@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificar Certificado · Visión Pecuaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --principal: #6B3410; --verde-oscuro: #0f4a21;
+    --rojo: #b91c1c; --rojo-claro: #fee2e2;
+    --tinta: #1a2e1d; --muted: #6b7280;
+    --bg: #f3f4f6; --surface: #fff; --border: #e5e7eb;
+    --font: 'Inter', -apple-system, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--tinta); min-height: 100vh; display: flex; flex-direction: column; }
+  header { background: linear-gradient(135deg, var(--principal), var(--verde-oscuro)); color: #fff; padding: 20px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+  header .logo { width: 44px; height: 44px; border-radius: 10px; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+  header h1 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; }
+  header p { font-size: .74rem; opacity: .85; margin-top: 1px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+  main { flex: 1; max-width: 640px; width: 100%; margin: 0 auto; padding: 40px 20px; }
+  .search-box { background: var(--surface); border-radius: 16px; padding: 28px 22px; box-shadow: 0 10px 30px rgba(0,0,0,.06); margin-bottom: 20px; }
+  .search-box h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; color: var(--tinta); }
+  .search-box p { font-size: .88rem; color: var(--muted); margin-bottom: 16px; }
+  .search-row { display: flex; gap: 8px; }
+  .search-row input { flex: 1; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: .92rem; font-family: var(--font); outline: none; transition: border-color .15s; text-transform: uppercase; letter-spacing: .05em; }
+  .search-row input:focus { border-color: var(--principal); }
+  .search-row button { background: var(--principal); color: #fff; border: none; border-radius: 10px; padding: 12px 22px; font-weight: 700; font-size: .92rem; cursor: pointer; font-family: var(--font); transition: background .15s; }
+  .search-row button:hover { background: var(--verde-oscuro); }
+  .result-valid { background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.08); animation: slideUp .4s ease; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .result-valid__banner { background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 22px 24px; display: flex; align-items: center; gap: 14px; }
+  .result-valid__banner .check { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+  .result-valid__banner h3 { font-size: 1.1rem; font-weight: 800; }
+  .result-valid__banner p { font-size: .82rem; opacity: .9; margin-top: 2px; }
+  .result-valid__body { padding: 22px 24px; }
+  .kv { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .kv:last-child { border-bottom: none; }
+  .kv__label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; font-weight: 700; margin-bottom: 3px; }
+  .kv__value { font-size: 1rem; color: var(--tinta); font-weight: 600; }
+  .kv__value--curso { font-family: var(--font-display); font-style: italic; color: var(--principal); }
+  .kv__value--folio { font-family: monospace; letter-spacing: .08em; color: var(--verde-oscuro); }
+  .result-valid__footer { background: rgba(107,52,16,.04); padding: 14px 24px; font-size: .78rem; color: var(--muted); text-align: center; border-top: 1px solid var(--border); }
+  .result-invalid { background: var(--surface); border-radius: 16px; padding: 30px 24px; box-shadow: 0 10px 30px rgba(0,0,0,.06); text-align: center; border-top: 4px solid var(--rojo); }
+  .result-invalid .icon { width: 64px; height: 64px; border-radius: 50%; background: var(--rojo-claro); color: var(--rojo); display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 12px; }
+  .result-invalid h3 { font-size: 1.1rem; font-weight: 800; color: var(--rojo); margin-bottom: 6px; }
+  .result-invalid p { font-size: .88rem; color: var(--muted); }
+  .loading-state { text-align: center; padding: 30px; color: var(--muted); font-size: .88rem; }
+  footer { padding: 20px; text-align: center; font-size: .78rem; color: var(--muted); border-top: 1px solid var(--border); background: var(--surface); }
+  footer a { color: var(--principal); text-decoration: none; font-weight: 600; }
+  @media (max-width: 540px) { .search-row { flex-direction: column; } .search-row button { width: 100%; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌿</div>
+  <div>
+    <h1>Visión Pecuaria</h1>
+    <p>Verificación de certificados</p>
+  </div>
+</header>
+
+<main>
+  <div class="search-box">
+    <h2>🔍 Verifica un certificado</h2>
+    <p>Ingresa el folio oficial (ej: <strong>AGC-2026-00001</strong>) para validar su autenticidad.</p>
+    <form class="search-row" onsubmit="event.preventDefault(); buscar();">
+      <input type="text" id="input-folio" placeholder="AGC-2026-00001" autocomplete="off" required>
+      <button type="submit">Verificar</button>
+    </form>
+  </div>
+  <div id="resultado"></div>
+</main>
+
+<footer>
+  Visión Pecuaria · Tehuacán, Puebla · México<br>
+  Sistema oficial de certificación — <a href="index.html">Ir al club</a>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
+  authDomain: "visionpecuaria-mx.firebaseapp.com",
+  projectId: "visionpecuaria-mx",
+  storageBucket: "visionpecuaria-mx.firebasestorage.app",
+  messagingSenderId: "231737548143",
+  appId: "1:231737548143:web:6651621c2cbad8a31a9c9a"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const resultEl = document.getElementById('resultado');
+
+async function buscar() {
+  const folioRaw = document.getElementById('input-folio').value.trim().toUpperCase();
+  if (!folioRaw) return;
+  resultEl.innerHTML = '<div class="loading-state">🔍 Verificando folio...</div>';
+  try {
+    const snap = await getDoc(doc(db, 'certificados', folioRaw));
+    if (!snap.exists()) return mostrarInvalido(folioRaw);
+    mostrarValido(folioRaw, snap.data());
+  } catch (e) {
+    resultEl.innerHTML = `<div class="result-invalid"><div class="icon">⚠️</div><h3>Error de conexión</h3><p>${escapeHTML(e.message)}</p></div>`;
+  }
+}
+
+function mostrarValido(folio, c) {
+  const fecha = c.fechaEmision ? new Date(c.fechaEmision) : new Date();
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const fechaLegible = `${fecha.getDate()} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()}`;
+  resultEl.innerHTML = `
+    <div class="result-valid">
+      <div class="result-valid__banner">
+        <div class="check">✓</div>
+        <div><h3>Certificado auténtico</h3><p>Emitido oficialmente por Visión Pecuaria</p></div>
+      </div>
+      <div class="result-valid__body">
+        <div class="kv"><div class="kv__label">Folio oficial</div><div class="kv__value kv__value--folio">${folio}</div></div>
+        <div class="kv"><div class="kv__label">Otorgado a</div><div class="kv__value">${escapeHTML(c.miembroNombre || 'Socio VisionPecuaria')}</div></div>
+        <div class="kv"><div class="kv__label">Curso completado</div><div class="kv__value kv__value--curso">${escapeHTML(c.cursoTitulo || '—')}</div></div>
+        <div class="kv"><div class="kv__label">Categoría</div><div class="kv__value">${escapeHTML(c.categoria || 'General')}</div></div>
+        <div class="kv"><div class="kv__label">Fecha de emisión</div><div class="kv__value">${fechaLegible}</div></div>
+        ${c.totalClases ? `<div class="kv"><div class="kv__label">Clases del curso</div><div class="kv__value">${c.totalClases} clases completadas</div></div>` : ''}
+      </div>
+      <div class="result-valid__footer">Este certificado fue emitido por Visión Pecuaria · Tehuacán, Puebla</div>
+    </div>
+  `;
+}
+
+function mostrarInvalido(folio) {
+  resultEl.innerHTML = `
+    <div class="result-invalid">
+      <div class="icon">✕</div>
+      <h3>Certificado no encontrado</h3>
+      <p>El folio <strong>${escapeHTML(folio)}</strong> no existe en nuestros registros oficiales. Verifica que esté escrito correctamente.</p>
+    </div>
+  `;
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+const params = new URLSearchParams(window.location.search);
+const folioUrl = params.get('folio');
+if (folioUrl) {
+  document.getElementById('input-folio').value = folioUrl;
+  buscar();
+}
+
+window.buscar = buscar;
+</script>
+
+</body>
+</html>
