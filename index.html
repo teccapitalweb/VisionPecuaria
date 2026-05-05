@@ -14109,7 +14109,7 @@ const PECUQUIMICOS_DB = {
   'vacuna-clostridial':  { nombre:'Bacterina Clostridial 8 vías', tipo:'liquido', dosis_tipica:'2 ml/animal', aplicacion:'subcutánea (anual)', usos:'Carbón sintomático, edema maligno, enterotoxemia', reingreso:'sin retiro' },
   'vacuna-ibr-bvd':      { nombre:'Vacuna IBR-BVD-PI3-BRSV', tipo:'liquido', dosis_tipica:'2-5 ml según marca', aplicacion:'IM o SC', usos:'Complejo respiratorio bovino', reingreso:'21 días pre-faena' },
   'vacuna-rb51':         { nombre:'Vacuna Brucella RB51', tipo:'liquido', dosis_tipica:'2 ml dosis única', aplicacion:'subcutánea', usos:'Brucelosis (becerras 4-8 meses, OBLIGATORIA)', reingreso:'sin retiro' }
-};};
+};
 
 // APOYOS PECUARIOS DEL GOBIERNO 2026 (curados)
 const APOYOS_DB = [
@@ -14216,7 +14216,7 @@ const APOYOS_DB = [
     desc:'Programa estatal de apicultura. Entrega de equipo, abejas reina y capacitación en sanidad apícola.',
     requisitos:'Apicultor registrado en padrón estatal',
     fecha:'Convocatoria anual marzo', link:'https://sedea.queretaro.gob.mx' }
-];];
+];
 
 // ═══════ TABS ═══════
 window.cambiarHerrTab = function(tab, btn) {
@@ -15278,7 +15278,7 @@ const DIAG_DB = [
     desc:'Pérdida de peso progresiva sin causa aparente. Generalmente combinación de parásitos + nutrición deficiente.',
     trat:['Desparasitación de amplio espectro','Suplementación con sales minerales','Vitamina ADE inyectable'],
     prev:['Análisis coproparasitoscópico semestral','Suplementación mineral permanente','Forraje de calidad'] }
-];];
+];
 
 window.ejecutarDiagnostico = function() {
   const hato = document.getElementById('diag-hato').value;
@@ -15449,7 +15449,7 @@ const ENFERMEDADES_INFO = {
     tratamiento: ['No requiere tratamiento', 'Continúa con calendario sanitario al día'],
     prevencion: ['Inspección semanal del hato', 'Suplementación mineral permanente', 'Calendario vacunal vigente']
   }
-};};
+};
 
 function buscarInfoEnfermedad(label) {
   if (!label) return null;
@@ -17763,7 +17763,7 @@ const MERCADO_PRODUCTOS_FALLBACK = [
     ],
     estacional: 'Precio bajo (subproducto lechería). Mercado nicho para crianza lechal o becerros de leche para gourmet.'
   }
-];];
+];
 
 // Generar historiales 30 días para cada producto del fallback
 MERCADO_PRODUCTOS_FALLBACK.forEach(p => {
