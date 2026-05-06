@@ -116,13 +116,13 @@ body {
 
 .card {
   width: 100%; max-width: 460px;
-  background: rgba(255,255,255,.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(8, 20, 12, .92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,.08);
   border-radius: 24px;
   padding: 36px 32px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 80px rgba(212,160,23,.05);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 80px rgba(212,160,23,.08);
   position: relative;
   animation: cardEntrance .9s cubic-bezier(.2,.8,.3,1.1) backwards;
 }
@@ -292,27 +292,29 @@ body {
 .field input {
   width: 100%;
   padding: 13px 14px 13px 42px;
-  background: rgba(255,255,255,.06);
-  border: 1.5px solid rgba(255,255,255,.1);
+  background: rgba(20, 50, 32, 0.85);
+  border: 1.5px solid rgba(255,255,255,.15);
   border-radius: 12px;
   color: #fff;
   font: 400 .95rem/1 'Inter', sans-serif;
   font-family: inherit;
   transition: border-color .25s, background .25s, box-shadow .25s;
 }
-.field input::placeholder { color: rgba(255,255,255,.35); }
+.field input::placeholder { color: rgba(255,255,255,.45); }
 .field input:focus {
   outline: none;
   border-color: var(--gold);
-  background: rgba(255,255,255,.08);
+  background: rgba(30, 60, 40, 0.95);
   box-shadow: 0 0 0 4px rgba(212,160,23,.15);
 }
 .field input:-webkit-autofill,
 .field input:-webkit-autofill:hover,
-.field input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,.06) inset;
-  caret-color: #fff;
+.field input:-webkit-autofill:focus,
+.field input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(20, 50, 32, 0.85) inset !important;
+  caret-color: #fff !important;
+  transition: background-color 99999s ease-in-out 0s;
 }
 .field-icon {
   position: absolute;
