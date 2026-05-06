@@ -1481,6 +1481,700 @@ button { font-family: inherit; }
   color: rgba(255,255,255,.4);
 }
 
+/* Badge live rojo pulsante */
+.sb-nav-badge--live {
+  background: #ef4444 !important;
+  color: #fff !important;
+  font-size: 8px !important;
+  padding: 4px 7px !important;
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,.6); }
+  50% { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* CINETECA — videos individuales                                */
+/* ═══════════════════════════════════════════════════════════ */
+.cineteca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.video-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rl);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+  position: relative;
+}
+.video-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,160,23,.4);
+  box-shadow: 0 16px 40px rgba(0,0,0,.4);
+}
+.video-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, var(--field-700), var(--field-800));
+  overflow: hidden;
+}
+.video-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+}
+.video-card:hover .video-thumb img { transform: scale(1.06); }
+.video-thumb-play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.3);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.video-card:hover .video-thumb-play { opacity: 1; }
+.video-thumb-play-icon {
+  width: 60px; height: 60px;
+  background: rgba(212,160,23,.95);
+  color: var(--field-deep);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.5);
+  transform: scale(.85);
+  transition: transform .3s;
+}
+.video-card:hover .video-thumb-play-icon { transform: scale(1); }
+.video-thumb-duracion {
+  position: absolute; bottom: 8px; right: 8px;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: .72rem;
+  font-weight: 700;
+}
+.video-info { padding: 14px 16px 16px; }
+.video-categoria {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.video-titulo {
+  font: 700 .95rem/1.35 'Inter', sans-serif;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.video-meta {
+  display: flex; gap: 10px;
+  font-size: .76rem;
+  color: rgba(255,255,255,.55);
+}
+.video-meta span { display: inline-flex; align-items: center; gap: 4px; }
+
+.cineteca-filter {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+.cineteca-filter::-webkit-scrollbar { height: 4px; }
+.cineteca-chip {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px;
+  color: rgba(255,255,255,.7);
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.cineteca-chip:hover { background: rgba(212,160,23,.1); color: var(--gold-light); }
+.cineteca-chip.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  border-color: var(--gold);
+}
+
+/* Modal player de video */
+.video-modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 1500;
+  background: rgba(0,0,0,.92);
+  align-items: center; justify-content: center;
+  padding: 20px;
+  animation: fadeIn .25s ease;
+}
+.video-modal.active { display: flex; }
+.video-modal-box {
+  width: 100%; max-width: 1000px;
+  position: relative;
+}
+.video-modal-close {
+  position: absolute; top: -42px; right: 0;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s;
+}
+.video-modal-close:hover { background: rgba(212,160,23,.3); transform: rotate(90deg); }
+.video-modal-player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: var(--rl);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,.7);
+}
+.video-modal-player iframe { width: 100%; height: 100%; border: 0; }
+.video-modal-info {
+  margin-top: 16px;
+  padding: 18px 20px;
+  background: rgba(15,61,39,.6);
+  border: 1px solid rgba(212,160,23,.2);
+  border-radius: var(--rl);
+}
+.video-modal-info h3 {
+  font: 800 1.2rem/1.3 'Montserrat', sans-serif;
+  margin-bottom: 8px;
+}
+.video-modal-info p {
+  color: rgba(255,255,255,.7);
+  font-size: .9rem;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* BIBLIOTECA — PDFs                                             */
+/* ═══════════════════════════════════════════════════════════ */
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.pdf-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rl);
+  padding: 22px 18px;
+  cursor: pointer;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.pdf-card:hover {
+  background: rgba(212,160,23,.08);
+  border-color: rgba(212,160,23,.4);
+  transform: translateY(-3px);
+}
+.pdf-icon-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.pdf-icon {
+  width: 52px; height: 64px;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border-radius: 6px 6px 14px 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+  color: #fff;
+  letter-spacing: .5px;
+  box-shadow: 0 8px 16px rgba(220,38,38,.3);
+  position: relative;
+}
+.pdf-icon::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 0 0 0 6px;
+}
+.pdf-paginas {
+  font-size: .72rem;
+  color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.05);
+  padding: 4px 9px;
+  border-radius: 100px;
+}
+.pdf-titulo {
+  font: 700 .95rem/1.35 'Inter', sans-serif;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pdf-fecha {
+  font-size: .72rem;
+  color: rgba(255,255,255,.45);
+}
+.pdf-actions {
+  display: flex; gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.pdf-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.85);
+  border-radius: 8px;
+  font: 600 .76rem 'Inter', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: all .2s;
+  text-decoration: none;
+}
+.pdf-btn:hover {
+  background: rgba(212,160,23,.15);
+  border-color: rgba(212,160,23,.4);
+  color: var(--gold-light);
+}
+.pdf-btn--main {
+  background: linear-gradient(135deg, rgba(212,160,23,.2), rgba(212,160,23,.08));
+  border-color: rgba(212,160,23,.4);
+  color: var(--gold-light);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* SESIONES EN VIVO                                              */
+/* ═══════════════════════════════════════════════════════════ */
+.sesiones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+.sesion-card {
+  background: linear-gradient(180deg, rgba(15,61,39,.6), rgba(10,31,18,.85));
+  border: 1px solid rgba(212,160,23,.2);
+  border-radius: var(--rxl);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+.sesion-card.live {
+  border: 2px solid #ef4444;
+  background: linear-gradient(180deg, rgba(239,68,68,.15), rgba(10,31,18,.9));
+}
+.sesion-card.live::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ef4444, transparent);
+  animation: liveBar 2s linear infinite;
+  background-size: 200% 100%;
+}
+@keyframes liveBar {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.sesion-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.sesion-status--live {
+  background: rgba(239,68,68,.2);
+  border: 1px solid rgba(239,68,68,.4);
+  color: #fca5a5;
+}
+.sesion-status--live .live-dot {
+  width: 8px; height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+.sesion-status--proximo {
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.4);
+  color: var(--gold-light);
+}
+.sesion-status--pasado {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.6);
+}
+.sesion-titulo {
+  font: 800 1.1rem/1.3 'Montserrat', sans-serif;
+  margin-bottom: 10px;
+}
+.sesion-instructor {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.sesion-instructor-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+.sesion-instructor-name {
+  font-size: .85rem;
+  font-weight: 600;
+  color: #fff;
+}
+.sesion-instructor-rol {
+  font-size: .72rem;
+  color: rgba(255,255,255,.5);
+}
+.sesion-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(0,0,0,.2);
+  border-radius: 10px;
+}
+.sesion-info-label {
+  font-size: .68rem;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.sesion-info-value { color: #fff; font-weight: 600; font-size: .85rem; }
+.sesion-countdown {
+  display: flex; gap: 6px;
+  margin-bottom: 14px;
+}
+.sesion-countdown-cell {
+  flex: 1;
+  background: rgba(212,160,23,.1);
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: 8px;
+  padding: 10px 4px;
+  text-align: center;
+}
+.sesion-countdown-num {
+  font: 800 1.4rem 'Montserrat', sans-serif;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.sesion-countdown-label {
+  font-size: .65rem;
+  color: rgba(255,255,255,.6);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.sesion-cta {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font: 800 .9rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform .2s, box-shadow .25s;
+  text-decoration: none;
+}
+.sesion-cta--live {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(239,68,68,.4);
+}
+.sesion-cta--live:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(239,68,68,.55); }
+.sesion-cta--proximo {
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.4);
+  color: var(--gold-light);
+}
+.sesion-cta--proximo:hover { background: rgba(212,160,23,.25); }
+.sesion-cta--pasado {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.85);
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🎖️ CERTIFICADOS — estilo diploma                              */
+/* ═══════════════════════════════════════════════════════════ */
+.cert-hero {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(212,160,23,.15), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(107,68,35,.2), transparent 50%),
+    linear-gradient(135deg, rgba(15,61,39,.7), rgba(10,31,18,.85));
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: var(--rxl);
+  padding: 32px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+.cert-hero::before {
+  content: '🎖️';
+  position: absolute;
+  font-size: 220px;
+  right: -30px; top: -50px;
+  opacity: .08;
+  transform: rotate(-15deg);
+}
+.cert-hero-text { flex: 1; min-width: 240px; position: relative; z-index: 2; }
+.cert-hero-text h1 {
+  font: 800 1.6rem/1.2 'Montserrat', sans-serif;
+  margin-bottom: 8px;
+}
+.cert-hero-text h1 .grad {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cert-hero-text p {
+  color: rgba(255,255,255,.7);
+  font-size: .95rem;
+  line-height: 1.5;
+}
+.cert-hero-stats {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  position: relative; z-index: 2;
+}
+.cert-hero-stat {
+  text-align: center;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(212,160,23,.3);
+  padding: 14px 22px;
+  border-radius: 14px;
+  min-width: 100px;
+}
+.cert-hero-stat-num {
+  font: 800 2rem/1 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cert-hero-stat-label {
+  font-size: .7rem;
+  color: rgba(255,255,255,.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+.cert-card {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(212,160,23,.08), transparent 60%),
+    linear-gradient(135deg, rgba(247,243,234,.04), rgba(255,255,255,.02));
+  border: 2px solid rgba(212,160,23,.25);
+  border-radius: var(--rxl);
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+  overflow: hidden;
+}
+.cert-card::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: 18px;
+  pointer-events: none;
+}
+.cert-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 16px 40px rgba(212,160,23,.2);
+}
+.cert-card.locked {
+  opacity: .6;
+  filter: grayscale(.5);
+  cursor: default;
+}
+.cert-card.locked:hover {
+  transform: none;
+  border-color: rgba(212,160,23,.15);
+  box-shadow: none;
+}
+
+.cert-medal {
+  width: 78px; height: 78px;
+  margin: 0 auto 14px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.cert-medal-bg {
+  position: absolute; inset: 0;
+  background: conic-gradient(from 0deg, var(--gold), var(--gold-light), var(--gold-deep), var(--gold));
+  border-radius: 50%;
+  animation: medalSpin 8s linear infinite;
+}
+.cert-card.locked .cert-medal-bg { animation: none; background: rgba(255,255,255,.1); }
+@keyframes medalSpin {
+  to { transform: rotate(360deg); }
+}
+.cert-medal-inner {
+  position: relative;
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--field-deep), var(--field-900));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+}
+
+.cert-tipo {
+  text-align: center;
+  font-size: .68rem;
+  color: var(--gold-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.cert-titulo {
+  text-align: center;
+  font: 800 1.05rem/1.3 'Montserrat', sans-serif;
+  margin-bottom: 6px;
+  color: #fff;
+}
+.cert-curso {
+  text-align: center;
+  font-size: .82rem;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.cert-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,.4), transparent);
+  margin: 14px 0;
+}
+
+.cert-info-rows {
+  display: flex; flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.cert-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .8rem;
+}
+.cert-info-label { color: rgba(255,255,255,.5); }
+.cert-info-value { color: #fff; font-weight: 600; }
+.cert-folio {
+  font-family: 'Inter', monospace;
+  background: rgba(212,160,23,.1);
+  border: 1px solid rgba(212,160,23,.3);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: .72rem;
+  color: var(--gold-light);
+}
+
+.cert-actions {
+  display: flex;
+  gap: 8px;
+}
+.cert-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font: 700 .8rem 'Inter', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: all .2s;
+  text-decoration: none;
+}
+.cert-btn--main {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  box-shadow: 0 6px 16px rgba(212,160,23,.3);
+}
+.cert-btn--main:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(212,160,23,.45);
+}
+.cert-btn--ghost {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.85);
+}
+.cert-btn--ghost:hover {
+  background: rgba(212,160,23,.15);
+  border-color: rgba(212,160,23,.4);
+  color: var(--gold-light);
+}
+
+/* Certificado bloqueado (en progreso) */
+.cert-progress {
+  margin: 12px 0;
+  padding: 10px;
+  background: rgba(0,0,0,.2);
+  border-radius: 10px;
+}
+.cert-progress-text {
+  font-size: .76rem;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.cert-progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.cert-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+  border-radius: 100px;
+}
+
+/* Sello "EMITIDO" */
+.cert-sello {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: rgba(34,197,94,.15);
+  border: 1.5px solid rgba(34,197,94,.5);
+  color: #4ade80;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
 @media (max-width: 880px) {
   .establo-hero { height: 240px; }
   .establo-hero-content { padding: 22px 20px; }
@@ -1584,10 +2278,6 @@ button { font-family: inherit; }
         <span class="sb-nav-label">Mi Hato</span>
         <span class="sb-nav-badge">5</span>
       </button>
-      <button class="sb-nav-item" data-section="establo" data-vip="true">
-        <span class="sb-nav-icon">🎓</span>
-        <span class="sb-nav-label">Establo</span>
-      </button>
       <button class="sb-nav-item" data-section="potrero">
         <span class="sb-nav-icon">🌾</span>
         <span class="sb-nav-label">Potrero</span>
@@ -1601,13 +2291,40 @@ button { font-family: inherit; }
         <span class="sb-nav-label">Mercado</span>
       </button>
 
+      <div class="sb-section-label">Aprendizaje</div>
+      <button class="sb-nav-item" data-section="establo" data-vip="true">
+        <span class="sb-nav-icon">🎓</span>
+        <span class="sb-nav-label">Establo</span>
+        <span class="sb-nav-badge" id="badgeCursos" style="display:none;">0</span>
+      </button>
+      <button class="sb-nav-item" data-section="cineteca" data-vip="true">
+        <span class="sb-nav-icon">🎬</span>
+        <span class="sb-nav-label">Cineteca</span>
+        <span class="sb-nav-badge" id="badgeVideos" style="display:none;">0</span>
+      </button>
+      <button class="sb-nav-item" data-section="biblioteca" data-vip="true">
+        <span class="sb-nav-icon">📚</span>
+        <span class="sb-nav-label">Biblioteca</span>
+        <span class="sb-nav-badge" id="badgePdfs" style="display:none;">0</span>
+      </button>
+      <button class="sb-nav-item" data-section="vivo" data-vip="true">
+        <span class="sb-nav-icon">📡</span>
+        <span class="sb-nav-label">En Vivo</span>
+        <span class="sb-nav-badge sb-nav-badge--live" id="badgeVivo" style="display:none;">●</span>
+      </button>
+
       <div class="sb-section-label">Tu carrera</div>
       <button class="sb-nav-item" data-section="bitacora">
         <span class="sb-nav-icon">📓</span>
         <span class="sb-nav-label">Bitácora del Capataz</span>
       </button>
+      <button class="sb-nav-item" data-section="certificados">
+        <span class="sb-nav-icon">🎖️</span>
+        <span class="sb-nav-label">Certificados</span>
+        <span class="sb-nav-badge" id="badgeCerts" style="display:none;">0</span>
+      </button>
       <button class="sb-nav-item" data-section="radar" data-vip="true">
-        <span class="sb-nav-icon">📡</span>
+        <span class="sb-nav-icon">🌐</span>
         <span class="sb-nav-label">Radar</span>
       </button>
       <button class="sb-nav-item" data-section="caseta">
@@ -1879,6 +2596,107 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 🎬 CINETECA (videos sueltos)                              -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-cineteca">
+        <div class="section-head">
+          <div>
+            <h1>🎬 La Cineteca</h1>
+            <p>Webinars, masterclasses y videos especializados</p>
+          </div>
+        </div>
+
+        <!-- Filtros de categoría -->
+        <div class="cineteca-filter" id="cinetecaFilter">
+          <button class="cineteca-chip active" data-cat="todos">Todos</button>
+        </div>
+
+        <!-- Loading -->
+        <div id="cinetecaLoading" class="establo-loading">
+          <div class="boot-spin" style="width:32px;height:32px"></div>
+          <p>Cargando videos...</p>
+        </div>
+
+        <!-- Grid de videos -->
+        <div class="cineteca-grid" id="cinetecaGrid"></div>
+
+        <!-- Vacío -->
+        <div id="cinetecaVacio" class="establo-vacio" style="display:none;">
+          <div style="font-size:64px;margin-bottom:16px;">🎬</div>
+          <h3>La cineteca está siendo preparada</h3>
+          <p>Los webinars y videos especializados se publicarán pronto.</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 📚 BIBLIOTECA (PDFs / material descargable)               -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-biblioteca">
+        <div class="section-head">
+          <div>
+            <h1>📚 La Biblioteca</h1>
+            <p>Material descargable, guías y manuales pecuarios</p>
+          </div>
+        </div>
+
+        <div class="establo-controls">
+          <div class="establo-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="bibliotecaSearch" placeholder="Busca un manual, guía o tema..." />
+          </div>
+          <div class="establo-stats">
+            <span class="establo-stat-pill"><strong id="totalPdfs">0</strong> documentos</span>
+          </div>
+        </div>
+
+        <div id="bibliotecaLoading" class="establo-loading">
+          <div class="boot-spin" style="width:32px;height:32px"></div>
+          <p>Cargando biblioteca...</p>
+        </div>
+
+        <div class="biblioteca-grid" id="bibliotecaGrid"></div>
+
+        <div id="bibliotecaVacio" class="establo-vacio" style="display:none;">
+          <div style="font-size:64px;margin-bottom:16px;">📚</div>
+          <h3>La biblioteca está siendo organizada</h3>
+          <p>Los materiales descargables se subirán pronto.</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 📡 EN VIVO (sesiones / webinars en directo)               -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-vivo">
+        <div class="section-head">
+          <div>
+            <h1>📡 Sesiones en Vivo</h1>
+            <p>Webinars, Q&A y masterclasses con expertos pecuarios</p>
+          </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="cineteca-filter">
+          <button class="cineteca-chip active" data-vivo="todos" onclick="filtrarSesiones('todos', this)">Todos</button>
+          <button class="cineteca-chip" data-vivo="proximo" onclick="filtrarSesiones('proximo', this)">🔔 Próximas</button>
+          <button class="cineteca-chip" data-vivo="live" onclick="filtrarSesiones('live', this)">🔴 En vivo</button>
+          <button class="cineteca-chip" data-vivo="pasado" onclick="filtrarSesiones('pasado', this)">📼 Grabaciones</button>
+        </div>
+
+        <div id="vivoLoading" class="establo-loading">
+          <div class="boot-spin" style="width:32px;height:32px"></div>
+          <p>Cargando sesiones...</p>
+        </div>
+
+        <div class="sesiones-grid" id="vivoGrid"></div>
+
+        <div id="vivoVacio" class="establo-vacio" style="display:none;">
+          <div style="font-size:64px;margin-bottom:16px;">📡</div>
+          <h3>Sin sesiones programadas</h3>
+          <p>Las próximas sesiones en vivo se anunciarán pronto.</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
       <!-- 🌾 POTRERO (HERRAMIENTAS)                                 -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-potrero">
@@ -1951,6 +2769,46 @@ button { font-family: inherit; }
 
         <h3 style="font:800 1.1rem 'Montserrat',sans-serif;margin-bottom:14px;">🏆 Logros</h3>
         <div class="logros-grid" id="logrosGrid"></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 🎖️ CERTIFICADOS                                            -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-certificados">
+        <!-- Hero -->
+        <div class="cert-hero">
+          <div class="cert-hero-text">
+            <h1>🎖️ <span class="grad">Certificados Oficiales</span></h1>
+            <p>Cada curso completado te da un certificado oficial IPCI con folio único, código QR de verificación y validez nacional.</p>
+          </div>
+          <div class="cert-hero-stats">
+            <div class="cert-hero-stat">
+              <div class="cert-hero-stat-num" id="certEmitidos">0</div>
+              <div class="cert-hero-stat-label">Emitidos</div>
+            </div>
+            <div class="cert-hero-stat">
+              <div class="cert-hero-stat-num" id="certEnProgreso">0</div>
+              <div class="cert-hero-stat-label">En progreso</div>
+            </div>
+            <div class="cert-hero-stat">
+              <div class="cert-hero-stat-num" id="certHorasTotal">0</div>
+              <div class="cert-hero-stat-label">Horas totales</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font:800 1.1rem 'Montserrat',sans-serif;margin-bottom:14px;">🏆 Mis certificados</h3>
+        <div id="certsLoading" class="establo-loading">
+          <div class="boot-spin" style="width:32px;height:32px"></div>
+          <p>Cargando certificados...</p>
+        </div>
+        <div class="certs-grid" id="certsGrid"></div>
+
+        <div id="certsVacio" class="establo-vacio" style="display:none;">
+          <div style="font-size:64px;margin-bottom:16px;">🎖️</div>
+          <h3>Aún no tienes certificados</h3>
+          <p>Completa tu primer curso del Establo para ganar tu primer certificado oficial.</p>
+        </div>
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
@@ -2027,6 +2885,20 @@ button { font-family: inherit; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
     <button class="modal-cta-secondary" onclick="suscribirElite('mensual')">o paga $200 MXN/mes (Capataz Pro)</button>
+  </div>
+</div>
+
+<!-- VIDEO MODAL (cineteca) -->
+<div class="video-modal" id="videoModal" onclick="if(event.target===this)cerrarVideoModal()">
+  <div class="video-modal-box">
+    <button class="video-modal-close" onclick="cerrarVideoModal()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="video-modal-player" id="videoModalPlayer"></div>
+    <div class="video-modal-info">
+      <h3 id="videoModalTitulo">Título</h3>
+      <p id="videoModalDesc">Descripción</p>
+    </div>
   </div>
 </div>
 
@@ -2124,6 +2996,14 @@ onAuthStateChanged(auth, async (user) => {
   // Iniciar suscripción a cursos en tiempo real
   if (typeof window.__rancho?.iniciarEstablo === 'function') {
     window.__rancho.iniciarEstablo();
+  }
+  // Iniciar Cineteca + Biblioteca + En Vivo
+  if (typeof window.__rancho?.iniciarContenido === 'function') {
+    window.__rancho.iniciarContenido();
+  }
+  // Iniciar Certificados
+  if (typeof window.__rancho?.iniciarCertificados === 'function') {
+    window.__rancho.iniciarCertificados();
   }
 });
 
@@ -2820,6 +3700,607 @@ function pintarLogros() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// 🎬 CINETECA — videos sueltos (colección 'videos' de Firestore)
+// ═══════════════════════════════════════════════════════════
+let VIDEOS_FIRESTORE = [];
+let cinetecaCatActiva = 'todos';
+
+function thumbnailYoutube(url) {
+  const id = extraerYoutubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+}
+
+function cardVideo(v) {
+  const thumb = thumbnailYoutube(v.url);
+  const ytId = extraerYoutubeId(v.url);
+  return `
+    <div class="video-card" onclick="abrirVideoModal('${v.id}')">
+      <div class="video-thumb">
+        ${thumb ? `<img src="${thumb}" alt="${(v.titulo||'').replace(/"/g,'&quot;')}" loading="lazy">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">🎥</div>`}
+        <div class="video-thumb-play">
+          <div class="video-thumb-play-icon">▶</div>
+        </div>
+        ${v.duracion ? `<div class="video-thumb-duracion">${v.duracion}</div>` : ''}
+      </div>
+      <div class="video-info">
+        ${v.categoria ? `<span class="video-categoria">${v.categoria}</span>` : ''}
+        <div class="video-titulo">${v.titulo || 'Sin título'}</div>
+        <div class="video-meta">
+          ${v.instructor ? `<span>👤 ${v.instructor}</span>` : ''}
+          ${v.mes ? `<span>📅 ${v.mes}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function pintarCineteca() {
+  const loading = document.getElementById('cinetecaLoading');
+  const vacio = document.getElementById('cinetecaVacio');
+  const grid = document.getElementById('cinetecaGrid');
+  loading.style.display = 'none';
+
+  if (!VIDEOS_FIRESTORE.length) {
+    vacio.style.display = 'block';
+    grid.innerHTML = '';
+    return;
+  }
+  vacio.style.display = 'none';
+
+  // Pintar filtros (categorías únicas)
+  const filterCont = document.getElementById('cinetecaFilter');
+  const cats = [...new Set(VIDEOS_FIRESTORE.map(v => v.categoria).filter(Boolean))];
+  filterCont.innerHTML = `<button class="cineteca-chip ${cinetecaCatActiva==='todos'?'active':''}" onclick="filtrarCineteca('todos', this)">Todos</button>` +
+    cats.map(c => `<button class="cineteca-chip ${cinetecaCatActiva===c?'active':''}" onclick="filtrarCineteca('${c}', this)">${c}</button>`).join('');
+
+  let videos = VIDEOS_FIRESTORE;
+  if (cinetecaCatActiva !== 'todos') videos = videos.filter(v => v.categoria === cinetecaCatActiva);
+
+  // Ordenar por fecha desc
+  videos.sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+
+  grid.innerHTML = videos.map(cardVideo).join('');
+
+  const badge = document.getElementById('badgeVideos');
+  if (badge && VIDEOS_FIRESTORE.length > 0) {
+    badge.textContent = VIDEOS_FIRESTORE.length;
+    badge.style.display = '';
+  }
+}
+
+window.filtrarCineteca = function(cat, btn) {
+  cinetecaCatActiva = cat;
+  pintarCineteca();
+};
+
+window.abrirVideoModal = function(videoId) {
+  const v = VIDEOS_FIRESTORE.find(x => x.id === videoId);
+  if (!v) return;
+  const ytId = extraerYoutubeId(v.url);
+  const player = document.getElementById('videoModalPlayer');
+  if (ytId) {
+    player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+  } else {
+    player.innerHTML = `<iframe src="${v.url}" allowfullscreen></iframe>`;
+  }
+  document.getElementById('videoModalTitulo').textContent = v.titulo || 'Sin título';
+  document.getElementById('videoModalDesc').textContent = `${v.instructor ? '👤 ' + v.instructor : ''} ${v.duracion ? '· ⏱ ' + v.duracion : ''} ${v.categoria ? '· 🏷️ ' + v.categoria : ''}`.trim();
+  document.getElementById('videoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+window.cerrarVideoModal = function() {
+  document.getElementById('videoModal').classList.remove('active');
+  document.getElementById('videoModalPlayer').innerHTML = '';
+  document.body.style.overflow = '';
+};
+
+// ═══════════════════════════════════════════════════════════
+// 📚 BIBLIOTECA — PDFs (colección 'pdfs' de Firestore)
+// ═══════════════════════════════════════════════════════════
+let PDFS_FIRESTORE = [];
+let bibliotecaSearch = '';
+
+function cardPdf(p) {
+  const fechaTxt = p.fecha ? new Date(p.fecha).toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' }) : '';
+  return `
+    <div class="pdf-card">
+      <div class="pdf-icon-wrap">
+        <div class="pdf-icon">PDF</div>
+        ${p.paginas ? `<span class="pdf-paginas">${p.paginas} pág.</span>` : ''}
+      </div>
+      <div class="pdf-titulo">${p.titulo || 'Sin título'}</div>
+      ${fechaTxt ? `<div class="pdf-fecha">📅 ${fechaTxt}</div>` : ''}
+      <div class="pdf-actions">
+        <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="pdf-btn pdf-btn--main" onclick="event.stopPropagation();">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Ver</span>
+        </a>
+        <a href="${p.url}" download target="_blank" rel="noopener noreferrer" class="pdf-btn" onclick="event.stopPropagation();">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Descargar</span>
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function pintarBiblioteca() {
+  const loading = document.getElementById('bibliotecaLoading');
+  const vacio = document.getElementById('bibliotecaVacio');
+  const grid = document.getElementById('bibliotecaGrid');
+  loading.style.display = 'none';
+
+  document.getElementById('totalPdfs').textContent = PDFS_FIRESTORE.length;
+
+  let pdfs = PDFS_FIRESTORE;
+  if (bibliotecaSearch) {
+    pdfs = pdfs.filter(p => (p.titulo||'').toLowerCase().includes(bibliotecaSearch));
+  }
+  pdfs.sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+
+  if (!pdfs.length) {
+    if (PDFS_FIRESTORE.length === 0) {
+      vacio.style.display = 'block';
+      grid.innerHTML = '';
+    } else {
+      vacio.style.display = 'none';
+      grid.innerHTML = `<div class="establo-vacio" style="grid-column:1/-1;"><div style="font-size:48px;">🔍</div><h3>Sin resultados</h3><p>Intenta con otro término.</p></div>`;
+    }
+    return;
+  }
+  vacio.style.display = 'none';
+  grid.innerHTML = pdfs.map(cardPdf).join('');
+
+  const badge = document.getElementById('badgePdfs');
+  if (badge && PDFS_FIRESTORE.length > 0) {
+    badge.textContent = PDFS_FIRESTORE.length;
+    badge.style.display = '';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const sb = document.getElementById('bibliotecaSearch');
+  if (sb) {
+    let t;
+    sb.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        bibliotecaSearch = sb.value.toLowerCase().trim();
+        pintarBiblioteca();
+      }, 200);
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// 📡 EN VIVO — sesiones (colección 'sesiones' de Firestore)
+// ═══════════════════════════════════════════════════════════
+let SESIONES_FIRESTORE = [];
+let sesionesFiltro = 'todos';
+const SESIONES_DEMO = [
+  // Demo inicial mientras admin no ha creado sesiones
+  {
+    id: 'demo-vivo',
+    titulo: 'Bienvenida al rancho · Tour por la plataforma',
+    instructor: 'Equipo Visión Pecuaria',
+    rol: 'Soporte',
+    fecha: new Date(Date.now() + 1000*60*60*24*3).toISOString(),
+    hora: '7:00 PM',
+    duracion: '45 min',
+    plataforma: 'Zoom',
+    link: '#'
+  }
+];
+
+function getSesionEstado(s) {
+  const ahora = new Date();
+  const fecha = new Date(s.fecha);
+  const finEstimado = new Date(fecha.getTime() + 90*60*1000); // +90 min
+  if (ahora >= fecha && ahora <= finEstimado) return 'live';
+  if (ahora < fecha) return 'proximo';
+  return 'pasado';
+}
+
+function formatearFechaSesion(fechaISO, hora) {
+  const d = new Date(fechaISO);
+  const opts = { weekday:'long', day:'numeric', month:'long' };
+  let txt = d.toLocaleDateString('es-MX', opts);
+  txt = txt.charAt(0).toUpperCase() + txt.slice(1);
+  return hora ? `${txt} · ${hora}` : txt;
+}
+
+function calcularCountdown(fechaISO) {
+  const diff = new Date(fechaISO).getTime() - Date.now();
+  if (diff <= 0) return null;
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+  return { d, h, m };
+}
+
+function cardSesion(s) {
+  const estado = getSesionEstado(s);
+  const iniciales = (s.instructor || 'VP').split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();
+
+  let statusHTML = '';
+  let ctaHTML = '';
+
+  if (estado === 'live') {
+    statusHTML = `<div class="sesion-status sesion-status--live"><span class="live-dot"></span>EN VIVO AHORA</div>`;
+    ctaHTML = `<a href="${s.link || '#'}" target="_blank" rel="noopener noreferrer" class="sesion-cta sesion-cta--live">🔴 Unirme ahora</a>`;
+  } else if (estado === 'proximo') {
+    const cd = calcularCountdown(s.fecha);
+    statusHTML = `<div class="sesion-status sesion-status--proximo">🔔 PRÓXIMAMENTE</div>`;
+    if (cd) {
+      statusHTML += `
+        <div class="sesion-countdown">
+          <div class="sesion-countdown-cell"><div class="sesion-countdown-num">${cd.d}</div><div class="sesion-countdown-label">días</div></div>
+          <div class="sesion-countdown-cell"><div class="sesion-countdown-num">${cd.h}</div><div class="sesion-countdown-label">hrs</div></div>
+          <div class="sesion-countdown-cell"><div class="sesion-countdown-num">${cd.m}</div><div class="sesion-countdown-label">min</div></div>
+        </div>
+      `;
+    }
+    ctaHTML = `<button class="sesion-cta sesion-cta--proximo" onclick="agregarRecordatorio('${s.id}')">🔔 Agendar recordatorio</button>`;
+  } else {
+    statusHTML = `<div class="sesion-status sesion-status--pasado">📼 GRABACIÓN</div>`;
+    ctaHTML = s.grabacion
+      ? `<a href="${s.grabacion}" target="_blank" rel="noopener noreferrer" class="sesion-cta sesion-cta--pasado">📼 Ver grabación</a>`
+      : `<button class="sesion-cta sesion-cta--pasado" disabled style="opacity:.5;cursor:not-allowed;">Grabación no disponible</button>`;
+  }
+
+  return `
+    <div class="sesion-card ${estado === 'live' ? 'live' : ''}">
+      ${statusHTML}
+      <div class="sesion-titulo">${s.titulo}</div>
+      <div class="sesion-instructor">
+        <div class="sesion-instructor-avatar">${iniciales}</div>
+        <div>
+          <div class="sesion-instructor-name">${s.instructor || 'Por anunciar'}</div>
+          <div class="sesion-instructor-rol">${s.rol || 'Especialista pecuario'}</div>
+        </div>
+      </div>
+      <div class="sesion-info">
+        <div>
+          <div class="sesion-info-label">Fecha</div>
+          <div class="sesion-info-value">${formatearFechaSesion(s.fecha, s.hora)}</div>
+        </div>
+        <div>
+          <div class="sesion-info-label">Duración</div>
+          <div class="sesion-info-value">${s.duracion || '60 min'}</div>
+        </div>
+      </div>
+      ${ctaHTML}
+    </div>
+  `;
+}
+
+function pintarSesiones() {
+  const loading = document.getElementById('vivoLoading');
+  const vacio = document.getElementById('vivoVacio');
+  const grid = document.getElementById('vivoGrid');
+  loading.style.display = 'none';
+
+  let lista = SESIONES_FIRESTORE.length ? SESIONES_FIRESTORE : SESIONES_DEMO;
+
+  if (sesionesFiltro !== 'todos') {
+    lista = lista.filter(s => getSesionEstado(s) === sesionesFiltro);
+  }
+
+  // Ordenar: live primero, luego próximos por fecha asc, luego pasados desc
+  lista.sort((a, b) => {
+    const ea = getSesionEstado(a), eb = getSesionEstado(b);
+    const pri = { live: 0, proximo: 1, pasado: 2 };
+    if (pri[ea] !== pri[eb]) return pri[ea] - pri[eb];
+    if (ea === 'pasado') return (b.fecha||'').localeCompare(a.fecha||'');
+    return (a.fecha||'').localeCompare(b.fecha||'');
+  });
+
+  if (!lista.length) {
+    vacio.style.display = 'block';
+    grid.innerHTML = '';
+    return;
+  }
+  vacio.style.display = 'none';
+  grid.innerHTML = lista.map(cardSesion).join('');
+
+  // Badge live
+  const live = lista.filter(s => getSesionEstado(s) === 'live').length;
+  const proximas = lista.filter(s => getSesionEstado(s) === 'proximo').length;
+  const badge = document.getElementById('badgeVivo');
+  if (badge) {
+    if (live > 0) {
+      badge.style.display = '';
+      badge.textContent = '●';
+    } else if (proximas > 0) {
+      badge.style.display = '';
+      badge.textContent = proximas;
+      badge.style.background = '';
+      badge.style.animation = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+window.filtrarSesiones = function(filtro, btn) {
+  sesionesFiltro = filtro;
+  document.querySelectorAll('[data-vivo]').forEach(b => b.classList.toggle('active', b === btn));
+  pintarSesiones();
+};
+
+window.agregarRecordatorio = function(sid) {
+  toast('🔔 Recordatorio agendado · Te avisaremos por email', 'success', '🔔');
+};
+
+// Refrescar countdown cada minuto
+setInterval(() => {
+  if (document.getElementById('section-vivo').classList.contains('active')) {
+    pintarSesiones();
+  }
+}, 60000);
+
+// ═══════════════════════════════════════════════════════════
+// SUSCRIPCIONES FIRESTORE: videos, pdfs, sesiones
+// ═══════════════════════════════════════════════════════════
+window.__rancho.iniciarContenido = async function() {
+  try {
+    const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    if (!db) return;
+
+    // Videos
+    onSnapshot(collection(db, 'videos'), (snap) => {
+      VIDEOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      pintarCineteca();
+    }, (err) => {
+      console.warn('Sin permisos para videos:', err.message);
+      document.getElementById('cinetecaLoading').style.display = 'none';
+      document.getElementById('cinetecaVacio').style.display = 'block';
+    });
+
+    // PDFs
+    onSnapshot(collection(db, 'pdfs'), (snap) => {
+      PDFS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      pintarBiblioteca();
+    }, (err) => {
+      console.warn('Sin permisos para pdfs:', err.message);
+      document.getElementById('bibliotecaLoading').style.display = 'none';
+      document.getElementById('bibliotecaVacio').style.display = 'block';
+    });
+
+    // Sesiones
+    onSnapshot(collection(db, 'sesiones'), (snap) => {
+      SESIONES_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      pintarSesiones();
+    }, (err) => {
+      console.warn('Sin permisos para sesiones:', err.message);
+      // Mostrar solo demo
+      document.getElementById('vivoLoading').style.display = 'none';
+      pintarSesiones();
+    });
+  } catch(e) {
+    console.error('Error iniciando contenido:', e);
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// 🎖️ CERTIFICADOS — colección 'certificados' filtrada por uid
+// ═══════════════════════════════════════════════════════════
+let CERTS_FIRESTORE = [];
+const CERTS_DEMO = [
+  // Demos para que se vea cómo lucen mientras no hay reales
+  {
+    id: 'demo-1',
+    titulo: 'Certificado de Capacitación',
+    cursoTitulo: 'Inseminación Artificial Bovina',
+    folio: 'IPCI-VP-2026-0001',
+    fechaEmision: '2026-04-15',
+    horas: 24,
+    estado: 'emitido',
+    icon: '🐂',
+    instructor: 'MVZ. Bertín García',
+    urlPdf: '#',
+    qr: 'https://teccapitalweb.github.io/VisionPecuaria/verificar.html?f=DEMO-001'
+  },
+  {
+    id: 'demo-2',
+    titulo: 'Certificado de Especialización',
+    cursoTitulo: 'Manejo Estratégico de Becerros',
+    folio: 'IPCI-VP-2026-0002',
+    fechaEmision: '2026-03-22',
+    horas: 32,
+    estado: 'emitido',
+    icon: '🐄',
+    instructor: 'MVZ. Óscar Flores',
+    urlPdf: '#',
+    qr: 'https://teccapitalweb.github.io/VisionPecuaria/verificar.html?f=DEMO-002'
+  },
+  {
+    id: 'demo-3',
+    titulo: 'Certificado en proceso',
+    cursoTitulo: 'Medicina Deportiva Equina',
+    estado: 'en_progreso',
+    icon: '🐎',
+    progreso: 65,
+    horas: 28
+  },
+  {
+    id: 'demo-4',
+    titulo: 'Certificado en proceso',
+    cursoTitulo: 'Apicultura Productiva',
+    estado: 'en_progreso',
+    icon: '🐝',
+    progreso: 30,
+    horas: 18
+  }
+];
+
+function cardCertificado(c) {
+  const emitido = c.estado === 'emitido';
+  const fechaTxt = c.fechaEmision
+    ? new Date(c.fechaEmision).toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' })
+    : '';
+
+  if (emitido) {
+    return `
+      <div class="cert-card">
+        <div class="cert-sello">✓ Emitido</div>
+        <div class="cert-medal">
+          <div class="cert-medal-bg"></div>
+          <div class="cert-medal-inner">${c.icon || '🎖️'}</div>
+        </div>
+        <div class="cert-tipo">${c.titulo || 'Certificado oficial'}</div>
+        <div class="cert-titulo">${c.cursoTitulo || 'Curso'}</div>
+        <div class="cert-curso">Visión Pecuaria · IPCI</div>
+        <div class="cert-divider"></div>
+        <div class="cert-info-rows">
+          ${c.folio ? `
+            <div class="cert-info-row">
+              <span class="cert-info-label">Folio</span>
+              <span class="cert-folio">${c.folio}</span>
+            </div>` : ''}
+          ${fechaTxt ? `
+            <div class="cert-info-row">
+              <span class="cert-info-label">Emitido</span>
+              <span class="cert-info-value">${fechaTxt}</span>
+            </div>` : ''}
+          ${c.horas ? `
+            <div class="cert-info-row">
+              <span class="cert-info-label">Duración</span>
+              <span class="cert-info-value">${c.horas} hrs</span>
+            </div>` : ''}
+          ${c.instructor ? `
+            <div class="cert-info-row">
+              <span class="cert-info-label">Instructor</span>
+              <span class="cert-info-value">${c.instructor}</span>
+            </div>` : ''}
+        </div>
+        <div class="cert-actions">
+          ${c.urlPdf ? `<a href="${c.urlPdf}" target="_blank" rel="noopener noreferrer" class="cert-btn cert-btn--main">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Descargar PDF</span>
+          </a>` : ''}
+          ${c.qr ? `<a href="${c.qr}" target="_blank" rel="noopener noreferrer" class="cert-btn cert-btn--ghost">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Verificar</span>
+          </a>` : ''}
+        </div>
+      </div>
+    `;
+  } else {
+    // En progreso
+    return `
+      <div class="cert-card locked">
+        <div class="cert-medal">
+          <div class="cert-medal-bg"></div>
+          <div class="cert-medal-inner">${c.icon || '🔒'}</div>
+        </div>
+        <div class="cert-tipo">En progreso</div>
+        <div class="cert-titulo">${c.cursoTitulo || 'Curso'}</div>
+        <div class="cert-curso">Visión Pecuaria · IPCI</div>
+        <div class="cert-divider"></div>
+        <div class="cert-progress">
+          <div class="cert-progress-text">
+            <span>Avance del curso</span>
+            <strong style="color:var(--gold-light);">${c.progreso || 0}%</strong>
+          </div>
+          <div class="cert-progress-bar">
+            <div class="cert-progress-fill" style="width:${c.progreso || 0}%"></div>
+          </div>
+        </div>
+        <div class="cert-info-rows">
+          ${c.horas ? `
+            <div class="cert-info-row">
+              <span class="cert-info-label">Duración total</span>
+              <span class="cert-info-value">${c.horas} hrs</span>
+            </div>` : ''}
+          <div class="cert-info-row">
+            <span class="cert-info-label">Estado</span>
+            <span class="cert-info-value" style="color:var(--gold-light);">Termina el curso para emitir</span>
+          </div>
+        </div>
+        <div class="cert-actions">
+          <button class="cert-btn cert-btn--ghost" onclick="navigateTo('establo')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Ir al curso</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function pintarCertificados() {
+  const loading = document.getElementById('certsLoading');
+  const vacio = document.getElementById('certsVacio');
+  const grid = document.getElementById('certsGrid');
+  if (!grid) return;
+  loading.style.display = 'none';
+
+  // Si no hay certificados reales, mostrar demos para visual
+  let lista = CERTS_FIRESTORE.length ? CERTS_FIRESTORE : CERTS_DEMO;
+
+  // Stats
+  const emitidos = lista.filter(c => c.estado === 'emitido').length;
+  const enProgreso = lista.filter(c => c.estado === 'en_progreso').length;
+  const horasTotal = lista.filter(c => c.estado === 'emitido').reduce((acc,c) => acc + (c.horas||0), 0);
+  document.getElementById('certEmitidos').textContent = emitidos;
+  document.getElementById('certEnProgreso').textContent = enProgreso;
+  document.getElementById('certHorasTotal').textContent = horasTotal;
+
+  // Badge sidebar
+  const badge = document.getElementById('badgeCerts');
+  if (badge) {
+    if (emitidos > 0) {
+      badge.textContent = emitidos;
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  if (!lista.length) {
+    vacio.style.display = 'block';
+    grid.innerHTML = '';
+    return;
+  }
+  vacio.style.display = 'none';
+
+  // Ordenar: emitidos primero (más recientes), después en progreso
+  lista.sort((a,b) => {
+    if (a.estado !== b.estado) return a.estado === 'emitido' ? -1 : 1;
+    return (b.fechaEmision||'').localeCompare(a.fechaEmision||'');
+  });
+
+  grid.innerHTML = lista.map(cardCertificado).join('');
+}
+
+// Ya no metemos suscripción a 'certificados' por seguridad de reglas Firestore
+// Usamos demos hasta que el admin emita certificados reales filtrados por user
+window.__rancho.iniciarCertificados = async function() {
+  try {
+    const { collection, query, where, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const user = window.__rancho.auth?.currentUser;
+    if (!db || !user) {
+      pintarCertificados();
+      return;
+    }
+    const q = query(collection(db, 'certificados'), where('email', '==', user.email));
+    onSnapshot(q, (snap) => {
+      CERTS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data(), estado: d.data().estado || 'emitido' }));
+      pintarCertificados();
+    }, (err) => {
+      console.warn('Sin permisos para certificados (usando demos):', err.message);
+      pintarCertificados();
+    });
+  } catch(e) {
+    console.error('Error iniciando certificados:', e);
+    pintarCertificados();
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
@@ -2829,13 +4310,17 @@ window.addEventListener('DOMContentLoaded', () => {
   pintarHato();
   pintarTools();
   pintarLogros();
+  pintarCertificados();
   setTimeout(() => setTermometro(87), 800);
   // El Establo se inicia desde el módulo Firebase cuando hay user
 });
 
-// Cerrar modal con ESC
+// Cerrar modales con ESC
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') cerrarModalVIP();
+  if (e.key === 'Escape') {
+    cerrarModalVIP();
+    cerrarVideoModal();
+  }
 });
 </script>
 
