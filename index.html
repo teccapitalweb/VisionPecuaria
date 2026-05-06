@@ -1096,9 +1096,399 @@ button { font-family: inherit; }
 .toast--error { border-color: var(--error); }
 
 /* ═══════════════════════════════════════════════════════════ */
-/* MOBILE                                                        */
+/* ESTABLO NUEVO — hero + búsqueda + filas dinámicas            */
 /* ═══════════════════════════════════════════════════════════ */
+.establo-hero {
+  position: relative;
+  height: 320px;
+  border-radius: var(--rxl);
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--field-800), var(--field-900));
+  cursor: pointer;
+  transition: transform .3s;
+}
+.establo-hero:hover { transform: scale(1.005); }
+.establo-hero-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 1s ease;
+}
+.establo-hero:hover .establo-hero-bg { transform: scale(1.05); }
+.establo-hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10,31,18,.95) 0%, rgba(10,31,18,.7) 50%, rgba(10,31,18,.4) 100%),
+    linear-gradient(180deg, transparent 60%, rgba(10,31,18,.85) 100%);
+}
+.establo-hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 36px 40px;
+  max-width: 600px;
+}
+.establo-hero-tag {
+  display: inline-block;
+  font-size: .72rem; font-weight: 800; letter-spacing: 1.5px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  padding: 5px 12px;
+  border-radius: 100px;
+  width: fit-content;
+  margin-bottom: 14px;
+}
+.establo-hero-title {
+  font: 800 clamp(1.6rem, 3.5vw, 2.5rem)/1.1 'Montserrat', sans-serif;
+  margin-bottom: 10px;
+  text-shadow: 0 4px 20px rgba(0,0,0,.5);
+}
+.establo-hero-desc {
+  font-size: .95rem;
+  color: rgba(255,255,255,.85);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 10px rgba(0,0,0,.4);
+  max-width: 480px;
+}
+.establo-hero-meta {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-size: .82rem; color: rgba(255,255,255,.75);
+  margin-bottom: 18px;
+}
+.establo-hero-meta span {
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.establo-hero-cta {
+  background: #fff;
+  color: var(--field-deep);
+  border: none;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font: 800 .95rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  width: fit-content;
+  transition: transform .2s, box-shadow .25s;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+}
+.establo-hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.4);
+}
+
+.establo-controls {
+  display: flex; gap: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.establo-search {
+  flex: 1; min-width: 240px;
+  position: relative;
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  padding: 0 14px;
+  transition: border-color .25s, background .25s;
+}
+.establo-search:focus-within {
+  border-color: var(--gold);
+  background: rgba(255,255,255,.08);
+}
+.establo-search svg { color: rgba(255,255,255,.4); flex-shrink: 0; }
+.establo-search input {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font: 400 .92rem 'Inter', sans-serif;
+  outline: none;
+}
+.establo-search input::placeholder { color: rgba(255,255,255,.4); }
+
+.establo-stats {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.establo-stat-pill {
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.3);
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: .82rem;
+  color: rgba(255,255,255,.85);
+}
+.establo-stat-pill strong {
+  color: var(--gold-light);
+  margin-right: 3px;
+}
+
+.establo-loading {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 80px 20px;
+  color: rgba(255,255,255,.6);
+}
+
+.establo-vacio {
+  text-align: center;
+  padding: 80px 20px;
+  background: rgba(255,255,255,.03);
+  border: 1px dashed rgba(255,255,255,.1);
+  border-radius: var(--rxl);
+}
+.establo-vacio h3 {
+  font: 800 1.2rem 'Montserrat', sans-serif;
+  margin-bottom: 8px;
+  color: var(--gold-light);
+}
+.establo-vacio p { color: rgba(255,255,255,.6); }
+
+/* Card de curso mejorada */
+.curso-card-thumb-img {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .4s;
+}
+.curso-card:hover .curso-card-thumb-img {
+  transform: scale(1.08);
+}
+.curso-thumb-emoji {
+  position: relative; z-index: 1;
+  font-size: 64px;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.4));
+}
+
+/* Locked overlay para cursos con fechaDesbloqueo futura */
+.curso-locked-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(4px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: #fff;
+  font-size: .8rem;
+  z-index: 5;
+  text-align: center;
+  padding: 12px;
+}
+.curso-locked-overlay-icon { font-size: 32px; margin-bottom: 6px; }
+.curso-locked-overlay strong { font-weight: 700; margin-bottom: 4px; }
+.curso-locked-overlay small { color: rgba(255,255,255,.6); font-size: .72rem; }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* VISTA CINE (detalle del curso con player)                    */
+/* ═══════════════════════════════════════════════════════════ */
+.cine-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  padding: 9px 16px;
+  border-radius: 100px;
+  font: 600 .85rem 'Inter', sans-serif;
+  cursor: pointer;
+  margin-bottom: 18px;
+  transition: background .2s;
+}
+.cine-back:hover { background: rgba(212,160,23,.15); color: var(--gold-light); }
+
+.cine-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .cine-layout { grid-template-columns: 1fr; }
+  .cine-sidebar { max-height: 600px; }
+}
+
+.cine-main { min-width: 0; }
+
+.cine-player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: var(--rl);
+  overflow: hidden;
+  box-shadow: 0 16px 50px rgba(0,0,0,.5);
+  position: relative;
+  margin-bottom: 18px;
+}
+.cine-player iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.cine-player-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  color: rgba(255,255,255,.4);
+  background: linear-gradient(135deg, var(--field-800), var(--field-900));
+}
+
+.cine-info {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rxl);
+  padding: 24px;
+}
+.cine-info-head {
+  display: flex; justify-content: space-between; align-items: start;
+  gap: 14px; margin-bottom: 14px;
+}
+.cine-categoria {
+  font-size: .7rem; color: var(--gold-light);
+  font-weight: 800; letter-spacing: 1.2px;
+}
+.cine-titulo {
+  font: 800 1.4rem/1.2 'Montserrat', sans-serif;
+  margin-top: 4px;
+}
+.cine-progreso-badge {
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.4);
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: .76rem;
+  color: var(--gold-light);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.cine-desc {
+  color: rgba(255,255,255,.75);
+  line-height: 1.6;
+  font-size: .92rem;
+  margin-bottom: 14px;
+}
+.cine-meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: .85rem; color: rgba(255,255,255,.6);
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.cine-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+.cine-sidebar {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rxl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 80px;
+  max-height: calc(100vh - 100px);
+}
+.cine-sidebar-head {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.cine-sidebar-head h3 {
+  font: 800 1rem 'Montserrat', sans-serif;
+  margin-bottom: 4px;
+}
+.cine-sidebar-head p {
+  font-size: .76rem;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 10px;
+}
+.cine-progress-bar {
+  height: 5px;
+  background: rgba(255,255,255,.08);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.cine-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 100px;
+  transition: width .5s;
+}
+
+.cine-clases-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.cine-clases-list::-webkit-scrollbar { width: 6px; }
+.cine-clases-list::-webkit-scrollbar-track { background: rgba(0,0,0,.2); }
+.cine-clases-list::-webkit-scrollbar-thumb { background: rgba(212,160,23,.3); border-radius: 3px; }
+
+.cine-clase {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .2s;
+  margin-bottom: 4px;
+}
+.cine-clase:hover { background: rgba(255,255,255,.05); }
+.cine-clase.active {
+  background: linear-gradient(90deg, rgba(212,160,23,.2), rgba(212,160,23,.05));
+  border-left: 3px solid var(--gold);
+  padding-left: 9px;
+}
+.cine-clase.locked { opacity: .5; cursor: not-allowed; }
+
+.cine-clase-num {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,.08);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .82rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.6);
+}
+.cine-clase.done .cine-clase-num {
+  background: var(--success);
+  color: #fff;
+}
+.cine-clase.active .cine-clase-num {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+}
+.cine-clase-content { flex: 1; min-width: 0; }
+.cine-clase-title {
+  font-size: .88rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.cine-clase-meta {
+  font-size: .72rem;
+  color: rgba(255,255,255,.5);
+  display: flex; align-items: center; gap: 6px;
+}
+.cine-clase-lock-icon {
+  width: 14px; height: 14px;
+  color: rgba(255,255,255,.4);
+}
+
 @media (max-width: 880px) {
+  .establo-hero { height: 240px; }
+  .establo-hero-content { padding: 22px 20px; }
+  .establo-hero-title { font-size: 1.4rem; }
+  .establo-hero-desc { font-size: .85rem; }
+  .cine-titulo { font-size: 1.15rem; }
+  .cine-info { padding: 18px; }
+
   .sidebar {
     transform: translateX(-100%);
     box-shadow: 8px 0 30px rgba(0,0,0,.4);
@@ -1398,39 +1788,93 @@ button { font-family: inherit; }
       <!-- 🎓 ESTABLO (CURSOS)                                       -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-establo">
-        <div class="section-head">
-          <div>
-            <h1>🎓 El Establo del Conocimiento</h1>
-            <p>Capacitaciones especializadas para que domines tu negocio pecuario</p>
+
+        <!-- HERO ESTABLO con curso destacado -->
+        <div class="establo-hero" id="establoHero">
+          <div class="establo-hero-bg" id="establoHeroBg"></div>
+          <div class="establo-hero-overlay"></div>
+          <div class="establo-hero-content">
+            <span class="establo-hero-tag" id="establoHeroTag">⭐ DESTACADO</span>
+            <h1 class="establo-hero-title" id="establoHeroTitle">El Establo</h1>
+            <p class="establo-hero-desc" id="establoHeroDesc">Capacitaciones especializadas para que domines tu negocio pecuario.</p>
+            <div class="establo-hero-meta" id="establoHeroMeta"></div>
+            <button class="establo-hero-cta" id="establoHeroCta">
+              ▶ Empezar curso
+            </button>
           </div>
         </div>
 
-        <div class="row-cine">
-          <div class="row-cine-head">
-            <div class="row-cine-title">📺 Continúa viendo</div>
+        <!-- Search + filters -->
+        <div class="establo-controls">
+          <div class="establo-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="establoSearch" placeholder="Busca un curso, instructor o tema..." />
           </div>
-          <div class="row-cine-scroll" id="cineContinuar"></div>
+          <div class="establo-stats">
+            <span class="establo-stat-pill"><strong id="totalCursos">0</strong> cursos</span>
+            <span class="establo-stat-pill"><strong id="totalClases">0</strong> clases</span>
+            <span class="establo-stat-pill" id="misProgresoStat" style="display:none;"><strong id="misProgresoNum">0%</strong> de progreso</span>
+          </div>
         </div>
 
-        <div class="row-cine">
-          <div class="row-cine-head">
-            <div class="row-cine-title">🐂 Bovinos</div>
-          </div>
-          <div class="row-cine-scroll" id="cineBovinos"></div>
+        <!-- Loading state -->
+        <div id="establoLoading" class="establo-loading">
+          <div class="boot-spin" style="width:32px;height:32px"></div>
+          <p>Cargando cursos del rancho...</p>
         </div>
 
-        <div class="row-cine">
-          <div class="row-cine-head">
-            <div class="row-cine-title">🐑 Ovinos & Caprinos</div>
-          </div>
-          <div class="row-cine-scroll" id="cineOvinos"></div>
+        <!-- Categorías dinámicas (se generan desde Firestore) -->
+        <div id="establoCategorias"></div>
+
+        <!-- Estado vacío -->
+        <div id="establoVacio" class="establo-vacio" style="display:none;">
+          <div style="font-size:64px;margin-bottom:16px;">🎬</div>
+          <h3>El establo está siendo preparado</h3>
+          <p>Los primeros cursos se publicarán muy pronto. Vuelve en unos días.</p>
         </div>
 
-        <div class="row-cine">
-          <div class="row-cine-head">
-            <div class="row-cine-title">🐔 Avicultura</div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 🎬 VISTA DETALLE DEL CURSO (modo cine)                     -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-curso">
+        <button class="cine-back" onclick="navigateTo('establo')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Volver al Establo</span>
+        </button>
+
+        <div class="cine-layout">
+          <!-- Player principal -->
+          <div class="cine-main">
+            <div class="cine-player" id="cinePlayer">
+              <div class="cine-player-placeholder">
+                <div style="font-size:64px;">🎬</div>
+                <p>Selecciona una clase para empezar</p>
+              </div>
+            </div>
+            <div class="cine-info">
+              <div class="cine-info-head">
+                <div>
+                  <span class="cine-categoria" id="cineCategoria">CATEGORÍA</span>
+                  <h1 class="cine-titulo" id="cineTitulo">Título del curso</h1>
+                </div>
+                <div class="cine-progreso-badge" id="cineProgresoBadge">0% completado</div>
+              </div>
+              <p class="cine-desc" id="cineDesc">Descripción del curso...</p>
+              <div class="cine-meta" id="cineMeta"></div>
+            </div>
           </div>
-          <div class="row-cine-scroll" id="cineAves"></div>
+
+          <!-- Sidebar de clases -->
+          <aside class="cine-sidebar">
+            <div class="cine-sidebar-head">
+              <h3>📚 Contenido del curso</h3>
+              <p id="cineContador">0 clases</p>
+              <div class="cine-progress-bar"><div class="cine-progress-fill" id="cineProgressFill"></div></div>
+            </div>
+            <div class="cine-clases-list" id="cineClasesList"></div>
+          </aside>
         </div>
       </section>
 
@@ -1676,6 +2120,11 @@ onAuthStateChanged(auth, async (user) => {
   // UI con datos del user
   pintarUsuario(user);
   hideBoot();
+
+  // Iniciar suscripción a cursos en tiempo real
+  if (typeof window.__rancho?.iniciarEstablo === 'function') {
+    window.__rancho.iniciarEstablo();
+  }
 });
 
 window.__rancho.cerrarSesion = async function() {
@@ -1925,54 +2374,364 @@ function pintarMercadoFull() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// CINE DEL RANCHO (cursos demo)
+// 🎬 EL ESTABLO — conectado a Firestore en tiempo real
 // ═══════════════════════════════════════════════════════════
-const CURSOS = [
-  { id:'c1', cat:'Bovinos', cat_id:'bovinos', titulo:'Inseminación artificial bovina', emoji:'🐮', duracion:'4h 20m', clases:12, progreso:35, vip:false },
-  { id:'c2', cat:'Bovinos', cat_id:'bovinos', titulo:'Manejo estratégico de becerros', emoji:'🐂', duracion:'5h 40m', clases:18, progreso:0, vip:true },
-  { id:'c3', cat:'Bovinos', cat_id:'bovinos', titulo:'Ordeño profesional y calidad de leche', emoji:'🥛', duracion:'3h 15m', clases:10, progreso:65, vip:true },
-  { id:'c4', cat:'Bovinos', cat_id:'bovinos', titulo:'Medicina deportiva equina', emoji:'🐎', duracion:'6h 50m', clases:22, progreso:0, vip:true },
-  { id:'c5', cat:'Ovinos', cat_id:'ovinos', titulo:'Reproducción ovina intensiva', emoji:'🐑', duracion:'2h 50m', clases:8, progreso:0, vip:true },
-  { id:'c6', cat:'Ovinos', cat_id:'ovinos', titulo:'Nutrición y engorda de borregos', emoji:'🌾', duracion:'4h 10m', clases:14, progreso:0, vip:true },
-  { id:'c7', cat:'Caprinos', cat_id:'ovinos', titulo:'Sanidad caprina integral', emoji:'🐐', duracion:'3h 30m', clases:11, progreso:0, vip:true },
-  { id:'c8', cat:'Aves', cat_id:'aves', titulo:'Avicultura de postura comercial', emoji:'🐔', duracion:'5h 15m', clases:16, progreso:0, vip:true },
-  { id:'c9', cat:'Aves', cat_id:'aves', titulo:'Pollo de engorda intensivo', emoji:'🍗', duracion:'4h 45m', clases:14, progreso:15, vip:false },
-  { id:'c10', cat:'Aves', cat_id:'aves', titulo:'Apicultura productiva', emoji:'🐝', duracion:'3h 50m', clases:12, progreso:0, vip:true }
-];
+let CURSOS_FIRESTORE = [];
+let cursoActivo = null;
+let claseActivaIdx = 0;
+let progresoCursos = {}; // { cursoId: [idxClase, idxClase, ...] }
 
+// Cargar progreso desde localStorage (persistencia simple, después podemos llevarlo a Firestore por uid)
+try {
+  progresoCursos = JSON.parse(localStorage.getItem('vp_progreso_cursos') || '{}');
+} catch(e) { progresoCursos = {}; }
+
+function guardarProgreso() {
+  try { localStorage.setItem('vp_progreso_cursos', JSON.stringify(progresoCursos)); } catch(e){}
+}
+
+// Helper: extraer ID de YouTube de una URL
+function extraerYoutubeId(url) {
+  if (!url) return null;
+  const r = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  return r ? r[1] : null;
+}
+
+// Helper: filtrar curso bloqueado por fecha
+function cursoEstaBloqueado(curso) {
+  if (!curso.fechaDesbloqueo) return false;
+  return new Date(curso.fechaDesbloqueo) > new Date();
+}
+
+// Helper: clase bloqueada (1ra clase libre para FREE, resto VIP)
+function claseEstaBloqueada(idxClase, isVip) {
+  if (isVip) return false;
+  return idxClase > 0; // Solo la primera es libre para FREE
+}
+
+// ═══ CARD DEL CURSO ═══
 function cardCurso(c) {
-  const isVip = c.vip && window.__rancho?.userPlan && window.__rancho.userPlan() !== 'vip';
-  const onclick = isVip ? `abrirModalVIP('Este curso es exclusivo para Élite Pecuario.')` : `toast('Próximamente: ${c.titulo}', 'success', '🎬')`;
+  const bloqueadoFecha = cursoEstaBloqueado(c);
+  const numClases = (c.clases || []).length;
+  const progreso = progresoCursos[c.id] || [];
+  const pctProgreso = numClases > 0 ? Math.round((progreso.length / numClases) * 100) : 0;
+
+  const fotoStyle = c.foto
+    ? `background-image: linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.6)), url('${c.foto}'); background-size: cover; background-position: center;`
+    : `background: linear-gradient(135deg, ${c.color || '#1a5d3a'}, ${c.color || '#0f3d27'});`;
+
+  const fechaFormateada = bloqueadoFecha
+    ? new Date(c.fechaDesbloqueo).toLocaleDateString('es-MX', { day:'numeric', month:'long' })
+    : '';
+
   return `
-    <div class="curso-card" onclick="${onclick}">
-      <div class="curso-thumb">
-        ${c.emoji}
-        ${c.vip ? '<span class="curso-thumb-tag">⭐ VIP</span>' : ''}
-        ${isVip ? `<div class="curso-thumb-lock">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>` : ''}
-        ${c.progreso > 0 ? `<div class="curso-thumb-progress"><div class="curso-thumb-progress-fill" style="width:${c.progreso}%"></div></div>` : ''}
+    <div class="curso-card" onclick="${bloqueadoFecha ? `toast('Este curso se desbloquea el ${fechaFormateada}', 'success', '🔒')` : `abrirCurso('${c.id}')`}">
+      <div class="curso-thumb" style="${fotoStyle}">
+        ${!c.foto ? `<span class="curso-thumb-emoji">${c.emoji || '🐂'}</span>` : ''}
+        ${bloqueadoFecha ? `
+          <div class="curso-locked-overlay">
+            <div class="curso-locked-overlay-icon">🔒</div>
+            <strong>Próximamente</strong>
+            <small>Disponible el ${fechaFormateada}</small>
+          </div>
+        ` : ''}
+        ${pctProgreso > 0 && !bloqueadoFecha ? `<div class="curso-thumb-progress"><div class="curso-thumb-progress-fill" style="width:${pctProgreso}%"></div></div>` : ''}
       </div>
       <div class="curso-info">
-        <div class="curso-categoria">${c.cat}</div>
+        <div class="curso-categoria">${c.categoria || 'GENERAL'}</div>
         <div class="curso-title">${c.titulo}</div>
         <div class="curso-meta">
-          <span>⏱ ${c.duracion}</span>
-          <span>📚 ${c.clases} clases</span>
+          <span>📚 ${numClases} clase${numClases !== 1 ? 's' : ''}</span>
+          ${pctProgreso > 0 ? `<span>📈 ${pctProgreso}%</span>` : ''}
         </div>
       </div>
     </div>
   `;
 }
-function pintarCine() {
-  const continuar = CURSOS.filter(c => c.progreso > 0);
-  const home = CURSOS.slice(0, 6);
-  document.getElementById('cineScrollHome').innerHTML = home.map(cardCurso).join('');
-  document.getElementById('cineContinuar').innerHTML = (continuar.length ? continuar : CURSOS.slice(0,4)).map(cardCurso).join('');
-  document.getElementById('cineBovinos').innerHTML = CURSOS.filter(c => c.cat_id==='bovinos').map(cardCurso).join('');
-  document.getElementById('cineOvinos').innerHTML = CURSOS.filter(c => c.cat_id==='ovinos').map(cardCurso).join('');
-  document.getElementById('cineAves').innerHTML = CURSOS.filter(c => c.cat_id==='aves').map(cardCurso).join('');
+
+// ═══ HERO destacado ═══
+function pintarEstabloHero(curso) {
+  if (!curso) return;
+  const numClases = (curso.clases || []).length;
+  const fotoStyle = curso.foto
+    ? `background-image: url('${curso.foto}'); background-size: cover; background-position: center;`
+    : `background: linear-gradient(135deg, ${curso.color || '#1a5d3a'} 0%, ${curso.color || '#0f3d27'}cc 100%);`;
+
+  document.getElementById('establoHeroBg').setAttribute('style', fotoStyle);
+  document.getElementById('establoHeroTitle').textContent = curso.titulo;
+  document.getElementById('establoHeroDesc').textContent = curso.descripcion || `Curso especializado en ${(curso.categoria || 'pecuaria').toLowerCase()}.`;
+  document.getElementById('establoHeroMeta').innerHTML = `
+    <span>📚 ${numClases} clase${numClases !== 1 ? 's' : ''}</span>
+    <span>🏷️ ${curso.categoria || 'General'}</span>
+    ${curso.emoji ? `<span>${curso.emoji}</span>` : ''}
+  `;
+  document.getElementById('establoHeroCta').onclick = () => abrirCurso(curso.id);
 }
+
+// ═══ Pintar todas las filas del Establo ═══
+function pintarEstablo() {
+  const cursos = CURSOS_FIRESTORE;
+  const loading = document.getElementById('establoLoading');
+  const vacio = document.getElementById('establoVacio');
+  const cont = document.getElementById('establoCategorias');
+
+  loading.style.display = 'none';
+
+  if (!cursos || cursos.length === 0) {
+    vacio.style.display = 'block';
+    cont.innerHTML = '';
+    document.getElementById('establoHero').style.display = 'none';
+    return;
+  }
+
+  vacio.style.display = 'none';
+  document.getElementById('establoHero').style.display = '';
+
+  // Stats
+  const totalClases = cursos.reduce((acc, c) => acc + (c.clases || []).length, 0);
+  document.getElementById('totalCursos').textContent = cursos.length;
+  document.getElementById('totalClases').textContent = totalClases;
+
+  // % progreso global
+  const totalCompletadas = Object.values(progresoCursos).reduce((acc, arr) => acc + arr.length, 0);
+  if (totalClases > 0 && totalCompletadas > 0) {
+    document.getElementById('misProgresoStat').style.display = '';
+    document.getElementById('misProgresoNum').textContent = Math.round((totalCompletadas / totalClases) * 100) + '%';
+  }
+
+  // Hero: el primer curso (o el más reciente)
+  const cursosDisponibles = cursos.filter(c => !cursoEstaBloqueado(c));
+  pintarEstabloHero(cursosDisponibles[0] || cursos[0]);
+
+  // Buscar en estado actual
+  const search = (document.getElementById('establoSearch')?.value || '').toLowerCase().trim();
+  let cursosFiltrados = cursos;
+  if (search) {
+    cursosFiltrados = cursos.filter(c =>
+      (c.titulo || '').toLowerCase().includes(search) ||
+      (c.categoria || '').toLowerCase().includes(search) ||
+      (c.descripcion || '').toLowerCase().includes(search)
+    );
+  }
+
+  // Agrupar por categoría
+  const categorias = {};
+  cursosFiltrados.forEach(c => {
+    const cat = c.categoria || 'GENERAL';
+    if (!categorias[cat]) categorias[cat] = [];
+    categorias[cat].push(c);
+  });
+
+  // Continúa viendo (cursos con progreso)
+  const continuar = cursosFiltrados.filter(c => (progresoCursos[c.id] || []).length > 0 && (progresoCursos[c.id] || []).length < (c.clases || []).length);
+
+  let html = '';
+
+  if (continuar.length) {
+    html += `
+      <div class="row-cine">
+        <div class="row-cine-head">
+          <div class="row-cine-title">📺 Continúa viendo</div>
+        </div>
+        <div class="row-cine-scroll">
+          ${continuar.map(cardCurso).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  Object.keys(categorias).forEach(cat => {
+    const emojis = { BOVINOS: '🐂', OVINOS: '🐑', CAPRINOS: '🐐', AVES: '🐔', PORCINOS: '🐖', EQUINOS: '🐎', APICULTURA: '🐝' };
+    const emoji = emojis[cat.toUpperCase()] || '🎓';
+    html += `
+      <div class="row-cine">
+        <div class="row-cine-head">
+          <div class="row-cine-title">${emoji} ${cat}</div>
+        </div>
+        <div class="row-cine-scroll">
+          ${categorias[cat].map(cardCurso).join('')}
+        </div>
+      </div>
+    `;
+  });
+
+  if (cursosFiltrados.length === 0) {
+    html = `<div class="establo-vacio"><div style="font-size:48px;margin-bottom:12px;">🔍</div><h3>Sin resultados para "${search}"</h3><p>Intenta con otro término.</p></div>`;
+  }
+
+  cont.innerHTML = html;
+
+  // También pintar la fila del home con los primeros 6
+  const home = document.getElementById('cineScrollHome');
+  if (home) home.innerHTML = cursos.slice(0, 6).map(cardCurso).join('');
+}
+
+// ═══ Abrir curso (cambia a vista cine) ═══
+window.abrirCurso = function(cursoId) {
+  const curso = CURSOS_FIRESTORE.find(c => c.id === cursoId);
+  if (!curso) {
+    toast('Curso no encontrado', 'error', '⚠️');
+    return;
+  }
+  cursoActivo = curso;
+  claseActivaIdx = 0;
+  pintarVistaCurso();
+  // Cambiar a sección cine
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-curso').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ═══ Pintar vista del curso (modo cine) ═══
+function pintarVistaCurso() {
+  if (!cursoActivo) return;
+  const c = cursoActivo;
+  const clases = c.clases || [];
+  const progreso = progresoCursos[c.id] || [];
+  const pctProgreso = clases.length > 0 ? Math.round((progreso.length / clases.length) * 100) : 0;
+
+  document.getElementById('cineCategoria').textContent = c.categoria || 'GENERAL';
+  document.getElementById('cineTitulo').textContent = c.titulo;
+  document.getElementById('cineDesc').textContent = c.descripcion || 'Sin descripción disponible.';
+  document.getElementById('cineProgresoBadge').textContent = pctProgreso + '% completado';
+  document.getElementById('cineProgressFill').style.width = pctProgreso + '%';
+  document.getElementById('cineContador').textContent = `${clases.length} clase${clases.length !== 1 ? 's' : ''} · ${progreso.length} completadas`;
+
+  document.getElementById('cineMeta').innerHTML = `
+    <span>📚 ${clases.length} clases</span>
+    <span>🏷️ ${c.categoria || 'General'}</span>
+    ${c.emoji ? `<span>${c.emoji}</span>` : ''}
+  `;
+
+  // Lista de clases
+  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
+  const lista = document.getElementById('cineClasesList');
+
+  if (!clases.length) {
+    lista.innerHTML = `<div style="padding:30px 16px;text-align:center;color:rgba(255,255,255,.5);font-size:.85rem;">Las clases de este curso se publicarán pronto.</div>`;
+    document.getElementById('cinePlayer').innerHTML = `
+      <div class="cine-player-placeholder">
+        <div style="font-size:64px;">⏳</div>
+        <p>Las clases se publicarán pronto</p>
+      </div>
+    `;
+    return;
+  }
+
+  lista.innerHTML = clases.map((cl, i) => {
+    const bloqueada = claseEstaBloqueada(i, isVip);
+    const completada = progreso.includes(i);
+    const activa = i === claseActivaIdx;
+    return `
+      <div class="cine-clase ${activa?'active':''} ${completada?'done':''} ${bloqueada?'locked':''}"
+           onclick="${bloqueada ? `abrirModalVIP('Esta clase es exclusiva de Élite Pecuario. La primera clase es gratis.')` : `cambiarClase(${i})`}">
+        <div class="cine-clase-num">${completada ? '✓' : (bloqueada ? '🔒' : (i+1))}</div>
+        <div class="cine-clase-content">
+          <div class="cine-clase-title">${cl.titulo || 'Clase ' + (i+1)}</div>
+          <div class="cine-clase-meta">
+            ${cl.duracion ? `<span>⏱ ${cl.duracion}</span>` : ''}
+            ${cl.instructor ? `<span>· ${cl.instructor}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Cargar la clase activa en el player
+  cargarClaseEnPlayer(claseActivaIdx);
+}
+
+window.cambiarClase = function(idx) {
+  claseActivaIdx = idx;
+  pintarVistaCurso();
+};
+
+function cargarClaseEnPlayer(idx) {
+  if (!cursoActivo) return;
+  const clase = (cursoActivo.clases || [])[idx];
+  const player = document.getElementById('cinePlayer');
+  if (!clase) {
+    player.innerHTML = `<div class="cine-player-placeholder"><div style="font-size:64px;">🎬</div><p>Selecciona una clase</p></div>`;
+    return;
+  }
+  const ytId = extraerYoutubeId(clase.url || clase.videoUrl);
+  if (ytId) {
+    player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+    // Marcar como completada después de 30s (heurística simple)
+    setTimeout(() => marcarClaseVista(idx), 30000);
+  } else if (clase.url || clase.videoUrl) {
+    // Otro tipo de URL (Vimeo, link directo)
+    const url = clase.url || clase.videoUrl;
+    player.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
+    setTimeout(() => marcarClaseVista(idx), 30000);
+  } else {
+    player.innerHTML = `
+      <div class="cine-player-placeholder">
+        <div style="font-size:64px;">📝</div>
+        <p style="margin-bottom:8px;">${clase.titulo || 'Clase ' + (idx+1)}</p>
+        <small style="color:rgba(255,255,255,.4);">Esta clase aún no tiene video. Contenido en preparación.</small>
+      </div>
+    `;
+  }
+}
+
+function marcarClaseVista(idx) {
+  if (!cursoActivo) return;
+  const cid = cursoActivo.id;
+  if (!progresoCursos[cid]) progresoCursos[cid] = [];
+  if (!progresoCursos[cid].includes(idx)) {
+    progresoCursos[cid].push(idx);
+    guardarProgreso();
+    // Repintar para actualizar UI sin recargar
+    if (document.getElementById('section-curso').classList.contains('active')) {
+      pintarVistaCurso();
+    }
+    pintarEstablo();
+    toast('+10 XP · Clase completada', 'success', '✅');
+  }
+}
+
+// ═══ Búsqueda en vivo ═══
+document.addEventListener('DOMContentLoaded', () => {
+  const search = document.getElementById('establoSearch');
+  if (search) {
+    let timer;
+    search.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => pintarEstablo(), 200);
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// 🔥 SUSCRIPCIÓN FIRESTORE EN TIEMPO REAL
+// ═══════════════════════════════════════════════════════════
+window.__rancho = window.__rancho || {};
+window.__rancho.iniciarEstablo = async function() {
+  try {
+    const { collection, onSnapshot, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    if (!db) return;
+    const q = query(collection(db, 'cursos'));
+    onSnapshot(q, (snap) => {
+      CURSOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // Ordenar: primero los que tienen createdAt más reciente
+      CURSOS_FIRESTORE.sort((a, b) => {
+        const da = a.createdAt || a.updatedAt || '';
+        const db = b.createdAt || b.updatedAt || '';
+        return db.localeCompare(da);
+      });
+      pintarEstablo();
+    }, (err) => {
+      console.error('Error suscribiéndose a cursos:', err);
+      document.getElementById('establoLoading').style.display = 'none';
+      document.getElementById('establoVacio').style.display = 'block';
+    });
+  } catch(e) {
+    console.error('No se pudo iniciar el establo:', e);
+  }
+};
+
 
 // ═══════════════════════════════════════════════════════════
 // HATO VIRTUAL (demo data)
@@ -2067,11 +2826,11 @@ window.addEventListener('DOMContentLoaded', () => {
   pintarMisiones();
   pintarMercadoMini();
   pintarMercadoFull();
-  pintarCine();
   pintarHato();
   pintarTools();
   pintarLogros();
   setTimeout(() => setTermometro(87), 800);
+  // El Establo se inicia desde el módulo Firebase cuando hay user
 });
 
 // Cerrar modal con ESC
