@@ -2175,6 +2175,80 @@ button { font-family: inherit; }
   z-index: 3;
 }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* 👑 BANNER VIP — aparece en secciones premium en modo FREE     */
+/* ═══════════════════════════════════════════════════════════ */
+.vip-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+  margin-bottom: 22px;
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(212,160,23,.05));
+  border: 1px solid rgba(212,160,23,.45);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.vip-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(212,160,23,.15), transparent);
+  animation: vipShine 4s ease-in-out infinite;
+}
+@keyframes vipShine {
+  0%, 100% { left: -50%; }
+  60% { left: 110%; }
+}
+.vip-banner-icon {
+  flex-shrink: 0;
+  width: 50px; height: 50px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 8px 18px rgba(212,160,23,.3);
+}
+.vip-banner-text { flex: 1; min-width: 0; position: relative; z-index: 2; }
+.vip-banner-text strong {
+  display: block;
+  color: var(--gold-light);
+  font: 700 .92rem 'Inter', sans-serif;
+  margin-bottom: 3px;
+}
+.vip-banner-text span {
+  display: block;
+  color: rgba(255,255,255,.75);
+  font-size: .82rem;
+  line-height: 1.4;
+}
+.vip-banner-cta {
+  flex-shrink: 0;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  border: none;
+  border-radius: 100px;
+  font: 800 .85rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .25s;
+  box-shadow: 0 6px 16px rgba(212,160,23,.35);
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+.vip-banner-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(212,160,23,.5);
+}
+@media (max-width: 700px) {
+  .vip-banner { flex-direction: column; text-align: center; padding: 18px 16px; gap: 12px; }
+  .vip-banner-cta { width: 100%; }
+}
+
 @media (max-width: 880px) {
   .establo-hero { height: 240px; }
   .establo-hero-content { padding: 22px 20px; }
@@ -3059,12 +3133,8 @@ window.__rancho.userPlan = () => userPlan;
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════════════════
 window.navigateTo = function(section) {
-  // Verificar si es VIP-only
-  const navItem = document.querySelector(`.sb-nav-item[data-section="${section}"]`);
-  if (navItem && navItem.dataset.vip) {
-    abrirModalVIP();
-    return;
-  }
+  // Permitimos entrar a todas las secciones para que vean el contenido
+  // El bloqueo se hace por contenido (videos individuales, descargas, etc)
   document.querySelectorAll('.sb-nav-item').forEach(b => {
     b.classList.toggle('active', b.dataset.section === section);
   });
@@ -3073,11 +3143,47 @@ window.navigateTo = function(section) {
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (window.innerWidth <= 880) toggleSidebar(false);
+
+  // Mostrar/ocultar banner VIP según sección
+  actualizarBannerVIP(section);
 };
 
 document.querySelectorAll('.sb-nav-item').forEach(btn => {
   btn.addEventListener('click', () => navigateTo(btn.dataset.section));
 });
+
+// ═══════════════════════════════════════════════════════════
+// 👑 BANNER VIP en secciones bloqueadas (modo FREE)
+// ═══════════════════════════════════════════════════════════
+const SECCIONES_VIP = {
+  establo: { titulo: 'Curso bloqueado', desc: 'Mira la primera clase gratis. Para acceder al curso completo, hazte Élite Pecuario.', icon: '🎓' },
+  cineteca: { titulo: 'Cineteca exclusiva', desc: 'Ves los webinars en vista previa. Para reproducirlos completos, hazte Élite Pecuario.', icon: '🎬' },
+  biblioteca: { titulo: 'Biblioteca exclusiva', desc: 'Ves los títulos. Para descargar el material completo, hazte Élite Pecuario.', icon: '📚' },
+  vivo: { titulo: 'Sesiones en vivo', desc: 'Ves la programación. Para unirte a las sesiones en vivo, hazte Élite Pecuario.', icon: '📡' },
+  botiquin: { titulo: 'Diagnóstico veterinario IA', desc: 'Función exclusiva. Solicítalo siendo Élite Pecuario.', icon: '⚕️' },
+  radar: { titulo: 'Radar de comunidad', desc: 'Conecta con productores de toda la república. Exclusivo Élite Pecuario.', icon: '🌐' }
+};
+window.actualizarBannerVIP = function(section) {
+  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
+  // Quitar banner viejo si existe
+  document.querySelectorAll('.vip-banner').forEach(b => b.remove());
+  if (isVip) return; // VIP no ve banners
+  const config = SECCIONES_VIP[section];
+  if (!config) return;
+  const sectionEl = document.getElementById('section-' + section);
+  if (!sectionEl) return;
+  const banner = document.createElement('div');
+  banner.className = 'vip-banner';
+  banner.innerHTML = `
+    <div class="vip-banner-icon">${config.icon}</div>
+    <div class="vip-banner-text">
+      <strong>👑 Estás en modo Explorador (FREE)</strong>
+      <span>${config.desc}</span>
+    </div>
+    <button class="vip-banner-cta" onclick="abrirModalVIP()">Hazte Élite</button>
+  `;
+  sectionEl.insertBefore(banner, sectionEl.firstChild);
+};
 
 window.toggleSidebar = function(force) {
   const sb = document.getElementById('sidebar');
@@ -3776,6 +3882,12 @@ window.filtrarCineteca = function(cat, btn) {
 window.abrirVideoModal = function(videoId) {
   const v = VIDEOS_FIRESTORE.find(x => x.id === videoId);
   if (!v) return;
+  // Verificar VIP
+  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
+  if (!isVip) {
+    abrirModalVIP('Este video es exclusivo para miembros Élite Pecuario.');
+    return;
+  }
   const ytId = extraerYoutubeId(v.url);
   const player = document.getElementById('videoModalPlayer');
   if (ytId) {
@@ -3802,6 +3914,13 @@ let bibliotecaSearch = '';
 
 function cardPdf(p) {
   const fechaTxt = p.fecha ? new Date(p.fecha).toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' }) : '';
+  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
+  const verAction = isVip
+    ? `href="${p.url}" target="_blank" rel="noopener noreferrer"`
+    : `href="javascript:void(0)" onclick="abrirModalVIP('Descargar este PDF requiere ser Élite Pecuario.')"`;
+  const descAction = isVip
+    ? `href="${p.url}" download target="_blank" rel="noopener noreferrer"`
+    : `href="javascript:void(0)" onclick="abrirModalVIP('Descargar este PDF requiere ser Élite Pecuario.')"`;
   return `
     <div class="pdf-card">
       <div class="pdf-icon-wrap">
@@ -3811,13 +3930,15 @@ function cardPdf(p) {
       <div class="pdf-titulo">${p.titulo || 'Sin título'}</div>
       ${fechaTxt ? `<div class="pdf-fecha">📅 ${fechaTxt}</div>` : ''}
       <div class="pdf-actions">
-        <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="pdf-btn pdf-btn--main" onclick="event.stopPropagation();">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span>Ver</span>
+        <a ${verAction} class="pdf-btn pdf-btn--main">
+          ${isVip ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
+            : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`}
+          <span>${isVip ? 'Ver' : 'VIP'}</span>
         </a>
-        <a href="${p.url}" download target="_blank" rel="noopener noreferrer" class="pdf-btn" onclick="event.stopPropagation();">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span>Descargar</span>
+        <a ${descAction} class="pdf-btn">
+          ${isVip ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
+            : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`}
+          <span>${isVip ? 'Descargar' : 'VIP'}</span>
         </a>
       </div>
     </div>
@@ -3921,13 +4042,18 @@ function calcularCountdown(fechaISO) {
 function cardSesion(s) {
   const estado = getSesionEstado(s);
   const iniciales = (s.instructor || 'VP').split(' ').slice(0,2).map(x=>x[0]).join('').toUpperCase();
+  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
 
   let statusHTML = '';
   let ctaHTML = '';
 
   if (estado === 'live') {
     statusHTML = `<div class="sesion-status sesion-status--live"><span class="live-dot"></span>EN VIVO AHORA</div>`;
-    ctaHTML = `<a href="${s.link || '#'}" target="_blank" rel="noopener noreferrer" class="sesion-cta sesion-cta--live">🔴 Unirme ahora</a>`;
+    if (isVip) {
+      ctaHTML = `<a href="${s.link || '#'}" target="_blank" rel="noopener noreferrer" class="sesion-cta sesion-cta--live">🔴 Unirme ahora</a>`;
+    } else {
+      ctaHTML = `<button class="sesion-cta sesion-cta--live" onclick="abrirModalVIP('Únete a la sesión en vivo siendo Élite Pecuario.')">👑 Unirme (Élite)</button>`;
+    }
   } else if (estado === 'proximo') {
     const cd = calcularCountdown(s.fecha);
     statusHTML = `<div class="sesion-status sesion-status--proximo">🔔 PRÓXIMAMENTE</div>`;
@@ -3940,12 +4066,22 @@ function cardSesion(s) {
         </div>
       `;
     }
-    ctaHTML = `<button class="sesion-cta sesion-cta--proximo" onclick="agregarRecordatorio('${s.id}')">🔔 Agendar recordatorio</button>`;
+    if (isVip) {
+      ctaHTML = `<button class="sesion-cta sesion-cta--proximo" onclick="agregarRecordatorio('${s.id}')">🔔 Agendar recordatorio</button>`;
+    } else {
+      ctaHTML = `<button class="sesion-cta sesion-cta--proximo" onclick="abrirModalVIP('Agenda y participa en sesiones siendo Élite Pecuario.')">👑 Agendar (Élite)</button>`;
+    }
   } else {
     statusHTML = `<div class="sesion-status sesion-status--pasado">📼 GRABACIÓN</div>`;
-    ctaHTML = s.grabacion
-      ? `<a href="${s.grabacion}" target="_blank" rel="noopener noreferrer" class="sesion-cta sesion-cta--pasado">📼 Ver grabación</a>`
-      : `<button class="sesion-cta sesion-cta--pasado" disabled style="opacity:.5;cursor:not-allowed;">Grabación no disponible</button>`;
+    if (s.grabacion) {
+      if (isVip) {
+        ctaHTML = `<a href="${s.grabacion}" target="_blank" rel="noopener noreferrer" class="sesion-cta sesion-cta--pasado">📼 Ver grabación</a>`;
+      } else {
+        ctaHTML = `<button class="sesion-cta sesion-cta--pasado" onclick="abrirModalVIP('Ver grabaciones requiere ser Élite Pecuario.')">👑 Ver (Élite)</button>`;
+      }
+    } else {
+      ctaHTML = `<button class="sesion-cta sesion-cta--pasado" disabled style="opacity:.5;cursor:not-allowed;">Grabación no disponible</button>`;
+    }
   }
 
   return `
