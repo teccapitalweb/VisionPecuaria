@@ -3042,65 +3042,55 @@ let userPlan = 'free';
 setBootStatus('Verificando sesión...');
 const hashOk = await procesarHashAutologin();
 
-// 🛡️ Anti-bucle: dar 2.5s de gracia para que Firebase hidrate la sesión
-// del localStorage antes de redirigir al login. Evita el bucle:
-//   login.html → index.html → (firebase aún no carga) → login.html → ...
-const startedAt = Date.now();
-const GRACE_MS = 2500;
+// 🛡️ Anti-bucle: el primer disparo de onAuthStateChanged puede traer null
+// mientras Firebase hidrata la sesión del localStorage. NO redirigimos en
+// el primer null durante los primeros 4 segundos. Si después de eso sigue
+// null, sí redirigimos al login.
+let authProcessed = false;
 
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    // Si Firebase aún está cargando la sesión, esperar antes de redirigir
-    const elapsed = Date.now() - startedAt;
-    if (elapsed < GRACE_MS) {
-      // Esperamos un poco más y reintentamos
-      setTimeout(() => {
-        if (!auth.currentUser && !hashOk) {
-          window.location.href = 'login.html?logout=1';
-        }
-      }, GRACE_MS - elapsed);
-      return;
-    }
-    if (!hashOk) {
-      window.location.href = 'login.html?logout=1';
-    }
+  // Si ya procesamos un user válido, ignorar disparos posteriores con null
+  if (authProcessed && !user) return;
+
+  if (user) {
+    authProcessed = true;
+    currentUser = user;
+    setBootStatus('Cargando tu rancho...');
+
+    // Buscar miembro VIP en Firestore — leer doc(uid) directo
+    try {
+      const refM = doc(db, 'miembros', user.uid);
+      const snapM = await getDoc(refM);
+      if (snapM.exists()) {
+        const m = snapM.data();
+        const vence = m.vence ? new Date(m.vence) : null;
+        const activoVIP = m.estado === 'activo' && (vence ? vence > new Date() : true);
+        if (activoVIP) userPlan = 'vip';
+      }
+    } catch (e) { console.warn('No se pudo verificar VIP:', e.code || e); }
+
+    // UI con datos del user
+    pintarUsuario(user);
+    hideBoot();
+
+    // Iniciar suscripciones a contenido
+    if (typeof window.__rancho?.iniciarEstablo === 'function') window.__rancho.iniciarEstablo();
+    if (typeof window.__rancho?.cargarMiembro === 'function') window.__rancho.cargarMiembro();
+    if (typeof window.__rancho?.iniciarContenido === 'function') window.__rancho.iniciarContenido();
+    if (typeof window.__rancho?.iniciarCertificados === 'function') window.__rancho.iniciarCertificados();
     return;
   }
-  currentUser = user;
-  setBootStatus('Cargando tu rancho...');
 
-  // Buscar miembro VIP en Firestore — leer doc(uid) directo
-  try {
-    const refM = doc(db, 'miembros', user.uid);
-    const snapM = await getDoc(refM);
-    if (snapM.exists()) {
-      const m = snapM.data();
-      const vence = m.vence ? new Date(m.vence) : null;
-      const activoVIP = m.estado === 'activo' && (vence ? vence > new Date() : true);
-      if (activoVIP) userPlan = 'vip';
+  // user es null. Si ya hubo un autologin por hash, no redirigir
+  if (hashOk) return;
+
+  // Esperar 4 segundos a que Firebase termine de hidratar.
+  // Si después de eso el authProcessed sigue false, redirigimos.
+  setTimeout(() => {
+    if (!authProcessed && !auth.currentUser) {
+      window.location.href = 'login.html?logout=1';
     }
-  } catch (e) { console.warn('No se pudo verificar VIP:', e.code || e); }
-
-  // UI con datos del user
-  pintarUsuario(user);
-  hideBoot();
-
-  // Iniciar suscripción a cursos en tiempo real
-  if (typeof window.__rancho?.iniciarEstablo === 'function') {
-    window.__rancho.iniciarEstablo();
-  }
-  // Cargar datos del miembro logueado (cursosDesbloqueados, fechaUltimaActivacion)
-  if (typeof window.__rancho?.cargarMiembro === 'function') {
-    window.__rancho.cargarMiembro();
-  }
-  // Iniciar Cineteca + Biblioteca + En Vivo
-  if (typeof window.__rancho?.iniciarContenido === 'function') {
-    window.__rancho.iniciarContenido();
-  }
-  // Iniciar Certificados
-  if (typeof window.__rancho?.iniciarCertificados === 'function') {
-    window.__rancho.iniciarCertificados();
-  }
+  }, 4000);
 });
 
 window.__rancho.cerrarSesion = async function() {
