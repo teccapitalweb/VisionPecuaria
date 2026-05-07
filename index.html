@@ -3689,7 +3689,7 @@ function pintarVistaCurso() {
   document.getElementById('cineMeta').innerHTML = `
     <span>📚 ${clases.length} clases</span>
     <span>🏷️ ${c.categoria || 'General'}</span>
-    ${c.emoji ? `<span>${c.emoji}</span>` : ''}
+    ${c.instructor ? `<span>👤 ${c.instructor}</span>` : ''}
   `;
 
   // Lista de clases
@@ -3717,10 +3717,6 @@ function pintarVistaCurso() {
         <div class="cine-clase-num">${completada ? '✓' : (bloqueada ? '🔒' : (i+1))}</div>
         <div class="cine-clase-content">
           <div class="cine-clase-title">${cl.titulo || 'Clase ' + (i+1)}</div>
-          <div class="cine-clase-meta">
-            ${cl.duracion ? `<span>⏱ ${cl.duracion}</span>` : ''}
-            ${cl.instructor ? `<span>· ${cl.instructor}</span>` : ''}
-          </div>
         </div>
       </div>
     `;
@@ -3743,17 +3739,8 @@ function cargarClaseEnPlayer(idx) {
     player.innerHTML = `<div class="cine-player-placeholder"><div style="font-size:64px;">🎬</div><p>Selecciona una clase</p></div>`;
     return;
   }
-  const ytId = extraerYoutubeId(clase.url || clase.videoUrl);
-  if (ytId) {
-    player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
-    // Marcar como completada después de 30s (heurística simple)
-    setTimeout(() => marcarClaseVista(idx), 30000);
-  } else if (clase.url || clase.videoUrl) {
-    // Otro tipo de URL (Vimeo, link directo)
-    const url = clase.url || clase.videoUrl;
-    player.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
-    setTimeout(() => marcarClaseVista(idx), 30000);
-  } else {
+  const url = clase.url || clase.videoUrl || '';
+  if (!url) {
     player.innerHTML = `
       <div class="cine-player-placeholder">
         <div style="font-size:64px;">📝</div>
@@ -3761,7 +3748,30 @@ function cargarClaseEnPlayer(idx) {
         <small style="color:rgba(255,255,255,.4);">Esta clase aún no tiene video. Contenido en preparación.</small>
       </div>
     `;
+    return;
   }
+  // 1. Google Drive: convertir /file/d/{id}/view o /file/d/{id} → /file/d/{id}/preview
+  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^\/\?]+)/);
+  if (driveMatch) {
+    player.innerHTML = `<iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+    setTimeout(() => marcarClaseVista(idx), 30000);
+    return;
+  }
+  // 2. YouTube
+  const ytId = extraerYoutubeId(url);
+  if (ytId) {
+    player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+    setTimeout(() => marcarClaseVista(idx), 30000);
+    return;
+  }
+  // 3. MP4/WebM directo
+  if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) {
+    player.innerHTML = `<video src="${url}" controls autoplay style="width:100%;height:100%;background:#000;" onplay="setTimeout(() => marcarClaseVista(${idx}), 30000)"></video>`;
+    return;
+  }
+  // 4. Otro tipo (Vimeo, etc) → iframe genérico
+  player.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
+  setTimeout(() => marcarClaseVista(idx), 30000);
 }
 
 function marcarClaseVista(idx) {
@@ -3823,19 +3833,34 @@ window.__rancho.iniciarEstablo = async function() {
     const { collection, onSnapshot, query } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     const db = window.__rancho.db;
     if (!db) return;
+
+    // Timeout de seguridad: si en 8s no llega nada, mostrar estado vacío
+    const safetyTimer = setTimeout(() => {
+      const loading = document.getElementById('establoLoading');
+      if (loading && loading.style.display !== 'none') {
+        console.warn('⏰ Timeout cargando cursos. Mostrando vacío.');
+        loading.style.display = 'none';
+        document.getElementById('establoVacio').style.display = 'block';
+      }
+    }, 8000);
+
     const q = query(collection(db, 'cursos'));
     onSnapshot(q, (snap) => {
+      clearTimeout(safetyTimer);
       CURSOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       // Ordenar por ordenDrip ascendente (1, 2, 3...)
       CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
       pintarEstablo();
     }, (err) => {
+      clearTimeout(safetyTimer);
       console.error('Error suscribiéndose a cursos:', err);
       document.getElementById('establoLoading').style.display = 'none';
       document.getElementById('establoVacio').style.display = 'block';
     });
   } catch(e) {
     console.error('No se pudo iniciar el establo:', e);
+    document.getElementById('establoLoading').style.display = 'none';
+    document.getElementById('establoVacio').style.display = 'block';
   }
 };
 
@@ -4305,33 +4330,50 @@ window.__rancho.iniciarContenido = async function() {
     const db = window.__rancho.db;
     if (!db) return;
 
-    // Videos
+    // Helper: timeout de seguridad genérico
+    function safetyTimeout(loadingId, vacioId, ms = 8000) {
+      return setTimeout(() => {
+        const l = document.getElementById(loadingId);
+        if (l && l.style.display !== 'none') {
+          l.style.display = 'none';
+          const v = document.getElementById(vacioId);
+          if (v) v.style.display = 'block';
+        }
+      }, ms);
+    }
+
+    const tVideos = safetyTimeout('cinetecaLoading', 'cinetecaVacio');
     onSnapshot(collection(db, 'videos'), (snap) => {
+      clearTimeout(tVideos);
       VIDEOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       pintarCineteca();
     }, (err) => {
+      clearTimeout(tVideos);
       console.warn('Sin permisos para videos:', err.message);
       document.getElementById('cinetecaLoading').style.display = 'none';
       document.getElementById('cinetecaVacio').style.display = 'block';
     });
 
-    // PDFs
+    const tPdfs = safetyTimeout('bibliotecaLoading', 'bibliotecaVacio');
     onSnapshot(collection(db, 'pdfs'), (snap) => {
+      clearTimeout(tPdfs);
       PDFS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       pintarBiblioteca();
     }, (err) => {
+      clearTimeout(tPdfs);
       console.warn('Sin permisos para pdfs:', err.message);
       document.getElementById('bibliotecaLoading').style.display = 'none';
       document.getElementById('bibliotecaVacio').style.display = 'block';
     });
 
-    // Sesiones
+    const tSes = safetyTimeout('vivoLoading', 'vivoVacio');
     onSnapshot(collection(db, 'sesiones'), (snap) => {
+      clearTimeout(tSes);
       SESIONES_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       pintarSesiones();
     }, (err) => {
+      clearTimeout(tSes);
       console.warn('Sin permisos para sesiones:', err.message);
-      // Mostrar solo demo
       document.getElementById('vivoLoading').style.display = 'none';
       pintarSesiones();
     });
