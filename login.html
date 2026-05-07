@@ -518,7 +518,7 @@ body {
     </div>
 
     <!-- LOGIN form -->
-    <form class="form active" id="formLogin" onsubmit="loginEmail(event)">
+    <form class="form active" id="formLogin" onsubmit="submitLogin(event)">
       <h2 class="form-title">Bienvenido de vuelta</h2>
       <p class="form-subtitle">Accede a tu portal y sigue construyendo tu negocio pecuario.</p>
 
@@ -560,7 +560,7 @@ body {
     </form>
 
     <!-- REGISTRO form -->
-    <form class="form" id="formRegistro" onsubmit="registroEmail(event)">
+    <form class="form" id="formRegistro" onsubmit="submitRegistro(event)">
       <h2 class="form-title">Únete al rancho digital</h2>
       <p class="form-subtitle">Crea tu cuenta gratis. Después podrás convertirte en Élite Pecuario.</p>
 
@@ -715,7 +715,7 @@ function ocultarAlerts() {
 // ═══════════════════════════════════════════════════════════
 // LOGIN CON EMAIL
 // ═══════════════════════════════════════════════════════════
-window.loginEmail = async function(ev) {
+window.submitLogin = async function(ev) {
   ev.preventDefault();
   ocultarAlerts();
   const email = document.getElementById('loginEmail').value.trim();
@@ -738,7 +738,7 @@ window.loginEmail = async function(ev) {
 // ═══════════════════════════════════════════════════════════
 // REGISTRO CON EMAIL
 // ═══════════════════════════════════════════════════════════
-window.registroEmail = async function(ev) {
+window.submitRegistro = async function(ev) {
   ev.preventDefault();
   ocultarAlerts();
   const nombre = document.getElementById('regNombre').value.trim();
