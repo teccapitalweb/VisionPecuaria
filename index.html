@@ -3071,6 +3071,10 @@ onAuthStateChanged(auth, async (user) => {
   if (typeof window.__rancho?.iniciarEstablo === 'function') {
     window.__rancho.iniciarEstablo();
   }
+  // Cargar datos del miembro logueado (cursosDesbloqueados, fechaUltimaActivacion)
+  if (typeof window.__rancho?.cargarMiembro === 'function') {
+    window.__rancho.cargarMiembro();
+  }
   // Iniciar Cineteca + Biblioteca + En Vivo
   if (typeof window.__rancho?.iniciarContenido === 'function') {
     window.__rancho.iniciarContenido();
@@ -3383,10 +3387,85 @@ function extraerYoutubeId(url) {
   return r ? r[1] : null;
 }
 
-// Helper: filtrar curso bloqueado por fecha
+// ═══════════════════════════════════════════════════════════
+// 🔓 SISTEMA DRIP — desbloqueo secuencial por miembro
+// ═══════════════════════════════════════════════════════════
+// Cada miembro tiene en su doc Firestore:
+//   - cursosDesbloqueados: ['cursoId1', 'cursoId2', ...] (lista permanente)
+//   - fechaUltimaActivacion: ISO date (cuando empezó/renovó membresía)
+// Reglas:
+//   - El curso con ordenDrip=1 SIEMPRE está libre (gratuito intro)
+//   - El siguiente curso (ordenDrip=2) se desbloquea N días después de fechaUltimaActivacion
+//   - El curso ordenDrip=3 se desbloquea N+M días después, etc
+//   - Si el curso YA está en cursosDesbloqueados, queda desbloqueado para siempre
+// ═══════════════════════════════════════════════════════════
+let MIEMBRO_ACTUAL = null; // doc del miembro logueado (tiene cursosDesbloqueados, fechaUltimaActivacion)
+
+// Calcula el estado de un curso para el miembro actual
+// Retorna: { desbloqueado: bool, fechaDesbloqueo: Date|null, diasRestantes: number, esLibre: bool, requierePago: bool }
+function calcularEstadoCurso(curso) {
+  const orden = curso.ordenDrip || 999;
+  const dias = curso.diasDrip || 8;
+  const esLibre = orden === 1;
+
+  // Curso #1: siempre libre para todos (gratis intro)
+  if (esLibre) {
+    return { desbloqueado: true, fechaDesbloqueo: null, diasRestantes: 0, esLibre: true, requierePago: false };
+  }
+
+  // Si NO hay miembro o no hay membresía activa
+  if (!MIEMBRO_ACTUAL || !MIEMBRO_ACTUAL.fechaUltimaActivacion) {
+    // Pero si ya estaba en cursosDesbloqueados (membresía vencida pero ya lo había desbloqueado), permitir
+    if (MIEMBRO_ACTUAL && (MIEMBRO_ACTUAL.cursosDesbloqueados || []).includes(curso.id)) {
+      return { desbloqueado: true, fechaDesbloqueo: null, diasRestantes: 0, esLibre: false, requierePago: false };
+    }
+    return { desbloqueado: false, fechaDesbloqueo: null, diasRestantes: -1, esLibre: false, requierePago: true };
+  }
+
+  // Si ya está en cursosDesbloqueados → siempre disponible
+  if ((MIEMBRO_ACTUAL.cursosDesbloqueados || []).includes(curso.id)) {
+    return { desbloqueado: true, fechaDesbloqueo: null, diasRestantes: 0, esLibre: false, requierePago: false };
+  }
+
+  // Calcular fecha de desbloqueo basada en la posición en la cola
+  // Para el miembro: cuántos cursos YA tiene desbloqueados de su lista
+  const yaDesbloqueados = (MIEMBRO_ACTUAL.cursosDesbloqueados || []).length;
+  // Posición del curso en la cola del miembro (después de los que ya tiene)
+  const posicionDesdeActivacion = orden - 1; // Curso 2 = 1 paso, Curso 3 = 2 pasos, etc
+
+  const fechaActivacion = new Date(MIEMBRO_ACTUAL.fechaUltimaActivacion);
+  const fechaDesbloqueo = new Date(fechaActivacion);
+  fechaDesbloqueo.setDate(fechaDesbloqueo.getDate() + posicionDesdeActivacion * dias);
+
+  const ahora = new Date();
+  const desbloqueado = ahora >= fechaDesbloqueo;
+  const diasRestantes = desbloqueado ? 0 : Math.ceil((fechaDesbloqueo - ahora) / (1000 * 60 * 60 * 24));
+
+  // Si se desbloquea HOY, registrarlo en Firestore
+  if (desbloqueado && !MIEMBRO_ACTUAL.cursosDesbloqueados?.includes(curso.id)) {
+    registrarDesbloqueo(curso.id);
+  }
+
+  return { desbloqueado, fechaDesbloqueo, diasRestantes, esLibre: false, requierePago: false };
+}
+
+async function registrarDesbloqueo(cursoId) {
+  try {
+    const { doc, updateDoc, arrayUnion } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const user = window.__rancho.auth?.currentUser;
+    if (!db || !user || !MIEMBRO_ACTUAL?._docId) return;
+    await updateDoc(doc(db, 'miembros', MIEMBRO_ACTUAL._docId), {
+      cursosDesbloqueados: arrayUnion(cursoId)
+    });
+    if (!MIEMBRO_ACTUAL.cursosDesbloqueados) MIEMBRO_ACTUAL.cursosDesbloqueados = [];
+    MIEMBRO_ACTUAL.cursosDesbloqueados.push(cursoId);
+  } catch(e) { console.warn('No se pudo registrar desbloqueo:', e); }
+}
+
+// Mantener backward compat
 function cursoEstaBloqueado(curso) {
-  if (!curso.fechaDesbloqueo) return false;
-  return new Date(curso.fechaDesbloqueo) > new Date();
+  return !calcularEstadoCurso(curso).desbloqueado;
 }
 
 // Helper: clase bloqueada (1ra clase libre para FREE, resto VIP)
@@ -3397,31 +3476,55 @@ function claseEstaBloqueada(idxClase, isVip) {
 
 // ═══ CARD DEL CURSO ═══
 function cardCurso(c) {
-  const bloqueadoFecha = cursoEstaBloqueado(c);
+  const estado = calcularEstadoCurso(c);
   const numClases = (c.clases || []).length;
   const progreso = progresoCursos[c.id] || [];
   const pctProgreso = numClases > 0 ? Math.round((progreso.length / numClases) * 100) : 0;
 
   const fotoStyle = c.foto
-    ? `background-image: linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.6)), url('${c.foto}'); background-size: cover; background-position: center;`
-    : `background: linear-gradient(135deg, ${c.color || '#1a5d3a'}, ${c.color || '#0f3d27'});`;
+    ? `background-image: linear-gradient(135deg, rgba(0,0,0,.25), rgba(0,0,0,.55)), url('${c.foto}'); background-size: cover; background-position: center;`
+    : `background: linear-gradient(135deg, #1a5d3a, #0f3d27);`;
 
-  const fechaFormateada = bloqueadoFecha
-    ? new Date(c.fechaDesbloqueo).toLocaleDateString('es-MX', { day:'numeric', month:'long' })
-    : '';
+  let lockHTML = '';
+  let onClickAction = `abrirCurso('${c.id}')`;
+
+  if (!estado.desbloqueado) {
+    if (estado.requierePago) {
+      lockHTML = `
+        <div class="curso-locked-overlay">
+          <div class="curso-locked-overlay-icon">🔒</div>
+          <strong>Hazte Élite</strong>
+          <small>Suscríbete para desbloquear</small>
+        </div>
+      `;
+      onClickAction = `abrirModalVIP('Para desbloquear este curso necesitas membresía Élite Pecuario.')`;
+    } else if (estado.fechaDesbloqueo) {
+      const fechaTxt = estado.fechaDesbloqueo.toLocaleDateString('es-MX', { day:'numeric', month:'long' });
+      const diasTxt = estado.diasRestantes === 1 ? '1 día' : `${estado.diasRestantes} días`;
+      lockHTML = `
+        <div class="curso-locked-overlay">
+          <div class="curso-locked-overlay-icon">⏳</div>
+          <strong>Disponible el ${fechaTxt}</strong>
+          <small>Faltan ${diasTxt}</small>
+        </div>
+      `;
+      onClickAction = `toast('Este curso se desbloqueará el ${fechaTxt} (en ${diasTxt})', 'info', '⏳')`;
+    }
+  }
+
+  let badge = '';
+  if (estado.esLibre) {
+    badge = '<span class="curso-thumb-tag" style="background:rgba(34,197,94,.95);color:#fff;">🆓 GRATIS</span>';
+  } else if (estado.desbloqueado) {
+    badge = '<span class="curso-thumb-tag" style="background:rgba(212,160,23,.95);color:var(--field-deep);">⭐ DISPONIBLE</span>';
+  }
 
   return `
-    <div class="curso-card" onclick="${bloqueadoFecha ? `toast('Este curso se desbloquea el ${fechaFormateada}', 'success', '🔒')` : `abrirCurso('${c.id}')`}">
+    <div class="curso-card" onclick="${onClickAction}">
       <div class="curso-thumb" style="${fotoStyle}">
-        ${!c.foto ? `<span class="curso-thumb-emoji">${c.emoji || '🐂'}</span>` : ''}
-        ${bloqueadoFecha ? `
-          <div class="curso-locked-overlay">
-            <div class="curso-locked-overlay-icon">🔒</div>
-            <strong>Próximamente</strong>
-            <small>Disponible el ${fechaFormateada}</small>
-          </div>
-        ` : ''}
-        ${pctProgreso > 0 && !bloqueadoFecha ? `<div class="curso-thumb-progress"><div class="curso-thumb-progress-fill" style="width:${pctProgreso}%"></div></div>` : ''}
+        ${badge}
+        ${lockHTML}
+        ${pctProgreso > 0 && estado.desbloqueado ? `<div class="curso-thumb-progress"><div class="curso-thumb-progress-fill" style="width:${pctProgreso}%"></div></div>` : ''}
       </div>
       <div class="curso-info">
         <div class="curso-categoria">${c.categoria || 'GENERAL'}</div>
@@ -3693,20 +3796,38 @@ document.addEventListener('DOMContentLoaded', () => {
 // 🔥 SUSCRIPCIÓN FIRESTORE EN TIEMPO REAL
 // ═══════════════════════════════════════════════════════════
 window.__rancho = window.__rancho || {};
+
+// Cargar el doc del miembro logueado
+window.__rancho.cargarMiembro = async function() {
+  try {
+    const { collection, query, where, getDocs, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const user = window.__rancho.auth?.currentUser;
+    if (!db || !user) return;
+    const q = query(collection(db, 'miembros'), where('email', '==', user.email));
+    onSnapshot(q, (snap) => {
+      if (!snap.empty) {
+        const docSnap = snap.docs[0];
+        MIEMBRO_ACTUAL = { _docId: docSnap.id, ...docSnap.data() };
+        // Re-pintar establo cuando cambian los datos del miembro
+        if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
+      } else {
+        MIEMBRO_ACTUAL = null;
+      }
+    }, () => { MIEMBRO_ACTUAL = null; });
+  } catch(e) { console.warn('Sin acceso a miembros:', e); }
+};
+
 window.__rancho.iniciarEstablo = async function() {
   try {
-    const { collection, onSnapshot, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const { collection, onSnapshot, query } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     const db = window.__rancho.db;
     if (!db) return;
     const q = query(collection(db, 'cursos'));
     onSnapshot(q, (snap) => {
       CURSOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Ordenar: primero los que tienen createdAt más reciente
-      CURSOS_FIRESTORE.sort((a, b) => {
-        const da = a.createdAt || a.updatedAt || '';
-        const db = b.createdAt || b.updatedAt || '';
-        return db.localeCompare(da);
-      });
+      // Ordenar por ordenDrip ascendente (1, 2, 3...)
+      CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
       pintarEstablo();
     }, (err) => {
       console.error('Error suscribiéndose a cursos:', err);
