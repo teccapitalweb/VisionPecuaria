@@ -3052,16 +3052,17 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   setBootStatus('Cargando tu rancho...');
 
-  // Buscar miembro VIP en Firestore (por email)
+  // Buscar miembro VIP en Firestore — leer doc(uid) directo
   try {
-    const qSnap = await getDocs(query(collection(db, 'miembros'), where('email','==', user.email)));
-    if (!qSnap.empty) {
-      const m = qSnap.docs[0].data();
+    const refM = doc(db, 'miembros', user.uid);
+    const snapM = await getDoc(refM);
+    if (snapM.exists()) {
+      const m = snapM.data();
       const vence = m.vence ? new Date(m.vence) : null;
-      const activoVIP = m.estado === 'activo' || (vence && vence > new Date());
+      const activoVIP = m.estado === 'activo' && (vence ? vence > new Date() : true);
       if (activoVIP) userPlan = 'vip';
     }
-  } catch (e) { console.warn('No se pudo verificar VIP:', e); }
+  } catch (e) { console.warn('No se pudo verificar VIP:', e.code || e); }
 
   // UI con datos del user
   pintarUsuario(user);
@@ -3807,25 +3808,42 @@ document.addEventListener('DOMContentLoaded', () => {
 // ═══════════════════════════════════════════════════════════
 window.__rancho = window.__rancho || {};
 
-// Cargar el doc del miembro logueado
+// Cargar el doc del miembro logueado — usa doc(uid) directo, no query
 window.__rancho.cargarMiembro = async function() {
   try {
-    const { collection, query, where, getDocs, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const { doc, onSnapshot, getDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     const db = window.__rancho.db;
     const user = window.__rancho.auth?.currentUser;
     if (!db || !user) return;
-    const q = query(collection(db, 'miembros'), where('email', '==', user.email));
-    onSnapshot(q, (snap) => {
-      if (!snap.empty) {
-        const docSnap = snap.docs[0];
-        MIEMBRO_ACTUAL = { _docId: docSnap.id, ...docSnap.data() };
-        // Re-pintar establo cuando cambian los datos del miembro
+
+    // 1. Buscar primero en 'miembros' por uid (es el ID del doc)
+    const refMiembro = doc(db, 'miembros', user.uid);
+    onSnapshot(refMiembro, (snap) => {
+      if (snap.exists()) {
+        MIEMBRO_ACTUAL = { _docId: snap.id, _tipo: 'miembro', ...snap.data() };
         if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
-      } else {
-        MIEMBRO_ACTUAL = null;
+        return;
       }
-    }, () => { MIEMBRO_ACTUAL = null; });
-  } catch(e) { console.warn('Sin acceso a miembros:', e); }
+      // 2. Si no es miembro, buscar en 'usuarios_free'
+      const refFree = doc(db, 'usuarios_free', user.uid);
+      onSnapshot(refFree, (snapFree) => {
+        if (snapFree.exists()) {
+          MIEMBRO_ACTUAL = { _docId: snapFree.id, _tipo: 'free', ...snapFree.data() };
+        } else {
+          MIEMBRO_ACTUAL = null;
+        }
+        if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
+      }, (err) => {
+        console.warn('Sin acceso a usuarios_free:', err.code);
+        MIEMBRO_ACTUAL = null;
+        if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
+      });
+    }, (err) => {
+      console.warn('Sin acceso a miembros:', err.code);
+      MIEMBRO_ACTUAL = null;
+      if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
+    });
+  } catch(e) { console.warn('Error cargando miembro:', e); }
 };
 
 window.__rancho.iniciarEstablo = async function() {
