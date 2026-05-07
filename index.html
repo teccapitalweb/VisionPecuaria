@@ -3020,7 +3020,10 @@ async function procesarHashAutologin() {
   const m = hash.match(/a=([^&]+)/);
   if (!m) return false;
   try {
-    const data = JSON.parse(atob(decodeURIComponent(m[1])));
+    // Landing codifica: btoa(encodeURIComponent(JSON.stringify(data)))
+    // Portal decodifica orden INVERSO: JSON.parse(decodeURIComponent(atob(...)))
+    const decoded = decodeURIComponent(atob(m[1]));
+    const data = JSON.parse(decoded);
     if (!data.e || !data.p || !data.t) return false;
     if (Date.now() - data.t > 5 * 60 * 1000) return false; // expira 5 min
     setBootStatus('Reconociendo tu sesión...');
