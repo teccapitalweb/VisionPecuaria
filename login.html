@@ -646,10 +646,17 @@ await setPersistence(auth, browserLocalPersistence);
 
 // Detectar si ya hay sesión → ir al portal automático (con UX bonita)
 const toast = document.getElementById('sessionToast');
-toast.classList.add('show');
+
+// Si la URL trae ?logout=1, no auto-redirigir (vienes de cerrar sesión o de un loop)
+const params = new URLSearchParams(window.location.search);
+const noAutoRedirect = params.has('logout') || params.has('force');
+
+if (!noAutoRedirect) {
+  toast.classList.add('show');
+}
 
 onAuthStateChanged(auth, (user) => {
-  if (user) {
+  if (user && !noAutoRedirect) {
     toast.querySelector('span').textContent = `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
     setTimeout(() => { window.location.href = 'index.html'; }, 600);
   } else {
