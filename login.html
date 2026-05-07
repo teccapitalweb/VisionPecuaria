@@ -647,21 +647,41 @@ await setPersistence(auth, browserLocalPersistence);
 // Detectar si ya hay sesión → ir al portal automático (con UX bonita)
 const toast = document.getElementById('sessionToast');
 
-// Si la URL trae ?logout=1, no auto-redirigir (vienes de cerrar sesión o de un loop)
+// Si la URL trae ?logout=1, NO auto-redirigir AL CARGAR la página (evita bucle)
+// PERO si el usuario hace login manual, sí redirigir
 const params = new URLSearchParams(window.location.search);
-const noAutoRedirect = params.has('logout') || params.has('force');
+const skipInitialAutoRedirect = params.has('logout') || params.has('force');
 
-if (!noAutoRedirect) {
+if (!skipInitialAutoRedirect) {
   toast.classList.add('show');
 }
 
+// Flag: ¿el primer disparo de onAuthStateChanged ya pasó?
+// Si trae user en el primer disparo + skipInitialAutoRedirect=true,
+// significa que tenía sesión guardada Y vino de un logout, NO redirigir.
+// Pero si user viene en disparos posteriores (después de un login manual),
+// SÍ redirigir.
+let firstAuthFired = false;
+
 onAuthStateChanged(auth, (user) => {
-  if (user && !noAutoRedirect) {
-    toast.querySelector('span').textContent = `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
-    setTimeout(() => { window.location.href = 'index.html'; }, 600);
-  } else {
+  const wasFirst = !firstAuthFired;
+  firstAuthFired = true;
+
+  if (!user) {
     toast.classList.remove('show');
+    return;
   }
+
+  // Si es el primer disparo Y vino con ?logout=1 → no redirigir (evita bucle)
+  if (wasFirst && skipInitialAutoRedirect) {
+    toast.classList.remove('show');
+    return;
+  }
+
+  // En cualquier otro caso (login manual nuevo, o auto-redirect normal), ir al portal
+  toast.classList.add('show');
+  toast.querySelector('span').textContent = `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
+  setTimeout(() => { window.location.href = 'index.html'; }, 600);
 });
 
 // ═══════════════════════════════════════════════════════════
