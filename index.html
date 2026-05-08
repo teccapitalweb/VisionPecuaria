@@ -3077,7 +3077,15 @@ onAuthStateChanged(auth, async (user) => {
     hideBoot();
 
     // Iniciar suscripciones a contenido
+    console.log('🐂 [AUTH] Usuario logueado, iniciando suscripciones. uid:', user.uid);
+    console.log('🐂 [AUTH] Funciones disponibles:', {
+      iniciarEstablo: typeof window.__rancho?.iniciarEstablo,
+      cargarMiembro: typeof window.__rancho?.cargarMiembro,
+      iniciarContenido: typeof window.__rancho?.iniciarContenido,
+      iniciarCertificados: typeof window.__rancho?.iniciarCertificados
+    });
     if (typeof window.__rancho?.iniciarEstablo === 'function') window.__rancho.iniciarEstablo();
+    else console.error('🐂 [AUTH] iniciarEstablo NO ES FUNCIÓN — bug de orden de scripts');
     if (typeof window.__rancho?.cargarMiembro === 'function') window.__rancho.cargarMiembro();
     if (typeof window.__rancho?.iniciarContenido === 'function') window.__rancho.iniciarContenido();
     if (typeof window.__rancho?.iniciarCertificados === 'function') window.__rancho.iniciarCertificados();
@@ -3857,36 +3865,61 @@ window.__rancho.cargarMiembro = async function() {
 };
 
 window.__rancho.iniciarEstablo = async function() {
+  console.log('🐂 [ESTABLO] iniciarEstablo() llamada');
   try {
-    const { collection, onSnapshot, query } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const { collection, onSnapshot, query, getDocs } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     const db = window.__rancho.db;
-    if (!db) return;
+    console.log('🐂 [ESTABLO] db:', !!db, 'auth.currentUser:', !!window.__rancho.auth?.currentUser);
+    if (!db) {
+      console.error('🐂 [ESTABLO] db es null/undefined, abortando');
+      return;
+    }
 
     // Timeout de seguridad: si en 8s no llega nada, mostrar estado vacío
     const safetyTimer = setTimeout(() => {
       const loading = document.getElementById('establoLoading');
       if (loading && loading.style.display !== 'none') {
-        console.warn('⏰ Timeout cargando cursos. Mostrando vacío.');
+        console.warn('⏰ [ESTABLO] Timeout 8s sin respuesta. Estado:', { CURSOS_FIRESTORE: CURSOS_FIRESTORE.length });
         loading.style.display = 'none';
-        document.getElementById('establoVacio').style.display = 'block';
+        const vacio = document.getElementById('establoVacio');
+        if (vacio) vacio.style.display = 'block';
       }
     }, 8000);
 
+    // Lectura inicial INMEDIATA con getDocs (no espera el snapshot)
+    try {
+      console.log('🐂 [ESTABLO] Intentando getDocs inicial...');
+      const initialSnap = await getDocs(collection(db, 'cursos'));
+      console.log('🐂 [ESTABLO] getDocs OK:', initialSnap.docs.length, 'cursos');
+      CURSOS_FIRESTORE = initialSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
+      window.CURSOS_FIRESTORE = CURSOS_FIRESTORE; // expuesto para debug
+      clearTimeout(safetyTimer);
+      pintarEstablo();
+    } catch (errInit) {
+      console.error('🐂 [ESTABLO] Error en getDocs inicial:', errInit.code, errInit.message);
+      clearTimeout(safetyTimer);
+      document.getElementById('establoLoading').style.display = 'none';
+      const vacio = document.getElementById('establoVacio');
+      if (vacio) vacio.style.display = 'block';
+      // Mostrar el error en pantalla para que Jorge lo vea
+      if (vacio) vacio.innerHTML = `<p style="color:#ef4444;padding:20px;text-align:center;">❌ Error: ${errInit.code || errInit.message}<br><small>Revisa reglas Firestore</small></p>`;
+      return;
+    }
+
+    // Suscripción en tiempo real para actualizaciones futuras
     const q = query(collection(db, 'cursos'));
     onSnapshot(q, (snap) => {
-      clearTimeout(safetyTimer);
+      console.log('🐂 [ESTABLO] onSnapshot update:', snap.docs.length, 'cursos');
       CURSOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Ordenar por ordenDrip ascendente (1, 2, 3...)
       CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
+      window.CURSOS_FIRESTORE = CURSOS_FIRESTORE;
       pintarEstablo();
     }, (err) => {
-      clearTimeout(safetyTimer);
-      console.error('Error suscribiéndose a cursos:', err);
-      document.getElementById('establoLoading').style.display = 'none';
-      document.getElementById('establoVacio').style.display = 'block';
+      console.error('🐂 [ESTABLO] onSnapshot error:', err.code, err.message);
     });
   } catch(e) {
-    console.error('No se pudo iniciar el establo:', e);
+    console.error('🐂 [ESTABLO] Error fatal:', e);
     document.getElementById('establoLoading').style.display = 'none';
     document.getElementById('establoVacio').style.display = 'block';
   }
