@@ -3076,42 +3076,26 @@ onAuthStateChanged(auth, async (user) => {
     pintarUsuario(user);
     hideBoot();
 
-    // Iniciar suscripciones a contenido
-    console.log('🐂 [AUTH] Usuario logueado, iniciando suscripciones. uid:', user.uid);
-
-    // 🛡️ FIX ORDEN DE SCRIPTS: si las funciones del script regular aún no están
-    // definidas (porque module corre antes en algunos navegadores), guardamos
-    // un flag y el script regular las invoca cuando esté listo.
-    window.__ranchoUserReady = true;
-    window.__ranchoUser = user;
-
-    const tryInit = () => {
-      console.log('🐂 [AUTH] tryInit, funciones:', {
-        iniciarEstablo: typeof window.__rancho?.iniciarEstablo,
-        cargarMiembro: typeof window.__rancho?.cargarMiembro
-      });
+    // 🛡️ Iniciar suscripciones con polling: las funciones están en otro <script>
+    // que puede ejecutarse después de este module. Esperamos hasta 6s.
+    let intentos = 0;
+    const tryStart = () => {
+      intentos++;
       if (typeof window.__rancho?.iniciarEstablo === 'function') {
+        console.log('✅ [AUTH] Suscripciones iniciando, intentos:', intentos);
         window.__rancho.iniciarEstablo();
         if (typeof window.__rancho.cargarMiembro === 'function') window.__rancho.cargarMiembro();
         if (typeof window.__rancho.iniciarContenido === 'function') window.__rancho.iniciarContenido();
         if (typeof window.__rancho.iniciarCertificados === 'function') window.__rancho.iniciarCertificados();
-        return true;
+        return;
       }
-      return false;
+      if (intentos > 60) {
+        console.error('❌ [AUTH] Timeout 6s — script regular NO ejecutó');
+        return;
+      }
+      setTimeout(tryStart, 100);
     };
-
-    if (!tryInit()) {
-      // Las funciones aún no están definidas. Reintentamos cada 100ms hasta 5s
-      console.warn('🐂 [AUTH] Funciones aún no definidas, esperando script regular...');
-      let attempts = 0;
-      const interval = setInterval(() => {
-        attempts++;
-        if (tryInit() || attempts > 50) {
-          clearInterval(interval);
-          if (attempts > 50) console.error('🐂 [AUTH] Timeout: las funciones nunca se definieron');
-        }
-      }, 100);
-    }
+    tryStart();
     return;
   }
 
@@ -3175,7 +3159,8 @@ window.__rancho.userPlan = () => userPlan;
 <!-- LÓGICA DE NAVEGACIÓN + DATA DEMO                             -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <script>
-console.log('🐂 [SCRIPT-REGULAR] INICIO ejecutando');
+console.log('✅ [SCRIPT-2] Inicio de ejecución');
+window.__rancho = window.__rancho || {};
 // ═══════════════════════════════════════════════════════════
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════════════════
@@ -3888,63 +3873,37 @@ window.__rancho.cargarMiembro = async function() {
   } catch(e) { console.warn('Error cargando miembro:', e); }
 };
 
-console.log('🐂 [SCRIPT-REGULAR] Llegamos a definir iniciarEstablo');
 window.__rancho.iniciarEstablo = async function() {
-  console.log('🐂 [ESTABLO] iniciarEstablo() llamada');
   try {
-    const { collection, onSnapshot, query, getDocs } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const { collection, onSnapshot, query } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     const db = window.__rancho.db;
-    console.log('🐂 [ESTABLO] db:', !!db, 'auth.currentUser:', !!window.__rancho.auth?.currentUser);
-    if (!db) {
-      console.error('🐂 [ESTABLO] db es null/undefined, abortando');
-      return;
-    }
+    if (!db) return;
 
     // Timeout de seguridad: si en 8s no llega nada, mostrar estado vacío
     const safetyTimer = setTimeout(() => {
       const loading = document.getElementById('establoLoading');
       if (loading && loading.style.display !== 'none') {
-        console.warn('⏰ [ESTABLO] Timeout 8s sin respuesta. Estado:', { CURSOS_FIRESTORE: CURSOS_FIRESTORE.length });
+        console.warn('⏰ Timeout cargando cursos. Mostrando vacío.');
         loading.style.display = 'none';
-        const vacio = document.getElementById('establoVacio');
-        if (vacio) vacio.style.display = 'block';
+        document.getElementById('establoVacio').style.display = 'block';
       }
     }, 8000);
 
-    // Lectura inicial INMEDIATA con getDocs (no espera el snapshot)
-    try {
-      console.log('🐂 [ESTABLO] Intentando getDocs inicial...');
-      const initialSnap = await getDocs(collection(db, 'cursos'));
-      console.log('🐂 [ESTABLO] getDocs OK:', initialSnap.docs.length, 'cursos');
-      CURSOS_FIRESTORE = initialSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-      CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
-      window.CURSOS_FIRESTORE = CURSOS_FIRESTORE; // expuesto para debug
-      clearTimeout(safetyTimer);
-      pintarEstablo();
-    } catch (errInit) {
-      console.error('🐂 [ESTABLO] Error en getDocs inicial:', errInit.code, errInit.message);
-      clearTimeout(safetyTimer);
-      document.getElementById('establoLoading').style.display = 'none';
-      const vacio = document.getElementById('establoVacio');
-      if (vacio) vacio.style.display = 'block';
-      // Mostrar el error en pantalla para que Jorge lo vea
-      if (vacio) vacio.innerHTML = `<p style="color:#ef4444;padding:20px;text-align:center;">❌ Error: ${errInit.code || errInit.message}<br><small>Revisa reglas Firestore</small></p>`;
-      return;
-    }
-
-    // Suscripción en tiempo real para actualizaciones futuras
     const q = query(collection(db, 'cursos'));
     onSnapshot(q, (snap) => {
-      console.log('🐂 [ESTABLO] onSnapshot update:', snap.docs.length, 'cursos');
+      clearTimeout(safetyTimer);
       CURSOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // Ordenar por ordenDrip ascendente (1, 2, 3...)
       CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
-      window.CURSOS_FIRESTORE = CURSOS_FIRESTORE;
       pintarEstablo();
     }, (err) => {
-      console.error('🐂 [ESTABLO] onSnapshot error:', err.code, err.message);
+      clearTimeout(safetyTimer);
+      console.error('Error suscribiéndose a cursos:', err);
+      document.getElementById('establoLoading').style.display = 'none';
+      document.getElementById('establoVacio').style.display = 'block';
     });
   } catch(e) {
-    console.error('🐂 [ESTABLO] Error fatal:', e);
+    console.error('No se pudo iniciar el establo:', e);
     document.getElementById('establoLoading').style.display = 'none';
     document.getElementById('establoVacio').style.display = 'block';
   }
@@ -4707,9 +4666,12 @@ document.addEventListener('keydown', e => {
     cerrarVideoModal();
   }
 });
-console.log('🐂 [SCRIPT-REGULAR] FIN — funciones definidas:', {
-  iniciarEstablo: typeof window.__rancho?.iniciarEstablo,
-  cargarMiembro: typeof window.__rancho?.cargarMiembro
+
+console.log('✅ [SCRIPT-2] FIN — funciones:', {
+  iniciarEstablo: typeof window.__rancho.iniciarEstablo,
+  cargarMiembro: typeof window.__rancho.cargarMiembro,
+  iniciarContenido: typeof window.__rancho.iniciarContenido,
+  iniciarCertificados: typeof window.__rancho.iniciarCertificados
 });
 </script>
 
