@@ -84,7 +84,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCa6zt7YD3QUzGxyPky0zPPfjQwhtYMeTw",
@@ -104,9 +104,22 @@ async function buscar() {
   if (!folioRaw) return;
   resultEl.innerHTML = '<div class="loading-state">🔍 Verificando folio...</div>';
   try {
-    const snap = await getDoc(doc(db, 'certificados', folioRaw));
-    if (!snap.exists()) return mostrarInvalido(folioRaw);
-    mostrarValido(folioRaw, snap.data());
+    // Buscar primero por campo "folio" (la forma correcta como se guardan ahora)
+    const q = query(collection(db, 'certificados'), where('folio', '==', folioRaw), limit(1));
+    const qs = await getDocs(q);
+    if (!qs.empty) {
+      mostrarValido(folioRaw, qs.docs[0].data());
+      return;
+    }
+    // Fallback legacy: si alguien usaba el folio como docId
+    try {
+      const snap = await getDoc(doc(db, 'certificados', folioRaw));
+      if (snap.exists()) {
+        mostrarValido(folioRaw, snap.data());
+        return;
+      }
+    } catch(_) { /* ignore */ }
+    mostrarInvalido(folioRaw);
   } catch (e) {
     resultEl.innerHTML = `<div class="result-invalid"><div class="icon">⚠️</div><h3>Error de conexión</h3><p>${escapeHTML(e.message)}</p></div>`;
   }
@@ -116,6 +129,7 @@ function mostrarValido(folio, c) {
   const fecha = c.fechaEmision ? new Date(c.fechaEmision) : new Date();
   const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   const fechaLegible = `${fecha.getDate()} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()}`;
+  const nombreOtorgado = c.nombre || c.miembroNombre || 'Socio Visión Pecuaria';
   resultEl.innerHTML = `
     <div class="result-valid">
       <div class="result-valid__banner">
@@ -124,7 +138,7 @@ function mostrarValido(folio, c) {
       </div>
       <div class="result-valid__body">
         <div class="kv"><div class="kv__label">Folio oficial</div><div class="kv__value kv__value--folio">${folio}</div></div>
-        <div class="kv"><div class="kv__label">Otorgado a</div><div class="kv__value">${escapeHTML(c.miembroNombre || 'Socio VisionPecuaria')}</div></div>
+        <div class="kv"><div class="kv__label">Otorgado a</div><div class="kv__value">${escapeHTML(nombreOtorgado)}</div></div>
         <div class="kv"><div class="kv__label">Curso completado</div><div class="kv__value kv__value--curso">${escapeHTML(c.cursoTitulo || '—')}</div></div>
         <div class="kv"><div class="kv__label">Categoría</div><div class="kv__value">${escapeHTML(c.categoria || 'General')}</div></div>
         <div class="kv"><div class="kv__label">Fecha de emisión</div><div class="kv__value">${fechaLegible}</div></div>
@@ -150,7 +164,7 @@ function escapeHTML(s) {
 }
 
 const params = new URLSearchParams(window.location.search);
-const folioUrl = params.get('folio');
+const folioUrl = params.get('folio') || params.get('f');
 if (folioUrl) {
   document.getElementById('input-folio').value = folioUrl;
   buscar();

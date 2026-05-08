@@ -2290,7 +2290,430 @@ button { font-family: inherit; }
 }
 .sb-overlay.active { display: block; }
 @media (min-width: 881px) { .sb-overlay { display: none !important; } }
+/* ═══════════════════════════════════════════════════════════ */
+/* 🎉 POPUP CELEBRACIÓN — Curso completado                       */
+/* ═══════════════════════════════════════════════════════════ */
+.celebra-modal {
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(15,46,29,.95), rgba(0,0,0,.98));
+  z-index: 9998;
+  display: none;
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(20px);
+  animation: celebraFadeIn .5s ease-out;
+}
+.celebra-modal.active { display: flex; }
+@keyframes celebraFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.celebra-content {
+  text-align: center;
+  max-width: 580px;
+  padding: 48px 32px;
+  position: relative;
+}
+
+.celebra-trofeo {
+  width: 160px; height: 160px;
+  margin: 0 auto 28px;
+  position: relative;
+  animation: trofeoBounce 1.2s ease-out, trofeoGlow 2s ease-in-out infinite alternate;
+}
+@keyframes trofeoBounce {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.3) rotate(20deg); }
+  80% { transform: scale(.95) rotate(-10deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+@keyframes trofeoGlow {
+  from { filter: drop-shadow(0 0 20px rgba(212,160,23,.6)) drop-shadow(0 0 40px rgba(212,160,23,.3)); }
+  to { filter: drop-shadow(0 0 40px rgba(255,217,107,.9)) drop-shadow(0 0 80px rgba(255,217,107,.5)); }
+}
+.celebra-trofeo svg {
+  width: 100%; height: 100%;
+}
+
+.celebra-titulo {
+  font: 900 2.4rem 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #ffd96b, #fff4c2, #d4a017);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  animation: tituloSlide .8s ease-out .3s both, gradMove 3s ease-in-out infinite;
+  text-shadow: 0 0 30px rgba(212,160,23,.4);
+}
+@keyframes tituloSlide {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes gradMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.celebra-sub {
+  color: rgba(255,255,255,.85);
+  font-size: 1.05rem;
+  margin-bottom: 32px;
+  animation: tituloSlide 1s ease-out .5s both;
+}
+.celebra-sub b { color: var(--gold-light); }
+
+.celebra-stars {
+  display: flex; justify-content: center; gap: 6px;
+  margin-bottom: 24px;
+  font-size: 1.8rem;
+}
+.celebra-stars span {
+  animation: starPop .5s ease-out both;
+  filter: drop-shadow(0 0 12px rgba(255,217,107,.8));
+}
+.celebra-stars span:nth-child(1) { animation-delay: .8s; }
+.celebra-stars span:nth-child(2) { animation-delay: 1.0s; }
+.celebra-stars span:nth-child(3) { animation-delay: 1.2s; }
+.celebra-stars span:nth-child(4) { animation-delay: 1.4s; }
+.celebra-stars span:nth-child(5) { animation-delay: 1.6s; }
+@keyframes starPop {
+  from { transform: scale(0) rotate(-90deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.celebra-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  animation: tituloSlide 1s ease-out 1.5s both;
+}
+.celebra-btn {
+  padding: 14px 28px;
+  border-radius: 14px;
+  font: 800 .95rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: transform .25s, box-shadow .25s;
+  border: none;
+  white-space: nowrap;
+}
+.celebra-btn:hover { transform: translateY(-3px); }
+.celebra-btn-gold {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+  color: var(--field-deep);
+  box-shadow: 0 8px 24px rgba(212,160,23,.4);
+}
+.celebra-btn-gold:hover { box-shadow: 0 12px 36px rgba(212,160,23,.6); }
+.celebra-btn-ghost {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+}
+.celebra-btn-ghost:hover { background: rgba(255,255,255,.15); }
+
+.celebra-close {
+  position: absolute; top: 20px; right: 20px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #fff;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.4rem;
+  z-index: 10;
+}
+.celebra-close:hover { background: rgba(255,255,255,.15); }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🎓 CERTIFICADO — Plantilla PDF                               */
+/* ═══════════════════════════════════════════════════════════ */
+.cert-template {
+  width: 1100px;
+  height: 780px;
+  position: relative;
+  background:
+    radial-gradient(ellipse at top left, rgba(212,160,23,.12), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(212,160,23,.08), transparent 50%),
+    linear-gradient(135deg, #0a2540 0%, #0f2e1d 100%);
+  font-family: 'Montserrat', 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  padding: 50px 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.cert-template::before {
+  content: '';
+  position: absolute; inset: 18px;
+  border: 3px solid rgba(212,160,23,.6);
+  border-radius: 8px;
+  pointer-events: none;
+}
+.cert-template::after {
+  content: '';
+  position: absolute; inset: 28px;
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.cert-corner {
+  position: absolute;
+  width: 100px; height: 100px;
+  border-color: #d4a017;
+  border-style: solid;
+}
+.cert-corner.tl { top: 38px; left: 70px; border-width: 3px 0 0 3px; }
+.cert-corner.tr { top: 38px; right: 70px; border-width: 3px 3px 0 0; }
+.cert-corner.bl { bottom: 38px; left: 70px; border-width: 0 0 3px 3px; }
+.cert-corner.br { bottom: 38px; right: 70px; border-width: 0 3px 3px 0; }
+
+.cert-logo-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; margin-top: 24px; margin-bottom: 18px;
+}
+.cert-logo-bull {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px;
+  box-shadow: 0 8px 20px rgba(212,160,23,.4);
+}
+.cert-logo-text {
+  text-align: left;
+}
+.cert-logo-text h1 {
+  font: 900 1.4rem 'Montserrat', sans-serif;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #f5d77a;
+}
+.cert-logo-text p {
+  font: 600 .68rem 'Montserrat', sans-serif;
+  letter-spacing: 4px;
+  color: rgba(245,215,122,.7);
+  margin: 2px 0 0 0;
+  text-transform: uppercase;
+}
+
+.cert-eyebrow {
+  text-align: center;
+  font: 600 .8rem 'Montserrat', sans-serif;
+  letter-spacing: 8px;
+  color: rgba(245,215,122,.85);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.cert-h1 {
+  text-align: center;
+  font: 900 2.6rem 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+  margin: 0 0 6px 0;
+  background: linear-gradient(180deg, #ffd96b, #d4a017);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cert-divider {
+  width: 80px; height: 3px;
+  background: linear-gradient(90deg, transparent, #d4a017, transparent);
+  margin: 14px auto 22px;
+}
+.cert-otorga {
+  text-align: center;
+  font: 400 .95rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.75);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.cert-nombre {
+  text-align: center;
+  font: 700 2.6rem 'Playfair Display', 'Georgia', serif;
+  color: #fff;
+  margin: 0 0 4px 0;
+  letter-spacing: 1px;
+  border-bottom: 2px solid rgba(212,160,23,.4);
+  padding-bottom: 14px;
+  margin: 0 80px 20px;
+}
+.cert-completion {
+  text-align: center;
+  font: 400 .95rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.75);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.cert-curso {
+  text-align: center;
+  font: 800 1.5rem 'Montserrat', sans-serif;
+  color: #ffd96b;
+  margin: 0 0 6px 0;
+}
+.cert-clases-info {
+  text-align: center;
+  font: 500 .8rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.6);
+  margin-bottom: 30px;
+}
+
+.cert-footer {
+  position: absolute;
+  bottom: 60px; left: 80px; right: 80px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.cert-firma {
+  text-align: center;
+  flex: 1;
+}
+.cert-firma-line {
+  border-top: 1px solid rgba(212,160,23,.5);
+  width: 200px;
+  margin: 0 auto 6px;
+}
+.cert-firma-name {
+  font: 700 .9rem 'Montserrat', sans-serif;
+  color: #fff;
+}
+.cert-firma-title {
+  font: 500 .68rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.55);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.cert-qr-box {
+  text-align: center;
+}
+.cert-qr-code {
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  width: 100px; height: 100px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cert-qr-code img,
+.cert-qr-code canvas {
+  width: 100%; height: 100%;
+  display: block;
+}
+.cert-folio {
+  font: 700 .68rem 'Montserrat', monospace;
+  color: rgba(245,215,122,.85);
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+.cert-fecha {
+  text-align: center;
+  flex: 1;
+}
+.cert-fecha-day {
+  font: 800 1.4rem 'Montserrat', sans-serif;
+  color: #ffd96b;
+}
+.cert-fecha-rest {
+  font: 500 .75rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.65);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.cert-watermark {
+  position: absolute;
+  bottom: 8px; right: 30px;
+  font: 600 .6rem 'Montserrat', monospace;
+  color: rgba(212,160,23,.4);
+  letter-spacing: 2px;
+}
+
+/* Botón saltear VIP */
+.btn-saltar-vip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  color: #0a2540;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  font: 700 .72rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  margin-left: 8px;
+  box-shadow: 0 4px 12px rgba(212,160,23,.3);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-saltar-vip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(212,160,23,.5);
+}
+
+/* Modal preview certificado */
+.cert-preview-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.92);
+  z-index: 9997;
+  display: none;
+  padding: 30px;
+  overflow: auto;
+  backdrop-filter: blur(10px);
+}
+.cert-preview-modal.active { display: block; }
+.cert-preview-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+.cert-preview-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap; gap: 12px;
+}
+.cert-preview-title {
+  font: 800 1.3rem 'Montserrat', sans-serif;
+  color: #f5d77a;
+}
+.cert-preview-actions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.cert-action {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font: 700 .82rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  border: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: transform .2s;
+}
+.cert-action:hover { transform: translateY(-2px); }
+.cert-action-pdf {
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  color: #0a2540;
+}
+.cert-action-share {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+}
+.cert-action-close {
+  background: rgba(239,68,68,.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,.3);
+}
+.cert-canvas-wrap {
+  background: #fff;
+  border-radius: 10px;
+  overflow: auto;
+  max-width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.cert-canvas-wrap > .cert-template {
+  transform-origin: top left;
+}
+
+@media (max-width: 720px) {
+  .celebra-titulo { font-size: 1.7rem; }
+  .celebra-trofeo { width: 120px; height: 120px; }
+  .cert-canvas-wrap > .cert-template {
+    transform: scale(.4);
+  }
+}
 </style>
+<!-- CDN libraries para certificados, confeti y QR -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -2980,6 +3403,82 @@ button { font-family: inherit; }
 <div class="toast" id="toast">
   <span id="toastIcon">🎯</span>
   <span id="toastMsg">Misión completada · +50 XP</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🎉 MODAL CELEBRACIÓN — Curso completado                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="celebra-modal" id="celebraModal" onclick="if(event.target===this)cerrarCelebra()">
+  <button class="celebra-close" onclick="cerrarCelebra()">×</button>
+  <div class="celebra-content">
+    <div class="celebra-trofeo">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="trofeoGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffd96b"/>
+            <stop offset="50%" stop-color="#f5d77a"/>
+            <stop offset="100%" stop-color="#d4a017"/>
+          </linearGradient>
+          <linearGradient id="trofeoGradShine" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#fff4c2"/>
+            <stop offset="50%" stop-color="#ffd96b"/>
+            <stop offset="100%" stop-color="#d4a017"/>
+          </linearGradient>
+        </defs>
+        <!-- Asas -->
+        <path d="M 50 60 Q 30 60 30 90 Q 30 110 55 110" stroke="url(#trofeoGrad)" stroke-width="8" fill="none"/>
+        <path d="M 150 60 Q 170 60 170 90 Q 170 110 145 110" stroke="url(#trofeoGrad)" stroke-width="8" fill="none"/>
+        <!-- Copa principal -->
+        <path d="M 55 50 L 55 100 Q 55 130 100 130 Q 145 130 145 100 L 145 50 Z" fill="url(#trofeoGrad)"/>
+        <ellipse cx="100" cy="50" rx="45" ry="8" fill="url(#trofeoGradShine)"/>
+        <!-- Tallo -->
+        <rect x="92" y="130" width="16" height="20" fill="url(#trofeoGrad)"/>
+        <!-- Base -->
+        <rect x="65" y="150" width="70" height="14" rx="4" fill="url(#trofeoGrad)"/>
+        <rect x="55" y="164" width="90" height="12" rx="3" fill="#a37210"/>
+        <!-- Estrella -->
+        <text x="100" y="100" text-anchor="middle" font-size="48" font-weight="900" fill="#fff" style="font-family: serif;">★</text>
+      </svg>
+    </div>
+    <h1 class="celebra-titulo" id="celebraTitulo">¡LO LOGRASTE!</h1>
+    <p class="celebra-sub" id="celebraSub">Has completado <b id="celebraCurso">el curso</b>. Tu certificado oficial está listo.</p>
+    <div class="celebra-stars">
+      <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
+    </div>
+    <div class="celebra-btns">
+      <button class="celebra-btn celebra-btn-gold" onclick="verCertificadoDesdeCelebra()">
+        🎓 Ver mi certificado
+      </button>
+      <button class="celebra-btn celebra-btn-ghost" onclick="cerrarCelebra()">
+        Volver al rancho
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🎓 MODAL PREVIEW CERTIFICADO                                  -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="cert-preview-modal" id="certPreviewModal">
+  <div class="cert-preview-inner">
+    <div class="cert-preview-header">
+      <div class="cert-preview-title" id="certPreviewTitle">📜 Certificado Oficial</div>
+      <div class="cert-preview-actions">
+        <button class="cert-action cert-action-pdf" onclick="descargarCertificadoPDF()">
+          📥 Descargar PDF
+        </button>
+        <button class="cert-action cert-action-share" onclick="compartirCertificado()">
+          🔗 Copiar link
+        </button>
+        <button class="cert-action cert-action-close" onclick="cerrarPreviewCertificado()">
+          ✕ Cerrar
+        </button>
+      </div>
+    </div>
+    <div class="cert-canvas-wrap" id="certCanvasWrap">
+      <!-- Aquí se inyecta la plantilla del certificado dinámicamente -->
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
@@ -3741,12 +4240,18 @@ function pintarVistaCurso() {
     const bloqueada = claseEstaBloqueada(i, isVip);
     const completada = progreso.includes(i);
     const activa = i === claseActivaIdx;
+    // VIP puede saltar clases bloqueadas (sistema híbrido)
+    const puedeSaltar = bloqueada && isVip;
+    const onclickStr = bloqueada
+      ? (puedeSaltar ? `confirmarSaltarVIP(${i})` : `abrirModalVIP('Esta clase es exclusiva de Élite Pecuario. La primera clase es gratis.')`)
+      : `cambiarClase(${i})`;
     return `
       <div class="cine-clase ${activa?'active':''} ${completada?'done':''} ${bloqueada?'locked':''}"
-           onclick="${bloqueada ? `abrirModalVIP('Esta clase es exclusiva de Élite Pecuario. La primera clase es gratis.')` : `cambiarClase(${i})`}">
+           onclick="${onclickStr}">
         <div class="cine-clase-num">${completada ? '✓' : (bloqueada ? '🔒' : (i+1))}</div>
         <div class="cine-clase-content">
           <div class="cine-clase-title">${cl.titulo || 'Clase ' + (i+1)}</div>
+          ${puedeSaltar ? '<div style="font-size:.65rem;color:#f5d77a;margin-top:2px;">⚡ Saltar (VIP)</div>' : ''}
         </div>
       </div>
     `;
@@ -3776,6 +4281,7 @@ function cargarClaseEnPlayer(idx) {
         <div style="font-size:64px;">📝</div>
         <p style="margin-bottom:8px;">${clase.titulo || 'Clase ' + (idx+1)}</p>
         <small style="color:rgba(255,255,255,.4);">Esta clase aún no tiene video. Contenido en preparación.</small>
+        <button class="celebra-btn celebra-btn-gold" style="margin-top:20px;" onclick="marcarClaseVista(${idx})">✓ Marcar como completada</button>
       </div>
     `;
     return;
@@ -3783,28 +4289,57 @@ function cargarClaseEnPlayer(idx) {
   // 1. Google Drive: convertir /file/d/{id}/view o /file/d/{id} → /file/d/{id}/preview
   const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^\/\?]+)/);
   if (driveMatch) {
-    player.innerHTML = `<iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
-    setTimeout(() => marcarClaseVista(idx), 30000);
+    player.innerHTML = `
+      <iframe src="https://drive.google.com/file/d/${driveMatch[1]}/preview" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+      <div style="position:absolute;bottom:10px;right:10px;display:flex;gap:8px;z-index:10;">
+        <button class="celebra-btn celebra-btn-gold" style="padding:8px 14px;font-size:.78rem;" onclick="marcarClaseVista(${idx})">✓ Marcar vista</button>
+      </div>
+    `;
+    // Auto-marcar tras 2 minutos viendo iframe (no podemos detectar 90% de Drive)
+    setTimeout(() => marcarClaseVista(idx), 120000);
     return;
   }
   // 2. YouTube
   const ytId = extraerYoutubeId(url);
   if (ytId) {
-    player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
-    setTimeout(() => marcarClaseVista(idx), 30000);
+    player.innerHTML = `
+      <iframe src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      <div style="position:absolute;bottom:10px;right:10px;display:flex;gap:8px;z-index:10;">
+        <button class="celebra-btn celebra-btn-gold" style="padding:8px 14px;font-size:.78rem;" onclick="marcarClaseVista(${idx})">✓ Marcar vista</button>
+      </div>
+    `;
+    setTimeout(() => marcarClaseVista(idx), 120000);
     return;
   }
-  // 3. MP4/WebM directo
+  // 3. MP4/WebM directo — DETECTA 90% AUTO
   if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) {
-    player.innerHTML = `<video src="${url}" controls autoplay style="width:100%;height:100%;background:#000;" onplay="setTimeout(() => marcarClaseVista(${idx}), 30000)"></video>`;
+    player.innerHTML = `<video id="claseVideoNative_${idx}" src="${url}" controls autoplay style="width:100%;height:100%;background:#000;"></video>`;
+    setTimeout(() => {
+      const video = document.getElementById(`claseVideoNative_${idx}`);
+      if (!video) return;
+      let yaMarco = false;
+      video.addEventListener('timeupdate', () => {
+        if (yaMarco) return;
+        const pct = video.duration ? (video.currentTime / video.duration) : 0;
+        if (pct >= 0.90) {
+          yaMarco = true;
+          marcarClaseVista(idx);
+        }
+      });
+    }, 100);
     return;
   }
   // 4. Otro tipo (Vimeo, etc) → iframe genérico
-  player.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
-  setTimeout(() => marcarClaseVista(idx), 30000);
+  player.innerHTML = `
+    <iframe src="${url}" allowfullscreen></iframe>
+    <div style="position:absolute;bottom:10px;right:10px;display:flex;gap:8px;z-index:10;">
+      <button class="celebra-btn celebra-btn-gold" style="padding:8px 14px;font-size:.78rem;" onclick="marcarClaseVista(${idx})">✓ Marcar vista</button>
+    </div>
+  `;
+  setTimeout(() => marcarClaseVista(idx), 120000);
 }
 
-function marcarClaseVista(idx) {
+window.marcarClaseVista = function(idx) {
   if (!cursoActivo) return;
   const cid = cursoActivo.id;
   if (!progresoCursos[cid]) progresoCursos[cid] = [];
@@ -3817,8 +4352,21 @@ function marcarClaseVista(idx) {
     }
     pintarEstablo();
     toast('+10 XP · Clase completada', 'success', '✅');
+
+    // 🎓 ¿Curso completado?
+    const totalClases = (cursoActivo.clases || []).length;
+    if (totalClases > 0 && progresoCursos[cid].length >= totalClases) {
+      // ¡Curso terminado! Generar certificado y disparar celebración
+      setTimeout(() => emitirCertificado(cursoActivo), 800);
+    }
   }
-}
+};
+
+window.confirmarSaltarVIP = function(idx) {
+  if (!confirm(`⚡ ¿Saltar a la clase ${idx + 1}?\n\nNo se marcará como completada hasta que la termines de ver.`)) return;
+  cambiarClase(idx);
+  toast('Saltaste a la clase ' + (idx+1), 'info', '⚡');
+};
 
 // ═══ Búsqueda en vivo ═══
 document.addEventListener('DOMContentLoaded', () => {
@@ -4669,11 +5217,343 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════
+// 🎓 SISTEMA DE CERTIFICADOS (emisión, listado, PDF, QR)
+// ═══════════════════════════════════════════════════════════
+
+// Cache local de certificados emitidos del usuario actual
+let CERTIFICADOS_USER = [];
+let certificadoActivo = null; // El que se está mostrando en preview
+
+// 🎨 Generar HTML del certificado para preview/PDF
+function renderCertificadoTemplate(cert) {
+  const fecha = new Date(cert.fechaEmision || cert.creadoEn || Date.now());
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const fechaTexto = `${fecha.getDate()} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()}`;
+  const dia = fecha.getDate();
+  const restoFecha = `${meses[fecha.getMonth()].toUpperCase()} ${fecha.getFullYear()}`;
+
+  return `
+    <div class="cert-template" id="certTemplateActive">
+      <div class="cert-corner tl"></div>
+      <div class="cert-corner tr"></div>
+      <div class="cert-corner bl"></div>
+      <div class="cert-corner br"></div>
+
+      <div class="cert-logo-row">
+        <div class="cert-logo-bull">🐂</div>
+        <div class="cert-logo-text">
+          <h1>VISIÓN PECUARIA</h1>
+          <p>Élite Pecuario · Capacitación IPCI</p>
+        </div>
+      </div>
+
+      <div class="cert-eyebrow">Certificado Oficial</div>
+      <h1 class="cert-h1">DE FINALIZACIÓN</h1>
+      <div class="cert-divider"></div>
+
+      <p class="cert-otorga">Se otorga el presente reconocimiento a</p>
+      <h2 class="cert-nombre">${cert.nombre || 'Estudiante'}</h2>
+
+      <p class="cert-completion">por haber concluido satisfactoriamente el programa</p>
+      <h3 class="cert-curso">${cert.cursoTitulo || 'Curso'}</h3>
+      <p class="cert-clases-info">${cert.totalClases || 4} clases · ${cert.categoria || 'Capacitación pecuaria'}</p>
+
+      <div class="cert-footer">
+        <div class="cert-firma">
+          <div class="cert-firma-line"></div>
+          <div class="cert-firma-name">Visión Pecuaria</div>
+          <div class="cert-firma-title">Coordinación Académica</div>
+        </div>
+
+        <div class="cert-fecha">
+          <div class="cert-fecha-day">${dia}</div>
+          <div class="cert-fecha-rest">${restoFecha}</div>
+          <div style="font-size:.65rem;color:rgba(255,255,255,.5);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">Tehuacán, Puebla</div>
+        </div>
+
+        <div class="cert-qr-box">
+          <div class="cert-qr-code" id="certQrTarget"></div>
+          <div class="cert-folio">${cert.folio || 'VP-XXXX-XXXX'}</div>
+        </div>
+      </div>
+
+      <div class="cert-watermark">VP-OFICIAL · IPCI · ${fechaTexto}</div>
+    </div>
+  `;
+}
+
+// 🎓 Emitir certificado al completar curso
+async function emitirCertificado(curso) {
+  if (!curso || !window.__rancho?.auth?.currentUser) return;
+  const user = window.__rancho.auth.currentUser;
+
+  try {
+    const { collection, addDoc, query, where, getDocs, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+
+    // Verificar si ya existe certificado para este usuario+curso
+    const q = query(
+      collection(db, 'certificados'),
+      where('uid', '==', user.uid),
+      where('cursoId', '==', curso.id)
+    );
+    const existSnap = await getDocs(q);
+    let cert;
+
+    if (!existSnap.empty) {
+      // Ya existe — usarlo
+      const d = existSnap.docs[0];
+      cert = { id: d.id, ...d.data() };
+    } else {
+      // Crear nuevo
+      const folio = generarFolio();
+      const nombre = (user.displayName || user.email.split('@')[0] || 'Estudiante').trim();
+      const fechaEmision = new Date().toISOString();
+
+      const certData = {
+        folio,
+        uid: user.uid,
+        nombre,
+        email: user.email || '',
+        cursoId: curso.id,
+        cursoTitulo: curso.titulo || 'Curso',
+        categoria: curso.categoria || 'General',
+        totalClases: (curso.clases || []).length,
+        fechaEmision,
+        creadoEn: serverTimestamp(),
+        validURL: `https://visionpecuariamx.com/verificar.html?f=${folio}`
+      };
+      const docRef = await addDoc(collection(db, 'certificados'), certData);
+      cert = { id: docRef.id, ...certData };
+    }
+
+    // Lanzar celebración
+    lanzarCelebracion(cert);
+    // Refrescar lista de certificados del usuario
+    cargarCertificadosUser();
+  } catch (e) {
+    console.error('❌ Emitir certificado:', e);
+    toast('No se pudo generar tu certificado: ' + (e.code || e.message), 'error', '⚠️');
+  }
+}
+
+// 🆔 Folio único: VP-2026-XXXXX
+function generarFolio() {
+  const year = new Date().getFullYear();
+  const rand = Math.random().toString(36).substring(2, 7).toUpperCase();
+  return `VP-${year}-${rand}`;
+}
+
+// 🎉 Lanzar celebración con confeti + sonido + modal
+function lanzarCelebracion(cert) {
+  certificadoActivo = cert;
+  // Llenar texto
+  const titulos = ['¡LO LOGRASTE!', '¡FELICIDADES!', '¡QUÉ CAMPEÓN!', '¡ERES UN CRACK!'];
+  document.getElementById('celebraTitulo').textContent = titulos[Math.floor(Math.random() * titulos.length)];
+  const primerNombre = (cert.nombre || '').split(' ')[0] || 'Campeón';
+  document.getElementById('celebraSub').innerHTML = `${primerNombre}, has completado <b>${cert.cursoTitulo}</b>. Tu certificado oficial está listo.`;
+
+  // Mostrar modal
+  document.getElementById('celebraModal').classList.add('active');
+
+  // 🎊 Confeti épico
+  if (typeof confetti === 'function') {
+    const fireConfetti = () => {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#d4a017', '#f5d77a', '#ffd96b', '#fff4c2', '#0f2e1d', '#ffffff']
+      });
+    };
+    fireConfetti();
+    setTimeout(fireConfetti, 400);
+    setTimeout(fireConfetti, 800);
+    setTimeout(() => {
+      confetti({
+        particleCount: 150,
+        spread: 120,
+        origin: { y: 0.4 },
+        colors: ['#d4a017', '#f5d77a', '#ffd96b']
+      });
+    }, 1200);
+  }
+
+  // 🎵 Sonido fanfare (Do-Mi-Sol-Do mayor)
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const tones = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    tones.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.frequency.value = freq;
+      osc.type = 'triangle';
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const startAt = ctx.currentTime + (i * 0.18);
+      gain.gain.setValueAtTime(0, startAt);
+      gain.gain.linearRampToValueAtTime(0.15, startAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startAt + 0.5);
+      osc.start(startAt);
+      osc.stop(startAt + 0.5);
+    });
+  } catch(e) { /* sin sonido si no permite */ }
+}
+
+window.cerrarCelebra = function() {
+  document.getElementById('celebraModal').classList.remove('active');
+};
+
+window.verCertificadoDesdeCelebra = function() {
+  cerrarCelebra();
+  if (certificadoActivo) abrirPreviewCertificado(certificadoActivo);
+};
+
+// 📜 Abrir preview del certificado
+window.abrirPreviewCertificado = function(cert) {
+  certificadoActivo = cert;
+  const wrap = document.getElementById('certCanvasWrap');
+  wrap.innerHTML = renderCertificadoTemplate(cert);
+  document.getElementById('certPreviewTitle').textContent = `📜 ${cert.cursoTitulo}`;
+
+  // Generar QR
+  setTimeout(() => {
+    const qrTarget = document.getElementById('certQrTarget');
+    if (qrTarget && typeof QRCode !== 'undefined') {
+      qrTarget.innerHTML = '';
+      try {
+        new QRCode(qrTarget, {
+          text: cert.validURL || `https://visionpecuariamx.com/verificar.html?f=${cert.folio}`,
+          width: 84, height: 84,
+          colorDark: '#0a2540',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch(e) { console.warn('QR error:', e); }
+    }
+  }, 50);
+
+  document.getElementById('certPreviewModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+
+window.cerrarPreviewCertificado = function() {
+  document.getElementById('certPreviewModal').classList.remove('active');
+  document.body.style.overflow = '';
+};
+
+// 📥 Descargar certificado en PDF
+window.descargarCertificadoPDF = async function() {
+  if (!certificadoActivo) return;
+  toast('Generando PDF...', 'info', '⏳');
+  try {
+    const tpl = document.getElementById('certTemplateActive');
+    if (!tpl) { toast('Plantilla no cargada', 'error', '⚠️'); return; }
+    const canvas = await html2canvas(tpl, { scale: 2, backgroundColor: '#0a2540', logging: false, useCORS: true });
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    // A4 horizontal: 297 x 210
+    pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
+    const filename = `Certificado_${certificadoActivo.folio || 'VP'}_${(certificadoActivo.nombre || '').replace(/\s+/g, '_')}.pdf`;
+    pdf.save(filename);
+    toast('PDF descargado', 'success', '✅');
+  } catch(e) {
+    console.error(e);
+    toast('No se pudo generar PDF: ' + e.message, 'error', '⚠️');
+  }
+};
+
+window.compartirCertificado = function() {
+  if (!certificadoActivo) return;
+  const url = certificadoActivo.validURL || `https://visionpecuariamx.com/verificar.html?f=${certificadoActivo.folio}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      toast('Link copiado al portapapeles', 'success', '🔗');
+    });
+  } else {
+    prompt('Copia este link:', url);
+  }
+};
+
+// 🗂️ Cargar certificados del usuario y pintarlos en la sección
+async function cargarCertificadosUser() {
+  if (!window.__rancho?.auth?.currentUser) return;
+  const user = window.__rancho.auth.currentUser;
+  try {
+    const { collection, query, where, getDocs } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const q = query(collection(db, 'certificados'), where('uid', '==', user.uid));
+    const snap = await getDocs(q);
+    CERTIFICADOS_USER = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    pintarCertificadosUser();
+  } catch(e) {
+    console.error('Cargar certificados:', e);
+    document.getElementById('certsLoading').style.display = 'none';
+    document.getElementById('certsVacio').style.display = 'block';
+  }
+}
+
+function pintarCertificadosUser() {
+  const grid = document.getElementById('certsGrid');
+  const loading = document.getElementById('certsLoading');
+  const vacio = document.getElementById('certsVacio');
+  if (loading) loading.style.display = 'none';
+
+  // Stats
+  const emitidos = CERTIFICADOS_USER.length;
+  document.getElementById('certEmitidos').textContent = emitidos;
+
+  // Cursos en progreso (no completados aún)
+  const cursosEnProg = (CURSOS_FIRESTORE || []).filter(c => {
+    const total = (c.clases || []).length;
+    if (total === 0) return false;
+    const prog = (progresoCursos[c.id] || []).length;
+    return prog > 0 && prog < total;
+  });
+  document.getElementById('certEnProgreso').textContent = cursosEnProg.length;
+
+  // Horas totales (estimado: cada clase = 0.5h)
+  const horas = CERTIFICADOS_USER.reduce((acc, c) => acc + ((c.totalClases || 0) * 0.5), 0);
+  document.getElementById('certHorasTotal').textContent = Math.round(horas);
+
+  if (emitidos === 0) {
+    grid.innerHTML = '';
+    if (vacio) vacio.style.display = 'block';
+    return;
+  }
+  if (vacio) vacio.style.display = 'none';
+
+  grid.innerHTML = CERTIFICADOS_USER.map(c => {
+    const fecha = new Date(c.fechaEmision || Date.now());
+    const fechaStr = fecha.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    return `
+      <div class="cert-card" onclick='abrirPreviewCertificado(${JSON.stringify(c).replace(/'/g, "&#39;")})'>
+        <div class="cert-medal">
+          <div class="cert-medal-bg"></div>
+          <div class="cert-medal-inner">🏆</div>
+        </div>
+        <div class="cert-tipo" style="text-align:center;font:700 .7rem 'Montserrat',sans-serif;letter-spacing:2px;color:rgba(245,215,122,.7);text-transform:uppercase;margin-bottom:6px;">${c.categoria || 'Curso'}</div>
+        <div style="text-align:center;font:800 1.05rem 'Montserrat',sans-serif;color:#fff;margin-bottom:8px;">${c.cursoTitulo}</div>
+        <div style="text-align:center;font:500 .8rem 'Montserrat',sans-serif;color:rgba(255,255,255,.55);margin-bottom:14px;">Otorgado el ${fechaStr}</div>
+        <div style="text-align:center;font:700 .7rem 'Montserrat',monospace;color:#f5d77a;letter-spacing:1px;background:rgba(212,160,23,.1);padding:6px 10px;border-radius:8px;border:1px solid rgba(212,160,23,.25);">${c.folio || 'VP-XXX'}</div>
+        <div style="text-align:center;margin-top:14px;font-size:.78rem;color:rgba(255,255,255,.6);">📥 Click para ver / descargar</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Exponer en window.__rancho.iniciarCertificados (sobreescribe el demo si existe)
+window.__rancho.iniciarCertificados = cargarCertificadosUser;
+
 console.log('✅ [SCRIPT-2] FIN — funciones:', {
   iniciarEstablo: typeof window.__rancho.iniciarEstablo,
   cargarMiembro: typeof window.__rancho.cargarMiembro,
   iniciarContenido: typeof window.__rancho.iniciarContenido,
-  iniciarCertificados: typeof window.__rancho.iniciarCertificados
+  iniciarCertificados: typeof window.__rancho.iniciarCertificados,
+  emitirCertificado: typeof emitirCertificado,
+  abrirPreviewCertificado: typeof window.abrirPreviewCertificado
 });
 </script>
 
