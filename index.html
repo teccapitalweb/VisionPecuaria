@@ -3175,6 +3175,7 @@ window.__rancho.userPlan = () => userPlan;
 <!-- LÓGICA DE NAVEGACIÓN + DATA DEMO                             -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <script>
+console.log('🐂 [SCRIPT-REGULAR] INICIO ejecutando');
 // ═══════════════════════════════════════════════════════════
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════════════════
@@ -3887,6 +3888,7 @@ window.__rancho.cargarMiembro = async function() {
   } catch(e) { console.warn('Error cargando miembro:', e); }
 };
 
+console.log('🐂 [SCRIPT-REGULAR] Llegamos a definir iniciarEstablo');
 window.__rancho.iniciarEstablo = async function() {
   console.log('🐂 [ESTABLO] iniciarEstablo() llamada');
   try {
@@ -4704,6 +4706,10 @@ document.addEventListener('keydown', e => {
     cerrarModalVIP();
     cerrarVideoModal();
   }
+});
+console.log('🐂 [SCRIPT-REGULAR] FIN — funciones definidas:', {
+  iniciarEstablo: typeof window.__rancho?.iniciarEstablo,
+  cargarMiembro: typeof window.__rancho?.cargarMiembro
 });
 </script>
 
