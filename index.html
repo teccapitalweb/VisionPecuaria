@@ -3009,7 +3009,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 await setPersistence(auth, browserLocalPersistence);
 
-window.__rancho = { auth, db };
+// 🛡️ Preservar funciones que el script regular ya pudo haber definido
+// (auth/db pueden coexistir con iniciarEstablo, cargarMiembro, etc)
+window.__rancho = Object.assign(window.__rancho || {}, { auth, db });
 
 // ═══════════════════════════════════════════════════════════
 // AUTOLOGIN POR HASH (cross-domain desde la landing)
