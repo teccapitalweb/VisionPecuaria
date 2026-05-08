@@ -3078,17 +3078,40 @@ onAuthStateChanged(auth, async (user) => {
 
     // Iniciar suscripciones a contenido
     console.log('🐂 [AUTH] Usuario logueado, iniciando suscripciones. uid:', user.uid);
-    console.log('🐂 [AUTH] Funciones disponibles:', {
-      iniciarEstablo: typeof window.__rancho?.iniciarEstablo,
-      cargarMiembro: typeof window.__rancho?.cargarMiembro,
-      iniciarContenido: typeof window.__rancho?.iniciarContenido,
-      iniciarCertificados: typeof window.__rancho?.iniciarCertificados
-    });
-    if (typeof window.__rancho?.iniciarEstablo === 'function') window.__rancho.iniciarEstablo();
-    else console.error('🐂 [AUTH] iniciarEstablo NO ES FUNCIÓN — bug de orden de scripts');
-    if (typeof window.__rancho?.cargarMiembro === 'function') window.__rancho.cargarMiembro();
-    if (typeof window.__rancho?.iniciarContenido === 'function') window.__rancho.iniciarContenido();
-    if (typeof window.__rancho?.iniciarCertificados === 'function') window.__rancho.iniciarCertificados();
+
+    // 🛡️ FIX ORDEN DE SCRIPTS: si las funciones del script regular aún no están
+    // definidas (porque module corre antes en algunos navegadores), guardamos
+    // un flag y el script regular las invoca cuando esté listo.
+    window.__ranchoUserReady = true;
+    window.__ranchoUser = user;
+
+    const tryInit = () => {
+      console.log('🐂 [AUTH] tryInit, funciones:', {
+        iniciarEstablo: typeof window.__rancho?.iniciarEstablo,
+        cargarMiembro: typeof window.__rancho?.cargarMiembro
+      });
+      if (typeof window.__rancho?.iniciarEstablo === 'function') {
+        window.__rancho.iniciarEstablo();
+        if (typeof window.__rancho.cargarMiembro === 'function') window.__rancho.cargarMiembro();
+        if (typeof window.__rancho.iniciarContenido === 'function') window.__rancho.iniciarContenido();
+        if (typeof window.__rancho.iniciarCertificados === 'function') window.__rancho.iniciarCertificados();
+        return true;
+      }
+      return false;
+    };
+
+    if (!tryInit()) {
+      // Las funciones aún no están definidas. Reintentamos cada 100ms hasta 5s
+      console.warn('🐂 [AUTH] Funciones aún no definidas, esperando script regular...');
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (tryInit() || attempts > 50) {
+          clearInterval(interval);
+          if (attempts > 50) console.error('🐂 [AUTH] Timeout: las funciones nunca se definieron');
+        }
+      }, 100);
+    }
     return;
   }
 
