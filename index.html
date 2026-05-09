@@ -40,26 +40,40 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  background:
-    radial-gradient(ellipse at top right, rgba(212,160,23,.06), transparent 50%),
-    radial-gradient(ellipse at bottom left, rgba(15,74,33,.18), transparent 50%),
-    linear-gradient(180deg, #061812 0%, #0a1f12 50%, #050d09 100%);
-  background-attachment: fixed;
+  background: #050d09;
   color: #fff;
   line-height: 1.55;
   overflow-x: hidden;
   min-height: 100vh;
+  position: relative;
 }
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgba(34,197,94,.18), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 100%, rgba(212,160,23,.12), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 30%, rgba(15,74,33,.4), transparent 60%);
   pointer-events: none;
   z-index: 0;
+  animation: auroraShift 20s ease-in-out infinite alternate;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .6;
+}
+@keyframes auroraShift {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(2%, 1%) rotate(2deg) scale(1.05); }
+  100% { transform: translate(-1%, -2%) rotate(-1deg) scale(1.02); }
 }
 img { display: block; max-width: 100%; }
 button { font-family: inherit; }
@@ -433,80 +447,161 @@ button { font-family: inherit; }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* HERO TERMÓMETRO */
+/* HERO TERMÓMETRO — REDISEÑO ÉPICO */
 .casco-hero {
   background:
-    radial-gradient(circle at 100% 0%, rgba(212,160,23,.18), transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(15,74,33,.4), transparent 50%),
-    linear-gradient(180deg, rgba(15,61,39,.6), rgba(10,31,18,.8));
-  border: 1px solid rgba(212,160,23,.25);
-  border-radius: 24px;
-  padding: 36px;
+    linear-gradient(135deg, rgba(15,74,33,.4) 0%, rgba(10,37,64,.5) 100%);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 28px;
+  padding: 40px;
   margin-bottom: 28px;
   position: relative;
   overflow: hidden;
   box-shadow:
-    0 12px 40px rgba(0,0,0,.35),
-    0 1px 0 rgba(255,255,255,.06) inset,
-    0 0 80px rgba(212,160,23,.05);
+    0 20px 60px rgba(0,0,0,.4),
+    0 1px 0 rgba(255,255,255,.08) inset,
+    0 0 100px rgba(212,160,23,.05);
   z-index: 1;
+  isolation: isolate;
+}
+.hero-aurora {
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(34,197,94,.4), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(212,160,23,.4), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(20,184,166,.3), transparent 40%);
+  filter: blur(40px);
+  opacity: .6;
+  animation: auroraDance 12s ease-in-out infinite alternate;
+  z-index: -1;
+  pointer-events: none;
+}
+@keyframes auroraDance {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(5%, -3%) rotate(120deg); }
+  66% { transform: translate(-3%, 4%) rotate(240deg); }
+  100% { transform: translate(2%, -1%) rotate(360deg); }
 }
 .casco-hero::before {
   content: '';
-  position: absolute; top: -40%; right: -15%;
-  width: 600px; height: 600px;
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(circle, rgba(212,160,23,.22), transparent 65%);
+    linear-gradient(135deg, transparent 60%, rgba(212,160,23,.04));
   pointer-events: none;
-  animation: heroGlow 8s ease-in-out infinite;
 }
 .casco-hero::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,160,23,.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,.6), transparent);
 }
-@keyframes heroGlow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: .7; transform: scale(1.05); }
+
+.casco-hero-content {
+  position: relative; z-index: 2;
+  display: flex; gap: 32px; align-items: center;
+  flex-wrap: wrap;
 }
-.casco-hero-content { position: relative; z-index: 2; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
-.casco-hero-text { flex: 1; min-width: 240px; }
+.casco-hero-text { flex: 1; min-width: 280px; }
 .casco-eyebrow {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: .72rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 700 .72rem 'Montserrat', sans-serif;
   color: var(--gold-light);
-  background: rgba(212,160,23,.12);
-  padding: 5px 12px; border-radius: 100px;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+  padding: 7px 14px; border-radius: 100px;
   letter-spacing: 1.2px; text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,255,255,.1);
 }
 .casco-eyebrow .pulse {
-  width: 6px; height: 6px;
-  background: var(--gold);
+  width: 7px; height: 7px;
+  background: #4ade80;
   border-radius: 50%;
   animation: pulseDot 2s ease-in-out infinite;
-  box-shadow: 0 0 10px var(--gold);
+  box-shadow: 0 0 12px #4ade80;
 }
 @keyframes pulseDot {
   0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: .6; }
+  50% { transform: scale(1.5); opacity: .5; }
 }
 .casco-hero-title {
-  font: 800 clamp(1.5rem, 3.5vw, 2rem) 'Montserrat', sans-serif;
-  margin-bottom: 8px;
+  font: 800 clamp(1.7rem, 4vw, 2.4rem)/1.15 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 12px;
+  letter-spacing: -1px;
+  color: #fff;
 }
 .casco-hero-title .grad {
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  background: linear-gradient(135deg, #ffd96b 0%, #f5d77a 50%, #d4a017 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(212,160,23,.3));
 }
 .casco-hero-sub {
-  color: rgba(255,255,255,.7); font-size: .95rem; line-height: 1.5;
+  color: rgba(255,255,255,.7);
+  font: 500 .98rem/1.55 'Inter', sans-serif;
   max-width: 520px;
+  margin-bottom: 24px;
 }
 
+/* HERO STATS CHIPS */
+.hero-stats {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.hero-stat {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: 12px 18px;
+  transition: all .3s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.hero-stat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212,160,23,.15), transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.hero-stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212,160,23,.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,.3), 0 0 30px rgba(212,160,23,.15);
+}
+.hero-stat:hover::before { opacity: 1; }
+.hero-stat-icon {
+  font-size: 24px;
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, rgba(212,160,23,.2), rgba(245,215,122,.05));
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.hero-stat-num {
+  font: 800 1.4rem/1 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.5px;
+  position: relative;
+  z-index: 1;
+}
+.hero-stat-label {
+  font: 600 .7rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
 /* TERMÓMETRO PECUARIO */
 .termometro {
   flex-shrink: 0;
@@ -664,10 +759,22 @@ button { font-family: inherit; }
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
 .widget-title {
-  font: 700 .98rem 'Plus Jakarta Sans', sans-serif;
-  display: flex; align-items: center; gap: 10px;
+  font: 800 1rem 'Plus Jakarta Sans', sans-serif;
+  display: flex; align-items: center; gap: 12px;
   color: #fff;
-  letter-spacing: -.2px;
+  letter-spacing: -.3px;
+  position: relative;
+  padding-left: 14px;
+}
+.widget-title::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 18px;
+  background: linear-gradient(180deg, #ffd96b, #d4a017);
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(212,160,23,.4);
 }
 .widget-title > span:first-child {
   width: 32px; height: 32px;
@@ -797,16 +904,28 @@ button { font-family: inherit; }
 }
 
 /* CINE DEL RANCHO */
-.row-cine { margin-bottom: 32px; }
+.row-cine { margin-bottom: 32px; position: relative; z-index: 1; }
 .row-cine-head {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 .row-cine-title {
-  font: 700 1.08rem 'Plus Jakarta Sans', sans-serif;
-  display: flex; align-items: center; gap: 10px;
+  font: 800 1.15rem 'Plus Jakarta Sans', sans-serif;
+  display: flex; align-items: center; gap: 12px;
   color: #fff;
-  letter-spacing: -.3px;
+  letter-spacing: -.4px;
+  position: relative;
+  padding-left: 16px;
+}
+.row-cine-title::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 4px; height: 22px;
+  background: linear-gradient(180deg, #ffd96b, #d4a017);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(212,160,23,.5);
 }
 .row-cine-scroll {
   display: flex; gap: 16px;
@@ -831,6 +950,15 @@ button { font-family: inherit; }
   position: relative;
   box-shadow: 0 4px 16px rgba(0,0,0,.25);
 }
+/* Primera card del carrusel destacada */
+.row-cine-scroll > .curso-card:first-child {
+  flex: 0 0 380px;
+  background: linear-gradient(135deg, rgba(212,160,23,.12), rgba(15,74,33,.2));
+  border-color: rgba(212,160,23,.3);
+  box-shadow: 0 8px 28px rgba(0,0,0,.35), 0 0 50px rgba(212,160,23,.1);
+}
+.row-cine-scroll > .curso-card:first-child .curso-thumb { height: 200px; }
+.row-cine-scroll > .curso-card:first-child .curso-info h3 { font-size: 1.05rem; }
 .curso-card:hover {
   transform: translateY(-6px);
   border-color: rgba(212,160,23,.5);
@@ -2429,8 +2557,13 @@ button { font-family: inherit; }
   .menu-toggle-btn { display: inline-flex; }
   .content { padding: 16px; }
   .main-topbar { padding: 14px 16px; gap: 12px; }
-  .casco-hero { padding: 22px 18px; }
+  .casco-hero { padding: 24px 20px; border-radius: 20px; }
   .casco-hero-content { gap: 18px; }
+  .hero-stats { gap: 8px; }
+  .hero-stat { padding: 10px 14px; gap: 10px; }
+  .hero-stat-icon { width: 36px; height: 36px; font-size: 20px; }
+  .hero-stat-num { font-size: 1.15rem; }
+  .hero-stat-label { font-size: .65rem; }
   .termometro { width: 140px; height: 140px; margin: 0 auto; }
   .termo-num { font-size: 2rem; }
   .section-head h1 { font-size: 1.3rem; }
@@ -2935,9 +3068,21 @@ button { font-family: inherit; }
 }
 .noticias-title {
   display: flex; align-items: center; gap: 12px;
-  font: 700 1.08rem 'Plus Jakarta Sans', sans-serif;
+  font: 800 1.15rem 'Plus Jakarta Sans', sans-serif;
   color: #fff;
-  letter-spacing: -.3px;
+  letter-spacing: -.4px;
+  position: relative;
+  padding-left: 16px;
+}
+.noticias-title::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 4px; height: 22px;
+  background: linear-gradient(180deg, #ffd96b, #d4a017);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(212,160,23,.5);
 }
 .noticias-title > span:first-child {
   width: 34px; height: 34px;
@@ -3480,6 +3625,7 @@ button { font-family: inherit; }
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section active" id="section-casco">
         <div class="casco-hero">
+          <div class="hero-aurora"></div>
           <div class="casco-hero-content">
             <div class="casco-hero-text">
               <span class="casco-eyebrow">
@@ -3490,8 +3636,31 @@ button { font-family: inherit; }
                 Tu rancho está <span class="grad" id="termoEstadoTexto">excelente</span>
               </h1>
               <p class="casco-hero-sub" id="termoExplicacion">
-                Tienes 2 alertas pendientes y los precios del becerro subieron 4.2% esta semana. Es buen momento para vender.
+                Empieza registrando tu primer animal y completando un curso del Establo.
               </p>
+              <div class="hero-stats" id="heroStats">
+                <div class="hero-stat">
+                  <div class="hero-stat-icon">🐄</div>
+                  <div>
+                    <div class="hero-stat-num" id="statAnimales">0</div>
+                    <div class="hero-stat-label">animales</div>
+                  </div>
+                </div>
+                <div class="hero-stat">
+                  <div class="hero-stat-icon">🎬</div>
+                  <div>
+                    <div class="hero-stat-num" id="statCursos">0</div>
+                    <div class="hero-stat-label">cursos</div>
+                  </div>
+                </div>
+                <div class="hero-stat">
+                  <div class="hero-stat-icon">🏆</div>
+                  <div>
+                    <div class="hero-stat-num" id="statCertificados">0</div>
+                    <div class="hero-stat-label">certificados</div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="termometro">
               <svg class="termo-circle" viewBox="0 0 200 200">
@@ -3499,7 +3668,7 @@ button { font-family: inherit; }
                 <circle class="termo-progress-ring" cx="100" cy="100" r="80" id="termoProgress"/>
               </svg>
               <div class="termo-text">
-                <div class="termo-num" id="termoNum">87</div>
+                <div class="termo-num" id="termoNum">0</div>
                 <div class="termo-label">de 100</div>
               </div>
             </div>
@@ -4527,6 +4696,18 @@ function setTermometro(valor) {
 function refrescarTermometro() {
   const score = calcularScoreRancho();
   setTermometro(score);
+
+  // Actualizar stats chips
+  const animales = window.__rancho?.animales?.length || 0;
+  const cursos = (window.__rancho?.cursos || []).length;
+  const certs = window.__rancho?.certificadosCount || 0;
+
+  const elA = document.getElementById('statAnimales');
+  const elC = document.getElementById('statCursos');
+  const elCert = document.getElementById('statCertificados');
+  if (elA) elA.textContent = animales;
+  if (elC) elC.textContent = cursos;
+  if (elCert) elCert.textContent = certs;
 }
 
 // ═══════════════════════════════════════════════════════════
