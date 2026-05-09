@@ -2831,70 +2831,137 @@ button { font-family: inherit; }
 }
 .noticias-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width: 1180px) {
+  .noticias-grid { grid-template-columns: repeat(2, 1fr); }
 }
 .noticia-card {
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(15,46,29,.4), rgba(10,37,64,.55));
+  border: 1px solid rgba(212,160,23,.12);
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform .25s, border-color .25s, box-shadow .25s;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .35s;
   display: flex; flex-direction: column;
+  isolation: isolate;
+}
+.noticia-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 60%, rgba(212,160,23,.05));
+  pointer-events: none;
+  z-index: 1;
 }
 .noticia-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(212,160,23,.4);
-  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+  transform: translateY(-6px);
+  border-color: rgba(212,160,23,.55);
+  box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(212,160,23,.15);
+}
+.noticia-card:hover .noticia-img { transform: scale(1.06); }
+.noticia-card:hover .noticia-titulo { color: #ffd96b; }
+
+.noticia-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #0a2540;
+}
+.noticia-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(10,37,64,.85) 100%);
+  pointer-events: none;
 }
 .noticia-img {
-  width: 100%;
-  aspect-ratio: 16/9;
+  width: 100%; height: 100%;
   object-fit: cover;
-  background: rgba(0,0,0,.3);
   display: block;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
 }
 .noticia-img-placeholder {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: linear-gradient(135deg, rgba(212,160,23,.2), rgba(15,74,33,.4));
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(212,160,23,.3), transparent 60%),
+    linear-gradient(135deg, rgba(15,74,33,.6), rgba(10,37,64,.8));
   display: flex; align-items: center; justify-content: center;
-  font-size: 48px;
+  font-size: 56px;
+  opacity: .7;
 }
-.noticia-body {
-  padding: 14px 16px 16px;
-  flex: 1;
-  display: flex; flex-direction: column;
-  gap: 8px;
-}
-.noticia-source {
-  font: 700 .65rem 'Montserrat', sans-serif;
+.noticia-cat-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: rgba(10,37,64,.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(245,215,122,.35);
   color: #f5d77a;
+  font: 700 .65rem 'Montserrat', sans-serif;
   letter-spacing: 1.2px;
   text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 8px;
+  z-index: 2;
+}
+.noticia-body {
+  padding: 16px 18px 18px;
+  flex: 1;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+.noticia-source {
+  font: 800 .68rem 'Montserrat', sans-serif;
+  color: #f5d77a;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.noticia-source::before {
+  content: '';
+  width: 4px; height: 4px;
+  background: #d4a017;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(212,160,23,.6);
 }
 .noticia-titulo {
-  font: 700 .92rem 'Plus Jakarta Sans', sans-serif;
+  font: 700 .98rem/1.32 'Plus Jakarta Sans', sans-serif;
   color: #fff;
-  line-height: 1.35;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  letter-spacing: -.2px;
+  transition: color .25s;
 }
 .noticia-fecha {
-  font: 500 .72rem 'Montserrat', sans-serif;
-  color: rgba(255,255,255,.5);
+  font: 600 .72rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.45);
   margin-top: auto;
+  padding-top: 6px;
+  display: flex; align-items: center; gap: 6px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.noticia-fecha::before {
+  content: '🕐';
+  font-size: .9rem;
+  filter: grayscale(.3);
 }
 .noticias-vacio {
   text-align: center;
-  padding: 30px 16px;
-  color: rgba(255,255,255,.5);
-  font-size: .88rem;
+  padding: 50px 16px;
+  color: rgba(255,255,255,.55);
+  font-size: .9rem;
+  background: rgba(255,255,255,.02);
+  border-radius: 14px;
+  border: 1px dashed rgba(255,255,255,.08);
 }
-.noticias-vacio-icon { font-size: 42px; margin-bottom: 10px; }
+.noticias-vacio-icon { font-size: 48px; margin-bottom: 12px; opacity: .5; }
 
 /* ═══════════ HATO WIDGET CASCO (vacío) ═══════════ */
 .hato-vacio {
@@ -5189,8 +5256,17 @@ function tiempoRelativo(fecha) {
 function pintarNoticias() {
   const cont = document.getElementById('noticiasGrid');
   if (!cont) return;
+
+  const LABELS = {
+    bovinos: '🐄 Bovinos',
+    porcinos: '🐖 Porcinos',
+    avicola: '🐔 Avícola',
+    mercados: '📈 Mercados'
+  };
+
   const filtradas = NOTICIAS_TODAS
     .filter(n => n.categoria === noticiasTabActiva)
+    .filter(n => n.imagen) // solo con imagen para que el grid se vea armónico
     .sort((a, b) => {
       const fa = a.fecha?.toDate ? a.fecha.toDate().getTime() : new Date(a.fecha || 0).getTime();
       const fb = b.fecha?.toDate ? b.fecha.toDate().getTime() : new Date(b.fecha || 0).getTime();
@@ -5202,29 +5278,29 @@ function pintarNoticias() {
     cont.innerHTML = `
       <div class="noticias-vacio">
         <div class="noticias-vacio-icon">📰</div>
-        <div>Próximamente noticias actualizadas del sector pecuario</div>
-        <small style="opacity:.6;display:block;margin-top:6px;">Estamos preparando el flujo automático de fuentes oficiales</small>
+        <div>Aún no hay noticias en esta categoría</div>
+        <small style="opacity:.6;display:block;margin-top:6px;">Las noticias se actualizan automáticamente cada 6 horas</small>
       </div>
     `;
     return;
   }
 
-  cont.innerHTML = `<div class="noticias-grid">` + filtradas.map(n => {
-    const img = n.imagen
-      ? `<img class="noticia-img" src="${n.imagen}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-         <div class="noticia-img-placeholder" style="display:none;">📰</div>`
-      : `<div class="noticia-img-placeholder">📰</div>`;
-    return `
-      <div class="noticia-card" onclick="window.open('${n.link || '#'}','_blank','noopener')">
-        ${img}
-        <div class="noticia-body">
-          <div class="noticia-source">${n.fuente || 'Sector pecuario'}</div>
-          <div class="noticia-titulo">${n.titulo || 'Sin título'}</div>
-          <div class="noticia-fecha">${tiempoRelativo(n.fecha)}</div>
-        </div>
+  const catLabel = LABELS[noticiasTabActiva] || noticiasTabActiva;
+
+  cont.innerHTML = `<div class="noticias-grid">` + filtradas.map(n => `
+    <article class="noticia-card" onclick="window.open('${n.link || '#'}','_blank','noopener')">
+      <div class="noticia-img-wrap">
+        <span class="noticia-cat-badge">${catLabel}</span>
+        <img class="noticia-img" src="${n.imagen}" alt="" loading="lazy"
+             onerror="this.parentElement.innerHTML='<div class=\\'noticia-img-placeholder\\'>📰</div>'">
       </div>
-    `;
-  }).join('') + `</div>`;
+      <div class="noticia-body">
+        <div class="noticia-source">${n.fuente || 'Sector pecuario'}</div>
+        <h3 class="noticia-titulo">${n.titulo || 'Sin título'}</h3>
+        <div class="noticia-fecha">${tiempoRelativo(n.fecha)}</div>
+      </div>
+    </article>
+  `).join('') + `</div>`;
 }
 
 window.cambiarTabNoticias = function(cat) {
