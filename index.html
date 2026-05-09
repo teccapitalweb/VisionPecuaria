@@ -399,19 +399,22 @@ button { font-family: inherit; }
 
 /* HERO TERMÓMETRO */
 .casco-hero {
-  background: linear-gradient(135deg, rgba(15,61,39,.7), rgba(10,31,18,.85));
-  border: 1px solid rgba(212,160,23,.25);
-  border-radius: var(--rxl);
-  padding: 28px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(212,160,23,.12), transparent 50%),
+    linear-gradient(180deg, rgba(15,61,39,.55), rgba(10,31,18,.7));
+  border: 1px solid rgba(212,160,23,.18);
+  border-radius: 20px;
+  padding: 32px;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.04);
 }
 .casco-hero::before {
   content: '';
-  position: absolute; top: -50%; right: -10%;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(212,160,23,.15), transparent 60%);
+  position: absolute; top: -40%; right: -15%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(212,160,23,.18), transparent 65%);
   pointer-events: none;
 }
 .casco-hero-content { position: relative; z-index: 2; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
@@ -578,63 +581,109 @@ button { font-family: inherit; }
 @media (max-width: 880px) { .widgets-grid { grid-template-columns: 1fr; } }
 
 .widget {
-  background: rgba(255,255,255,.04);
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
   border: 1px solid rgba(255,255,255,.08);
-  border-radius: var(--rxl);
+  border-radius: 18px;
   padding: 22px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.04);
+  transition: border-color .3s, box-shadow .3s;
+}
+.widget:hover {
+  border-color: rgba(212,160,23,.25);
 }
 .widget-head {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
 .widget-title {
-  font: 800 1rem 'Montserrat', sans-serif;
-  display: flex; align-items: center; gap: 8px;
+  font: 700 .98rem 'Plus Jakarta Sans', sans-serif;
+  display: flex; align-items: center; gap: 10px;
+  color: #fff;
+  letter-spacing: -.2px;
+}
+.widget-title > span:first-child {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(245,215,122,.06));
+  border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px;
 }
 .widget-link {
-  font-size: .78rem; color: var(--gold-light);
+  font-size: .76rem; color: var(--gold-light);
   text-decoration: none; font-weight: 600;
-  transition: color .2s;
-  background: none; border: none; cursor: pointer;
+  transition: all .2s;
+  background: rgba(212,160,23,.08); border: 1px solid rgba(212,160,23,.15);
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 8px;
 }
-.widget-link:hover { color: var(--gold); text-decoration: underline; }
+.widget-link:hover {
+  background: rgba(212,160,23,.15);
+  border-color: rgba(212,160,23,.35);
+  color: #ffd96b;
+}
 
 /* MERCADO MINI */
-.mercado-mini-list { display: flex; flex-direction: column; gap: 8px; }
+.mercado-mini-list { display: flex; flex-direction: column; gap: 4px; }
 .mercado-mini-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px;
-  background: rgba(255,255,255,.03);
-  border-radius: 10px;
-  transition: background .2s;
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 14px;
+  background: transparent;
+  border-radius: 12px;
+  transition: background .2s, transform .2s;
+  cursor: default;
 }
-.mercado-mini-row:hover { background: rgba(255,255,255,.06); }
-.mm-emoji { font-size: 22px; flex-shrink: 0; }
+.mercado-mini-row:hover {
+  background: rgba(255,255,255,.04);
+  transform: translateX(2px);
+}
+.mm-emoji {
+  font-size: 22px; flex-shrink: 0;
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, rgba(212,160,23,.12), rgba(15,46,29,.4));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
 .mm-info { flex: 1; min-width: 0; }
-.mm-name { font-size: .88rem; font-weight: 600; color: #fff; }
-.mm-detail { font-size: .72rem; color: rgba(255,255,255,.5); }
-.mm-price { font-size: .92rem; font-weight: 800; color: #fff; text-align: right; }
+.mm-name { font: 700 .88rem 'Plus Jakarta Sans', sans-serif; color: #fff; }
+.mm-detail { font: 500 .72rem 'Montserrat', sans-serif; color: rgba(255,255,255,.45); margin-top: 2px; }
+.mm-price { font: 800 .98rem 'Plus Jakarta Sans', sans-serif; color: #fff; text-align: right; letter-spacing: -.3px; }
 .mm-change {
-  font-size: .72rem; font-weight: 700;
-  display: inline-flex; align-items: center; gap: 2px;
+  font-size: .7rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 3px;
+  margin-top: 2px;
 }
 .mm-change--up { color: #4ade80; }
 .mm-change--down { color: #f87171; }
 
 /* HATO RESUMEN */
 .hato-resumen-card {
-  background: linear-gradient(135deg, rgba(107,68,35,.25), rgba(107,68,35,.08));
-  border: 1px solid rgba(160,112,80,.3);
+  background: linear-gradient(135deg, rgba(212,160,23,.14), rgba(15,46,29,.3));
+  border: 1px solid rgba(212,160,23,.22);
   border-radius: 14px;
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 12px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hato-resumen-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(212,160,23,.15), transparent 70%);
+  pointer-events: none;
 }
 .hato-num {
-  font: 800 2.2rem/1 'Montserrat', sans-serif;
+  font: 800 2.4rem/1 'Plus Jakarta Sans', sans-serif;
   color: var(--gold-light);
+  letter-spacing: -1px;
+  position: relative;
 }
-.hato-label { font-size: .78rem; color: rgba(255,255,255,.7); margin-top: 4px; }
+.hato-label { font: 600 .76rem 'Montserrat', sans-serif; color: rgba(255,255,255,.7); margin-top: 6px; letter-spacing: .3px; position: relative; }
 .hato-add-btn {
   width: 100%;
   margin-top: 10px;
@@ -651,15 +700,17 @@ button { font-family: inherit; }
 
 /* ALERTAS */
 .alerta-mini {
-  display: flex; gap: 10px; align-items: flex-start;
-  padding: 10px;
-  border-radius: 10px;
-  background: rgba(245,158,11,.1);
-  border-left: 3px solid var(--warn);
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
   margin-bottom: 8px;
   font-size: .82rem;
+  transition: background .2s, border-color .2s;
 }
-.alerta-mini--ok { background: rgba(34,197,94,.1); border-color: var(--success); }
+.alerta-mini:hover { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.1); }
+.alerta-mini--ok { background: rgba(34,197,94,.08); border-color: rgba(34,197,94,.25); }
 .alerta-mini-emoji { font-size: 18px; }
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -667,30 +718,34 @@ button { font-family: inherit; }
 /* ═══════════════════════════════════════════════════════════ */
 .section-head {
   display: flex; align-items: end; justify-content: space-between;
-  margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 22px; gap: 16px; flex-wrap: wrap;
 }
 .section-head h1 {
-  font: 800 1.6rem/1.2 'Montserrat', sans-serif;
+  font: 800 1.7rem/1.15 'Plus Jakarta Sans', sans-serif;
   display: flex; align-items: center; gap: 12px;
+  letter-spacing: -.5px;
+  color: #fff;
 }
 .section-head p {
-  color: rgba(255,255,255,.6); font-size: .9rem; margin-top: 4px;
+  color: rgba(255,255,255,.55); font: 500 .92rem 'Montserrat', sans-serif; margin-top: 6px;
 }
 
 /* CINE DEL RANCHO */
 .row-cine { margin-bottom: 32px; }
 .row-cine-head {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 .row-cine-title {
-  font: 700 1.05rem 'Montserrat', sans-serif;
-  display: flex; align-items: center; gap: 8px;
+  font: 700 1.08rem 'Plus Jakarta Sans', sans-serif;
+  display: flex; align-items: center; gap: 10px;
+  color: #fff;
+  letter-spacing: -.3px;
 }
 .row-cine-scroll {
-  display: flex; gap: 14px;
+  display: flex; gap: 16px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
@@ -701,18 +756,19 @@ button { font-family: inherit; }
 .curso-card {
   flex: 0 0 280px;
   scroll-snap-align: start;
-  background: rgba(255,255,255,.04);
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
   border: 1px solid rgba(255,255,255,.08);
-  border-radius: var(--rl);
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform .3s, border-color .3s, box-shadow .3s;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .35s;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
 }
 .curso-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: rgba(212,160,23,.4);
-  box-shadow: 0 16px 40px rgba(0,0,0,.4);
+  transform: translateY(-5px);
+  border-color: rgba(212,160,23,.45);
+  box-shadow: 0 16px 36px rgba(0,0,0,.4), 0 0 0 1px rgba(212,160,23,.12);
   z-index: 5;
 }
 .curso-thumb {
@@ -2793,21 +2849,32 @@ button { font-family: inherit; }
 
 /* ═══════════ NOTICIAS DEL RANCHO ═══════════ */
 .noticias-card {
-  background: linear-gradient(160deg, rgba(15,46,29,.6), rgba(10,37,64,.5));
-  border: 1px solid rgba(212,160,23,.18);
-  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
   padding: 24px;
   margin: 24px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
 }
 .noticias-head {
   display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
+  flex-wrap: wrap; gap: 14px;
   margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
 .noticias-title {
-  display: flex; align-items: center; gap: 10px;
-  font: 700 1.1rem 'Plus Jakarta Sans', sans-serif;
+  display: flex; align-items: center; gap: 12px;
+  font: 700 1.08rem 'Plus Jakarta Sans', sans-serif;
   color: #fff;
+  letter-spacing: -.3px;
+}
+.noticias-title > span:first-child {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(245,215,122,.06));
+  border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 17px;
 }
 .noticias-tabs {
   display: flex; gap: 6px;
