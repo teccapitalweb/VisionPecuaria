@@ -2595,7 +2595,15 @@ button { font-family: inherit; }
 }
 .cert-firma {
   text-align: center;
-  flex: 1;
+  flex: 0 0 auto;
+  min-width: 220px;
+}
+.cert-firma-img {
+  display: block;
+  width: 170px;
+  height: auto;
+  margin: 0 auto -8px;
+  filter: drop-shadow(0 2px 4px rgba(212,160,23,.25));
 }
 .cert-firma-line {
   border-top: 1px solid rgba(212,160,23,.5);
@@ -2635,8 +2643,11 @@ button { font-family: inherit; }
 }
 
 .cert-fecha {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
   text-align: center;
-  flex: 1;
 }
 .cert-fecha-day {
   font: 800 1.4rem 'Montserrat', sans-serif;
@@ -5312,8 +5323,9 @@ function renderCertificadoTemplate(cert) {
 
       <div class="cert-footer">
         <div class="cert-firma">
+          <img class="cert-firma-img" src="data:image/png;base64,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" alt="Firma Eduardo">
           <div class="cert-firma-line"></div>
-          <div class="cert-firma-name">Ing. Coordinación</div>
+          <div class="cert-firma-name">Eduardo · Coordinación</div>
           <div class="cert-firma-title">VISIÓN PECUARIA</div>
         </div>
 
