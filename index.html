@@ -299,50 +299,90 @@ button { font-family: inherit; }
 
 .main-topbar {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(10,31,18,.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  padding: 14px 28px;
+  background: linear-gradient(180deg, rgba(15,46,29,.92), rgba(10,31,18,.85));
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212,160,23,.15);
+  padding: 16px 28px;
   display: flex; align-items: center; gap: 16px;
+  position: relative;
+}
+.main-topbar::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,.4), transparent);
 }
 .menu-toggle-btn {
   display: none;
-  width: 40px; height: 40px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 10px;
-  color: #fff; cursor: pointer;
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, rgba(212,160,23,.12), rgba(255,255,255,.04));
+  border: 1px solid rgba(212,160,23,.2);
+  border-radius: 12px;
+  color: #f5d77a; cursor: pointer;
   align-items: center; justify-content: center;
+  transition: all .2s;
 }
-.topbar-greeting { flex: 1; min-width: 0; }
+.menu-toggle-btn:hover { background: rgba(212,160,23,.18); transform: scale(1.05); }
+.topbar-greeting { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .topbar-greeting h2 {
-  font: 700 1.1rem/1.2 'Montserrat', sans-serif;
+  font: 800 1.25rem/1.15 'Plus Jakarta Sans', 'Montserrat', sans-serif;
   color: #fff;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  letter-spacing: -0.3px;
+  display: flex; align-items: center; gap: 8px;
+}
+.topbar-greeting h2 .greet-name {
+  background: linear-gradient(135deg, #d4a017, #f5d77a, #ffd96b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
 }
 .topbar-greeting p {
-  font-size: .8rem;
-  color: rgba(255,255,255,.55);
-  margin-top: 2px;
+  font-size: .82rem;
+  color: rgba(255,255,255,.6);
+  margin: 0;
+  font-weight: 500;
+  display: flex; align-items: center; gap: 6px;
 }
-.topbar-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.topbar-greeting p::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(34,197,94,.6);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.3); }
+}
+.topbar-actions { display: flex; gap: 10px; flex-shrink: 0; align-items: center; }
 .topbar-action-btn {
-  width: 40px; height: 40px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 10px;
-  color: rgba(255,255,255,.7); cursor: pointer;
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, rgba(212,160,23,.1), rgba(255,255,255,.04));
+  border: 1px solid rgba(212,160,23,.15);
+  border-radius: 12px;
+  color: #f5d77a; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   position: relative;
-  transition: background .2s, color .2s;
+  transition: all .2s;
 }
-.topbar-action-btn:hover { background: rgba(212,160,23,.15); color: var(--gold-light); }
+.topbar-action-btn:hover {
+  background: rgba(212,160,23,.2);
+  border-color: rgba(212,160,23,.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(212,160,23,.18);
+}
 .topbar-action-btn .dot {
-  position: absolute; top: 8px; right: 8px;
-  width: 8px; height: 8px;
-  background: var(--gold);
+  position: absolute; top: 9px; right: 9px;
+  width: 9px; height: 9px;
+  background: #ef4444;
   border-radius: 50%;
-  border: 2px solid var(--field-deep);
+  border: 2px solid #0a1f12;
+  box-shadow: 0 0 8px rgba(239,68,68,.6);
 }
 
 .content { padding: 24px 28px 80px; }
@@ -2266,20 +2306,63 @@ button { font-family: inherit; }
   .main { margin-left: 0; }
   .menu-toggle-btn { display: inline-flex; }
   .content { padding: 16px; }
-  .main-topbar { padding: 12px 16px; }
+  .main-topbar { padding: 14px 16px; gap: 12px; }
   .casco-hero { padding: 22px 18px; }
   .casco-hero-content { gap: 18px; }
   .termometro { width: 140px; height: 140px; margin: 0 auto; }
   .termo-num { font-size: 2rem; }
   .section-head h1 { font-size: 1.3rem; }
   .modal { padding: 26px 20px; }
+
+  /* Noticias responsive */
+  .noticias-card { padding: 18px 14px; border-radius: 18px; margin: 18px 0; }
+  .noticias-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .noticias-tabs {
+    overflow-x: auto;
+    width: 100%;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .noticias-tabs::-webkit-scrollbar { display: none; }
+  .noticias-tab { white-space: nowrap; flex-shrink: 0; padding: 7px 12px; font-size: .75rem; }
+  .noticias-grid { grid-template-columns: 1fr; gap: 14px; }
+
+  /* Modal animal mobile */
+  .modal-animal-content { padding: 22px 18px; border-radius: 16px; max-height: 95vh; }
+  .modal-animal h3 { font-size: 1.15rem; }
+  .modal-animal-row { grid-template-columns: 1fr; gap: 0; }
+
+  /* Hato widget mobile */
+  .hato-vacio { padding: 12px 8px; }
+  .hato-vacio-icon { font-size: 36px; }
+  .btn-registrar-animal { padding: 12px 18px; font-size: .8rem; width: 100%; }
 }
 
 @media (max-width: 480px) {
-  .topbar-greeting h2 { font-size: .95rem; }
+  .topbar-greeting h2 { font-size: 1.05rem; }
   .topbar-greeting p { font-size: .72rem; }
+  .topbar-action-btn { width: 38px; height: 38px; }
+  .menu-toggle-btn { width: 38px; height: 38px; }
   .casco-hero { padding: 18px 14px; }
-  .casco-hero-title { font-size: 1.3rem; }
+  .casco-hero-title { font-size: 1.25rem; line-height: 1.25; }
+  .casco-hero-sub { font-size: .85rem; }
+  .termometro { width: 120px; height: 120px; }
+  .termo-num { font-size: 1.7rem; }
+
+  /* Cursos en home — más compactos */
+  .row-cine-title { font-size: 1rem; }
+
+  /* Mercado mini en mobile */
+  .mercado-mini-row { padding: 10px 8px; gap: 10px; }
+  .mm-name { font-size: .82rem; }
+  .mm-detail { font-size: .68rem; }
+  .mm-price { font-size: .92rem; }
+
+  /* Section heads */
+  .section-head h1 { font-size: 1.15rem; }
+  .section-head p { font-size: .78rem; }
 }
 
 .sb-overlay {
@@ -2669,6 +2752,45 @@ button { font-family: inherit; }
   letter-spacing: 2px;
 }
 
+/* ═══════════ MERCADO STATS ═══════════ */
+.mercado-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.mercado-stat-card {
+  background: linear-gradient(135deg, rgba(15,46,29,.5), rgba(10,37,64,.4));
+  border: 1px solid rgba(212,160,23,.18);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+  transition: transform .25s, border-color .25s;
+}
+.mercado-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,160,23,.4);
+}
+.mercado-stat-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(245,215,122,.08));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.mercado-stat-num {
+  font: 800 1.4rem 'Plus Jakarta Sans', sans-serif;
+  color: #f5d77a;
+  line-height: 1;
+}
+.mercado-stat-label {
+  font: 500 .72rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.6);
+  margin-top: 4px;
+  letter-spacing: .3px;
+}
+
 /* ═══════════ NOTICIAS DEL RANCHO ═══════════ */
 .noticias-card {
   background: linear-gradient(160deg, rgba(15,46,29,.6), rgba(10,37,64,.5));
@@ -2854,6 +2976,19 @@ button { font-family: inherit; }
   color: #fff;
   font: 500 .9rem 'Montserrat', sans-serif;
   margin-bottom: 14px;
+}
+.modal-animal select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f5d77a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.modal-animal select option {
+  background: #0f2e1d;
+  color: #fff;
+  padding: 10px;
 }
 .modal-animal input:focus,
 .modal-animal select:focus {
@@ -3167,6 +3302,15 @@ button { font-family: inherit; }
           </div>
         </div>
 
+        <!-- 🎬 CURSOS (movido arriba — principal atractivo) -->
+        <div class="row-cine">
+          <div class="row-cine-head">
+            <div class="row-cine-title">🎬 Continúa tu aprendizaje</div>
+            <button class="widget-link" onclick="navigateTo('establo')">Ver Establo →</button>
+          </div>
+          <div class="row-cine-scroll" id="cineScrollHome"></div>
+        </div>
+
         <!-- WIDGETS -->
         <div class="widgets-grid">
           <div class="widget">
@@ -3201,15 +3345,6 @@ button { font-family: inherit; }
             </div>
           </div>
           <div id="noticiasGrid"></div>
-        </div>
-
-        <!-- CINE DEL RANCHO -->
-        <div class="row-cine">
-          <div class="row-cine-head">
-            <div class="row-cine-title">🎬 Continúa tu aprendizaje</div>
-            <button class="widget-link" onclick="navigateTo('establo')">Ver Establo →</button>
-          </div>
-          <div class="row-cine-scroll" id="cineScrollHome"></div>
         </div>
 
       </section>
@@ -3488,10 +3623,38 @@ button { font-family: inherit; }
         <div class="section-head">
           <div>
             <h1>💰 Mercado de la Plaza</h1>
-            <p>Precios pecuarios actualizados · Fuente: SIAP-SADER</p>
+            <p>Precios pecuarios del sector · Fuente: SIAP-SADER</p>
           </div>
         </div>
+
+        <div class="mercado-stats-grid">
+          <div class="mercado-stat-card">
+            <div class="mercado-stat-icon">📊</div>
+            <div>
+              <div class="mercado-stat-num" id="mercadoCount">8</div>
+              <div class="mercado-stat-label">productos monitoreados</div>
+            </div>
+          </div>
+          <div class="mercado-stat-card">
+            <div class="mercado-stat-icon">📈</div>
+            <div>
+              <div class="mercado-stat-num" id="mercadoSubieron">—</div>
+              <div class="mercado-stat-label">precios al alza</div>
+            </div>
+          </div>
+          <div class="mercado-stat-card">
+            <div class="mercado-stat-icon">⏱️</div>
+            <div>
+              <div class="mercado-stat-num" id="mercadoActualizado" style="font-size:.95rem;">Hoy</div>
+              <div class="mercado-stat-label">última actualización</div>
+            </div>
+          </div>
+        </div>
+
         <div class="widget">
+          <div class="widget-head">
+            <div class="widget-title"><span>🏷️</span> Tabla completa de precios</div>
+          </div>
           <div class="mercado-mini-list" id="mercadoFull"></div>
         </div>
       </section>
@@ -3955,9 +4118,21 @@ function pintarUsuario(user) {
   // Saludo según hora
   const h = new Date().getHours();
   let saludo = 'Buenos días';
-  if (h >= 12 && h < 19) saludo = 'Buenas tardes';
-  else if (h >= 19 || h < 5) saludo = 'Buenas noches';
-  document.getElementById('greeting').textContent = `${saludo}, ${nombre.split(' ')[0]} 🤠`;
+  let emoji = '☀️';
+  let subtitle = 'Empieza el día revisando tu hato';
+  if (h >= 12 && h < 19) {
+    saludo = 'Buenas tardes';
+    emoji = '🌤️';
+    subtitle = 'Buen momento para checar precios del mercado';
+  } else if (h >= 19 || h < 5) {
+    saludo = 'Buenas noches';
+    emoji = '🌙';
+    subtitle = 'Cierra el día con un curso del Establo';
+  }
+  const primerNombre = nombre.split(' ')[0];
+  document.getElementById('greeting').innerHTML = `${saludo}, <span class="greet-name">${primerNombre}</span> ${emoji}`;
+  const subEl = document.getElementById('greetingSub');
+  if (subEl) subEl.textContent = subtitle;
 }
 
 window.__rancho.userPlan = () => userPlan;
@@ -4185,6 +4360,7 @@ function pintarMercadoMini() {
 }
 function pintarMercadoFull() {
   const cont = document.getElementById('mercadoFull');
+  if (!cont) return;
   cont.innerHTML = MERCADO.map(m => `
     <div class="mercado-mini-row">
       <div class="mm-emoji">${m.emoji}</div>
@@ -4200,6 +4376,28 @@ function pintarMercadoFull() {
       </div>
     </div>
   `).join('');
+
+  // Stats
+  const count = document.getElementById('mercadoCount');
+  const subieron = document.getElementById('mercadoSubieron');
+  const actual = document.getElementById('mercadoActualizado');
+  if (count) count.textContent = MERCADO.length;
+  if (subieron) {
+    const up = MERCADO.filter(m => (m.cambio || 0) > 0).length;
+    subieron.textContent = `${up}/${MERCADO.length}`;
+  }
+  if (actual) {
+    // Si el primer producto tiene timestamp lo usamos
+    const ts = MERCADO[0]?.actualizado;
+    if (ts && ts.toDate) {
+      const d = ts.toDate();
+      const hoy = new Date();
+      const diff = Math.floor((hoy - d) / 86400000);
+      actual.textContent = diff === 0 ? 'Hoy' : (diff === 1 ? 'Ayer' : `hace ${diff}d`);
+    } else {
+      actual.textContent = 'Hoy';
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
