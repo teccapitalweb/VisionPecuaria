@@ -2668,6 +2668,223 @@ button { font-family: inherit; }
   letter-spacing: 2px;
 }
 
+/* ═══════════ NOTICIAS DEL RANCHO ═══════════ */
+.noticias-card {
+  background: linear-gradient(160deg, rgba(15,46,29,.6), rgba(10,37,64,.5));
+  border: 1px solid rgba(212,160,23,.18);
+  border-radius: 24px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.noticias-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  margin-bottom: 20px;
+}
+.noticias-title {
+  display: flex; align-items: center; gap: 10px;
+  font: 700 1.1rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+}
+.noticias-tabs {
+  display: flex; gap: 6px;
+  flex-wrap: wrap;
+}
+.noticias-tab {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.65);
+  padding: 6px 14px;
+  border-radius: 10px;
+  font: 600 .78rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+}
+.noticias-tab:hover { color: #fff; border-color: rgba(212,160,23,.3); }
+.noticias-tab.active {
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  color: #0a2540;
+  border-color: transparent;
+}
+.noticias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.noticia-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+  display: flex; flex-direction: column;
+}
+.noticia-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212,160,23,.4);
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+}
+.noticia-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background: rgba(0,0,0,.3);
+  display: block;
+}
+.noticia-img-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, rgba(212,160,23,.2), rgba(15,74,33,.4));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+}
+.noticia-body {
+  padding: 14px 16px 16px;
+  flex: 1;
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.noticia-source {
+  font: 700 .65rem 'Montserrat', sans-serif;
+  color: #f5d77a;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.noticia-titulo {
+  font: 700 .92rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.noticia-fecha {
+  font: 500 .72rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  margin-top: auto;
+}
+.noticias-vacio {
+  text-align: center;
+  padding: 30px 16px;
+  color: rgba(255,255,255,.5);
+  font-size: .88rem;
+}
+.noticias-vacio-icon { font-size: 42px; margin-bottom: 10px; }
+
+/* ═══════════ HATO WIDGET CASCO (vacío) ═══════════ */
+.hato-vacio {
+  text-align: center;
+  padding: 16px 12px 8px;
+}
+.hato-vacio-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+  opacity: .8;
+}
+.hato-vacio-msg {
+  font: 600 .85rem 'Plus Jakarta Sans', sans-serif;
+  color: rgba(255,255,255,.85);
+  margin-bottom: 4px;
+}
+.hato-vacio-sub {
+  font: 500 .72rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 14px;
+}
+.btn-registrar-animal {
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  color: #0a2540;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font: 700 .78rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: transform .2s;
+}
+.btn-registrar-animal:hover { transform: translateY(-2px); }
+
+/* ═══════════ MODAL AGREGAR ANIMAL ═══════════ */
+.modal-animal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.75);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+.modal-animal.show { display: flex; }
+.modal-animal-content {
+  background: linear-gradient(160deg, #0f2e1d, #0a2540);
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: 20px;
+  padding: 28px;
+  max-width: 460px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-animal h3 {
+  font: 800 1.3rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 6px;
+}
+.modal-animal p {
+  font: 500 .85rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.6);
+  margin: 0 0 20px;
+}
+.modal-animal label {
+  display: block;
+  font: 600 .75rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 6px;
+  letter-spacing: .5px;
+}
+.modal-animal input,
+.modal-animal select {
+  width: 100%;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #fff;
+  font: 500 .9rem 'Montserrat', sans-serif;
+  margin-bottom: 14px;
+}
+.modal-animal input:focus,
+.modal-animal select:focus {
+  outline: none;
+  border-color: #d4a017;
+}
+.modal-animal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.modal-animal-actions {
+  display: flex; gap: 10px;
+  margin-top: 8px;
+}
+.modal-animal-actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font: 700 .85rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  border: none;
+}
+.btn-cancelar {
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.7);
+}
+.btn-guardar {
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  color: #0a2540;
+}
+
 /* Botón saltear VIP */
 .btn-saltar-vip {
   display: inline-flex; align-items: center; gap: 6px;
@@ -2949,20 +3166,6 @@ button { font-family: inherit; }
           </div>
         </div>
 
-        <!-- MISIONES DEL DÍA -->
-        <div class="misiones-card">
-          <div class="misiones-head">
-            <div class="misiones-title">
-              <span>🎯</span>
-              <span>Misiones del día</span>
-            </div>
-            <div class="streak-badge">
-              🔥 <span id="streakDays">3</span> días seguidos
-            </div>
-          </div>
-          <div class="misiones-grid" id="misionesGrid"></div>
-        </div>
-
         <!-- WIDGETS -->
         <div class="widgets-grid">
           <div class="widget">
@@ -2978,25 +3181,25 @@ button { font-family: inherit; }
               <div class="widget-title"><span>🐄</span> Mi hato</div>
               <button class="widget-link" onclick="navigateTo('hato')">Gestionar →</button>
             </div>
-            <div class="hato-resumen-card">
-              <div class="hato-num" id="hatoNum">5</div>
-              <div class="hato-label">cabezas registradas</div>
+            <div id="hatoCascoBox"></div>
+          </div>
+        </div>
+
+        <!-- 📰 NOTICIAS DEL RANCHO -->
+        <div class="noticias-card">
+          <div class="noticias-head">
+            <div class="noticias-title">
+              <span>📰</span>
+              <span>Noticias del rancho</span>
             </div>
-            <div class="alerta-mini">
-              <span class="alerta-mini-emoji">💉</span>
-              <div>
-                <strong>Vacunación pendiente</strong><br>
-                <small>2 animales necesitan refuerzo esta semana</small>
-              </div>
-            </div>
-            <div class="alerta-mini alerta-mini--ok">
-              <span class="alerta-mini-emoji">✅</span>
-              <div>
-                <strong>Sanidad al día</strong><br>
-                <small>Última desparasitación hace 12 días</small>
-              </div>
+            <div class="noticias-tabs" id="noticiasTabs">
+              <button class="noticias-tab active" data-cat="bovinos" onclick="cambiarTabNoticias('bovinos')">🐄 Bovinos</button>
+              <button class="noticias-tab" data-cat="porcinos" onclick="cambiarTabNoticias('porcinos')">🐖 Porcinos</button>
+              <button class="noticias-tab" data-cat="avicola" onclick="cambiarTabNoticias('avicola')">🐔 Avícola</button>
+              <button class="noticias-tab" data-cat="mercados" onclick="cambiarTabNoticias('mercados')">📈 Mercados</button>
             </div>
           </div>
+          <div id="noticiasGrid"></div>
         </div>
 
         <!-- CINE DEL RANCHO -->
@@ -3530,6 +3733,56 @@ button { font-family: inherit; }
   </div>
 </div>
 
+<!-- 🐄 MODAL AGREGAR ANIMAL -->
+<div class="modal-animal" id="modalAnimal" onclick="if(event.target===this)cerrarModalAnimal()">
+  <div class="modal-animal-content">
+    <h3>🐄 Registrar nuevo animal</h3>
+    <p>Agrega un animal a tu hato. Esto activa tu termómetro pecuario y te da seguimiento real.</p>
+
+    <label>Nombre o apodo</label>
+    <input type="text" id="animalNombre" placeholder="Ej. La Bonita, Lucero...">
+
+    <div class="modal-animal-row">
+      <div>
+        <label>Tipo</label>
+        <select id="animalTipo">
+          <option value="vaca">🐄 Vaca</option>
+          <option value="toro">🐂 Toro</option>
+          <option value="becerro">🐃 Becerro</option>
+          <option value="cerdo">🐖 Cerdo</option>
+          <option value="oveja">🐑 Oveja</option>
+          <option value="cabra">🐐 Cabra</option>
+          <option value="caballo">🐎 Caballo</option>
+          <option value="pollo">🐔 Aves</option>
+        </select>
+      </div>
+      <div>
+        <label>Arete / Tag</label>
+        <input type="text" id="animalTag" placeholder="#A001">
+      </div>
+    </div>
+
+    <div class="modal-animal-row">
+      <div>
+        <label>Raza</label>
+        <input type="text" id="animalRaza" placeholder="Holstein, Cebú, F1...">
+      </div>
+      <div>
+        <label>Peso (kg)</label>
+        <input type="number" id="animalPeso" placeholder="380">
+      </div>
+    </div>
+
+    <label>Edad aproximada</label>
+    <input type="text" id="animalEdad" placeholder="2.5 años">
+
+    <div class="modal-animal-actions">
+      <button class="btn-cancelar" onclick="cerrarModalAnimal()">Cancelar</button>
+      <button class="btn-guardar" onclick="guardarAnimal()">Guardar animal</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- 🔥 FIREBASE                                                   -->
 <!-- ═══════════════════════════════════════════════════════════ -->
@@ -3637,6 +3890,10 @@ onAuthStateChanged(auth, async (user) => {
         if (typeof window.__rancho.cargarMiembro === 'function') window.__rancho.cargarMiembro();
         if (typeof window.__rancho.iniciarContenido === 'function') window.__rancho.iniciarContenido();
         if (typeof window.__rancho.iniciarCertificados === 'function') window.__rancho.iniciarCertificados();
+        if (typeof window.__rancho.iniciarHato === 'function') window.__rancho.iniciarHato();
+        if (typeof window.__rancho.iniciarMercado === 'function') window.__rancho.iniciarMercado();
+        if (typeof window.__rancho.iniciarNoticias === 'function') window.__rancho.iniciarNoticias();
+        if (typeof window.__rancho.contarCertificados === 'function') window.__rancho.contarCertificados();
         return;
       }
       if (intentos > 60) {
@@ -3825,87 +4082,90 @@ window.toast = function(msg, tipo = 'success', icon = '🎯') {
 };
 
 // ═══════════════════════════════════════════════════════════
-// TERMÓMETRO PECUARIO (animación)
+// TERMÓMETRO PECUARIO (calculado dinámicamente)
 // ═══════════════════════════════════════════════════════════
+function calcularScoreRancho() {
+  let score = 20; // base por tener cuenta activa
+  const animales = window.__rancho?.animales?.length || 0;
+  const cursosActivos = Object.keys(progresoCursos || {}).filter(id => {
+    const c = (window.__rancho?.cursos || []).find(x => x.id === id);
+    if (!c || !c.clases) return false;
+    const done = (progresoCursos[id] || []).length;
+    return done > 0 && done < c.clases.length;
+  }).length;
+  const cursosCompletados = window.__rancho?.certificadosCount || 0;
+
+  score += Math.min(animales * 8, 30);          // hasta +30 por animales
+  score += Math.min(cursosActivos * 8, 25);     // hasta +25 por cursos en progreso
+  score += Math.min(cursosCompletados * 8, 25); // hasta +25 por certificados
+
+  return Math.min(score, 100);
+}
+
+function explicacionTermometro(score, animales, cursosActivos, cursosCompletados) {
+  if (score >= 85) return `Excelente trabajo. Tienes ${animales} animal${animales!==1?'es':''} en tu hato y ${cursosCompletados} certificado${cursosCompletados!==1?'s':''} ganado${cursosCompletados!==1?'s':''}.`;
+  if (score >= 60) return `Vas bien. Sigue completando cursos y registra más animales para subir tu termómetro.`;
+  if (animales === 0) return `Empieza registrando tu primer animal y completando un curso del Establo. Tu termómetro va a despegar.`;
+  return `Tu rancho necesita atención. Completa cursos y registra más animales para activar todo el potencial.`;
+}
+
 function setTermometro(valor) {
   const num = document.getElementById('termoNum');
   const ring = document.getElementById('termoProgress');
   const estado = document.getElementById('termoEstadoTexto');
   const expl = document.getElementById('termoExplicacion');
+  if (!num || !ring || !estado || !expl) return;
+
   const circumference = 502;
   ring.style.strokeDashoffset = circumference - (valor / 100) * circumference;
-  // Animación numérica
+
   let curr = 0;
-  const step = valor / 50;
+  const step = Math.max(valor / 50, 1);
   const it = setInterval(() => {
     curr += step;
     if (curr >= valor) { curr = valor; clearInterval(it); }
     num.textContent = Math.floor(curr);
   }, 30);
-  // Texto según valor
-  if (valor >= 85) {
-    estado.textContent = 'excelente';
-    expl.textContent = 'Tienes 2 alertas pendientes y los precios del becerro subieron 4.2% esta semana. Es buen momento para vender.';
-  } else if (valor >= 60) {
-    estado.textContent = 'estable';
-    expl.textContent = 'Algunas tareas pendientes. Atiéndelas hoy mismo para subir tu termómetro.';
-  } else {
-    estado.textContent = 'requiere atención';
-    expl.textContent = 'Hay alertas críticas. Revisa tu hato y atiende las misiones del día.';
-  }
+
+  const animales = window.__rancho?.animales?.length || 0;
+  const cursosActivos = Object.keys(progresoCursos || {}).filter(id => {
+    const c = (window.__rancho?.cursos || []).find(x => x.id === id);
+    if (!c || !c.clases) return false;
+    const done = (progresoCursos[id] || []).length;
+    return done > 0 && done < c.clases.length;
+  }).length;
+  const cursosCompletados = window.__rancho?.certificadosCount || 0;
+
+  if (valor >= 85) estado.textContent = 'excelente';
+  else if (valor >= 60) estado.textContent = 'estable';
+  else if (valor >= 35) estado.textContent = 'en construcción';
+  else estado.textContent = 'apenas empezando';
+
+  expl.textContent = explicacionTermometro(valor, animales, cursosActivos, cursosCompletados);
+}
+
+function refrescarTermometro() {
+  const score = calcularScoreRancho();
+  setTermometro(score);
 }
 
 // ═══════════════════════════════════════════════════════════
-// MISIONES
+// MERCADO MINI (lee de Firestore con fallback)
 // ═══════════════════════════════════════════════════════════
-const MISIONES = [
-  { id: 'm1', titulo: 'Revisa precios del mercado', desc: 'Echa un ojo a los precios de hoy', puntos: 30, icon: '💰', accion: () => navigateTo('mercado') },
-  { id: 'm2', titulo: 'Lee 1 lección', desc: 'Aprende algo nuevo del Establo', puntos: 50, icon: '🎓', accion: () => navigateTo('establo') },
-  { id: 'm3', titulo: 'Registra evento en bitácora', desc: 'Anota una actividad de tu hato', puntos: 40, icon: '📓', accion: () => navigateTo('hato') }
+const MERCADO_FALLBACK = [
+  { emoji: '🐂', nombre: 'Becerro engorda', detalle: '180-220 kg · pie', precio: 105, cambio: 4.2, orden: 1 },
+  { emoji: '🐄', nombre: 'Vaca lechera', detalle: 'Holstein · F1', precio: 95, cambio: 6.8, orden: 2 },
+  { emoji: '🥛', nombre: 'Leche cruda', detalle: 'Por litro', precio: 9.50, cambio: 3.8, orden: 3 },
+  { emoji: '🐑', nombre: 'Cordero Pelibuey', detalle: '35-45 kg pie', precio: 95, cambio: 8.5, orden: 4 },
+  { emoji: '🐖', nombre: 'Cerdo en pie', detalle: '95-110 kg', precio: 55, cambio: 1.5, orden: 5 },
+  { emoji: '🐔', nombre: 'Pollo engorda', detalle: '2.2-2.5 kg', precio: 60, cambio: 2.1, orden: 6 },
+  { emoji: '🥚', nombre: 'Huevo blanco', detalle: 'Por kg', precio: 42, cambio: -3.5, orden: 7 },
+  { emoji: '🍯', nombre: 'Miel multifloral', detalle: 'Por kg', precio: 95, cambio: 4.8, orden: 8 }
 ];
-let misionesDone = JSON.parse(localStorage.getItem('vp_misiones_'+new Date().toDateString()) || '[]');
-function pintarMisiones() {
-  const cont = document.getElementById('misionesGrid');
-  cont.innerHTML = MISIONES.map(m => {
-    const done = misionesDone.includes(m.id);
-    return `
-      <div class="mision ${done?'done':''}" onclick="completarMision('${m.id}')">
-        <div class="mision-checkbox">${done?'✓':''}</div>
-        <div class="mision-content">
-          <div class="mision-title">${m.icon} ${m.titulo}</div>
-          <div class="mision-desc">${m.desc}</div>
-          <div class="mision-points">+${m.puntos} XP</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-window.completarMision = function(id) {
-  if (misionesDone.includes(id)) return;
-  const m = MISIONES.find(x => x.id === id);
-  if (!m) return;
-  misionesDone.push(id);
-  localStorage.setItem('vp_misiones_'+new Date().toDateString(), JSON.stringify(misionesDone));
-  toast(`+${m.puntos} XP · ${m.titulo}`, 'success', '🎯');
-  pintarMisiones();
-  if (m.accion) setTimeout(m.accion, 800);
-};
-
-// ═══════════════════════════════════════════════════════════
-// MERCADO MINI
-// ═══════════════════════════════════════════════════════════
-const MERCADO = [
-  { emoji: '🐂', nombre: 'Becerro engorda', detalle: '180-220 kg · pie', precio: 105, cambio: 4.2 },
-  { emoji: '🐄', nombre: 'Vaca lechera', detalle: 'Holstein · F1', precio: 95, cambio: 6.8 },
-  { emoji: '🥛', nombre: 'Leche cruda', detalle: 'Por litro', precio: 9.50, cambio: 3.8 },
-  { emoji: '🐑', nombre: 'Cordero Pelibuey', detalle: '35-45 kg pie', precio: 95, cambio: 8.5 },
-  { emoji: '🐖', nombre: 'Cerdo en pie', detalle: '95-110 kg', precio: 55, cambio: 1.5 },
-  { emoji: '🐔', nombre: 'Pollo engorda', detalle: '2.2-2.5 kg', precio: 60, cambio: 2.1 },
-  { emoji: '🥚', nombre: 'Huevo blanco', detalle: 'Por kg', precio: 42, cambio: -3.5 },
-  { emoji: '🍯', nombre: 'Miel multifloral', detalle: 'Por kg', precio: 95, cambio: 4.8 }
-];
+let MERCADO = [...MERCADO_FALLBACK];
 function pintarMercadoMini() {
   const cont = document.getElementById('mercadoMini');
+  if (!cont) return;
   cont.innerHTML = MERCADO.slice(0,4).map(m => `
     <div class="mercado-mini-row">
       <div class="mm-emoji">${m.emoji}</div>
@@ -4228,9 +4488,18 @@ function pintarEstablo() {
 
   cont.innerHTML = html;
 
-  // También pintar la fila del home con los primeros 6
+  // Pintar fila del home: SOLO cursos en progreso (no terminados, ya iniciados)
+  // Si no hay ninguno en progreso, muestra los primeros 6 sugeridos
   const home = document.getElementById('cineScrollHome');
-  if (home) home.innerHTML = cursos.slice(0, 6).map(cardCurso).join('');
+  if (home) {
+    const enProgreso = cursos.filter(c => {
+      const total = (c.clases || []).length;
+      const done = (progresoCursos[c.id] || []).length;
+      return total > 0 && done > 0 && done < total;
+    });
+    const aMostrar = enProgreso.length > 0 ? enProgreso : cursos.slice(0, 6);
+    home.innerHTML = aMostrar.map(cardCurso).join('');
+  }
 }
 
 // ═══ Abrir curso (cambia a vista cine) ═══
@@ -4494,7 +4763,9 @@ window.__rancho.iniciarEstablo = async function() {
       CURSOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       // Ordenar por ordenDrip ascendente (1, 2, 3...)
       CURSOS_FIRESTORE.sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
+      window.__rancho.cursos = CURSOS_FIRESTORE;
       pintarEstablo();
+      refrescarTermometro();
     }, (err) => {
       clearTimeout(safetyTimer);
       console.error('Error suscribiéndose a cursos:', err);
@@ -4510,35 +4781,296 @@ window.__rancho.iniciarEstablo = async function() {
 
 
 // ═══════════════════════════════════════════════════════════
-// HATO VIRTUAL (demo data)
+// HATO VIRTUAL (lee de Firestore — colección 'animales' por userId)
 // ═══════════════════════════════════════════════════════════
-const HATO_DEMO = [
-  { nombre:'La Bonita', tag:'#A001', emoji:'🐄', peso:380, edad:'2.5 años', raza:'Holstein' },
-  { nombre:'El Cebú', tag:'#A002', emoji:'🐂', peso:425, edad:'3 años', raza:'Cebú' },
-  { nombre:'Lucero', tag:'#A003', emoji:'🐄', peso:310, edad:'2 años', raza:'F1' },
-  { nombre:'Negrito', tag:'#A004', emoji:'🐂', peso:290, edad:'1.5 años', raza:'Angus' },
-  { nombre:'Estrella', tag:'#A005', emoji:'🐄', peso:295, edad:'1.5 años', raza:'F1' }
-];
+const EMOJI_TIPO = {
+  vaca: '🐄', toro: '🐂', becerro: '🐃',
+  cerdo: '🐖', oveja: '🐑', cabra: '🐐',
+  caballo: '🐎', pollo: '🐔'
+};
+
 function pintarHato() {
   const cont = document.getElementById('hatoGrid');
-  cont.innerHTML = HATO_DEMO.map(a => `
+  if (!cont) return;
+  const animales = window.__rancho?.animales || [];
+
+  if (animales.length === 0) {
+    cont.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:rgba(255,255,255,.6);">
+        <div style="font-size:60px;margin-bottom:14px;">🐄</div>
+        <h3 style="color:#fff;margin:0 0 6px;">Tu hato está vacío</h3>
+        <p style="margin:0 0 18px;font-size:.88rem;">Registra tu primer animal y empieza a llevar el control real de tu rancho.</p>
+        <button class="btn-registrar-animal" onclick="abrirModalAnimal()">+ Registrar primer animal</button>
+      </div>
+    `;
+    return;
+  }
+
+  cont.innerHTML = animales.map(a => `
     <div class="animal-card">
-      <div class="animal-photo">${a.emoji}</div>
-      <div class="animal-name">${a.nombre}</div>
-      <div class="animal-tag">${a.tag} · ${a.raza}</div>
+      <div class="animal-photo">${a.emoji || EMOJI_TIPO[a.tipo] || '🐄'}</div>
+      <div class="animal-name">${a.nombre || 'Sin nombre'}</div>
+      <div class="animal-tag">${a.tag || '—'} · ${a.raza || 'Sin raza'}</div>
       <div class="animal-stats">
-        <div><div class="animal-stat-label">Peso</div><div class="animal-stat-value">${a.peso} kg</div></div>
-        <div><div class="animal-stat-label">Edad</div><div class="animal-stat-value">${a.edad}</div></div>
+        <div><div class="animal-stat-label">Peso</div><div class="animal-stat-value">${a.peso ? a.peso+' kg' : '—'}</div></div>
+        <div><div class="animal-stat-label">Edad</div><div class="animal-stat-value">${a.edad || '—'}</div></div>
       </div>
     </div>
   `).join('') + `
-    <div class="add-animal-card" onclick="toast('Función Mi Hato Virtual completa próximamente', 'success', '🐄')">
+    <div class="add-animal-card" onclick="abrirModalAnimal()">
       <div class="add-animal-icon">+</div>
       <div class="add-animal-text">Agregar animal</div>
       <small style="color:rgba(255,255,255,.4);margin-top:6px;font-size:.75rem">Foto, arete, peso, raza...</small>
     </div>
   `;
 }
+
+// ═══════════════════════════════════════════════════════════
+// HATO WIDGET DEL CASCO (mini)
+// ═══════════════════════════════════════════════════════════
+function pintarHatoCasco() {
+  const box = document.getElementById('hatoCascoBox');
+  if (!box) return;
+  const animales = window.__rancho?.animales || [];
+
+  if (animales.length === 0) {
+    box.innerHTML = `
+      <div class="hato-vacio">
+        <div class="hato-vacio-icon">🐄</div>
+        <div class="hato-vacio-msg">Aún no tienes animales registrados</div>
+        <div class="hato-vacio-sub">Activa tu termómetro pecuario registrando tu primer animal</div>
+        <button class="btn-registrar-animal" onclick="abrirModalAnimal()">+ Registrar mi primer animal</button>
+      </div>
+    `;
+    return;
+  }
+
+  // Resumen por tipo
+  const conteoPorTipo = {};
+  animales.forEach(a => {
+    const t = a.tipo || 'otro';
+    conteoPorTipo[t] = (conteoPorTipo[t] || 0) + 1;
+  });
+  const tiposTexto = Object.entries(conteoPorTipo)
+    .map(([t, n]) => `${EMOJI_TIPO[t] || '🐾'} ${n}`)
+    .join('  ·  ');
+
+  box.innerHTML = `
+    <div class="hato-resumen-card">
+      <div class="hato-num">${animales.length}</div>
+      <div class="hato-label">cabeza${animales.length!==1?'s':''} registrada${animales.length!==1?'s':''}</div>
+    </div>
+    <div class="alerta-mini alerta-mini--ok">
+      <span class="alerta-mini-emoji">📊</span>
+      <div>
+        <strong>Distribución</strong><br>
+        <small>${tiposTexto}</small>
+      </div>
+    </div>
+    <div class="alerta-mini">
+      <span class="alerta-mini-emoji">➕</span>
+      <div>
+        <strong style="cursor:pointer;" onclick="abrirModalAnimal()">Agregar otro animal</strong><br>
+        <small>Mantén tu hato actualizado</small>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// MODAL AGREGAR ANIMAL
+// ═══════════════════════════════════════════════════════════
+window.abrirModalAnimal = function() {
+  const m = document.getElementById('modalAnimal');
+  if (!m) return;
+  ['animalNombre','animalTag','animalRaza','animalPeso','animalEdad'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  m.classList.add('show');
+};
+window.cerrarModalAnimal = function() {
+  const m = document.getElementById('modalAnimal');
+  if (m) m.classList.remove('show');
+};
+window.guardarAnimal = async function() {
+  const user = window.__rancho?.auth?.currentUser;
+  const db = window.__rancho?.db;
+  if (!user || !db) { toast('Inicia sesión primero', 'error', '🔒'); return; }
+
+  const nombre = document.getElementById('animalNombre').value.trim();
+  const tipo = document.getElementById('animalTipo').value;
+  const tag = document.getElementById('animalTag').value.trim();
+  const raza = document.getElementById('animalRaza').value.trim();
+  const peso = parseFloat(document.getElementById('animalPeso').value) || null;
+  const edad = document.getElementById('animalEdad').value.trim();
+
+  if (!nombre) { toast('Ponle un nombre o apodo', 'error', '✏️'); return; }
+
+  try {
+    const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    await addDoc(collection(db, 'animales'), {
+      userId: user.uid,
+      nombre, tipo, tag, raza, peso, edad,
+      emoji: EMOJI_TIPO[tipo] || '🐾',
+      fechaRegistro: serverTimestamp()
+    });
+    toast(`${nombre} registrado en tu hato`, 'success', '🐄');
+    cerrarModalAnimal();
+  } catch(e) {
+    console.error('Error guardando animal:', e);
+    toast('No se pudo guardar. Verifica tu conexión.', 'error', '⚠️');
+  }
+};
+
+// Suscripción a animales del usuario
+window.__rancho.iniciarHato = async function() {
+  try {
+    const { collection, query, where, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const user = window.__rancho.auth?.currentUser;
+    if (!db || !user) return;
+
+    const q = query(collection(db, 'animales'), where('userId', '==', user.uid));
+    onSnapshot(q, (snap) => {
+      window.__rancho.animales = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      pintarHatoCasco();
+      pintarHato();
+      refrescarTermometro();
+    }, (err) => {
+      console.warn('Sin acceso a animales:', err.code);
+      window.__rancho.animales = [];
+      pintarHatoCasco();
+      pintarHato();
+    });
+  } catch(e) { console.warn('Error iniciando hato:', e); }
+};
+
+// ═══════════════════════════════════════════════════════════
+// MERCADO (suscripción a Firestore con fallback)
+// ═══════════════════════════════════════════════════════════
+window.__rancho.iniciarMercado = async function() {
+  try {
+    const { collection, onSnapshot, query } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    if (!db) return;
+
+    const q = query(collection(db, 'mercado'));
+    onSnapshot(q, (snap) => {
+      const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (docs.length > 0) {
+        MERCADO = docs.sort((a,b) => (a.orden || 999) - (b.orden || 999));
+        pintarMercadoMini();
+        pintarMercadoFull();
+      }
+    }, (err) => {
+      console.warn('Sin acceso a mercado, usando fallback:', err.code);
+    });
+  } catch(e) { console.warn('Error iniciando mercado:', e); }
+};
+
+// ═══════════════════════════════════════════════════════════
+// NOTICIAS DEL RANCHO (lee de Firestore por categoría)
+// ═══════════════════════════════════════════════════════════
+let NOTICIAS_TODAS = [];
+let noticiasTabActiva = 'bovinos';
+
+function tiempoRelativo(fecha) {
+  if (!fecha) return '';
+  const ms = (fecha.toDate ? fecha.toDate() : new Date(fecha)).getTime();
+  const diff = Date.now() - ms;
+  const h = Math.floor(diff / 3600000);
+  if (h < 1) return 'hace minutos';
+  if (h < 24) return `hace ${h} h`;
+  const d = Math.floor(h / 24);
+  if (d < 7) return `hace ${d} día${d!==1?'s':''}`;
+  return `hace ${Math.floor(d/7)} sem`;
+}
+
+function pintarNoticias() {
+  const cont = document.getElementById('noticiasGrid');
+  if (!cont) return;
+  const filtradas = NOTICIAS_TODAS
+    .filter(n => n.categoria === noticiasTabActiva)
+    .sort((a, b) => {
+      const fa = a.fecha?.toDate ? a.fecha.toDate().getTime() : new Date(a.fecha || 0).getTime();
+      const fb = b.fecha?.toDate ? b.fecha.toDate().getTime() : new Date(b.fecha || 0).getTime();
+      return fb - fa;
+    })
+    .slice(0, 6);
+
+  if (filtradas.length === 0) {
+    cont.innerHTML = `
+      <div class="noticias-vacio">
+        <div class="noticias-vacio-icon">📰</div>
+        <div>Próximamente noticias actualizadas del sector pecuario</div>
+        <small style="opacity:.6;display:block;margin-top:6px;">Estamos preparando el flujo automático de fuentes oficiales</small>
+      </div>
+    `;
+    return;
+  }
+
+  cont.innerHTML = `<div class="noticias-grid">` + filtradas.map(n => {
+    const img = n.imagen
+      ? `<img class="noticia-img" src="${n.imagen}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+         <div class="noticia-img-placeholder" style="display:none;">📰</div>`
+      : `<div class="noticia-img-placeholder">📰</div>`;
+    return `
+      <div class="noticia-card" onclick="window.open('${n.link || '#'}','_blank','noopener')">
+        ${img}
+        <div class="noticia-body">
+          <div class="noticia-source">${n.fuente || 'Sector pecuario'}</div>
+          <div class="noticia-titulo">${n.titulo || 'Sin título'}</div>
+          <div class="noticia-fecha">${tiempoRelativo(n.fecha)}</div>
+        </div>
+      </div>
+    `;
+  }).join('') + `</div>`;
+}
+
+window.cambiarTabNoticias = function(cat) {
+  noticiasTabActiva = cat;
+  document.querySelectorAll('.noticias-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  pintarNoticias();
+};
+
+window.__rancho.iniciarNoticias = async function() {
+  try {
+    const { collection, onSnapshot, query } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    if (!db) return;
+
+    const q = query(collection(db, 'noticias'));
+    onSnapshot(q, (snap) => {
+      NOTICIAS_TODAS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      pintarNoticias();
+    }, (err) => {
+      console.warn('Sin acceso a noticias:', err.code);
+      pintarNoticias();
+    });
+  } catch(e) { console.warn('Error iniciando noticias:', e); }
+};
+
+// ═══════════════════════════════════════════════════════════
+// CERTIFICADOS COUNT (para termómetro)
+// ═══════════════════════════════════════════════════════════
+window.__rancho.contarCertificados = async function() {
+  try {
+    const { collection, query, where, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const user = window.__rancho.auth?.currentUser;
+    if (!db || !user) return;
+    const q = query(collection(db, 'certificados'), where('userId', '==', user.uid));
+    onSnapshot(q, (snap) => {
+      window.__rancho.certificadosCount = snap.size;
+      refrescarTermometro();
+    }, (err) => {
+      console.warn('Sin acceso a certificados:', err.code);
+    });
+  } catch(e) { console.warn('Error contando certificados:', e); }
+};
 
 // ═══════════════════════════════════════════════════════════
 // HERRAMIENTAS DEL POTRERO
@@ -5247,15 +5779,15 @@ window.__rancho.iniciarCertificados = async function() {
 // INIT
 // ═══════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
-  pintarMisiones();
   pintarMercadoMini();
   pintarMercadoFull();
   pintarHato();
+  pintarHatoCasco();
   pintarTools();
   pintarLogros();
   pintarCertificados();
-  setTimeout(() => setTermometro(87), 800);
-  // El Establo se inicia desde el módulo Firebase cuando hay user
+  pintarNoticias();
+  refrescarTermometro();
 });
 
 // Cerrar modales con ESC
