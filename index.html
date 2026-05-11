@@ -756,6 +756,18 @@ button { font-family: inherit; }
 .hroad-milestone.completed .hroad-name { color: #4ade80; }
 .hroad-milestone.active .hroad-name { color: #fbbf24; font-weight: 800; }
 
+.hroad-courses {
+  font: 700 .58rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.35);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  margin-top: -14px;
+  text-align: center;
+  transition: color .3s;
+}
+.hroad-milestone.completed .hroad-courses { color: rgba(74,222,128,.6); }
+.hroad-milestone.active .hroad-courses { color: rgba(251,191,36,.85); font-weight: 800; }
+
 .hroad-footer {
   font: 500 .8rem 'Inter', sans-serif;
   color: rgba(255,255,255,.7);
@@ -5007,22 +5019,27 @@ button { font-family: inherit; }
                   <div class="hroad-milestone" data-step="1" title="Inicio">
                     <div class="hroad-dot">🌱</div>
                     <div class="hroad-name">Inicio</div>
+                    <div class="hroad-courses">0 cursos</div>
                   </div>
                   <div class="hroad-milestone" data-step="2" title="Aprendiz">
                     <div class="hroad-dot">📘</div>
                     <div class="hroad-name">Aprendiz</div>
+                    <div class="hroad-courses">1 curso</div>
                   </div>
                   <div class="hroad-milestone" data-step="3" title="Productor">
                     <div class="hroad-dot">🐄</div>
                     <div class="hroad-name">Productor</div>
+                    <div class="hroad-courses">3 cursos</div>
                   </div>
                   <div class="hroad-milestone" data-step="4" title="Experto">
                     <div class="hroad-dot">🎓</div>
                     <div class="hroad-name">Experto</div>
+                    <div class="hroad-courses">6 cursos</div>
                   </div>
                   <div class="hroad-milestone" data-step="5" title="Maestro">
                     <div class="hroad-dot">👑</div>
                     <div class="hroad-name">Maestro</div>
+                    <div class="hroad-courses">10 cursos</div>
                   </div>
                 </div>
               </div>
@@ -6284,46 +6301,70 @@ function actualizarPanelInteligente() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 🏆 RUTA DEL GANADERO — Calcula nivel actual y pinta milestones
+// 🏆 RUTA DEL GANADERO — Basada en CURSOS COMPLETADOS
+// Cada milestone = X cursos terminados. La línea se llena proporcional.
+// Si subimos otro curso al sistema, el footer se ajusta solo.
 // ═══════════════════════════════════════════════════════════
-function calcularNivelGanadero(animales, cursos, certs) {
-  // Sistema de puntos:
-  // Cada animal: 5 puntos | Cada curso (activo o completo): 8 | Cada certificado: 15
-  const puntos = (animales * 5) + (cursos * 8) + (certs * 15);
 
-  // Niveles: Inicio (0-9) → Aprendiz (10-29) → Productor (30-59) → Experto (60-99) → Maestro (100+)
-  if (puntos >= 100) return { nivel: 5, nombre: 'Maestro', puntos, sigPuntos: null };
-  if (puntos >= 60) return { nivel: 4, nombre: 'Experto', puntos, sigPuntos: 100 };
-  if (puntos >= 30) return { nivel: 3, nombre: 'Productor', puntos, sigPuntos: 60 };
-  if (puntos >= 10) return { nivel: 2, nombre: 'Aprendiz', puntos, sigPuntos: 30 };
-  return { nivel: 1, nombre: 'Inicio', puntos, sigPuntos: 10 };
+// Umbrales fijos de cursos completados para cada milestone
+const RUTA_MILESTONES = [
+  { step: 1, nombre: 'Inicio',    cursosNecesarios: 0 },
+  { step: 2, nombre: 'Aprendiz',  cursosNecesarios: 1 },
+  { step: 3, nombre: 'Productor', cursosNecesarios: 3 },
+  { step: 4, nombre: 'Experto',   cursosNecesarios: 6 },
+  { step: 5, nombre: 'Maestro',   cursosNecesarios: 10 }
+];
+
+function calcularNivelGanadero(certs) {
+  // Determina nivel actual basado en cursos completados (certificados)
+  let nivelActual = RUTA_MILESTONES[0];
+  for (const m of RUTA_MILESTONES) {
+    if (certs >= m.cursosNecesarios) nivelActual = m;
+    else break;
+  }
+  // Siguiente milestone (si existe)
+  const idx = RUTA_MILESTONES.findIndex(m => m.step === nivelActual.step);
+  const siguiente = RUTA_MILESTONES[idx + 1] || null;
+
+  return {
+    nivel: nivelActual.step,
+    nombre: nivelActual.nombre,
+    cursosActuales: certs,
+    cursosPrevio: nivelActual.cursosNecesarios,
+    cursosSiguiente: siguiente ? siguiente.cursosNecesarios : null,
+    siguienteNombre: siguiente ? siguiente.nombre : null
+  };
 }
 
 function actualizarRutaGanadero() {
-  const animales = window.__rancho?.animales?.length || 0;
-  const cursos = (window.__rancho?.cursos || []).length;
+  // Total de cursos disponibles en el catálogo (para detectar el máximo)
+  const totalCursosDisponibles = (window.__rancho?.cursos || []).length;
+  // Cursos completados (= certificados obtenidos)
   const certs = window.__rancho?.certificadosCount || 0;
 
-  const info = calcularNivelGanadero(animales, cursos, certs);
+  const info = calcularNivelGanadero(certs);
 
   // Label del nivel actual
   const lbl = document.getElementById('hroadProgressLabel');
   if (lbl) lbl.textContent = `Nivel ${info.nivel} · ${info.nombre}`;
 
-  // Barra de progreso: % entre milestones
+  // Barra de progreso: cada milestone ocupa 25% del ancho (5 milestones, 4 tramos)
+  // Si estás entre el milestone N y N+1, calculamos proporcionalmente el llenado
   const fill = document.getElementById('hroadFill');
   if (fill) {
-    // 5 milestones distribuidos uniformemente; cada uno representa 25% del ancho
-    // Nivel 1 = 0%, Nivel 2 = 25%, Nivel 3 = 50%, Nivel 4 = 75%, Nivel 5 = 100%
-    const base = (info.nivel - 1) * 25;
-    let extra = 0;
-    if (info.sigPuntos !== null) {
-      const prevThreshold = [0, 10, 30, 60, 100][info.nivel - 1];
-      const range = info.sigPuntos - prevThreshold;
-      const inLevel = info.puntos - prevThreshold;
-      extra = (inLevel / range) * 25;
+    let totalPct = 0;
+    if (info.cursosSiguiente === null) {
+      // Ya eres Maestro: 100%
+      totalPct = 100;
+    } else {
+      // Base: ya pasaste (nivel-1) milestones, cada uno vale 25%
+      const base = (info.nivel - 1) * 25;
+      // Extra: progreso dentro del tramo actual
+      const range = info.cursosSiguiente - info.cursosPrevio;
+      const inLevel = info.cursosActuales - info.cursosPrevio;
+      const extra = range > 0 ? (inLevel / range) * 25 : 0;
+      totalPct = Math.min(100, base + extra);
     }
-    const totalPct = Math.min(100, base + extra);
     fill.style.width = `${totalPct}%`;
   }
 
@@ -6335,25 +6376,15 @@ function actualizarRutaGanadero() {
     else if (step === info.nivel) m.classList.add('active');
   });
 
-  // Footer dinámico
+  // Footer dinámico — basado en cursos faltantes
   const footer = document.getElementById('hroadFooter');
   if (footer) {
-    if (info.nivel === 5) {
-      footer.innerHTML = `🎉 ¡Eres <strong>Maestro Ganadero</strong>! Has alcanzado el nivel máximo.`;
+    if (info.cursosSiguiente === null) {
+      footer.innerHTML = `🎉 ¡Eres <strong>Maestro Ganadero</strong>! Has completado ${certs} cursos.`;
     } else {
-      const faltan = info.sigPuntos - info.puntos;
-      // Calcular qué le falta concretamente
-      const sugerencias = [];
-      if (animales < 5) sugerencias.push(`<strong>${Math.max(1, 5-animales)} ${animales+1<2?'animal':'animales'}</strong>`);
-      else if (animales < 10) sugerencias.push(`<strong>${10-animales} animales</strong>`);
-      if (cursos < 3) sugerencias.push(`<strong>${Math.max(1, 3-cursos)} ${cursos+1<2?'curso':'cursos'}</strong>`);
-      if (certs === 0) sugerencias.push(`<strong>1 certificado</strong>`);
-
-      const proximoNombre = ['','Aprendiz','Productor','Experto','Maestro'][info.nivel];
-      const lista = sugerencias.slice(0, 2).join(' y ');
-      footer.innerHTML = lista
-        ? `Te faltan ${lista} para subir a <strong>${proximoNombre}</strong>.`
-        : `Suma <strong>${faltan} puntos</strong> para subir a <strong>${proximoNombre}</strong>.`;
+      const faltan = info.cursosSiguiente - info.cursosActuales;
+      const palabra = faltan === 1 ? 'curso' : 'cursos';
+      footer.innerHTML = `Termina <strong>${faltan} ${palabra}</strong> más para subir a <strong>${info.siguienteNombre}</strong>. <span style="color:rgba(255,255,255,.4);">(${certs}/${info.cursosSiguiente} completados)</span>`;
     }
   }
 }
