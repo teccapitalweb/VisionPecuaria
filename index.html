@@ -37,7 +37,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   font-family: 'Inter', -apple-system, system-ui, sans-serif;
   background: #050d09;
@@ -1292,6 +1292,11 @@ button { font-family: inherit; }
 }
 @media (max-width: 1100px) {
   .casco-top-grid { grid-template-columns: 1fr; }
+  /* En mobile el widget de hato no debe estirarse — que tome su altura natural */
+  .casco-top-grid > .widget--hato-casco { display: block; }
+  .casco-top-grid > .widget--hato-casco > div:last-child {
+    flex: none; display: block; justify-content: flex-start;
+  }
 }
 
 /* CASCO BOTTOM GRID — mercado izq + (whatsapp + descuento) apilados der */
