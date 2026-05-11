@@ -4209,7 +4209,7 @@ button { font-family: inherit; }
             <div class="mp-live-strip">
               <span class="mp-live-dot"></span>
               <span class="mp-live-label">EN VIVO</span>
-              <span class="mp-live-info">SIAP-SADER · SNIIM · UGRJ</span>
+              <span class="mp-live-info" id="mercadoUpdatedAt">SIAP · SNIIM · UGRJ</span>
             </div>
             <div class="mercado-mini-list" id="mercadoMini"></div>
           </div>
@@ -6173,15 +6173,44 @@ window.__rancho.iniciarMercado = async function() {
     onSnapshot(q, (snap) => {
       const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       if (docs.length > 0) {
+        // Normalizar campo "historia" — Firestore puede regresar objeto en vez de array
+        docs.forEach(d => {
+          if (d.historia && !Array.isArray(d.historia)) {
+            d.historia = Object.keys(d.historia).sort().map(k => d.historia[k]);
+          }
+        });
         MERCADO = docs.sort((a,b) => (a.orden || 999) - (b.orden || 999));
         pintarMercadoMini();
         pintarMercadoFull();
+        actualizarTimestampMercado();
       }
     }, (err) => {
       console.warn('Sin acceso a mercado, usando fallback:', err.code);
     });
   } catch(e) { console.warn('Error iniciando mercado:', e); }
 };
+
+// Actualiza el "hace X" en el live strip
+function actualizarTimestampMercado() {
+  const el = document.getElementById('mercadoUpdatedAt');
+  if (!el || !MERCADO.length) return;
+  const ts = MERCADO[0]?.actualizado;
+  if (!ts || !ts.toDate) {
+    el.textContent = 'SIAP · SNIIM · UGRJ';
+    return;
+  }
+  const diffMs = Date.now() - ts.toDate().getTime();
+  const mins = Math.floor(diffMs / 60000);
+  const hrs = Math.floor(mins / 60);
+  let label;
+  if (mins < 1) label = 'ahora';
+  else if (mins < 60) label = `hace ${mins} min`;
+  else if (hrs < 24) label = `hace ${hrs} h`;
+  else label = `hace ${Math.floor(hrs/24)} d`;
+  el.textContent = `Actualizado ${label} · SIAP · SNIIM`;
+}
+// Refresca el label cada minuto
+setInterval(() => actualizarTimestampMercado(), 60000);
 
 // ═══════════════════════════════════════════════════════════
 // NOTICIAS DEL RANCHO (lee de Firestore por categoría)
