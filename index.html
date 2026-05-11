@@ -4695,6 +4695,549 @@ button { font-family: inherit; }
 }
 .btn-guardar:disabled { opacity: .6; cursor: not-allowed; }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* 🔍 HATO TOOLBAR — Búsqueda, filtros, vista                   */
+/* ═══════════════════════════════════════════════════════════ */
+.hato-toolbar {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  margin-bottom: 14px;
+}
+.hato-search-wrap {
+  flex: 1; min-width: 220px;
+  position: relative;
+}
+.hato-search-icon {
+  position: absolute;
+  left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 14px;
+  opacity: .6;
+  pointer-events: none;
+}
+.hato-search-input {
+  width: 100%;
+  padding: 11px 38px 11px 38px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  color: #fff;
+  font: 600 .85rem 'Inter', sans-serif;
+  transition: border-color .2s, background .2s;
+}
+.hato-search-input:focus {
+  outline: none;
+  border-color: #d4a017;
+  background: rgba(0,0,0,.35);
+}
+.hato-search-input::placeholder { color: rgba(255,255,255,.4); }
+.hato-search-clear {
+  position: absolute;
+  right: 8px; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 26px;
+  border: none;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.7);
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  align-items: center; justify-content: center;
+  font: 700 18px/1 sans-serif;
+}
+.hato-search-clear:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+.hato-filters {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.hato-filter {
+  padding: 10px 14px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  color: #fff;
+  font: 600 .8rem 'Inter', sans-serif;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4a017' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  padding-right: 30px;
+}
+.hato-filter:focus { outline: none; border-color: #d4a017; }
+.hato-filter option { background: #0f2e1d; color: #fff; }
+
+/* Toggle de vista */
+.hato-view-toggle {
+  display: flex;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+.hato-view-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,.55);
+  font: 700 .76rem 'Montserrat', sans-serif;
+  letter-spacing: .3px;
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all .2s;
+}
+.hato-view-btn:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.04); }
+.hato-view-btn-active {
+  background: linear-gradient(135deg, rgba(212,160,23,.25), rgba(212,160,23,.08));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(212,160,23,.3);
+}
+
+.hato-results-info {
+  font: 500 .8rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.6);
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+.hato-results-info strong { color: #fbbf24; font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🏷️ BADGES EN ANIMAL CARD                                     */
+/* ═══════════════════════════════════════════════════════════ */
+.ac-badges {
+  position: absolute;
+  top: 10px; left: 10px;
+  display: flex; flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+.ac-lote-badge, .ac-events-badge, .ac-state-badge {
+  font: 800 .58rem 'Montserrat', sans-serif;
+  letter-spacing: .8px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+.ac-lote-badge {
+  background: rgba(212,160,23,.25);
+  color: #fbbf24;
+  border: 1px solid rgba(212,160,23,.4);
+}
+.ac-events-badge {
+  background: rgba(59,130,246,.2);
+  color: #93c5fd;
+  border: 1px solid rgba(59,130,246,.35);
+}
+.ac-state-badge { font-size: .56rem; padding: 3px 6px; }
+.ac-state-muerte { background: rgba(239,68,68,.2); color: #fca5a5; border: 1px solid rgba(239,68,68,.4); }
+.ac-state-venta { background: rgba(212,160,23,.25); color: #fbbf24; border: 1px solid rgba(212,160,23,.4); }
+.ac-state-enferma { background: rgba(251,191,36,.18); color: #fde68a; border: 1px solid rgba(251,191,36,.35); }
+
+.animal-card { cursor: pointer; }
+.animal-card:hover { box-shadow: 0 14px 30px rgba(0,0,0,.4), 0 0 50px rgba(212,160,23,.08); }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 📋 VISTA POR LOTES                                           */
+/* ═══════════════════════════════════════════════════════════ */
+.hato-lotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+.hato-lote-card {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(34,197,94,.1), transparent 50%),
+    linear-gradient(180deg, rgba(15,46,29,.6), rgba(255,255,255,.02));
+  border: 1px solid rgba(34,197,94,.22);
+  border-radius: 16px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all .3s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.hato-lote-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4ade80, transparent);
+  opacity: .5;
+}
+.hato-lote-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34,197,94,.5);
+  box-shadow: 0 16px 36px rgba(0,0,0,.4), 0 0 50px rgba(34,197,94,.1);
+}
+.hl-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 14px;
+  gap: 10px;
+}
+.hl-title {
+  font: 800 .95rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.2px;
+}
+.hl-date {
+  font: 500 .68rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  margin-top: 3px;
+}
+.hl-count {
+  font: 900 1.8rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: right;
+}
+.hl-count small {
+  display: block;
+  font: 600 .58rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.45);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  -webkit-text-fill-color: rgba(255,255,255,.45);
+}
+.hl-preview {
+  display: flex; gap: 4px; align-items: center;
+  padding: 10px;
+  background: rgba(0,0,0,.25);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.hl-emoji-mini {
+  font-size: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+.hl-more {
+  font: 700 .75rem 'Plus Jakarta Sans', sans-serif;
+  color: #fbbf24;
+  padding: 4px 10px;
+  background: rgba(212,160,23,.15);
+  border-radius: 100px;
+  margin-left: 4px;
+}
+.hl-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.hl-info {
+  display: flex; flex-direction: column;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.03);
+  border-radius: 8px;
+}
+.hl-info-label {
+  font: 700 .58rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.hl-info-val {
+  font: 700 .82rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin-top: 2px;
+}
+.hl-valor {
+  font: 600 .82rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.7);
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+.hl-valor strong { color: #4ade80; font-weight: 800; }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🐄 MODAL DETALLE DEL ANIMAL                                  */
+/* ═══════════════════════════════════════════════════════════ */
+.modal-detalle-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9998;
+  display: none;
+  align-items: flex-start; justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal-detalle-overlay.show { display: flex; }
+.modal-detalle-content {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(212,160,23,.1), transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(34,197,94,.06), transparent 50%),
+    linear-gradient(180deg, #0f2e1d, #08200f);
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: 22px;
+  padding: 26px;
+  max-width: 580px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0,0,0,.6), 0 0 100px rgba(212,160,23,.1);
+  animation: mdAppear .3s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes mdAppear {
+  from { transform: scale(.92) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.md-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.7);
+  border-radius: 50%;
+  cursor: pointer;
+  font: 700 18px/1 sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.md-close:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+.md-header {
+  display: flex; gap: 16px; align-items: center;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.md-photo {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--leather, #b08a3c), var(--field-800, #0f4a21));
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,.3);
+}
+.md-header-info { flex: 1; min-width: 0; }
+.md-eyebrow {
+  display: inline-block;
+  font: 800 .6rem 'Montserrat', sans-serif;
+  color: #fbbf24;
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.3);
+  padding: 3px 9px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.md-name {
+  font: 800 1.4rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 4px;
+  letter-spacing: -.4px;
+}
+.md-tag {
+  font: 600 .82rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.6);
+}
+.md-delete-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.3);
+  color: #fca5a5;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .22s;
+}
+.md-delete-btn:hover {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border-color: #ef4444;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(239,68,68,.4);
+}
+
+.md-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.md-stat {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.md-stat-label {
+  font: 700 .6rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.md-stat-val {
+  font: 700 .9rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.2px;
+}
+
+.md-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 3px;
+  background: rgba(0,0,0,.25);
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+.md-tab {
+  padding: 9px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgba(255,255,255,.55);
+  font: 700 .82rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+}
+.md-tab:hover { color: rgba(255,255,255,.85); }
+.md-tab-active {
+  background: linear-gradient(135deg, rgba(212,160,23,.2), rgba(212,160,23,.08));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(212,160,23,.3);
+}
+
+/* Historial de eventos */
+.md-eventos-list {
+  display: flex; flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.md-eventos-list::-webkit-scrollbar { width: 6px; }
+.md-eventos-list::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 3px; }
+.md-eventos-list::-webkit-scrollbar-thumb { background: rgba(212,160,23,.3); border-radius: 3px; }
+.md-empty {
+  padding: 30px 20px;
+  text-align: center;
+  color: rgba(255,255,255,.5);
+  font: 500 .85rem 'Inter', sans-serif;
+  background: rgba(255,255,255,.02);
+  border: 1px dashed rgba(255,255,255,.08);
+  border-radius: 12px;
+}
+.md-empty small { display: block; margin-top: 4px; color: rgba(255,255,255,.4); font-size: .75rem; }
+
+.md-evento {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  border-left: 3px solid var(--ev-color, #94a3b8);
+  border-radius: 10px;
+  transition: all .2s;
+}
+.md-evento:hover { background: rgba(255,255,255,.06); }
+.md-ev-icon {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.04);
+  border-radius: 10px;
+  font-size: 20px;
+}
+.md-ev-body { min-width: 0; }
+.md-ev-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 4px;
+  gap: 10px;
+}
+.md-ev-tipo {
+  font: 800 .68rem 'Montserrat', sans-serif;
+  color: var(--ev-color, #94a3b8);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.md-ev-fecha {
+  font: 600 .68rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+.md-ev-nota {
+  font: 500 .85rem/1.4 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+  word-break: break-word;
+}
+.md-ev-costo {
+  display: inline-block;
+  margin-top: 6px;
+  font: 700 .78rem 'Plus Jakarta Sans', sans-serif;
+  color: #fbbf24;
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.2);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.md-ev-del {
+  width: 26px; height: 26px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.5);
+  border-radius: 6px;
+  cursor: pointer;
+  font: 700 16px/1 sans-serif;
+  transition: all .2s;
+}
+.md-ev-del:hover { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.35); color: #fca5a5; }
+
+/* Tipos de evento (botones de selección) */
+.md-evento-tipos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.md-evento-tipo {
+  padding: 10px 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  color: rgba(255,255,255,.7);
+  font: 700 .8rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: center;
+}
+.md-evento-tipo:hover { background: rgba(255,255,255,.07); color: #fff; }
+.md-evento-tipo-selected {
+  background: linear-gradient(135deg, rgba(212,160,23,.25), rgba(212,160,23,.08));
+  border-color: rgba(212,160,23,.5);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(212,160,23,.15);
+}
+.md-evento-tipo-danger.md-evento-tipo-selected {
+  background: linear-gradient(135deg, rgba(239,68,68,.25), rgba(239,68,68,.08));
+  border-color: rgba(239,68,68,.5);
+  box-shadow: 0 4px 12px rgba(239,68,68,.15);
+}
+
+@media (max-width: 720px) {
+  .hato-toolbar { flex-direction: column; align-items: stretch; }
+  .hato-search-wrap { min-width: 0; }
+  .hato-filters { width: 100%; }
+  .hato-filter { flex: 1; min-width: 110px; }
+  .md-stats-grid { grid-template-columns: 1fr 1fr; }
+  .md-tabs { grid-template-columns: 1fr; }
+  .md-evento-tipos { grid-template-columns: 1fr 1fr; }
+}
+
 /* ═══════════ MODAL CONFIRMACIÓN LOTE SINIIGA ═══════════ */
 .confirm-lote-modal {
   background:
@@ -5778,7 +6321,51 @@ button { font-family: inherit; }
           </div>
         </div>
 
+        <!-- 🔍 TOOLBAR DE FILTROS Y BÚSQUEDA -->
+        <div class="hato-toolbar">
+          <div class="hato-search-wrap">
+            <span class="hato-search-icon">🔍</span>
+            <input type="text" class="hato-search-input" id="hatoSearch" placeholder="Buscar por arete, nombre o raza...">
+            <button class="hato-search-clear" id="hatoSearchClear" onclick="limpiarBusqueda()" title="Limpiar">×</button>
+          </div>
+          <div class="hato-filters">
+            <select class="hato-filter" id="hatoFilterTipo" onchange="aplicarFiltrosHato()">
+              <option value="">Todos los tipos</option>
+              <option value="vaca">🐄 Vacas</option>
+              <option value="toro">🐂 Toros</option>
+              <option value="becerro">🐃 Becerros</option>
+              <option value="cerdo">🐖 Cerdos</option>
+              <option value="oveja">🐑 Ovejas</option>
+              <option value="cabra">🐐 Cabras</option>
+              <option value="caballo">🐎 Caballos</option>
+              <option value="pollo">🐔 Aves</option>
+            </select>
+            <select class="hato-filter" id="hatoFilterOrden" onchange="aplicarFiltrosHato()">
+              <option value="reciente">Más recientes</option>
+              <option value="antiguo">Más antiguos</option>
+              <option value="pesoDesc">Mayor peso</option>
+              <option value="pesoAsc">Menor peso</option>
+              <option value="nombre">A-Z</option>
+            </select>
+            <div class="hato-view-toggle">
+              <button class="hato-view-btn hato-view-btn-active" data-view="individuales" onclick="cambiarVistaHato('individuales')" title="Vista individuales">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                <span>Individuales</span>
+              </button>
+              <button class="hato-view-btn" data-view="lotes" onclick="cambiarVistaHato('lotes')" title="Vista por lotes">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+                <span>Por lotes</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hato-results-info" id="hatoResultsInfo"></div>
+
+        <!-- Vista de animales individuales (grid de cards) -->
         <div class="hato-grid" id="hatoGrid"></div>
+        <!-- Vista agrupada por lotes -->
+        <div class="hato-lotes-grid" id="hatoLotesGrid" style="display:none;"></div>
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
@@ -6430,6 +7017,94 @@ button { font-family: inherit; }
       <div class="modal-animal-actions">
         <button class="btn-cancelar" onclick="cerrarModalAnimal()">Cancelar</button>
         <button class="btn-guardar" onclick="guardarLote()">📋 Registrar lote</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 🐄 MODAL DETALLE DEL ANIMAL (notas, eventos, historial)      -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="modal-detalle-overlay" id="modalDetalleAnimal" onclick="if(event.target===this)cerrarDetalleAnimal()">
+  <div class="modal-detalle-content">
+    <button class="md-close" onclick="cerrarDetalleAnimal()" title="Cerrar">×</button>
+
+    <div class="md-header">
+      <div class="md-photo" id="mdPhoto">🐄</div>
+      <div class="md-header-info">
+        <div class="md-eyebrow" id="mdLote">SIN LOTE</div>
+        <h2 class="md-name" id="mdName">—</h2>
+        <div class="md-tag" id="mdTag">—</div>
+      </div>
+      <button class="md-delete-btn" id="mdDeleteBtn" onclick="confirmarEliminarDesdeDetalle()" title="Eliminar animal">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+      </button>
+    </div>
+
+    <div class="md-stats-grid">
+      <div class="md-stat"><div class="md-stat-label">Peso</div><div class="md-stat-val" id="mdPeso">—</div></div>
+      <div class="md-stat"><div class="md-stat-label">Edad</div><div class="md-stat-val" id="mdEdad">—</div></div>
+      <div class="md-stat"><div class="md-stat-label">Raza</div><div class="md-stat-val" id="mdRaza">—</div></div>
+      <div class="md-stat"><div class="md-stat-label">Potrero</div><div class="md-stat-val" id="mdPotrero">—</div></div>
+    </div>
+
+    <div class="md-tabs">
+      <button class="md-tab md-tab-active" data-tab="historial" onclick="cambiarTabDetalle('historial')">
+        📋 Historial
+      </button>
+      <button class="md-tab" data-tab="agregar" onclick="cambiarTabDetalle('agregar')">
+        ➕ Registrar evento
+      </button>
+    </div>
+
+    <!-- TAB HISTORIAL -->
+    <div class="md-pane" id="mdPaneHistorial">
+      <div class="md-eventos-list" id="mdEventosList">
+        <div class="md-empty">📝 Sin eventos registrados todavía.</div>
+      </div>
+    </div>
+
+    <!-- TAB AGREGAR EVENTO -->
+    <div class="md-pane" id="mdPaneAgregar" style="display:none;">
+      <label>Tipo de evento</label>
+      <div class="md-evento-tipos" id="mdEventoTipos">
+        <button class="md-evento-tipo md-evento-tipo-active" data-tipo="nota" onclick="seleccionarTipoEvento('nota')">
+          📝 Nota
+        </button>
+        <button class="md-evento-tipo" data-tipo="enfermedad" onclick="seleccionarTipoEvento('enfermedad')">
+          🤒 Enfermedad
+        </button>
+        <button class="md-evento-tipo" data-tipo="vacuna" onclick="seleccionarTipoEvento('vacuna')">
+          💉 Vacuna
+        </button>
+        <button class="md-evento-tipo" data-tipo="parto" onclick="seleccionarTipoEvento('parto')">
+          🍼 Parto
+        </button>
+        <button class="md-evento-tipo" data-tipo="venta" onclick="seleccionarTipoEvento('venta')">
+          💰 Venta
+        </button>
+        <button class="md-evento-tipo md-evento-tipo-danger" data-tipo="muerte" onclick="seleccionarTipoEvento('muerte')">
+          ⚰️ Muerte
+        </button>
+      </div>
+
+      <label>Descripción / Detalles</label>
+      <textarea id="mdEventoNota" rows="3" placeholder="Ej. Le aplicamos vacuna triple, vacuna contra rabia, fecha del próximo refuerzo..."></textarea>
+
+      <div class="modal-animal-row">
+        <div>
+          <label>Fecha</label>
+          <input type="date" id="mdEventoFecha">
+        </div>
+        <div>
+          <label>Valor / Costo <small style="color:rgba(255,255,255,.4);">(opcional)</small></label>
+          <input type="number" id="mdEventoCosto" placeholder="0">
+        </div>
+      </div>
+
+      <div class="modal-animal-actions">
+        <button class="btn-cancelar" onclick="cambiarTabDetalle('historial')">Cancelar</button>
+        <button class="btn-guardar" onclick="guardarEventoAnimal()">Registrar evento</button>
       </div>
     </div>
   </div>
@@ -8032,15 +8707,117 @@ window.ejecutarEliminarAnimal = async function(animalId, nombre) {
   }
 };
 
-function pintarHato() {
-  const cont = document.getElementById('hatoGrid');
-  if (!cont) return;
-  const animales = window.__rancho?.animales || [];
+// Estado de filtros del Hato
+window.__hatoFiltros = {
+  search: '',
+  tipo: '',
+  orden: 'reciente',
+  vista: 'individuales'
+};
 
-  // Actualizar los stats arriba SIEMPRE
+window.cambiarVistaHato = function(modo) {
+  window.__hatoFiltros.vista = modo;
+  document.querySelectorAll('.hato-view-btn').forEach(b => {
+    b.classList.toggle('hato-view-btn-active', b.dataset.view === modo);
+  });
+  const gridInd = document.getElementById('hatoGrid');
+  const gridLot = document.getElementById('hatoLotesGrid');
+  if (modo === 'lotes') {
+    if (gridInd) gridInd.style.display = 'none';
+    if (gridLot) gridLot.style.display = 'grid';
+  } else {
+    if (gridLot) gridLot.style.display = 'none';
+    if (gridInd) gridInd.style.display = 'grid';
+  }
+  pintarHato();
+};
+
+window.aplicarFiltrosHato = function() {
+  const search = document.getElementById('hatoSearch')?.value?.toLowerCase().trim() || '';
+  const tipo = document.getElementById('hatoFilterTipo')?.value || '';
+  const orden = document.getElementById('hatoFilterOrden')?.value || 'reciente';
+  window.__hatoFiltros = { ...window.__hatoFiltros, search, tipo, orden };
+  // Mostrar/ocultar botón limpiar
+  const clearBtn = document.getElementById('hatoSearchClear');
+  if (clearBtn) clearBtn.style.display = search ? 'flex' : 'none';
+  pintarHato();
+};
+
+window.limpiarBusqueda = function() {
+  const input = document.getElementById('hatoSearch');
+  if (input) input.value = '';
+  aplicarFiltrosHato();
+};
+
+// Wire del input search en vivo
+document.addEventListener('input', (e) => {
+  if (e.target && e.target.id === 'hatoSearch') aplicarFiltrosHato();
+});
+
+function aplicarFiltrosALista(animales) {
+  const { search, tipo, orden } = window.__hatoFiltros;
+  let resultado = [...animales];
+  if (tipo) resultado = resultado.filter(a => (a.tipo || '').toLowerCase() === tipo);
+  if (search) {
+    resultado = resultado.filter(a => {
+      const cadena = [a.nombre, a.tag, a.raza, a.loteId, a.potrero, a.upp].filter(Boolean).join(' ').toLowerCase();
+      return cadena.includes(search);
+    });
+  }
+  // Ordenar
+  const parsePeso = v => parseFloat(v) || 0;
+  if (orden === 'antiguo') {
+    resultado.sort((a,b) => (a.fechaRegistro?.seconds || 0) - (b.fechaRegistro?.seconds || 0));
+  } else if (orden === 'pesoDesc') {
+    resultado.sort((a,b) => parsePeso(b.peso) - parsePeso(a.peso));
+  } else if (orden === 'pesoAsc') {
+    resultado.sort((a,b) => parsePeso(a.peso) - parsePeso(b.peso));
+  } else if (orden === 'nombre') {
+    resultado.sort((a,b) => String(a.nombre||'').localeCompare(String(b.nombre||'')));
+  } else {
+    // reciente
+    resultado.sort((a,b) => (b.fechaRegistro?.seconds || 0) - (a.fechaRegistro?.seconds || 0));
+  }
+  return resultado;
+}
+
+function pintarHato() {
+  const animales = window.__rancho?.animales || [];
   actualizarStatsHato();
 
-  if (animales.length === 0) {
+  const vista = window.__hatoFiltros?.vista || 'individuales';
+  const filtrados = aplicarFiltrosALista(animales);
+
+  const resultsEl = document.getElementById('hatoResultsInfo');
+  if (resultsEl) {
+    if (animales.length === 0) {
+      resultsEl.textContent = '';
+    } else if (filtrados.length === animales.length) {
+      resultsEl.textContent = '';
+    } else {
+      resultsEl.innerHTML = `Mostrando <strong>${filtrados.length}</strong> de ${animales.length} animales · <a onclick="limpiarFiltrosHato()" style="cursor:pointer;color:#fbbf24;text-decoration:underline;">limpiar filtros</a>`;
+    }
+  }
+
+  if (vista === 'lotes') {
+    pintarHatoVistaLotes(filtrados);
+  } else {
+    pintarHatoVistaIndividuales(filtrados, animales.length);
+  }
+}
+
+window.limpiarFiltrosHato = function() {
+  const s = document.getElementById('hatoSearch'); if (s) s.value = '';
+  const t = document.getElementById('hatoFilterTipo'); if (t) t.value = '';
+  const o = document.getElementById('hatoFilterOrden'); if (o) o.value = 'reciente';
+  aplicarFiltrosHato();
+};
+
+function pintarHatoVistaIndividuales(animales, totalReal) {
+  const cont = document.getElementById('hatoGrid');
+  if (!cont) return;
+
+  if ((totalReal || 0) === 0) {
     cont.innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:rgba(255,255,255,.6);">
         <div style="font-size:60px;margin-bottom:14px;">🐄</div>
@@ -8052,10 +8829,38 @@ function pintarHato() {
     return;
   }
 
+  if (animales.length === 0) {
+    cont.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:rgba(255,255,255,.6);">
+        <div style="font-size:50px;margin-bottom:12px;">🔍</div>
+        <h3 style="color:#fff;margin:0 0 6px;">Sin coincidencias</h3>
+        <p style="margin:0 0 14px;font-size:.85rem;">Ningún animal cumple los filtros aplicados.</p>
+        <button class="btn-registrar-animal" onclick="limpiarFiltrosHato()">Limpiar filtros</button>
+      </div>
+    `;
+    return;
+  }
+
   cont.innerHTML = animales.map(a => {
     const nombreEsc = (a.nombre || '').replace(/'/g, "\\'");
+    const eventCount = (a.eventos || []).length;
+    const badgeLote = a.loteId ? `<span class="ac-lote-badge" title="Lote: ${a.loteId}">📋 LOTE</span>` : '';
+    const badgeEventos = eventCount > 0 ? `<span class="ac-events-badge" title="${eventCount} eventos">📋 ${eventCount}</span>` : '';
+    // Detectar estados especiales del último evento
+    const ultEvento = (a.eventos || []).slice(-1)[0];
+    let estadoBadge = '';
+    if (ultEvento) {
+      if (ultEvento.tipo === 'muerte') estadoBadge = '<span class="ac-state-badge ac-state-muerte">⚰️ FALLECIDA</span>';
+      else if (ultEvento.tipo === 'venta') estadoBadge = '<span class="ac-state-badge ac-state-venta">💰 VENDIDA</span>';
+      else if (ultEvento.tipo === 'enfermedad') estadoBadge = '<span class="ac-state-badge ac-state-enferma">🤒 ENFERMA</span>';
+    }
     return `
-    <div class="animal-card">
+    <div class="animal-card" onclick="abrirDetalleAnimal('${a.id}')">
+      <div class="ac-badges">
+        ${estadoBadge}
+        ${badgeLote}
+        ${badgeEventos}
+      </div>
       <button class="animal-delete-btn" onclick="event.stopPropagation(); eliminarAnimal('${a.id || ''}', '${nombreEsc}')" title="Eliminar animal">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
@@ -8076,10 +8881,249 @@ function pintarHato() {
     <div class="add-animal-card" onclick="abrirModalAnimal()">
       <div class="add-animal-icon">+</div>
       <div class="add-animal-text">Agregar animal</div>
-      <small style="color:rgba(255,255,255,.4);margin-top:6px;font-size:.75rem">Foto, arete, peso, raza...</small>
+      <small style="color:rgba(255,255,255,.4);margin-top:6px;font-size:.75rem">Individual o por lote SINIIGA</small>
     </div>
   `;
 }
+
+function pintarHatoVistaLotes(animales) {
+  const cont = document.getElementById('hatoLotesGrid');
+  if (!cont) return;
+
+  if (animales.length === 0) {
+    cont.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:rgba(255,255,255,.6);">
+        <div style="font-size:50px;margin-bottom:12px;">📋</div>
+        <h3 style="color:#fff;margin:0 0 6px;">Sin lotes registrados</h3>
+        <p style="margin:0 0 14px;font-size:.85rem;">Cuando registres por lote (estilo SINIIGA), aparecerán aquí agrupados.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Agrupar
+  const grupos = {};
+  animales.forEach(a => {
+    const key = a.loteId || `__individuales`;
+    if (!grupos[key]) grupos[key] = { id: key, animales: [], tipo: a.tipo, raza: a.raza, peso: a.peso, edad: a.edad, potrero: a.potrero, upp: a.upp, fecha: a.fechaRegistro };
+    grupos[key].animales.push(a);
+  });
+
+  const gruposArr = Object.values(grupos).sort((a,b) => (b.fecha?.seconds||0) - (a.fecha?.seconds||0));
+
+  cont.innerHTML = gruposArr.map(g => {
+    const emoji = EMOJI_TIPO[g.tipo] || '🐄';
+    const esIndiv = g.id === '__individuales';
+    const titulo = esIndiv ? '🐄 Animales individuales' : `📋 Lote ${g.id.replace('lote-', '')}`;
+    const fechaTxt = g.fecha?.toDate ? g.fecha.toDate().toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' }) : '';
+    const valorTotal = g.animales.reduce((s,a) => s + (parseFloat(a.peso)||0) * 95, 0);
+    const previewEmojis = g.animales.slice(0,5).map(a => `<span class="hl-emoji-mini">${a.emoji || emoji}</span>`).join('');
+    const restoCount = g.animales.length - 5;
+    return `
+    <div class="hato-lote-card" onclick="abrirAnimalesDelLote('${g.id}')">
+      <div class="hl-head">
+        <div>
+          <div class="hl-title">${titulo}</div>
+          ${fechaTxt ? `<div class="hl-date">${fechaTxt}</div>` : ''}
+        </div>
+        <div class="hl-count">${g.animales.length}<small>animales</small></div>
+      </div>
+      <div class="hl-preview">
+        ${previewEmojis}
+        ${restoCount > 0 ? `<span class="hl-more">+${restoCount}</span>` : ''}
+      </div>
+      <div class="hl-info-row">
+        <div class="hl-info"><span class="hl-info-label">Tipo</span><span class="hl-info-val">${(g.tipo||'').charAt(0).toUpperCase() + (g.tipo||'').slice(1)}</span></div>
+        <div class="hl-info"><span class="hl-info-label">Raza</span><span class="hl-info-val">${g.raza || '—'}</span></div>
+        <div class="hl-info"><span class="hl-info-label">Peso prom.</span><span class="hl-info-val">${g.peso ? g.peso+' kg' : '—'}</span></div>
+        ${g.potrero ? `<div class="hl-info"><span class="hl-info-label">Potrero</span><span class="hl-info-val">${g.potrero}</span></div>` : ''}
+      </div>
+      ${valorTotal ? `<div class="hl-valor">💰 <strong>$${valorTotal.toLocaleString('es-MX')}</strong> valor estimado</div>` : ''}
+    </div>
+    `;
+  }).join('');
+}
+
+// Click en una card de lote: cambia a vista individual filtrando por ese lote
+window.abrirAnimalesDelLote = function(loteId) {
+  if (loteId === '__individuales') {
+    // Mostrar los que NO tienen loteId
+    window.__hatoFiltros.search = '';
+    const s = document.getElementById('hatoSearch'); if (s) s.value = '';
+  } else {
+    window.__hatoFiltros.search = loteId;
+    const s = document.getElementById('hatoSearch'); if (s) s.value = loteId;
+  }
+  cambiarVistaHato('individuales');
+  aplicarFiltrosHato();
+};
+
+// ═══════════════════════════════════════════════════════════
+// 🐄 DETALLE DEL ANIMAL — Notas, eventos, historial
+// ═══════════════════════════════════════════════════════════
+let _animalDetalleActual = null;
+let _tipoEventoActual = 'nota';
+
+window.abrirDetalleAnimal = function(animalId) {
+  const animales = window.__rancho?.animales || [];
+  const animal = animales.find(a => a.id === animalId);
+  if (!animal) return;
+  _animalDetalleActual = animal;
+
+  const modal = document.getElementById('modalDetalleAnimal');
+  if (!modal) return;
+
+  // Llenar datos
+  document.getElementById('mdPhoto').textContent = animal.emoji || EMOJI_TIPO[animal.tipo] || '🐄';
+  document.getElementById('mdName').textContent = animal.nombre || 'Sin nombre';
+  document.getElementById('mdTag').textContent = `${animal.tag || '—'} · ${animal.raza || 'Sin raza'}`;
+  document.getElementById('mdPeso').textContent = animal.peso ? `${animal.peso} kg` : '—';
+  document.getElementById('mdEdad').textContent = animal.edad || '—';
+  document.getElementById('mdRaza').textContent = animal.raza || '—';
+  document.getElementById('mdPotrero').textContent = animal.potrero || animal.upp || '—';
+
+  const loteEl = document.getElementById('mdLote');
+  if (animal.loteId) {
+    loteEl.textContent = `📋 ${animal.loteId}`;
+    loteEl.style.display = 'inline-block';
+  } else {
+    loteEl.textContent = 'REGISTRO INDIVIDUAL';
+    loteEl.style.display = 'inline-block';
+  }
+
+  // Pintar historial
+  pintarHistorialAnimal(animal);
+  // Reset al tab historial
+  cambiarTabDetalle('historial');
+  // Reset campos
+  document.getElementById('mdEventoNota').value = '';
+  document.getElementById('mdEventoCosto').value = '';
+  document.getElementById('mdEventoFecha').value = new Date().toISOString().slice(0,10);
+  seleccionarTipoEvento('nota');
+
+  modal.classList.add('show');
+};
+
+window.cerrarDetalleAnimal = function() {
+  const m = document.getElementById('modalDetalleAnimal');
+  if (m) m.classList.remove('show');
+  _animalDetalleActual = null;
+};
+
+window.cambiarTabDetalle = function(tab) {
+  document.querySelectorAll('.md-tab').forEach(t => {
+    t.classList.toggle('md-tab-active', t.dataset.tab === tab);
+  });
+  document.getElementById('mdPaneHistorial').style.display = tab === 'historial' ? 'block' : 'none';
+  document.getElementById('mdPaneAgregar').style.display = tab === 'agregar' ? 'block' : 'none';
+};
+
+window.seleccionarTipoEvento = function(tipo) {
+  _tipoEventoActual = tipo;
+  document.querySelectorAll('.md-evento-tipo').forEach(b => {
+    b.classList.toggle('md-evento-tipo-selected', b.dataset.tipo === tipo);
+  });
+};
+
+function pintarHistorialAnimal(animal) {
+  const cont = document.getElementById('mdEventosList');
+  if (!cont) return;
+  const eventos = (animal.eventos || []).slice().reverse(); // más reciente primero
+  if (eventos.length === 0) {
+    cont.innerHTML = `<div class="md-empty">📝 Sin eventos registrados todavía.<br><small>Pulsa "Registrar evento" para agregar el primero.</small></div>`;
+    return;
+  }
+  const TIPO_INFO = {
+    nota: { emoji: '📝', label: 'Nota', color: '#94a3b8' },
+    enfermedad: { emoji: '🤒', label: 'Enfermedad', color: '#fbbf24' },
+    vacuna: { emoji: '💉', label: 'Vacuna', color: '#22c55e' },
+    parto: { emoji: '🍼', label: 'Parto', color: '#f472b6' },
+    venta: { emoji: '💰', label: 'Venta', color: '#fbbf24' },
+    muerte: { emoji: '⚰️', label: 'Muerte', color: '#ef4444' }
+  };
+  cont.innerHTML = eventos.map((ev, idx) => {
+    const info = TIPO_INFO[ev.tipo] || TIPO_INFO.nota;
+    const fecha = ev.fecha || (ev.creado ? new Date(ev.creado).toISOString().slice(0,10) : '');
+    const fechaFmt = fecha ? new Date(fecha).toLocaleDateString('es-MX', {day:'numeric', month:'short', year:'numeric'}) : '—';
+    const costo = ev.costo ? `<span class="md-ev-costo">$${parseFloat(ev.costo).toLocaleString('es-MX')}</span>` : '';
+    // index original (no invertido) para borrar
+    const originalIdx = eventos.length - 1 - idx;
+    return `
+    <div class="md-evento" style="--ev-color:${info.color};">
+      <div class="md-ev-icon">${info.emoji}</div>
+      <div class="md-ev-body">
+        <div class="md-ev-head">
+          <span class="md-ev-tipo">${info.label}</span>
+          <span class="md-ev-fecha">${fechaFmt}</span>
+        </div>
+        <div class="md-ev-nota">${(ev.nota||'').replace(/</g,'&lt;') || '<em style="color:rgba(255,255,255,.4)">Sin descripción</em>'}</div>
+        ${costo}
+      </div>
+      <button class="md-ev-del" onclick="eliminarEventoAnimal(${originalIdx})" title="Eliminar evento">×</button>
+    </div>
+    `;
+  }).join('');
+}
+
+window.guardarEventoAnimal = async function() {
+  if (!_animalDetalleActual) return;
+  const nota = document.getElementById('mdEventoNota').value.trim();
+  const fecha = document.getElementById('mdEventoFecha').value;
+  const costo = parseFloat(document.getElementById('mdEventoCosto').value) || null;
+  if (!nota && _tipoEventoActual === 'nota') { toast('Escribe la nota', 'error', '✏️'); return; }
+
+  const nuevoEvento = {
+    tipo: _tipoEventoActual,
+    nota,
+    fecha: fecha || new Date().toISOString().slice(0,10),
+    costo,
+    creado: Date.now()
+  };
+
+  try {
+    const { doc, updateDoc, arrayUnion } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho?.db;
+    await updateDoc(doc(db, 'animales', _animalDetalleActual.id), {
+      eventos: arrayUnion(nuevoEvento)
+    });
+    toast('Evento registrado', 'success', '✅');
+    // Actualizar el animal en memoria local
+    _animalDetalleActual.eventos = [...(_animalDetalleActual.eventos || []), nuevoEvento];
+    pintarHistorialAnimal(_animalDetalleActual);
+    cambiarTabDetalle('historial');
+    // Limpiar form
+    document.getElementById('mdEventoNota').value = '';
+    document.getElementById('mdEventoCosto').value = '';
+  } catch(e) {
+    console.error('Error guardando evento:', e);
+    toast('No se pudo guardar el evento', 'error', '⚠️');
+  }
+};
+
+window.eliminarEventoAnimal = async function(idx) {
+  if (!_animalDetalleActual) return;
+  const eventos = _animalDetalleActual.eventos || [];
+  if (idx < 0 || idx >= eventos.length) return;
+  const nuevos = eventos.filter((_, i) => i !== idx);
+  try {
+    const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho?.db;
+    await updateDoc(doc(db, 'animales', _animalDetalleActual.id), { eventos: nuevos });
+    _animalDetalleActual.eventos = nuevos;
+    pintarHistorialAnimal(_animalDetalleActual);
+    toast('Evento eliminado', 'success', '🗑️');
+  } catch(e) {
+    console.error(e);
+    toast('No se pudo eliminar', 'error', '⚠️');
+  }
+};
+
+window.confirmarEliminarDesdeDetalle = function() {
+  if (!_animalDetalleActual) return;
+  const animal = _animalDetalleActual;
+  cerrarDetalleAnimal();
+  setTimeout(() => abrirConfirmEliminar(animal.id, animal.nombre), 280);
+};
 
 // ═══════════════════════════════════════════════════════════
 // HATO WIDGET DEL CASCO (mini)
