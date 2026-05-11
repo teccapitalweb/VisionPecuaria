@@ -603,6 +603,148 @@ button { font-family: inherit; }
   position: relative;
   z-index: 1;
 }
+/* ═══════════ RUTA DEL GANADERO (Roadmap milestones) ═══════════ */
+.hero-roadmap {
+  margin-top: 20px;
+  padding: 18px 22px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(212,160,23,.12), transparent 60%),
+    rgba(255,255,255,.04);
+  border: 1px solid rgba(212,160,23,.18);
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-roadmap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 70%, rgba(212,160,23,.05));
+  pointer-events: none;
+}
+.hroad-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap; gap: 10px;
+}
+.hroad-title {
+  font: 800 .92rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.2px;
+}
+.hroad-progress-label {
+  font: 800 .68rem 'Montserrat', sans-serif;
+  color: #fbbf24;
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.3);
+  padding: 5px 12px;
+  border-radius: 100px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.hroad-track {
+  position: relative;
+  padding: 12px 0;
+  margin-bottom: 14px;
+}
+.hroad-track::before {
+  content: '';
+  position: absolute;
+  top: 30px;
+  left: 6%; right: 6%;
+  height: 3px;
+  background: rgba(255,255,255,.1);
+  border-radius: 3px;
+}
+.hroad-fill {
+  position: absolute;
+  top: 30px;
+  left: 6%;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b, #d4a017);
+  border-radius: 3px;
+  box-shadow: 0 0 12px rgba(212,160,23,.5);
+  transition: width .8s cubic-bezier(.2,.8,.2,1);
+}
+
+.hroad-milestones {
+  display: flex; justify-content: space-between;
+  position: relative;
+}
+.hroad-milestone {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+  transition: transform .25s;
+}
+.hroad-milestone:hover { transform: translateY(-3px); }
+
+.hroad-dot {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  border: 2px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  transition: all .35s cubic-bezier(.2,.8,.2,1);
+  filter: grayscale(.6);
+  opacity: .55;
+}
+.hroad-milestone.completed .hroad-dot {
+  background: linear-gradient(135deg, rgba(34,197,94,.3), rgba(34,197,94,.15));
+  border-color: #22c55e;
+  box-shadow: 0 0 16px rgba(34,197,94,.45);
+  filter: none;
+  opacity: 1;
+}
+.hroad-milestone.active .hroad-dot {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-color: #fff;
+  box-shadow:
+    0 0 0 4px rgba(251,191,36,.2),
+    0 0 24px rgba(251,191,36,.6);
+  filter: none;
+  opacity: 1;
+  animation: milestonePulse 2s ease-in-out infinite;
+  transform: scale(1.15);
+}
+@keyframes milestonePulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(251,191,36,.2), 0 0 24px rgba(251,191,36,.6); }
+  50% { box-shadow: 0 0 0 8px rgba(251,191,36,.15), 0 0 30px rgba(251,191,36,.8); }
+}
+.hroad-name {
+  font: 700 .65rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  transition: color .3s;
+  text-align: center;
+}
+.hroad-milestone.completed .hroad-name { color: #4ade80; }
+.hroad-milestone.active .hroad-name { color: #fbbf24; font-weight: 800; }
+
+.hroad-footer {
+  font: 500 .8rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.7);
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+.hroad-footer strong {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .hero-roadmap { padding: 16px 14px; }
+  .hroad-dot { width: 32px; height: 32px; font-size: 15px; }
+  .hroad-name { font-size: .58rem; }
+}
+
 /* ═══════════ HERO SMART PANEL (reemplaza termómetro circular) ═══════════ */
 .hero-smart-panel {
   flex-shrink: 0;
@@ -4507,6 +4649,42 @@ button { font-family: inherit; }
                   </div>
                 </div>
               </div>
+
+              <!-- 🏆 RUTA DEL GANADERO — Progreso con milestones -->
+              <div class="hero-roadmap">
+                <div class="hroad-header">
+                  <span class="hroad-title">🏆 Tu ruta de ganadero</span>
+                  <span class="hroad-progress-label" id="hroadProgressLabel">Nivel 1 · Aprendiz</span>
+                </div>
+                <div class="hroad-track">
+                  <div class="hroad-fill" id="hroadFill"></div>
+                  <div class="hroad-milestones">
+                    <div class="hroad-milestone" data-step="1" title="Inicio">
+                      <div class="hroad-dot">🌱</div>
+                      <div class="hroad-name">Inicio</div>
+                    </div>
+                    <div class="hroad-milestone" data-step="2" title="Aprendiz">
+                      <div class="hroad-dot">📘</div>
+                      <div class="hroad-name">Aprendiz</div>
+                    </div>
+                    <div class="hroad-milestone" data-step="3" title="Productor">
+                      <div class="hroad-dot">🐄</div>
+                      <div class="hroad-name">Productor</div>
+                    </div>
+                    <div class="hroad-milestone" data-step="4" title="Experto">
+                      <div class="hroad-dot">🎓</div>
+                      <div class="hroad-name">Experto</div>
+                    </div>
+                    <div class="hroad-milestone" data-step="5" title="Maestro">
+                      <div class="hroad-dot">👑</div>
+                      <div class="hroad-name">Maestro</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="hroad-footer" id="hroadFooter">
+                  Te faltan <strong>1 animal</strong> y <strong>1 curso</strong> para subir a nivel Aprendiz.
+                </div>
+              </div>
             </div>
             <div class="hero-smart-panel">
               <!-- CLIMA -->
@@ -5782,6 +5960,84 @@ function actualizarPanelInteligente() {
     accionEl.textContent = sugerencia.texto;
     emojiEl.textContent = sugerencia.emoji;
     _accionActual = sugerencia.accion;
+  }
+
+  // 🏆 Actualizar Ruta del Ganadero
+  actualizarRutaGanadero();
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🏆 RUTA DEL GANADERO — Calcula nivel actual y pinta milestones
+// ═══════════════════════════════════════════════════════════
+function calcularNivelGanadero(animales, cursos, certs) {
+  // Sistema de puntos:
+  // Cada animal: 5 puntos | Cada curso (activo o completo): 8 | Cada certificado: 15
+  const puntos = (animales * 5) + (cursos * 8) + (certs * 15);
+
+  // Niveles: Inicio (0-9) → Aprendiz (10-29) → Productor (30-59) → Experto (60-99) → Maestro (100+)
+  if (puntos >= 100) return { nivel: 5, nombre: 'Maestro', puntos, sigPuntos: null };
+  if (puntos >= 60) return { nivel: 4, nombre: 'Experto', puntos, sigPuntos: 100 };
+  if (puntos >= 30) return { nivel: 3, nombre: 'Productor', puntos, sigPuntos: 60 };
+  if (puntos >= 10) return { nivel: 2, nombre: 'Aprendiz', puntos, sigPuntos: 30 };
+  return { nivel: 1, nombre: 'Inicio', puntos, sigPuntos: 10 };
+}
+
+function actualizarRutaGanadero() {
+  const animales = window.__rancho?.animales?.length || 0;
+  const cursos = (window.__rancho?.cursos || []).length;
+  const certs = window.__rancho?.certificadosCount || 0;
+
+  const info = calcularNivelGanadero(animales, cursos, certs);
+
+  // Label del nivel actual
+  const lbl = document.getElementById('hroadProgressLabel');
+  if (lbl) lbl.textContent = `Nivel ${info.nivel} · ${info.nombre}`;
+
+  // Barra de progreso: % entre milestones
+  const fill = document.getElementById('hroadFill');
+  if (fill) {
+    // 5 milestones distribuidos uniformemente; cada uno representa 25% del ancho
+    // Nivel 1 = 0%, Nivel 2 = 25%, Nivel 3 = 50%, Nivel 4 = 75%, Nivel 5 = 100%
+    const base = (info.nivel - 1) * 25;
+    let extra = 0;
+    if (info.sigPuntos !== null) {
+      const prevThreshold = [0, 10, 30, 60, 100][info.nivel - 1];
+      const range = info.sigPuntos - prevThreshold;
+      const inLevel = info.puntos - prevThreshold;
+      extra = (inLevel / range) * 25;
+    }
+    const totalPct = Math.min(100, base + extra);
+    fill.style.width = `${totalPct}%`;
+  }
+
+  // Marcar milestones completados / activo
+  document.querySelectorAll('.hroad-milestone').forEach(m => {
+    const step = parseInt(m.dataset.step);
+    m.classList.remove('completed', 'active');
+    if (step < info.nivel) m.classList.add('completed');
+    else if (step === info.nivel) m.classList.add('active');
+  });
+
+  // Footer dinámico
+  const footer = document.getElementById('hroadFooter');
+  if (footer) {
+    if (info.nivel === 5) {
+      footer.innerHTML = `🎉 ¡Eres <strong>Maestro Ganadero</strong>! Has alcanzado el nivel máximo.`;
+    } else {
+      const faltan = info.sigPuntos - info.puntos;
+      // Calcular qué le falta concretamente
+      const sugerencias = [];
+      if (animales < 5) sugerencias.push(`<strong>${Math.max(1, 5-animales)} ${animales+1<2?'animal':'animales'}</strong>`);
+      else if (animales < 10) sugerencias.push(`<strong>${10-animales} animales</strong>`);
+      if (cursos < 3) sugerencias.push(`<strong>${Math.max(1, 3-cursos)} ${cursos+1<2?'curso':'cursos'}</strong>`);
+      if (certs === 0) sugerencias.push(`<strong>1 certificado</strong>`);
+
+      const proximoNombre = ['','Aprendiz','Productor','Experto','Maestro'][info.nivel];
+      const lista = sugerencias.slice(0, 2).join(' y ');
+      footer.innerHTML = lista
+        ? `Te faltan ${lista} para subir a <strong>${proximoNombre}</strong>.`
+        : `Suma <strong>${faltan} puntos</strong> para subir a <strong>${proximoNombre}</strong>.`;
+    }
   }
 }
 
