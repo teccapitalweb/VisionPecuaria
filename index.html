@@ -502,10 +502,34 @@ button { font-family: inherit; }
 
 .casco-hero-content {
   position: relative; z-index: 2;
-  display: flex; gap: 32px; align-items: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  grid-template-areas:
+    "text panel"
+    "roadmap roadmap";
+  gap: 24px 32px;
+  align-items: start;
 }
-.casco-hero-text { flex: 1; min-width: 280px; }
+.casco-hero-text {
+  grid-area: text;
+  min-width: 0;
+  display: flex; flex-direction: column;
+  align-self: stretch;
+}
+.casco-hero-content > .hero-roadmap { grid-area: roadmap; margin-top: 0; }
+.hero-smart-panel { grid-area: panel; }
+
+/* Mobile: una sola columna */
+@media (max-width: 880px) {
+  .casco-hero-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "text"
+      "panel"
+      "roadmap";
+    gap: 16px;
+  }
+}
 .casco-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   font: 700 .72rem 'Montserrat', sans-serif;
@@ -740,9 +764,15 @@ button { font-family: inherit; }
 }
 
 @media (max-width: 720px) {
-  .hero-roadmap { padding: 16px 14px; }
-  .hroad-dot { width: 32px; height: 32px; font-size: 15px; }
-  .hroad-name { font-size: .58rem; }
+  .hero-roadmap { padding: 14px 12px; }
+  .hroad-header { margin-bottom: 14px; }
+  .hroad-title { font-size: .82rem; }
+  .hroad-progress-label { font-size: .58rem; padding: 4px 9px; }
+  .hroad-dot { width: 30px; height: 30px; font-size: 14px; }
+  .hroad-name { font-size: .54rem; letter-spacing: .4px; }
+  .hroad-footer { font-size: .72rem; padding-top: 10px; }
+  .hroad-track::before, .hroad-fill { top: 27px; }
+  .hroad-milestones { gap: 4px; }
 }
 
 /* ═══════════ HERO SMART PANEL (reemplaza termómetro circular) ═══════════ */
@@ -4649,43 +4679,8 @@ button { font-family: inherit; }
                   </div>
                 </div>
               </div>
-
-              <!-- 🏆 RUTA DEL GANADERO — Progreso con milestones -->
-              <div class="hero-roadmap">
-                <div class="hroad-header">
-                  <span class="hroad-title">🏆 Tu ruta de ganadero</span>
-                  <span class="hroad-progress-label" id="hroadProgressLabel">Nivel 1 · Aprendiz</span>
-                </div>
-                <div class="hroad-track">
-                  <div class="hroad-fill" id="hroadFill"></div>
-                  <div class="hroad-milestones">
-                    <div class="hroad-milestone" data-step="1" title="Inicio">
-                      <div class="hroad-dot">🌱</div>
-                      <div class="hroad-name">Inicio</div>
-                    </div>
-                    <div class="hroad-milestone" data-step="2" title="Aprendiz">
-                      <div class="hroad-dot">📘</div>
-                      <div class="hroad-name">Aprendiz</div>
-                    </div>
-                    <div class="hroad-milestone" data-step="3" title="Productor">
-                      <div class="hroad-dot">🐄</div>
-                      <div class="hroad-name">Productor</div>
-                    </div>
-                    <div class="hroad-milestone" data-step="4" title="Experto">
-                      <div class="hroad-dot">🎓</div>
-                      <div class="hroad-name">Experto</div>
-                    </div>
-                    <div class="hroad-milestone" data-step="5" title="Maestro">
-                      <div class="hroad-dot">👑</div>
-                      <div class="hroad-name">Maestro</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="hroad-footer" id="hroadFooter">
-                  Te faltan <strong>1 animal</strong> y <strong>1 curso</strong> para subir a nivel Aprendiz.
-                </div>
-              </div>
             </div>
+
             <div class="hero-smart-panel">
               <!-- CLIMA -->
               <div class="hsp-block hsp-weather">
@@ -4711,6 +4706,42 @@ button { font-family: inherit; }
                   <div class="hsp-action-text" id="heroActionText">Registra tu primer animal</div>
                 </div>
                 <button class="hsp-action-btn" id="heroActionBtn" onclick="ejecutarAccionSugerida()">→</button>
+              </div>
+            </div>
+
+            <!-- 🏆 RUTA DEL GANADERO — Progreso con milestones (full width abajo) -->
+            <div class="hero-roadmap">
+              <div class="hroad-header">
+                <span class="hroad-title">🏆 Tu ruta de ganadero</span>
+                <span class="hroad-progress-label" id="hroadProgressLabel">Nivel 1 · Aprendiz</span>
+              </div>
+              <div class="hroad-track">
+                <div class="hroad-fill" id="hroadFill"></div>
+                <div class="hroad-milestones">
+                  <div class="hroad-milestone" data-step="1" title="Inicio">
+                    <div class="hroad-dot">🌱</div>
+                    <div class="hroad-name">Inicio</div>
+                  </div>
+                  <div class="hroad-milestone" data-step="2" title="Aprendiz">
+                    <div class="hroad-dot">📘</div>
+                    <div class="hroad-name">Aprendiz</div>
+                  </div>
+                  <div class="hroad-milestone" data-step="3" title="Productor">
+                    <div class="hroad-dot">🐄</div>
+                    <div class="hroad-name">Productor</div>
+                  </div>
+                  <div class="hroad-milestone" data-step="4" title="Experto">
+                    <div class="hroad-dot">🎓</div>
+                    <div class="hroad-name">Experto</div>
+                  </div>
+                  <div class="hroad-milestone" data-step="5" title="Maestro">
+                    <div class="hroad-dot">👑</div>
+                    <div class="hroad-name">Maestro</div>
+                  </div>
+                </div>
+              </div>
+              <div class="hroad-footer" id="hroadFooter">
+                Te faltan <strong>1 animal</strong> y <strong>1 curso</strong> para subir a nivel Aprendiz.
               </div>
             </div>
           </div>
