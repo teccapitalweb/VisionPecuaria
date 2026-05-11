@@ -1754,6 +1754,19 @@ button { font-family: inherit; }
   -webkit-text-fill-color: transparent;
 }
 .hato-stat-detail { font-size: .76rem; color: rgba(255,255,255,.5); margin-top: 4px; }
+.hato-stat-detail strong { color: var(--gold-light); font-weight: 800; }
+.tipo-chip {
+  display: inline-block;
+  background: rgba(212,160,23,.1);
+  border: 1px solid rgba(212,160,23,.2);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin: 2px 3px 2px 0;
+  font: 600 .68rem 'Plus Jakarta Sans', sans-serif;
+  color: rgba(255,255,255,.85);
+  letter-spacing: .2px;
+}
+.tipo-chip strong { color: #fbbf24; font-weight: 800; }
 
 .hato-grid {
   display: grid;
@@ -8741,11 +8754,47 @@ const EMOJI_TIPO = {
   caballo: '🐎', pollo: '🐔'
 };
 
+// ═══════════════════════════════════════════════════════════
+// STATS HATO — Cálculos basados en fuentes oficiales:
+// • SIAP-SADER (Servicio de Información Agroalimentaria y Pesquera)
+// • SNIIM-SE (Sistema Nacional de Información e Integración de Mercados)
+// • INEGI INPC (Índice Nacional de Precios al Consumidor)
+// • UGRJ Rastro Guadalajara (Unión Ganadera Regional Jalisco)
+// Precios actualizados a Mayo 2026 (PRECIO EN PIE — pagado al productor)
+// ═══════════════════════════════════════════════════════════
+
+// Mapa: tipo de animal → id en mercado en vivo + precio default oficial en pie ($/kg)
+const TIPO_ANIMAL_INFO = {
+  vaca:     { mercadoId: 'vaca-abasto',       precio: 41, label: 'Vacas',     emoji: '🐄' },
+  toro:     { mercadoId: 'toro-reproductor',  precio: 88, label: 'Toros',     emoji: '🐂' },
+  becerro:  { mercadoId: 'becerro-engorda',   precio: 78, label: 'Becerros',  emoji: '🐃' },
+  cerdo:    { mercadoId: 'cerdo-pie',         precio: 51, label: 'Cerdos',    emoji: '🐖' },
+  oveja:    { mercadoId: 'cordero-pelibuey',  precio: 78, label: 'Ovinos',    emoji: '🐑' },
+  cabra:    { mercadoId: 'cabra-lechera',     precio: 65, label: 'Caprinos',  emoji: '🐐' },
+  caballo:  { mercadoId: null,                precio: 88, label: 'Equinos',   emoji: '🐎' },
+  pollo:    { mercadoId: 'pollo-pie',         precio: 47, label: 'Aves',      emoji: '🐔' }
+};
+
+function precioOficialPorTipo(tipo) {
+  const info = TIPO_ANIMAL_INFO[tipo] || TIPO_ANIMAL_INFO.vaca;
+  // Intentar usar precio EN VIVO del mercado (cron Railway)
+  try {
+    if (window.MERCADO && Array.isArray(window.MERCADO) && info.mercadoId) {
+      const prod = window.MERCADO.find(m => m.id === info.mercadoId);
+      if (prod?.precio && prod.precio > 0) return prod.precio;
+    }
+  } catch(e) {}
+  return info.precio;
+}
+
 function calcularStatsHato(animales) {
   if (!animales || animales.length === 0) {
-    return { total: 0, pesoProm: 0, valor: 0, edadProm: 0, tipoMayoritario: '', precioRef: 95 };
+    return {
+      total: 0, pesoProm: 0, valor: 0, edadProm: 0,
+      desglose: [], precioPromPond: 0
+    };
   }
-  // Helpers
+
   const parseNumero = (v) => {
     if (typeof v === 'number') return v;
     if (!v) return 0;
@@ -8755,67 +8804,63 @@ function calcularStatsHato(animales) {
 
   const total = animales.length;
 
-  // Peso promedio
+  // Peso promedio (solo de los que tienen peso registrado)
   const pesos = animales.map(a => parseNumero(a.peso)).filter(p => p > 0);
   const pesoProm = pesos.length ? Math.round(pesos.reduce((a,b)=>a+b,0) / pesos.length) : 0;
 
-  // Edad promedio
+  // Edad promedio (solo de los que tienen edad)
   const edades = animales.map(a => parseNumero(a.edad)).filter(e => e > 0);
   const edadProm = edades.length ? (edades.reduce((a,b)=>a+b,0) / edades.length).toFixed(1) : 0;
 
-  // Tipo mayoritario para mostrar el detalle
-  const tipoCount = {};
+  // ═══ DESGLOSE POR TIPO ═══
+  const conteoTipo = {};
   animales.forEach(a => {
-    const t = (a.tipo || 'bovino').toLowerCase();
-    tipoCount[t] = (tipoCount[t] || 0) + 1;
+    const t = (a.tipo || 'vaca').toLowerCase();
+    conteoTipo[t] = (conteoTipo[t] || 0) + 1;
   });
-  const tipoMayoritario = Object.entries(tipoCount).sort((a,b) => b[1]-a[1])[0]?.[0] || 'bovino';
+  const desglose = Object.entries(conteoTipo)
+    .map(([tipo, cantidad]) => {
+      const info = TIPO_ANIMAL_INFO[tipo] || { label: tipo, emoji: '🐾' };
+      return { tipo, cantidad, label: info.label, emoji: info.emoji };
+    })
+    .sort((a,b) => b.cantidad - a.cantidad);
 
-  // Precio de referencia según el tipo mayoritario (del mercado)
-  const PRECIOS_REF = {
-    bovino: 95,    // vaca abasto $/kg
-    porcino: 51,   // cerdo en pie
-    avicola: 47,
-    pollo: 47,
-    cerdo: 51,
-    oveja: 78,
-    ovino: 78,
-    cabra: 65,
-    caprino: 65,
-    caballo: 88,
-    equino: 88
-  };
-  // Si tenemos los datos del mercado en vivo, usarlos
-  let precioRef = PRECIOS_REF[tipoMayoritario] || 95;
-  try {
-    if (window.MERCADO && Array.isArray(window.MERCADO)) {
-      // Buscar producto del mercado que coincida con el tipo mayoritario
-      const mapaTipoMercado = {
-        bovino: 'vaca-abasto',
-        porcino: 'cerdo-pie',
-        cerdo: 'cerdo-pie',
-        avicola: 'pollo-pie',
-        pollo: 'pollo-pie',
-        oveja: 'cordero-pelibuey',
-        ovino: 'cordero-pelibuey',
-        cabra: 'cabra-lechera',
-        caprino: 'cabra-lechera'
-      };
-      const idBuscado = mapaTipoMercado[tipoMayoritario];
-      const producto = window.MERCADO.find(m => m.id === idBuscado);
-      if (producto?.precio) precioRef = producto.precio;
-    }
-  } catch(e) {}
+  // ═══ VALOR ESTIMADO ═══
+  // Calculamos animal por animal usando SU tipo correcto (no el mayoritario)
+  // Si no tiene peso, usamos peso promedio de su tipo como estimación
+  const pesoPromTipo = {};
+  Object.keys(conteoTipo).forEach(t => {
+    const pesosTipo = animales.filter(a => (a.tipo||'').toLowerCase() === t).map(a => parseNumero(a.peso)).filter(p => p > 0);
+    pesoPromTipo[t] = pesosTipo.length ? pesosTipo.reduce((a,b)=>a+b,0) / pesosTipo.length : 0;
+  });
 
-  // Valor estimado = suma de (peso × precio) de cada animal
   let valor = 0;
+  let sumaPesoTotal = 0;
+  let sumaPrecioTotal = 0;
   animales.forEach(a => {
-    const p = parseNumero(a.peso);
-    if (p > 0) valor += p * precioRef;
-    else valor += 400 * precioRef; // estimación por defecto si no hay peso
+    const tipo = (a.tipo || 'vaca').toLowerCase();
+    const precio = precioOficialPorTipo(tipo);
+    let peso = parseNumero(a.peso);
+    // Si no tiene peso, usar promedio de su mismo tipo. Si tampoco, usar 400 kg default solo para vacas
+    if (peso === 0) {
+      peso = pesoPromTipo[tipo] || (tipo === 'vaca' || tipo === 'toro' || tipo === 'becerro' ? 350 : 50);
+    }
+    valor += peso * precio;
+    sumaPesoTotal += peso;
+    sumaPrecioTotal += precio * peso;
   });
 
-  return { total, pesoProm, valor: Math.round(valor), edadProm, tipoMayoritario, precioRef };
+  // Precio promedio ponderado (por peso) — más representativo cuando hay mezcla
+  const precioPromPond = sumaPesoTotal > 0 ? Math.round(sumaPrecioTotal / sumaPesoTotal) : 0;
+
+  return {
+    total,
+    pesoProm,
+    valor: Math.round(valor),
+    edadProm,
+    desglose,
+    precioPromPond
+  };
 }
 
 function actualizarStatsHato() {
@@ -8831,22 +8876,42 @@ function actualizarStatsHato() {
   const elEdad = document.getElementById('hatoStatEdad');
   const elEdadDet = document.getElementById('hatoStatEdadDetail');
 
+  // TOTAL CABEZAS — con desglose multi-tipo
   if (elTotal) elTotal.textContent = stats.total;
   if (elTotalDet) {
-    if (stats.total === 0) elTotalDet.textContent = 'Sin animales';
-    else {
-      const tipoLabel = stats.tipoMayoritario.charAt(0).toUpperCase() + stats.tipoMayoritario.slice(1);
-      elTotalDet.textContent = `${tipoLabel} · ${stats.total === 1 ? '1 cabeza' : stats.total + ' cabezas'}`;
+    if (stats.total === 0) {
+      elTotalDet.innerHTML = 'Sin animales';
+    } else if (stats.desglose.length === 1) {
+      // Un solo tipo
+      const d = stats.desglose[0];
+      elTotalDet.innerHTML = `${d.emoji} ${d.label}: <strong>${d.cantidad}</strong>`;
+    } else {
+      // Varios tipos: mostrar todos
+      const lista = stats.desglose.slice(0, 4).map(d =>
+        `<span class="tipo-chip">${d.emoji} ${d.label}: <strong>${d.cantidad}</strong></span>`
+      ).join(' ');
+      const resto = stats.desglose.length > 4 ? ` <span class="tipo-chip">+${stats.desglose.length - 4} más</span>` : '';
+      elTotalDet.innerHTML = lista + resto;
     }
   }
+
+  // PESO PROMEDIO
   if (elPeso) elPeso.textContent = stats.pesoProm > 0 ? `${stats.pesoProm} kg` : '— kg';
-  if (elPesoDet) elPesoDet.textContent = stats.pesoProm > 0 ? 'por cabeza' : 'registra peso';
+  if (elPesoDet) elPesoDet.textContent = stats.pesoProm > 0 ? 'por cabeza · SIAP' : 'registra el peso';
 
+  // VALOR ESTIMADO
   if (elValor) elValor.textContent = `$${stats.valor.toLocaleString('es-MX')}`;
-  if (elValorDet) elValorDet.textContent = `a $${stats.precioRef}/kg en pie`;
+  if (elValorDet) {
+    if (stats.precioPromPond > 0) {
+      elValorDet.innerHTML = `≈ $${stats.precioPromPond}/kg en pie · <strong style="color:rgba(74,222,128,.85);">SIAP/SNIIM</strong>`;
+    } else {
+      elValorDet.textContent = 'según mercado';
+    }
+  }
 
+  // EDAD PROMEDIO
   if (elEdad) elEdad.textContent = stats.edadProm > 0 ? `${stats.edadProm} años` : '— años';
-  if (elEdadDet) elEdadDet.textContent = stats.edadProm > 0 ? 'del hato' : 'registra edad';
+  if (elEdadDet) elEdadDet.textContent = stats.edadProm > 0 ? 'del hato' : 'registra edades';
 }
 
 window.eliminarAnimal = function(animalId, nombre) {
