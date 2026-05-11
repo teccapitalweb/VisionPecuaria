@@ -4693,6 +4693,132 @@ button { font-family: inherit; }
   background: linear-gradient(135deg, #d4a017, #f5d77a);
   color: #0a2540;
 }
+.btn-guardar:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ═══════════ TABS DEL MODAL ANIMAL ═══════════ */
+.anim-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 14px 0 18px;
+  padding: 4px;
+  background: rgba(0,0,0,.25);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.anim-tab {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+  color: rgba(255,255,255,.55);
+  transition: all .25s;
+}
+.anim-tab:hover { background: rgba(255,255,255,.04); color: rgba(255,255,255,.8); }
+.anim-tab-active {
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(212,160,23,.06));
+  border-color: rgba(212,160,23,.35);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(212,160,23,.15);
+}
+.anim-tab-icon {
+  font-size: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  flex-shrink: 0;
+}
+.anim-tab-title {
+  font: 700 .85rem 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -.2px;
+  margin-bottom: 1px;
+}
+.anim-tab-sub {
+  font: 500 .65rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.45);
+  letter-spacing: .3px;
+}
+.anim-tab-active .anim-tab-sub { color: rgba(255,255,255,.65); }
+
+/* MODO LOTE: caja info, separadores y textarea */
+.lote-info-box {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(34,197,94,.1), rgba(34,197,94,.02));
+  border: 1px solid rgba(34,197,94,.22);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font: 500 .78rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+}
+.lote-info-box strong { color: #4ade80; display: block; margin-bottom: 2px; }
+.lote-info-icon { font-size: 22px; flex-shrink: 0; }
+
+.lote-section-title {
+  font: 800 .68rem 'Montserrat', sans-serif;
+  color: rgba(212,160,23,.85);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin: 14px 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(212,160,23,.15);
+}
+
+.modal-animal textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  color: #fff;
+  font: 600 .85rem 'Courier New', monospace;
+  letter-spacing: .3px;
+  margin-bottom: 4px;
+  resize: vertical;
+  min-height: 90px;
+  transition: border-color .2s;
+}
+.modal-animal textarea:focus {
+  outline: none;
+  border-color: #d4a017;
+}
+.modal-animal textarea::placeholder {
+  color: rgba(255,255,255,.3);
+  font-family: 'Courier New', monospace;
+}
+
+.lote-helper-btn {
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.3);
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font: 700 .7rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+}
+.lote-helper-btn:hover {
+  background: rgba(212,160,23,.25);
+  border-color: rgba(212,160,23,.5);
+  transform: translateY(-1px);
+}
+
+.lote-counter {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px;
+  background: rgba(255,255,255,.04);
+  border-radius: 8px;
+  font: 700 .78rem 'Plus Jakarta Sans', sans-serif;
+  color: rgba(255,255,255,.5);
+  margin: 6px 0 14px;
+  transition: color .25s;
+}
+.lote-preview-hint {
+  font: 500 .68rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.4);
+  font-weight: 500;
+}
 
 /* Botón saltear VIP */
 .btn-saltar-vip {
@@ -5789,49 +5915,142 @@ button { font-family: inherit; }
 <!-- 🐄 MODAL AGREGAR ANIMAL -->
 <div class="modal-animal" id="modalAnimal" onclick="if(event.target===this)cerrarModalAnimal()">
   <div class="modal-animal-content">
-    <h3>🐄 Registrar nuevo animal</h3>
-    <p>Agrega un animal a tu hato. Esto activa tu termómetro pecuario y te da seguimiento real.</p>
+    <h3>🐄 Registrar ganado</h3>
+    <p>Agrega animales a tu hato. Elige el modo según cuántos vayas a registrar.</p>
 
-    <label>Nombre o apodo</label>
-    <input type="text" id="animalNombre" placeholder="Ej. La Bonita, Lucero...">
+    <!-- TABS: Individual vs Lote SINIIGA -->
+    <div class="anim-tabs">
+      <button class="anim-tab anim-tab-active" id="animTabInd" onclick="cambiarTabAnimal('ind')">
+        <span class="anim-tab-icon">🐄</span>
+        <div>
+          <div class="anim-tab-title">Individual</div>
+          <div class="anim-tab-sub">Un animal con detalle</div>
+        </div>
+      </button>
+      <button class="anim-tab" id="animTabLote" onclick="cambiarTabAnimal('lote')">
+        <span class="anim-tab-icon">📋</span>
+        <div>
+          <div class="anim-tab-title">Por lote</div>
+          <div class="anim-tab-sub">Estilo SINIIGA · masivo</div>
+        </div>
+      </button>
+    </div>
 
-    <div class="modal-animal-row">
-      <div>
-        <label>Tipo</label>
-        <select id="animalTipo">
-          <option value="vaca">🐄 Vaca</option>
-          <option value="toro">🐂 Toro</option>
-          <option value="becerro">🐃 Becerro</option>
-          <option value="cerdo">🐖 Cerdo</option>
-          <option value="oveja">🐑 Oveja</option>
-          <option value="cabra">🐐 Cabra</option>
-          <option value="caballo">🐎 Caballo</option>
-          <option value="pollo">🐔 Aves</option>
-        </select>
+    <!-- MODO INDIVIDUAL -->
+    <div class="anim-pane" id="animPaneInd">
+      <label>Nombre o apodo</label>
+      <input type="text" id="animalNombre" placeholder="Ej. La Bonita, Lucero...">
+
+      <div class="modal-animal-row">
+        <div>
+          <label>Tipo</label>
+          <select id="animalTipo">
+            <option value="vaca">🐄 Vaca</option>
+            <option value="toro">🐂 Toro</option>
+            <option value="becerro">🐃 Becerro</option>
+            <option value="cerdo">🐖 Cerdo</option>
+            <option value="oveja">🐑 Oveja</option>
+            <option value="cabra">🐐 Cabra</option>
+            <option value="caballo">🐎 Caballo</option>
+            <option value="pollo">🐔 Aves</option>
+          </select>
+        </div>
+        <div>
+          <label>Arete / Tag</label>
+          <input type="text" id="animalTag" placeholder="#A001">
+        </div>
       </div>
-      <div>
-        <label>Arete / Tag</label>
-        <input type="text" id="animalTag" placeholder="#A001">
+
+      <div class="modal-animal-row">
+        <div>
+          <label>Raza</label>
+          <input type="text" id="animalRaza" placeholder="Holstein, Cebú, F1...">
+        </div>
+        <div>
+          <label>Peso (kg)</label>
+          <input type="number" id="animalPeso" placeholder="380">
+        </div>
+      </div>
+
+      <label>Edad aproximada</label>
+      <input type="text" id="animalEdad" placeholder="2.5 años">
+
+      <div class="modal-animal-actions">
+        <button class="btn-cancelar" onclick="cerrarModalAnimal()">Cancelar</button>
+        <button class="btn-guardar" onclick="guardarAnimal()">Guardar animal</button>
       </div>
     </div>
 
-    <div class="modal-animal-row">
-      <div>
-        <label>Raza</label>
-        <input type="text" id="animalRaza" placeholder="Holstein, Cebú, F1...">
+    <!-- MODO LOTE SINIIGA -->
+    <div class="anim-pane" id="animPaneLote" style="display:none;">
+      <div class="lote-info-box">
+        <span class="lote-info-icon">💡</span>
+        <div>
+          <strong>¿Cómo funciona?</strong>
+          Captura los datos generales del lote (raza, tipo, edad y peso promedio) UNA sola vez. Luego pega o escribe los aretes SINIIGA o tags. Cada arete genera un animal heredando esos datos. <strong>Tú decides cuántos.</strong>
+        </div>
       </div>
-      <div>
-        <label>Peso (kg)</label>
-        <input type="number" id="animalPeso" placeholder="380">
+
+      <div class="lote-section-title">📦 Datos del lote</div>
+
+      <div class="modal-animal-row">
+        <div>
+          <label>Tipo de ganado *</label>
+          <select id="loteTipo">
+            <option value="vaca">🐄 Vaca</option>
+            <option value="toro">🐂 Toro</option>
+            <option value="becerro">🐃 Becerro</option>
+            <option value="cerdo">🐖 Cerdo</option>
+            <option value="oveja">🐑 Oveja</option>
+            <option value="cabra">🐐 Cabra</option>
+            <option value="caballo">🐎 Caballo</option>
+            <option value="pollo">🐔 Aves</option>
+          </select>
+        </div>
+        <div>
+          <label>Raza predominante</label>
+          <input type="text" id="loteRaza" placeholder="Holstein, Cebú, F1...">
+        </div>
       </div>
-    </div>
 
-    <label>Edad aproximada</label>
-    <input type="text" id="animalEdad" placeholder="2.5 años">
+      <div class="modal-animal-row">
+        <div>
+          <label>Peso promedio (kg)</label>
+          <input type="number" id="lotePeso" placeholder="380">
+        </div>
+        <div>
+          <label>Edad promedio</label>
+          <input type="text" id="loteEdad" placeholder="2.5 años">
+        </div>
+      </div>
 
-    <div class="modal-animal-actions">
-      <button class="btn-cancelar" onclick="cerrarModalAnimal()">Cancelar</button>
-      <button class="btn-guardar" onclick="guardarAnimal()">Guardar animal</button>
+      <div class="modal-animal-row">
+        <div>
+          <label>UPP <small style="color:rgba(255,255,255,.4);">(opcional)</small></label>
+          <input type="text" id="loteUPP" placeholder="Ej. 21156001MX...">
+        </div>
+        <div>
+          <label>Potrero / Ubicación <small style="color:rgba(255,255,255,.4);">(opcional)</small></label>
+          <input type="text" id="lotePotrero" placeholder="Potrero norte">
+        </div>
+      </div>
+
+      <div class="lote-section-title">🏷️ Aretes / Identificadores</div>
+
+      <label style="display:flex;align-items:center;justify-content:space-between;">
+        <span>Pega los aretes (uno por línea o separados por comas)</span>
+        <button type="button" class="lote-helper-btn" onclick="generarAretesSecuencia()" title="Generar 10 aretes en secuencia">⚡ Generar 10</button>
+      </label>
+      <textarea id="loteAretes" rows="6" placeholder="MX-0001-2026&#10;MX-0002-2026&#10;MX-0003-2026&#10;...&#10;&#10;O pega tu lista desde Excel/WhatsApp"></textarea>
+      <div class="lote-counter">
+        <span id="loteCounter">0 animales detectados</span>
+        <span class="lote-preview-hint">Se crearán al guardar</span>
+      </div>
+
+      <div class="modal-animal-actions">
+        <button class="btn-cancelar" onclick="cerrarModalAnimal()">Cancelar</button>
+        <button class="btn-guardar" onclick="guardarLote()">📋 Registrar lote</button>
+      </div>
     </div>
   </div>
 </div>
@@ -7470,16 +7689,93 @@ function pintarHatoCasco() {
 window.abrirModalAnimal = function() {
   const m = document.getElementById('modalAnimal');
   if (!m) return;
+  // Limpiar campos individuales
   ['animalNombre','animalTag','animalRaza','animalPeso','animalEdad'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  // Limpiar campos del lote
+  ['loteRaza','lotePeso','loteEdad','loteUPP','lotePotrero','loteAretes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  // Reset al tab individual por default
+  cambiarTabAnimal('ind');
+  actualizarContadorLote();
   m.classList.add('show');
 };
 window.cerrarModalAnimal = function() {
   const m = document.getElementById('modalAnimal');
   if (m) m.classList.remove('show');
 };
+
+window.cambiarTabAnimal = function(modo) {
+  const tabInd = document.getElementById('animTabInd');
+  const tabLote = document.getElementById('animTabLote');
+  const paneInd = document.getElementById('animPaneInd');
+  const paneLote = document.getElementById('animPaneLote');
+  if (!tabInd || !tabLote) return;
+  if (modo === 'lote') {
+    tabInd.classList.remove('anim-tab-active');
+    tabLote.classList.add('anim-tab-active');
+    paneInd.style.display = 'none';
+    paneLote.style.display = 'block';
+  } else {
+    tabLote.classList.remove('anim-tab-active');
+    tabInd.classList.add('anim-tab-active');
+    paneLote.style.display = 'none';
+    paneInd.style.display = 'block';
+  }
+};
+
+// Parser de aretes: separa por línea, coma o punto y coma, filtra vacíos y duplicados
+function parsearAretes(texto) {
+  if (!texto) return [];
+  const partes = texto.split(/[\n,;]+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+  // Eliminar duplicados manteniendo orden
+  return [...new Set(partes)];
+}
+
+function actualizarContadorLote() {
+  const ta = document.getElementById('loteAretes');
+  const cont = document.getElementById('loteCounter');
+  if (!ta || !cont) return;
+  const aretes = parsearAretes(ta.value);
+  cont.textContent = aretes.length === 1 ? '1 animal detectado' : `${aretes.length} animales detectados`;
+  cont.style.color = aretes.length > 0 ? '#4ade80' : 'rgba(255,255,255,.5)';
+}
+
+// Listener para actualizar contador en vivo
+document.addEventListener('input', (e) => {
+  if (e.target && e.target.id === 'loteAretes') actualizarContadorLote();
+});
+
+window.generarAretesSecuencia = function() {
+  const ta = document.getElementById('loteAretes');
+  if (!ta) return;
+  // Detectar el prefijo existente (si lo hay) para continuar
+  const actual = parsearAretes(ta.value);
+  const año = new Date().getFullYear();
+  const prefijo = 'MX';
+  let inicio = 1;
+  // Si ya hay aretes con formato MX-NNNN-año, continuar después
+  if (actual.length > 0) {
+    const ultimo = actual[actual.length - 1];
+    const m = ultimo.match(/(\d+)/);
+    if (m) inicio = parseInt(m[1]) + 1;
+  }
+  const nuevos = [];
+  for (let i = 0; i < 10; i++) {
+    const num = String(inicio + i).padStart(4, '0');
+    nuevos.push(`${prefijo}-${num}-${año}`);
+  }
+  const sep = actual.length > 0 ? '\n' : '';
+  ta.value = (ta.value || '') + sep + nuevos.join('\n');
+  actualizarContadorLote();
+};
+
 window.guardarAnimal = async function() {
   const user = window.__rancho?.auth?.currentUser;
   const db = window.__rancho?.db;
@@ -7507,6 +7803,89 @@ window.guardarAnimal = async function() {
   } catch(e) {
     console.error('Error guardando animal:', e);
     toast('No se pudo guardar. Verifica tu conexión.', 'error', '⚠️');
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// 📋 REGISTRO POR LOTE (estilo SINIIGA-SINIDA)
+// Toma los datos generales del lote + los aretes individuales
+// y crea N animales en Firestore en una sola operación.
+// ═══════════════════════════════════════════════════════════
+window.guardarLote = async function() {
+  const user = window.__rancho?.auth?.currentUser;
+  const db = window.__rancho?.db;
+  if (!user || !db) { toast('Inicia sesión primero', 'error', '🔒'); return; }
+
+  const tipo = document.getElementById('loteTipo').value;
+  const raza = document.getElementById('loteRaza').value.trim();
+  const peso = parseFloat(document.getElementById('lotePeso').value) || null;
+  const edad = document.getElementById('loteEdad').value.trim();
+  const upp = document.getElementById('loteUPP').value.trim();
+  const potrero = document.getElementById('lotePotrero').value.trim();
+  const aretesText = document.getElementById('loteAretes').value;
+
+  const aretes = parsearAretes(aretesText);
+
+  if (aretes.length === 0) {
+    toast('Captura al menos un arete para registrar el lote', 'error', '🏷️');
+    return;
+  }
+  if (aretes.length > 200) {
+    toast('Máximo 200 animales por lote. Divídelo en varios.', 'error', '⚠️');
+    return;
+  }
+
+  // Confirmación
+  const confirmar = confirm(`Vas a registrar ${aretes.length} animales en tu hato.\n\nTipo: ${tipo}\nRaza: ${raza || '(sin definir)'}\nPeso promedio: ${peso ? peso + ' kg' : '(sin definir)'}\n\n¿Confirmar?`);
+  if (!confirmar) return;
+
+  // Botón a estado loading
+  const btn = document.querySelector('#animPaneLote .btn-guardar');
+  const btnTextOriginal = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = `Guardando 0/${aretes.length}...`; btn.disabled = true; }
+
+  try {
+    const { collection, addDoc, writeBatch, doc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const emoji = EMOJI_TIPO[tipo] || '🐾';
+    const fechaLote = new Date().toISOString().slice(0,10).replace(/-/g, '');
+    const loteId = `lote-${fechaLote}-${Date.now().toString(36).slice(-4)}`;
+
+    // Firestore writeBatch admite máximo 500 operaciones, vamos por lotes de 100 para seguridad
+    const BATCH_SIZE = 100;
+    let creados = 0;
+
+    for (let i = 0; i < aretes.length; i += BATCH_SIZE) {
+      const slice = aretes.slice(i, i + BATCH_SIZE);
+      const batch = writeBatch(db);
+      slice.forEach((arete, idx) => {
+        const animalRef = doc(collection(db, 'animales'));
+        batch.set(animalRef, {
+          userId: user.uid,
+          nombre: arete, // El arete sirve como nombre por default; el usuario puede editarlo después
+          tipo,
+          tag: arete,
+          raza,
+          peso,
+          edad,
+          emoji,
+          upp: upp || null,
+          potrero: potrero || null,
+          loteId,
+          fechaRegistro: serverTimestamp()
+        });
+      });
+      await batch.commit();
+      creados += slice.length;
+      if (btn) btn.textContent = `Guardando ${creados}/${aretes.length}...`;
+    }
+
+    toast(`✅ Lote de ${aretes.length} animales registrado`, 'success', '📋');
+    cerrarModalAnimal();
+  } catch(e) {
+    console.error('Error registrando lote:', e);
+    toast('No se pudo guardar el lote. Verifica conexión.', 'error', '⚠️');
+  } finally {
+    if (btn) { btn.textContent = btnTextOriginal; btn.disabled = false; }
   }
 };
 
