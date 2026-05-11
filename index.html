@@ -7481,6 +7481,18 @@ function setTermometro(valor) {
 
 function refrescarTermometro() {
   setTermometro(0);
+  // Actualizar las 3 cards apiladas del hero (animales/cursos/certificados)
+  const animales = window.__rancho?.animales?.length || 0;
+  const cursos = (window.__rancho?.cursos || []).length;
+  const certs = window.__rancho?.certificadosCount || 0;
+
+  const elA = document.getElementById('statAnimales');
+  const elC = document.getElementById('statCursos');
+  const elCert = document.getElementById('statCertificados');
+  if (elA) elA.textContent = animales;
+  if (elC) elC.textContent = cursos;
+  if (elCert) elCert.textContent = certs;
+
   // Actualizar panel inteligente
   actualizarPanelInteligente();
 }
