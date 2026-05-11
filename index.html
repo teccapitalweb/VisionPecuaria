@@ -6100,7 +6100,6 @@ button { font-family: inherit; }
       <button class="sb-nav-item" data-section="hato">
         <span class="sb-nav-icon">🐄</span>
         <span class="sb-nav-label">Mi Hato</span>
-        <span class="sb-nav-badge" id="sbBadgeHato" style="display:none;">0</span>
       </button>
       <button class="sb-nav-item" data-section="potrero">
         <span class="sb-nav-icon">🌾</span>
@@ -7713,17 +7712,6 @@ function refrescarTermometro() {
   if (elA) elA.textContent = animales;
   if (elC) elC.textContent = cursos;
   if (elCert) elCert.textContent = certs;
-
-  // Badge sidebar Mi Hato — muestra el total de animales
-  const sbBadge = document.getElementById('sbBadgeHato');
-  if (sbBadge) {
-    if (animales > 0) {
-      sbBadge.textContent = animales > 99 ? '99+' : animales;
-      sbBadge.style.display = '';
-    } else {
-      sbBadge.style.display = 'none';
-    }
-  }
 
   // Actualizar panel inteligente
   actualizarPanelInteligente();
