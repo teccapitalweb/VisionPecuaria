@@ -440,9 +440,8 @@ button { font-family: inherit; }
 /* Animación escalonada para cards del Casco */
 .section.active > .casco-hero { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) backwards; }
 .section.active > .casco-top-grid { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .1s backwards; }
-.section.active > .row-cine { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .1s backwards; }
-.section.active > .widget { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .2s backwards; }
-.section.active > .vip-access-grid { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .3s backwards; }
+.section.active > .vip-card--webinar { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .2s backwards; }
+.section.active > .casco-bottom-grid { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .3s backwards; }
 .section.active > .noticias-card { animation: cardIn .6s cubic-bezier(.2,.8,.2,1) .4s backwards; }
 @keyframes cardIn {
   from { opacity: 0; transform: translateY(20px); }
@@ -928,6 +927,42 @@ button { font-family: inherit; }
 }
 @media (max-width: 1100px) {
   .casco-top-grid { grid-template-columns: 1fr; }
+}
+
+/* CASCO BOTTOM GRID — mercado izq + (whatsapp + descuento) apilados der */
+.casco-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 22px;
+  margin: 28px 0;
+  position: relative;
+  z-index: 1;
+  align-items: stretch;
+}
+.casco-bottom-grid > .widget {
+  display: flex;
+  flex-direction: column;
+}
+.casco-bottom-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.casco-bottom-side > .vip-card {
+  flex: 1;
+  padding: 20px;
+}
+.casco-bottom-side .vip-card-title { font-size: 1rem; }
+.casco-bottom-side .vip-descuento-num { font-size: 2.8rem; margin: 0; }
+.casco-bottom-side .vip-descuento-num span { font-size: 1.8rem; }
+.casco-bottom-side .vip-wa-icon { width: 48px; height: 48px; }
+@media (max-width: 1100px) {
+  .casco-bottom-grid { grid-template-columns: 1fr; }
+  .casco-bottom-side { flex-direction: row; }
+  .casco-bottom-side > .vip-card { flex: 1; }
+}
+@media (max-width: 720px) {
+  .casco-bottom-side { flex-direction: column; }
 }
 
 /* CINE DEL RANCHO */
@@ -3105,8 +3140,17 @@ button { font-family: inherit; }
   border: 1px solid rgba(34,197,94,.25);
   box-shadow: 0 8px 28px rgba(0,0,0,.35), 0 0 60px rgba(34,197,94,.06);
   text-align: center;
+  margin: 28px 0;
+  position: relative;
+  z-index: 1;
 }
 .vip-card--webinar:hover { box-shadow: 0 16px 40px rgba(0,0,0,.5), 0 0 80px rgba(34,197,94,.12); border-color: rgba(34,197,94,.5); }
+.vip-card--webinar .vip-card-title { font-size: 1.4rem; }
+.vip-card--webinar .vip-countdown { margin: 8px 0; }
+.vip-card--webinar .vip-time-box { min-width: 78px; padding: 10px 16px; }
+.vip-card--webinar .vip-time-num { font-size: 1.7rem; }
+.vip-card--webinar .vip-btn { max-width: 340px; margin: 4px auto 0; }
+.vip-card--webinar .vip-ponente { max-width: 360px; margin: 4px auto; }
 
 .vip-card--whatsapp {
   background:
@@ -3966,79 +4010,80 @@ button { font-family: inherit; }
           </div>
         </div>
 
-        <!-- MERCADO (ancho completo abajo) -->
-        <div class="widget">
-          <div class="widget-head">
-            <div class="widget-title"><span>💰</span> Mercado al instante</div>
-            <button class="widget-link" onclick="navigateTo('mercado')">Ver todo →</button>
+        <!-- 🎓 WEBINAR (ancho completo, principal CTA) -->
+        <div class="vip-card vip-card--webinar" id="vipCardWebinar">
+          <div class="vip-pill vip-pill--green">
+            <span class="vip-pill-dot"></span>
+            <span>PRÓXIMO WEBINAR</span>
           </div>
-          <div class="mercado-mini-list" id="mercadoMini"></div>
+          <h3 class="vip-card-title" id="webinarTitulo">Webinar Visión Pecuaria</h3>
+          <div class="vip-ponente">
+            <div class="vip-ponente-name" id="webinarPonente">Por anunciar</div>
+            <div class="vip-ponente-tag">Ponente invitado</div>
+          </div>
+          <div class="vip-fecha-row" id="webinarFechaRow">
+            <span>📅</span>
+            <span id="webinarFecha">Fecha por confirmar</span>
+          </div>
+          <div class="vip-countdown-label">⏱️ COMIENZA EN</div>
+          <div class="vip-countdown" id="webinarCountdown">
+            <div class="vip-time-box">
+              <div class="vip-time-num" id="cdDays">--</div>
+              <div class="vip-time-label">DÍAS</div>
+            </div>
+            <span class="vip-time-sep">:</span>
+            <div class="vip-time-box">
+              <div class="vip-time-num" id="cdHours">--</div>
+              <div class="vip-time-label">HORAS</div>
+            </div>
+            <span class="vip-time-sep">:</span>
+            <div class="vip-time-box">
+              <div class="vip-time-num" id="cdMins">--</div>
+              <div class="vip-time-label">MIN</div>
+            </div>
+          </div>
+          <button class="vip-btn vip-btn--green" onclick="agendarWebinar()">
+            <span>📅</span> Agendar en calendario
+          </button>
         </div>
 
-        <!-- 🚀 ACCESO VIP — 3 cards: webinar, whatsapp, descuento -->
-        <div class="vip-access-grid">
-          <!-- WEBINAR -->
-          <div class="vip-card vip-card--webinar" id="vipCardWebinar">
-            <div class="vip-pill vip-pill--green">
-              <span class="vip-pill-dot"></span>
-              <span>PRÓXIMO WEBINAR</span>
+        <!-- 💰 MERCADO (izq) + WHATSAPP + DESCUENTO (der apilados) -->
+        <div class="casco-bottom-grid">
+          <div class="widget">
+            <div class="widget-head">
+              <div class="widget-title"><span>💰</span> Mercado al instante</div>
+              <button class="widget-link" onclick="navigateTo('mercado')">Ver todo →</button>
             </div>
-            <h3 class="vip-card-title" id="webinarTitulo">Webinar Visión Pecuaria</h3>
-            <div class="vip-ponente">
-              <div class="vip-ponente-name" id="webinarPonente">Por anunciar</div>
-              <div class="vip-ponente-tag">Ponente invitado</div>
-            </div>
-            <div class="vip-fecha-row" id="webinarFechaRow">
-              <span>📅</span>
-              <span id="webinarFecha">Fecha por confirmar</span>
-            </div>
-            <div class="vip-countdown-label">⏱️ COMIENZA EN</div>
-            <div class="vip-countdown" id="webinarCountdown">
-              <div class="vip-time-box">
-                <div class="vip-time-num" id="cdDays">--</div>
-                <div class="vip-time-label">DÍAS</div>
-              </div>
-              <span class="vip-time-sep">:</span>
-              <div class="vip-time-box">
-                <div class="vip-time-num" id="cdHours">--</div>
-                <div class="vip-time-label">HORAS</div>
-              </div>
-              <span class="vip-time-sep">:</span>
-              <div class="vip-time-box">
-                <div class="vip-time-num" id="cdMins">--</div>
-                <div class="vip-time-label">MIN</div>
-              </div>
-            </div>
-            <button class="vip-btn vip-btn--green" onclick="agendarWebinar()">
-              <span>📅</span> Agendar en calendario
-            </button>
+            <div class="mercado-mini-list" id="mercadoMini"></div>
           </div>
 
-          <!-- GRUPO WHATSAPP -->
-          <div class="vip-card vip-card--whatsapp">
-            <div class="vip-wa-icon">
-              <svg viewBox="0 0 32 32" fill="white" width="28" height="28">
-                <path d="M16.003 0C7.17.005.045 7.13.04 15.962c-.002 2.823.736 5.578 2.14 8.005L0 32l8.184-2.144a15.962 15.962 0 007.819 1.992c8.83-.005 15.954-7.13 15.96-15.961.005-8.83-7.13-15.962-15.96-15.887zm0 29.087a13.105 13.105 0 01-6.683-1.83l-.479-.285-4.964 1.302 1.323-4.84-.312-.497a13.108 13.108 0 01-2.011-7.026c.003-7.246 5.9-13.143 13.146-13.143 3.512.001 6.812 1.371 9.295 3.857a13.066 13.066 0 013.847 9.297c-.003 7.246-5.9 13.143-13.162 13.165zm7.21-9.84c-.395-.198-2.34-1.155-2.703-1.287-.362-.132-.626-.198-.89.198-.263.396-1.022 1.287-1.252 1.55-.231.264-.461.297-.857.099-.395-.198-1.67-.616-3.18-1.962-1.176-1.05-1.97-2.346-2.2-2.742-.231-.396-.025-.61.173-.808.178-.177.395-.461.593-.692.198-.231.264-.396.396-.66.132-.264.066-.495-.033-.693-.099-.198-.89-2.146-1.22-2.94-.32-.77-.646-.667-.89-.679a17.12 17.12 0 00-.756-.014c-.264 0-.692.1-1.054.495-.362.396-1.385 1.353-1.385 3.301 0 1.948 1.418 3.83 1.616 4.094.198.264 2.787 4.262 6.762 5.982 4.94 2.13 4.94 1.422 5.83 1.331.89-.099 2.86-1.171 3.262-2.302.404-1.13.404-2.097.282-2.302-.122-.198-.461-.33-.857-.495z"/>
-              </svg>
+          <div class="casco-bottom-side">
+            <!-- GRUPO WHATSAPP -->
+            <div class="vip-card vip-card--whatsapp">
+              <div class="vip-wa-icon">
+                <svg viewBox="0 0 32 32" fill="white" width="28" height="28">
+                  <path d="M16.003 0C7.17.005.045 7.13.04 15.962c-.002 2.823.736 5.578 2.14 8.005L0 32l8.184-2.144a15.962 15.962 0 007.819 1.992c8.83-.005 15.954-7.13 15.96-15.961.005-8.83-7.13-15.962-15.96-15.887zm0 29.087a13.105 13.105 0 01-6.683-1.83l-.479-.285-4.964 1.302 1.323-4.84-.312-.497a13.108 13.108 0 01-2.011-7.026c.003-7.246 5.9-13.143 13.146-13.143 3.512.001 6.812 1.371 9.295 3.857a13.066 13.066 0 013.847 9.297c-.003 7.246-5.9 13.143-13.162 13.165zm7.21-9.84c-.395-.198-2.34-1.155-2.703-1.287-.362-.132-.626-.198-.89.198-.263.396-1.022 1.287-1.252 1.55-.231.264-.461.297-.857.099-.395-.198-1.67-.616-3.18-1.962-1.176-1.05-1.97-2.346-2.2-2.742-.231-.396-.025-.61.173-.808.178-.177.395-.461.593-.692.198-.231.264-.396.396-.66.132-.264.066-.495-.033-.693-.099-.198-.89-2.146-1.22-2.94-.32-.77-.646-.667-.89-.679a17.12 17.12 0 00-.756-.014c-.264 0-.692.1-1.054.495-.362.396-1.385 1.353-1.385 3.301 0 1.948 1.418 3.83 1.616 4.094.198.264 2.787 4.262 6.762 5.982 4.94 2.13 4.94 1.422 5.83 1.331.89-.099 2.86-1.171 3.262-2.302.404-1.13.404-2.097.282-2.302-.122-.198-.461-.33-.857-.495z"/>
+                </svg>
+              </div>
+              <h3 class="vip-card-title">Grupo WhatsApp VIP</h3>
+              <p class="vip-card-desc">Comunidad de productores activos</p>
+              <button class="vip-btn vip-btn--white" onclick="abrirGrupoWhatsApp()">
+                <span style="color:#22c55e;">💬</span> Abrir grupo
+              </button>
             </div>
-            <h3 class="vip-card-title">Grupo WhatsApp VIP</h3>
-            <p class="vip-card-desc">Comunidad de productores activos</p>
-            <button class="vip-btn vip-btn--white" onclick="abrirGrupoWhatsApp()">
-              <span style="color:#22c55e;">💬</span> Abrir grupo
-            </button>
-          </div>
 
-          <!-- DESCUENTO -->
-          <div class="vip-card vip-card--descuento" id="vipCardDescuento">
-            <div class="vip-card-confetti">🎁</div>
-            <div class="vip-pill vip-pill--orange">
-              <span>🔥 TU DESCUENTO VIP</span>
+            <!-- DESCUENTO -->
+            <div class="vip-card vip-card--descuento" id="vipCardDescuento">
+              <div class="vip-card-confetti">🎁</div>
+              <div class="vip-pill vip-pill--orange">
+                <span>🔥 TU DESCUENTO VIP</span>
+              </div>
+              <div class="vip-descuento-num">20<span>%</span></div>
+              <p class="vip-card-desc">En todos los próximos cursos</p>
+              <button class="vip-btn vip-btn--orange" onclick="canjearDescuento()">
+                <span>💬</span> Canjear por WhatsApp
+              </button>
             </div>
-            <div class="vip-descuento-num">20<span>%</span></div>
-            <p class="vip-card-desc">En todos los próximos cursos</p>
-            <button class="vip-btn vip-btn--orange" onclick="canjearDescuento()">
-              <span>💬</span> Canjear por WhatsApp
-            </button>
           </div>
         </div>
 
