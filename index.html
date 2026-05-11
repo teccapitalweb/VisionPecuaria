@@ -4695,6 +4695,196 @@ button { font-family: inherit; }
 }
 .btn-guardar:disabled { opacity: .6; cursor: not-allowed; }
 
+/* ═══════════ FORM PREMIUM DEL DETALLE ANIMAL ═══════════ */
+.md-pane-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.md-form-section {
+  display: flex;
+  flex-direction: column;
+}
+.md-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.md-form-label {
+  display: flex; align-items: center; gap: 7px;
+  font: 800 .68rem 'Montserrat', sans-serif;
+  color: rgba(212,160,23,.85);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.md-form-label-icon {
+  font-size: 13px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
+}
+.md-form-optional {
+  font: 600 .58rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.4);
+  letter-spacing: .4px;
+  text-transform: lowercase;
+  margin-left: 4px;
+}
+
+/* Textarea premium */
+.md-form-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(212,160,23,.04), transparent 50%),
+    rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  color: #fff;
+  font: 500 .92rem/1.5 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 90px;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+}
+.md-form-textarea::placeholder {
+  color: rgba(255,255,255,.32);
+  font-style: italic;
+}
+.md-form-textarea:focus {
+  outline: none;
+  border-color: rgba(212,160,23,.5);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(212,160,23,.08), transparent 60%),
+    rgba(0,0,0,.4);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.25),
+    0 0 0 4px rgba(212,160,23,.08);
+}
+
+/* Input premium */
+.md-form-input {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  color: #fff;
+  font: 600 .92rem 'Inter', sans-serif;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+}
+.md-form-input::placeholder { color: rgba(255,255,255,.3); }
+.md-form-input:focus {
+  outline: none;
+  border-color: rgba(212,160,23,.5);
+  background: rgba(0,0,0,.45);
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.25),
+    0 0 0 4px rgba(212,160,23,.08);
+}
+/* Estilizar el ícono nativo del date picker en webkit */
+.md-form-input[type="date"] {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: .3px;
+  color-scheme: dark;
+}
+.md-form-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(.7) sepia(1) saturate(3) hue-rotate(15deg);
+  cursor: pointer;
+  opacity: .8;
+  transition: opacity .2s;
+}
+.md-form-input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+/* Input con prefijo (ej. $) */
+.md-form-input-wrap {
+  position: relative;
+}
+.md-form-input-prefix {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 800 1rem 'Plus Jakarta Sans', sans-serif;
+  color: #fbbf24;
+  pointer-events: none;
+  z-index: 1;
+}
+.md-form-input-with-prefix {
+  padding-left: 32px;
+}
+
+/* Spinner del number input */
+.md-form-input[type="number"] {
+  -moz-appearance: textfield;
+}
+.md-form-input[type="number"]::-webkit-outer-spin-button,
+.md-form-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Botones del form */
+.md-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.md-btn {
+  flex: 1;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font: 800 .88rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  border: none;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  letter-spacing: .2px;
+}
+.md-btn:disabled { opacity: .6; cursor: not-allowed; }
+.md-btn-cancel {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.8);
+}
+.md-btn-cancel:hover:not(:disabled) {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.2);
+}
+.md-btn-save {
+  background: linear-gradient(135deg, #d4a017 0%, #f5d77a 50%, #d4a017 100%);
+  background-size: 200% 100%;
+  color: #0a2540;
+  box-shadow:
+    0 8px 22px rgba(212,160,23,.4),
+    inset 0 1px 0 rgba(255,255,255,.3);
+  animation: btnGoldShine 4s ease-in-out infinite;
+}
+@keyframes btnGoldShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.md-btn-save:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 30px rgba(212,160,23,.55),
+    inset 0 1px 0 rgba(255,255,255,.4);
+}
+.md-btn-save:active:not(:disabled) { transform: translateY(0) scale(.97); }
+.md-btn-save span {
+  font-size: 1rem;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.2));
+}
+
+@media (max-width: 540px) {
+  .md-form-row { grid-template-columns: 1fr; }
+  .md-form-actions { flex-direction: column-reverse; }
+}
+
+/* ═══════════ FORM PREMIUM DEL DETALLE ANIMAL — FIN ═══════════ */
+
 /* ═══════════════════════════════════════════════════════════ */
 /* 🔍 HATO TOOLBAR — Búsqueda, filtros, vista                   */
 /* ═══════════════════════════════════════════════════════════ */
@@ -7065,46 +7255,64 @@ button { font-family: inherit; }
     </div>
 
     <!-- TAB AGREGAR EVENTO -->
-    <div class="md-pane" id="mdPaneAgregar" style="display:none;">
-      <label>Tipo de evento</label>
-      <div class="md-evento-tipos" id="mdEventoTipos">
-        <button class="md-evento-tipo md-evento-tipo-active" data-tipo="nota" onclick="seleccionarTipoEvento('nota')">
-          📝 Nota
-        </button>
-        <button class="md-evento-tipo" data-tipo="enfermedad" onclick="seleccionarTipoEvento('enfermedad')">
-          🤒 Enfermedad
-        </button>
-        <button class="md-evento-tipo" data-tipo="vacuna" onclick="seleccionarTipoEvento('vacuna')">
-          💉 Vacuna
-        </button>
-        <button class="md-evento-tipo" data-tipo="parto" onclick="seleccionarTipoEvento('parto')">
-          🍼 Parto
-        </button>
-        <button class="md-evento-tipo" data-tipo="venta" onclick="seleccionarTipoEvento('venta')">
-          💰 Venta
-        </button>
-        <button class="md-evento-tipo md-evento-tipo-danger" data-tipo="muerte" onclick="seleccionarTipoEvento('muerte')">
-          ⚰️ Muerte
-        </button>
-      </div>
-
-      <label>Descripción / Detalles</label>
-      <textarea id="mdEventoNota" rows="3" placeholder="Ej. Le aplicamos vacuna triple, vacuna contra rabia, fecha del próximo refuerzo..."></textarea>
-
-      <div class="modal-animal-row">
-        <div>
-          <label>Fecha</label>
-          <input type="date" id="mdEventoFecha">
-        </div>
-        <div>
-          <label>Valor / Costo <small style="color:rgba(255,255,255,.4);">(opcional)</small></label>
-          <input type="number" id="mdEventoCosto" placeholder="0">
+    <div class="md-pane md-pane-form" id="mdPaneAgregar" style="display:none;">
+      <div class="md-form-section">
+        <label class="md-form-label">Tipo de evento</label>
+        <div class="md-evento-tipos" id="mdEventoTipos">
+          <button class="md-evento-tipo md-evento-tipo-active" data-tipo="nota" onclick="seleccionarTipoEvento('nota')">
+            📝 Nota
+          </button>
+          <button class="md-evento-tipo" data-tipo="enfermedad" onclick="seleccionarTipoEvento('enfermedad')">
+            🤒 Enfermedad
+          </button>
+          <button class="md-evento-tipo" data-tipo="vacuna" onclick="seleccionarTipoEvento('vacuna')">
+            💉 Vacuna
+          </button>
+          <button class="md-evento-tipo" data-tipo="parto" onclick="seleccionarTipoEvento('parto')">
+            🍼 Parto
+          </button>
+          <button class="md-evento-tipo" data-tipo="venta" onclick="seleccionarTipoEvento('venta')">
+            💰 Venta
+          </button>
+          <button class="md-evento-tipo md-evento-tipo-danger" data-tipo="muerte" onclick="seleccionarTipoEvento('muerte')">
+            ⚰️ Muerte
+          </button>
         </div>
       </div>
 
-      <div class="modal-animal-actions">
-        <button class="btn-cancelar" onclick="cambiarTabDetalle('historial')">Cancelar</button>
-        <button class="btn-guardar" onclick="guardarEventoAnimal()">Registrar evento</button>
+      <div class="md-form-section">
+        <label class="md-form-label">
+          <span class="md-form-label-icon">✏️</span>
+          Descripción / Detalles
+        </label>
+        <textarea class="md-form-textarea" id="mdEventoNota" rows="3" placeholder="Ej. Le aplicamos vacuna triple, vacuna contra rabia, fecha del próximo refuerzo..."></textarea>
+      </div>
+
+      <div class="md-form-row">
+        <div class="md-form-section">
+          <label class="md-form-label">
+            <span class="md-form-label-icon">📅</span>
+            Fecha
+          </label>
+          <input type="date" class="md-form-input" id="mdEventoFecha">
+        </div>
+        <div class="md-form-section">
+          <label class="md-form-label">
+            <span class="md-form-label-icon">💵</span>
+            Costo <small class="md-form-optional">(opcional)</small>
+          </label>
+          <div class="md-form-input-wrap">
+            <span class="md-form-input-prefix">$</span>
+            <input type="number" class="md-form-input md-form-input-with-prefix" id="mdEventoCosto" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="md-form-actions">
+        <button class="md-btn md-btn-cancel" onclick="cambiarTabDetalle('historial')">Cancelar</button>
+        <button class="md-btn md-btn-save" onclick="guardarEventoAnimal()">
+          <span>✓</span> Registrar evento
+        </button>
       </div>
     </div>
   </div>
