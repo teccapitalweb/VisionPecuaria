@@ -4695,6 +4695,222 @@ button { font-family: inherit; }
 }
 .btn-guardar:disabled { opacity: .6; cursor: not-allowed; }
 
+/* ═══════════ MODAL CONFIRMACIÓN LOTE SINIIGA ═══════════ */
+.confirm-lote-modal {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(34,197,94,.12), transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(212,160,23,.08), transparent 50%),
+    linear-gradient(180deg, rgba(15,46,29,.96), rgba(8,20,12,.98));
+  border: 1px solid rgba(34,197,94,.28);
+  border-radius: 22px;
+  padding: 26px;
+  max-width: 540px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transform: scale(.85) translateY(20px);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.6),
+    0 0 100px rgba(34,197,94,.15),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+.confirm-eliminar-overlay.show .confirm-lote-modal {
+  transform: scale(1) translateY(0);
+}
+.confirm-lote-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #22c55e, #4ade80, #22c55e, transparent);
+  animation: dangerSlide 2.5s ease-in-out infinite;
+}
+
+.cl-header {
+  display: flex; gap: 16px; align-items: center;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.cl-icon-wrap {
+  position: relative;
+  width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cl-icon-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: rgba(34,197,94,.2);
+  animation: pulseGreen 2s ease-out infinite;
+}
+@keyframes pulseGreen {
+  0% { transform: scale(.85); opacity: .9; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+.cl-icon {
+  position: relative;
+  width: 50px; height: 50px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  z-index: 1;
+  box-shadow: 0 8px 20px rgba(34,197,94,.4), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.cl-eyebrow {
+  font: 800 .6rem 'Montserrat', sans-serif;
+  color: #4ade80;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.cl-title {
+  font: 800 1.3rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -.4px;
+}
+
+/* Contador grande */
+.cl-count-box {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.04));
+  border: 1px solid rgba(34,197,94,.35);
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+.cl-count-num {
+  font: 900 3.2rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -3px;
+  background: linear-gradient(135deg, #4ade80, #22c55e, #16a34a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 16px rgba(34,197,94,.3));
+}
+.cl-count-label {
+  font: 700 1.05rem/1.3 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+}
+.cl-count-label small {
+  font: 500 .8rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .3px;
+}
+
+/* Grid de stats */
+.cl-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.cl-stat-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.cl-stat-label {
+  font: 700 .65rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.cl-stat-val {
+  font: 800 1.15rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.3px;
+  line-height: 1.1;
+}
+.cl-stat-sub {
+  font: 500 .68rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.45);
+  margin-top: 3px;
+}
+
+/* Preview aretes */
+.cl-preview-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.cl-preview-label {
+  font: 700 .72rem 'Montserrat', sans-serif;
+  color: #fbbf24;
+  letter-spacing: .5px;
+  flex-shrink: 0;
+}
+.cl-preview-list {
+  font: 600 .8rem 'Courier New', monospace;
+  color: rgba(255,255,255,.75);
+  letter-spacing: .3px;
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+}
+
+/* Barra de progreso */
+.cl-progress-box {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: rgba(0,0,0,.3);
+  border-radius: 10px;
+}
+.cl-progress-label {
+  display: flex; justify-content: space-between;
+  font: 700 .78rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.cl-progress-label span:last-child { color: #4ade80; }
+.cl-progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.cl-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  border-radius: 3px;
+  transition: width .4s cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 0 12px rgba(34,197,94,.5);
+}
+
+/* Botón confirmar verde (reemplaza el rojo en este modal) */
+.confirm-btn-confirm {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(34,197,94,.4);
+}
+.confirm-btn-confirm:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(34,197,94,.55);
+}
+.confirm-btn-confirm:active:not(:disabled) {
+  transform: translateY(0) scale(.97);
+}
+
+@media (max-width: 540px) {
+  .confirm-lote-modal { padding: 22px 18px; }
+  .cl-stats-grid { grid-template-columns: 1fr; }
+  .cl-count-num { font-size: 2.6rem; }
+  .cl-title { font-size: 1.1rem; }
+  .confirm-eliminar-actions { flex-direction: column-reverse; }
+}
+
 /* ═══════════ MODAL CONFIRMACIÓN ELIMINAR ANIMAL ═══════════ */
 .confirm-eliminar-overlay {
   position: fixed; inset: 0;
@@ -8045,7 +8261,7 @@ window.guardarAnimal = async function() {
 // Toma los datos generales del lote + los aretes individuales
 // y crea N animales en Firestore en una sola operación.
 // ═══════════════════════════════════════════════════════════
-window.guardarLote = async function() {
+window.guardarLote = function() {
   const user = window.__rancho?.auth?.currentUser;
   const db = window.__rancho?.db;
   if (!user || !db) { toast('Inicia sesión primero', 'error', '🔒'); return; }
@@ -8069,57 +8285,196 @@ window.guardarLote = async function() {
     return;
   }
 
-  // Confirmación
-  const confirmar = confirm(`Vas a registrar ${aretes.length} animales en tu hato.\n\nTipo: ${tipo}\nRaza: ${raza || '(sin definir)'}\nPeso promedio: ${peso ? peso + ' kg' : '(sin definir)'}\n\n¿Confirmar?`);
-  if (!confirmar) return;
+  // Modal bonito de confirmación
+  abrirConfirmLote({ aretes, tipo, raza, peso, edad, upp, potrero });
+};
 
-  // Botón a estado loading
-  const btn = document.querySelector('#animPaneLote .btn-guardar');
-  const btnTextOriginal = btn ? btn.textContent : '';
-  if (btn) { btn.textContent = `Guardando 0/${aretes.length}...`; btn.disabled = true; }
+// ═══════════════════════════════════════════════════════════
+// Modal elegante de confirmación de lote
+// ═══════════════════════════════════════════════════════════
+function abrirConfirmLote(datos) {
+  const existing = document.getElementById('confirmLoteModal');
+  if (existing) existing.remove();
+
+  const emojiTipo = (typeof EMOJI_TIPO !== 'undefined' && EMOJI_TIPO[datos.tipo]) || '🐄';
+  const tipoLabel = datos.tipo.charAt(0).toUpperCase() + datos.tipo.slice(1);
+  // Preview de primeros 3 aretes
+  const previewAretes = datos.aretes.slice(0, 3).join(' · ');
+  const resto = datos.aretes.length - 3;
+  const aretePreview = resto > 0 ? `${previewAretes} · <span style="color:rgba(255,255,255,.4);">+${resto} más</span>` : previewAretes;
+
+  // Calcular valor estimado del lote si hay peso
+  let valorTotal = '';
+  if (datos.peso) {
+    const PRECIOS_REF = {
+      vaca: 95, toro: 88, becerro: 78,
+      cerdo: 51, oveja: 78, cabra: 65,
+      caballo: 88, pollo: 47
+    };
+    const precio = PRECIOS_REF[datos.tipo] || 95;
+    const total = datos.aretes.length * datos.peso * precio;
+    valorTotal = `<div class="cl-stat-card">
+      <div class="cl-stat-label">💰 Valor estimado</div>
+      <div class="cl-stat-val">$${total.toLocaleString('es-MX')}</div>
+      <div class="cl-stat-sub">a $${precio}/kg referencia</div>
+    </div>`;
+  }
+
+  const modal = document.createElement('div');
+  modal.id = 'confirmLoteModal';
+  modal.className = 'confirm-eliminar-overlay';
+  modal.innerHTML = `
+    <div class="confirm-lote-modal">
+      <div class="cl-header">
+        <div class="cl-icon-wrap">
+          <div class="cl-icon-pulse"></div>
+          <div class="cl-icon">📋</div>
+        </div>
+        <div>
+          <div class="cl-eyebrow">REGISTRO POR LOTE · SINIIGA</div>
+          <h3 class="cl-title">Confirmar registro masivo</h3>
+        </div>
+      </div>
+
+      <div class="cl-count-box">
+        <div class="cl-count-num">${datos.aretes.length}</div>
+        <div class="cl-count-label">
+          ${datos.aretes.length === 1 ? 'animal' : 'animales'}<br>
+          <small>se agregarán al hato</small>
+        </div>
+      </div>
+
+      <div class="cl-stats-grid">
+        <div class="cl-stat-card">
+          <div class="cl-stat-label">${emojiTipo} Tipo</div>
+          <div class="cl-stat-val">${tipoLabel}</div>
+          <div class="cl-stat-sub">${datos.raza || 'Sin raza definida'}</div>
+        </div>
+        <div class="cl-stat-card">
+          <div class="cl-stat-label">⚖️ Peso promedio</div>
+          <div class="cl-stat-val">${datos.peso ? datos.peso + ' kg' : '—'}</div>
+          <div class="cl-stat-sub">${datos.edad || 'sin edad definida'}</div>
+        </div>
+        ${valorTotal}
+        ${datos.upp || datos.potrero ? `
+          <div class="cl-stat-card">
+            <div class="cl-stat-label">📍 Ubicación</div>
+            <div class="cl-stat-val" style="font-size:1rem;">${datos.potrero || datos.upp}</div>
+            <div class="cl-stat-sub">${datos.upp ? 'UPP: ' + datos.upp : 'ubicación general'}</div>
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="cl-preview-row">
+        <span class="cl-preview-label">🏷️ Aretes:</span>
+        <span class="cl-preview-list">${aretePreview}</span>
+      </div>
+
+      <div class="cl-progress-box" id="clProgressBox" style="display:none;">
+        <div class="cl-progress-label">
+          <span>Registrando animales...</span>
+          <span id="clProgressCounter">0 / ${datos.aretes.length}</span>
+        </div>
+        <div class="cl-progress-bar"><div class="cl-progress-fill" id="clProgressFill"></div></div>
+      </div>
+
+      <div class="confirm-eliminar-actions">
+        <button class="confirm-btn confirm-btn-cancel" onclick="cerrarConfirmLote()" id="clBtnCancel">
+          Cancelar
+        </button>
+        <button class="confirm-btn confirm-btn-confirm" onclick="ejecutarRegistroLote()" id="clBtnConfirm">
+          ✓ Sí, registrar ${datos.aretes.length}
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  // Guardar datos para ejecutar
+  window.__loteDatosPending = datos;
+  requestAnimationFrame(() => modal.classList.add('show'));
+  // Click backdrop
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) cerrarConfirmLote();
+  });
+  // ESC
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      cerrarConfirmLote();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+}
+
+window.cerrarConfirmLote = function() {
+  const m = document.getElementById('confirmLoteModal');
+  if (!m) return;
+  m.classList.remove('show');
+  setTimeout(() => m.remove(), 250);
+  window.__loteDatosPending = null;
+};
+
+window.ejecutarRegistroLote = async function() {
+  const datos = window.__loteDatosPending;
+  if (!datos) return;
+  const user = window.__rancho?.auth?.currentUser;
+  const db = window.__rancho?.db;
+  if (!user || !db) { toast('Sin sesión activa', 'error', '🔒'); return; }
+
+  // UI a modo loading
+  const btnCancel = document.getElementById('clBtnCancel');
+  const btnConfirm = document.getElementById('clBtnConfirm');
+  const progBox = document.getElementById('clProgressBox');
+  const progFill = document.getElementById('clProgressFill');
+  const progCounter = document.getElementById('clProgressCounter');
+  if (btnCancel) btnCancel.disabled = true;
+  if (btnConfirm) { btnConfirm.disabled = true; btnConfirm.innerHTML = '<span class="confirm-loading"></span> Guardando...'; }
+  if (progBox) progBox.style.display = 'block';
 
   try {
-    const { collection, addDoc, writeBatch, doc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
-    const emoji = EMOJI_TIPO[tipo] || '🐾';
+    const { collection, writeBatch, doc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const emoji = EMOJI_TIPO[datos.tipo] || '🐾';
     const fechaLote = new Date().toISOString().slice(0,10).replace(/-/g, '');
     const loteId = `lote-${fechaLote}-${Date.now().toString(36).slice(-4)}`;
 
-    // Firestore writeBatch admite máximo 500 operaciones, vamos por lotes de 100 para seguridad
     const BATCH_SIZE = 100;
     let creados = 0;
+    const total = datos.aretes.length;
 
-    for (let i = 0; i < aretes.length; i += BATCH_SIZE) {
-      const slice = aretes.slice(i, i + BATCH_SIZE);
+    for (let i = 0; i < datos.aretes.length; i += BATCH_SIZE) {
+      const slice = datos.aretes.slice(i, i + BATCH_SIZE);
       const batch = writeBatch(db);
-      slice.forEach((arete, idx) => {
+      slice.forEach((arete) => {
         const animalRef = doc(collection(db, 'animales'));
         batch.set(animalRef, {
           userId: user.uid,
-          nombre: arete, // El arete sirve como nombre por default; el usuario puede editarlo después
-          tipo,
+          nombre: arete,
+          tipo: datos.tipo,
           tag: arete,
-          raza,
-          peso,
-          edad,
+          raza: datos.raza,
+          peso: datos.peso,
+          edad: datos.edad,
           emoji,
-          upp: upp || null,
-          potrero: potrero || null,
+          upp: datos.upp || null,
+          potrero: datos.potrero || null,
           loteId,
           fechaRegistro: serverTimestamp()
         });
       });
       await batch.commit();
       creados += slice.length;
-      if (btn) btn.textContent = `Guardando ${creados}/${aretes.length}...`;
+      const pct = Math.round((creados / total) * 100);
+      if (progFill) progFill.style.width = pct + '%';
+      if (progCounter) progCounter.textContent = `${creados} / ${total}`;
     }
 
-    toast(`✅ Lote de ${aretes.length} animales registrado`, 'success', '📋');
+    cerrarConfirmLote();
+    toast(`✅ Lote de ${total} animales registrado`, 'success', '📋');
     cerrarModalAnimal();
   } catch(e) {
     console.error('Error registrando lote:', e);
+    cerrarConfirmLote();
     toast('No se pudo guardar el lote. Verifica conexión.', 'error', '⚠️');
-  } finally {
-    if (btn) { btn.textContent = btnTextOriginal; btn.disabled = false; }
   }
 };
 
