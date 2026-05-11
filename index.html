@@ -5385,7 +5385,26 @@ function cardMercado(m, mini = false) {
 function pintarMercadoMini() {
   const cont = document.getElementById('mercadoMini');
   if (!cont) return;
-  cont.innerHTML = MERCADO.slice(0, 5).map(m => cardMercado(m, true)).join('');
+  // Top destacados: 1 de cada categoría para mostrar variedad
+  const yaVistas = new Set();
+  const destacados = [];
+  for (const m of MERCADO) {
+    if (!yaVistas.has(m.categoria)) {
+      destacados.push(m);
+      yaVistas.add(m.categoria);
+    }
+    if (destacados.length >= 7) break;
+  }
+  // Si quedan slots por llenar, completar con los primeros del catálogo
+  if (destacados.length < 7) {
+    for (const m of MERCADO) {
+      if (!destacados.includes(m)) {
+        destacados.push(m);
+        if (destacados.length >= 7) break;
+      }
+    }
+  }
+  cont.innerHTML = destacados.map(m => cardMercado(m, true)).join('');
 }
 function pintarMercadoFull() {
   const cont = document.getElementById('mercadoFull');
