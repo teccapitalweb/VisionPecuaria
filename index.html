@@ -603,6 +603,150 @@ button { font-family: inherit; }
   position: relative;
   z-index: 1;
 }
+/* ═══════════ HERO SMART PANEL (reemplaza termómetro circular) ═══════════ */
+.hero-smart-panel {
+  flex-shrink: 0;
+  width: 320px;
+  display: flex; flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.hsp-block {
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  padding: 14px 16px;
+  transition: all .3s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.hsp-block:hover {
+  border-color: rgba(212,160,23,.35);
+  background: rgba(255,255,255,.08);
+  transform: translateX(-3px);
+}
+
+/* CLIMA */
+.hsp-weather {
+  display: flex; align-items: center; gap: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(59,130,246,.18), transparent 70%),
+    rgba(255,255,255,.06);
+}
+.hsp-weather-icon {
+  font-size: 44px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+  animation: weatherFloat 6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes weatherFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+.hsp-weather-info { flex: 1; min-width: 0; }
+.hsp-weather-temp {
+  font: 900 1.9rem/1 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -1.5px;
+  background: linear-gradient(135deg, #fff, #93c5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hsp-weather-desc {
+  font: 600 .76rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.65);
+  margin-top: 3px;
+  letter-spacing: .3px;
+}
+
+/* TIP DEL DÍA */
+.hsp-tip {
+  background:
+    radial-gradient(circle at 0% 100%, rgba(212,160,23,.15), transparent 60%),
+    rgba(255,255,255,.06);
+}
+.hsp-tip-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 800 .62rem 'Montserrat', sans-serif;
+  color: #fbbf24;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.hsp-tip-dot {
+  width: 6px; height: 6px;
+  background: #fbbf24;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fbbf24;
+  animation: blinkDot 1.8s ease-in-out infinite;
+}
+.hsp-tip-text {
+  font: 500 .82rem/1.4 'Inter', sans-serif;
+  color: rgba(255,255,255,.92);
+}
+
+/* ACCIÓN SUGERIDA */
+.hsp-action {
+  display: flex; align-items: center; gap: 12px;
+  background:
+    radial-gradient(circle at 100% 100%, rgba(34,197,94,.18), transparent 60%),
+    rgba(255,255,255,.06);
+  cursor: pointer;
+}
+.hsp-action:hover { border-color: rgba(34,197,94,.5); }
+.hsp-action-emoji {
+  font-size: 32px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.3));
+  animation: pulseEmoji 2.5s ease-in-out infinite;
+}
+@keyframes pulseEmoji {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+.hsp-action-info { flex: 1; min-width: 0; }
+.hsp-action-label {
+  font: 800 .6rem 'Montserrat', sans-serif;
+  color: #4ade80;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+.hsp-action-text {
+  font: 700 .88rem/1.25 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin-top: 3px;
+  letter-spacing: -.2px;
+}
+.hsp-action-btn {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font: 800 1.3rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(34,197,94,.4);
+  transition: all .25s;
+}
+.hsp-action-btn:hover {
+  transform: translateX(3px);
+  box-shadow: 0 10px 22px rgba(34,197,94,.55);
+}
+
+/* Mobile */
+@media (max-width: 880px) {
+  .hero-smart-panel { width: 100%; }
+  .hsp-weather-icon { font-size: 38px; }
+  .hsp-weather-temp { font-size: 1.7rem; }
+}
+
 /* TERMÓMETRO PECUARIO */
 .termometro {
   flex-shrink: 0;
@@ -4332,13 +4476,13 @@ button { font-family: inherit; }
             <div class="casco-hero-text">
               <span class="casco-eyebrow">
                 <span class="pulse"></span>
-                Termómetro pecuario · Hoy
+                Centro de mando · Hoy
               </span>
               <h1 class="casco-hero-title">
-                Tu rancho está <span class="grad" id="termoEstadoTexto">excelente</span>
+                Tu rancho hoy: <span class="grad" id="termoEstadoTexto">listo para crecer</span>
               </h1>
               <p class="casco-hero-sub" id="termoExplicacion">
-                Empieza registrando tu primer animal y completando un curso del Establo.
+                Todo lo que necesitas saber para tomar la mejor decisión del día.
               </p>
               <div class="hero-stats" id="heroStats">
                 <div class="hero-stat">
@@ -4364,14 +4508,31 @@ button { font-family: inherit; }
                 </div>
               </div>
             </div>
-            <div class="termometro">
-              <svg class="termo-circle" viewBox="0 0 200 200">
-                <circle class="termo-bg-ring" cx="100" cy="100" r="80"/>
-                <circle class="termo-progress-ring" cx="100" cy="100" r="80" id="termoProgress"/>
-              </svg>
-              <div class="termo-text">
-                <div class="termo-num" id="termoNum">0</div>
-                <div class="termo-label">de 100</div>
+            <div class="hero-smart-panel">
+              <!-- CLIMA -->
+              <div class="hsp-block hsp-weather">
+                <div class="hsp-weather-icon" id="heroWeatherIcon">☀️</div>
+                <div class="hsp-weather-info">
+                  <div class="hsp-weather-temp" id="heroWeatherTemp">--°</div>
+                  <div class="hsp-weather-desc" id="heroWeatherDesc">Cargando clima...</div>
+                </div>
+              </div>
+              <!-- TIP DEL DÍA -->
+              <div class="hsp-block hsp-tip">
+                <div class="hsp-tip-label">
+                  <span class="hsp-tip-dot"></span>
+                  TIP DEL DÍA
+                </div>
+                <div class="hsp-tip-text" id="heroTipText">Cargando consejo del día...</div>
+              </div>
+              <!-- PRÓXIMA ACCIÓN -->
+              <div class="hsp-block hsp-action" id="heroActionCard">
+                <div class="hsp-action-emoji">🎯</div>
+                <div class="hsp-action-info">
+                  <div class="hsp-action-label">SIGUIENTE PASO</div>
+                  <div class="hsp-action-text" id="heroActionText">Registra tu primer animal</div>
+                </div>
+                <button class="hsp-action-btn" id="heroActionBtn" onclick="ejecutarAccionSugerida()">→</button>
               </div>
             </div>
           </div>
@@ -5468,22 +5629,11 @@ function explicacionTermometro(score, animales, cursosActivos, cursosCompletados
 }
 
 function setTermometro(valor) {
-  const num = document.getElementById('termoNum');
-  const ring = document.getElementById('termoProgress');
+  // Compat con código viejo — los elementos del círculo ya no existen
+  // pero refrescarTermometro sigue actualizando texto y panel inteligente
   const estado = document.getElementById('termoEstadoTexto');
   const expl = document.getElementById('termoExplicacion');
-  if (!num || !ring || !estado || !expl) return;
-
-  const circumference = 502;
-  ring.style.strokeDashoffset = circumference - (valor / 100) * circumference;
-
-  let curr = 0;
-  const step = Math.max(valor / 50, 1);
-  const it = setInterval(() => {
-    curr += step;
-    if (curr >= valor) { curr = valor; clearInterval(it); }
-    num.textContent = Math.floor(curr);
-  }, 30);
+  if (!estado || !expl) return;
 
   const animales = window.__rancho?.animales?.length || 0;
   const cursosActivos = Object.keys(progresoCursos || {}).filter(id => {
@@ -5494,30 +5644,163 @@ function setTermometro(valor) {
   }).length;
   const cursosCompletados = window.__rancho?.certificadosCount || 0;
 
-  if (valor >= 85) estado.textContent = 'excelente';
-  else if (valor >= 60) estado.textContent = 'estable';
-  else if (valor >= 35) estado.textContent = 'en construcción';
-  else estado.textContent = 'apenas empezando';
+  // Texto del título — frases naturales según progreso
+  if (cursosCompletados >= 3 && animales >= 5) estado.textContent = 'consolidado 💪';
+  else if (animales >= 1 || cursosActivos >= 1) estado.textContent = 'en marcha';
+  else estado.textContent = 'listo para crecer';
 
-  expl.textContent = explicacionTermometro(valor, animales, cursosActivos, cursosCompletados);
+  // Subtítulo dinámico
+  const hora = new Date().getHours();
+  let saludo;
+  if (hora < 12) saludo = 'Aprovecha la mañana';
+  else if (hora < 19) saludo = 'Buena tarde para revisar';
+  else saludo = 'Cierra el día';
+  expl.textContent = `${saludo} tu rancho. Aquí está lo importante de hoy.`;
 }
 
 function refrescarTermometro() {
-  const score = calcularScoreRancho();
-  setTermometro(score);
-
-  // Actualizar stats chips
-  const animales = window.__rancho?.animales?.length || 0;
-  const cursos = (window.__rancho?.cursos || []).length;
-  const certs = window.__rancho?.certificadosCount || 0;
-
-  const elA = document.getElementById('statAnimales');
-  const elC = document.getElementById('statCursos');
-  const elCert = document.getElementById('statCertificados');
-  if (elA) elA.textContent = animales;
-  if (elC) elC.textContent = cursos;
-  if (elCert) elCert.textContent = certs;
+  setTermometro(0);
+  // Actualizar panel inteligente
+  actualizarPanelInteligente();
 }
+
+// ═══════════════════════════════════════════════════════════
+// 🌤️ PANEL INTELIGENTE — Clima + Tip + Acción sugerida
+// ═══════════════════════════════════════════════════════════
+
+// Tips reales del sector pecuario (rotación diaria)
+const TIPS_RANCHO = [
+  '🐄 Una vaca lechera bien alimentada produce hasta un 20% más de leche.',
+  '💧 Tu hato necesita 40-80 L de agua limpia por cabeza al día. Vigílalo.',
+  '🌡️ El calor sobre 30°C baja la producción de leche hasta un 30%.',
+  '💉 Vacunación al día = animales más pesados al momento de venta.',
+  '📊 Pesar tu hato cada 30 días te muestra si tu alimentación funciona.',
+  '🌾 Sembrar pasto mejorado puede duplicar tu capacidad de carga animal.',
+  '🐂 Un becerro destetado a tiempo gana 20-30% más peso al año.',
+  '💰 Vender en lote de 10+ animales mejora el precio por kilo.',
+  '📅 Llevar bitácora reduce pérdidas hasta un 40% según SAGARPA.',
+  '🧪 Una prueba de fertilidad anual evita meses perdidos sin preñez.',
+  '🌱 Rotar potreros cada 21-28 días triplica la vida útil del pasto.',
+  '🐔 100 ponedoras bien manejadas dan 90+ huevos al día.',
+  '🐖 Un cerdo bien alimentado alcanza peso de mercado en 5-6 meses.',
+  '🩺 Desparasitar 2 veces al año mejora ganancia diaria de peso.',
+  '🦴 Sales minerales libres bajan 50% los problemas reproductivos.'
+];
+
+function tipDelDia() {
+  // Tip fijo por día (no cambia al recargar)
+  const hoy = new Date();
+  const seed = hoy.getFullYear() * 1000 + (hoy.getMonth() + 1) * 50 + hoy.getDate();
+  return TIPS_RANCHO[seed % TIPS_RANCHO.length];
+}
+
+// Iconos de clima OpenMeteo weather codes
+const WEATHER_ICONS = {
+  0: { icon: '☀️', desc: 'Despejado' },
+  1: { icon: '🌤️', desc: 'Mayormente despejado' },
+  2: { icon: '⛅', desc: 'Parcialmente nublado' },
+  3: { icon: '☁️', desc: 'Nublado' },
+  45: { icon: '🌫️', desc: 'Neblina' },
+  48: { icon: '🌫️', desc: 'Neblina con escarcha' },
+  51: { icon: '🌦️', desc: 'Llovizna ligera' },
+  53: { icon: '🌦️', desc: 'Llovizna' },
+  55: { icon: '🌦️', desc: 'Llovizna fuerte' },
+  61: { icon: '🌧️', desc: 'Lluvia ligera' },
+  63: { icon: '🌧️', desc: 'Lluvia' },
+  65: { icon: '🌧️', desc: 'Lluvia fuerte' },
+  71: { icon: '🌨️', desc: 'Nieve ligera' },
+  73: { icon: '🌨️', desc: 'Nieve' },
+  80: { icon: '🌦️', desc: 'Chubascos' },
+  81: { icon: '🌧️', desc: 'Chubascos fuertes' },
+  95: { icon: '⛈️', desc: 'Tormenta' },
+  96: { icon: '⛈️', desc: 'Tormenta con granizo' },
+  99: { icon: '⛈️', desc: 'Tormenta severa' }
+};
+
+async function cargarClima() {
+  const iconEl = document.getElementById('heroWeatherIcon');
+  const tempEl = document.getElementById('heroWeatherTemp');
+  const descEl = document.getElementById('heroWeatherDesc');
+  if (!iconEl || !tempEl || !descEl) return;
+  try {
+    // Tehuacán, Puebla por default. Open-Meteo es gratis sin key
+    const lat = 18.46, lon = -97.39;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=America/Mexico_City`;
+    const r = await fetch(url);
+    const data = await r.json();
+    if (!data?.current) throw new Error('Sin datos');
+    const temp = Math.round(data.current.temperature_2m);
+    const code = data.current.weather_code;
+    const wx = WEATHER_ICONS[code] || { icon: '🌤️', desc: 'Buen clima' };
+    iconEl.textContent = wx.icon;
+    tempEl.textContent = temp + '°C';
+    descEl.textContent = `${wx.desc} · Tehuacán`;
+  } catch (e) {
+    iconEl.textContent = '🌤️';
+    tempEl.textContent = '--°';
+    descEl.textContent = 'Tehuacán, Puebla';
+  }
+}
+
+function sugerirAccion() {
+  const animales = window.__rancho?.animales?.length || 0;
+  const cursosActivos = Object.keys(progresoCursos || {}).filter(id => {
+    const c = (window.__rancho?.cursos || []).find(x => x.id === id);
+    if (!c || !c.clases) return false;
+    const done = (progresoCursos[id] || []).length;
+    return done > 0 && done < c.clases.length;
+  }).length;
+  const cursosCompletados = window.__rancho?.certificadosCount || 0;
+
+  // Lógica priorizada
+  if (animales === 0) {
+    return { emoji: '🐄', texto: 'Registra tu primer animal', accion: 'abrirModalAnimal' };
+  }
+  if (cursosActivos > 0) {
+    return { emoji: '🎬', texto: 'Continúa tu curso activo', accion: 'navigateTo:establo' };
+  }
+  if (cursosCompletados === 0) {
+    return { emoji: '📚', texto: 'Empieza tu primer curso', accion: 'navigateTo:establo' };
+  }
+  if (animales < 5) {
+    return { emoji: '➕', texto: 'Suma más animales a tu hato', accion: 'abrirModalAnimal' };
+  }
+  return { emoji: '📈', texto: 'Revisa precios del mercado', accion: 'navigateTo:mercado' };
+}
+
+let _accionActual = null;
+function actualizarPanelInteligente() {
+  // Tip del día (fijo por fecha)
+  const tipEl = document.getElementById('heroTipText');
+  if (tipEl) tipEl.textContent = tipDelDia();
+
+  // Acción sugerida
+  const accionEl = document.getElementById('heroActionText');
+  const emojiEl = document.querySelector('.hsp-action-emoji');
+  if (accionEl && emojiEl) {
+    const sugerencia = sugerirAccion();
+    accionEl.textContent = sugerencia.texto;
+    emojiEl.textContent = sugerencia.emoji;
+    _accionActual = sugerencia.accion;
+  }
+}
+
+window.ejecutarAccionSugerida = function() {
+  if (!_accionActual) return;
+  if (_accionActual === 'abrirModalAnimal' && typeof abrirModalAnimal === 'function') {
+    abrirModalAnimal();
+  } else if (_accionActual.startsWith('navigateTo:')) {
+    const dest = _accionActual.split(':')[1];
+    if (typeof navigateTo === 'function') navigateTo(dest);
+  }
+};
+
+// Cargar clima al inicio y refrescar cada 30 min
+document.addEventListener('DOMContentLoaded', () => {
+  cargarClima();
+  actualizarPanelInteligente();
+  setInterval(cargarClima, 30 * 60 * 1000);
+});
 
 // ═══════════════════════════════════════════════════════════
 // MERCADO MINI (lee de Firestore con fallback)
