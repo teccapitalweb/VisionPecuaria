@@ -3362,6 +3362,158 @@ button { font-family: inherit; }
   .vip-descuento-num span { font-size: 2rem; }
 }
 
+/* ═══════════ MERCADO PRO — Trading dashboard style ═══════════ */
+.mercado-mini-list { display: flex; flex-direction: column; gap: 4px; padding: 4px 0; }
+
+.mp-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: transparent;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.mp-row::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background .25s;
+}
+.mp-row:hover {
+  background: linear-gradient(90deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border-color: rgba(212,160,23,.2);
+  transform: translateX(3px);
+}
+.mp-row:hover::before { background: linear-gradient(180deg, #ffd96b, #d4a017); }
+.mp-row:hover .mp-spark { transform: scale(1.06); }
+
+.mp-emoji-wrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.mp-emoji { font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.3)); }
+
+.mp-info { min-width: 0; }
+.mp-top-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 3px;
+}
+.mp-name {
+  font: 700 .92rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.2px;
+}
+.mp-fuente {
+  font: 700 .58rem 'Montserrat', sans-serif;
+  color: rgba(212,160,23,.85);
+  background: rgba(212,160,23,.1);
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  border: 1px solid rgba(212,160,23,.15);
+  white-space: nowrap;
+}
+.mp-detail {
+  font: 500 .72rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .2px;
+}
+
+.mp-spark {
+  flex-shrink: 0;
+  display: flex; align-items: center;
+  transition: transform .3s;
+}
+.spark { display: block; }
+
+.mp-right { text-align: right; min-width: 95px; }
+.mp-price {
+  font: 800 1.12rem/1 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.6px;
+  display: inline-flex; align-items: baseline; gap: 2px;
+}
+.mp-price-sign {
+  font-size: .82rem;
+  color: rgba(255,255,255,.5);
+  margin-right: 1px;
+}
+.mp-unit {
+  font: 600 .65rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.4);
+  margin-left: 2px;
+}
+.mp-change {
+  font: 700 .72rem 'Montserrat', sans-serif;
+  display: inline-flex; align-items: center; gap: 3px;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.mp-change.mp-up { color: #4ade80; background: rgba(34,197,94,.12); }
+.mp-change.mp-down { color: #f87171; background: rgba(239,68,68,.12); }
+.mp-change-arrow { font-size: .85rem; }
+.mp-change-period {
+  font-weight: 500;
+  color: rgba(255,255,255,.45);
+  margin-left: 3px;
+}
+
+/* TICKER STRIP - small text live indicator above market list */
+.mp-live-strip {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 8px;
+  font: 600 .7rem 'Montserrat', sans-serif;
+}
+.mp-live-dot {
+  width: 7px; height: 7px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: pulseLive 1.5s ease-in-out infinite;
+  box-shadow: 0 0 10px #ef4444;
+}
+@keyframes pulseLive {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+.mp-live-label {
+  color: #fca5a5;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.mp-live-info {
+  color: rgba(255,255,255,.45);
+  margin-left: auto;
+  letter-spacing: .3px;
+}
+
+@media (max-width: 720px) {
+  .mp-row { grid-template-columns: 40px 1fr auto; padding: 12px 10px; gap: 10px; }
+  .mp-spark { display: none; }
+  .mp-emoji-wrap { width: 38px; height: 38px; }
+  .mp-emoji { font-size: 20px; }
+  .mp-name { font-size: .82rem; }
+  .mp-detail { font-size: .68rem; }
+  .mp-fuente { font-size: .54rem; padding: 1px 5px; }
+  .mp-price { font-size: 1rem; }
+  .mp-right { min-width: 78px; }
+}
+
 /* ═══════════ NOTICIAS DEL RANCHO ═══════════ */
 .noticias-card {
   background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
@@ -4053,6 +4205,11 @@ button { font-family: inherit; }
             <div class="widget-head">
               <div class="widget-title"><span>💰</span> Mercado al instante</div>
               <button class="widget-link" onclick="navigateTo('mercado')">Ver todo →</button>
+            </div>
+            <div class="mp-live-strip">
+              <span class="mp-live-dot"></span>
+              <span class="mp-live-label">EN VIVO</span>
+              <span class="mp-live-info">SIAP-SADER · SNIIM · UGRJ</span>
             </div>
             <div class="mercado-mini-list" id="mercadoMini"></div>
           </div>
@@ -5098,54 +5255,142 @@ function refrescarTermometro() {
 // ═══════════════════════════════════════════════════════════
 // MERCADO MINI (lee de Firestore con fallback)
 // ═══════════════════════════════════════════════════════════
+// MERCADO PRO — Precios SIAP/SNIIM con histórico 7d y badges
+// Datos basados en SIAP Ene-Feb 2026, SNIIM cuadro nacional pecuarios
+// y rangos UGRJ (Unión Ganadera Regional Jalisco)
+// ═══════════════════════════════════════════════════════════
 const MERCADO_FALLBACK = [
-  { emoji: '🐂', nombre: 'Becerro engorda', detalle: '180-220 kg · pie', precio: 105, cambio: 4.2, orden: 1 },
-  { emoji: '🐄', nombre: 'Vaca lechera', detalle: 'Holstein · F1', precio: 95, cambio: 6.8, orden: 2 },
-  { emoji: '🥛', nombre: 'Leche cruda', detalle: 'Por litro', precio: 9.50, cambio: 3.8, orden: 3 },
-  { emoji: '🐑', nombre: 'Cordero Pelibuey', detalle: '35-45 kg pie', precio: 95, cambio: 8.5, orden: 4 },
-  { emoji: '🐖', nombre: 'Cerdo en pie', detalle: '95-110 kg', precio: 55, cambio: 1.5, orden: 5 },
-  { emoji: '🐔', nombre: 'Pollo engorda', detalle: '2.2-2.5 kg', precio: 60, cambio: 2.1, orden: 6 },
-  { emoji: '🥚', nombre: 'Huevo blanco', detalle: 'Por kg', precio: 42, cambio: -3.5, orden: 7 },
-  { emoji: '🍯', nombre: 'Miel multifloral', detalle: 'Por kg', precio: 95, cambio: 4.8, orden: 8 }
+  {
+    emoji: '🐂', nombre: 'Becerro engorda', detalle: '180-220 kg · en pie',
+    precio: 78, unidad: '/kg', cambio: 4.2, semana: 'semana',
+    fuente: 'SIAP-SADER', categoria: 'bovinos',
+    historia: [72, 73, 71, 74, 75, 76, 78], orden: 1,
+    color: '#f59e0b'
+  },
+  {
+    emoji: '🐄', nombre: 'Vaca para abasto', detalle: '380-450 kg · canal',
+    precio: 95, unidad: '/kg', cambio: 0.5, semana: 'mes',
+    fuente: 'UGRJ Rastro Guadalajara', categoria: 'bovinos',
+    historia: [93, 94, 92, 94, 95, 95, 95], orden: 2,
+    color: '#dc2626'
+  },
+  {
+    emoji: '🥛', nombre: 'Leche cruda bronca', detalle: 'Por litro · productor',
+    precio: 9.20, unidad: '/L', cambio: 1.2, semana: 'mes',
+    fuente: 'SIAP-SADER', categoria: 'bovinos',
+    historia: [8.90, 9.00, 9.05, 9.10, 9.10, 9.15, 9.20], orden: 3,
+    color: '#e2e8f0'
+  },
+  {
+    emoji: '🐖', nombre: 'Cerdo en pie', detalle: '95-110 kg · canal',
+    precio: 51, unidad: '/kg', cambio: -0.47, semana: 'mes',
+    fuente: 'SIAP-INEGI Ene 2026', categoria: 'porcinos',
+    historia: [52, 52, 51.5, 51.5, 51, 51, 51], orden: 4,
+    color: '#f472b6'
+  },
+  {
+    emoji: '🐔', nombre: 'Pollo en pie', detalle: '2.2-2.5 kg · granja',
+    precio: 47, unidad: '/kg', cambio: -2.1, semana: 'mes',
+    fuente: 'SNIIM Pecuarios', categoria: 'avicola',
+    historia: [49, 49, 48, 48, 47.5, 47, 47], orden: 5,
+    color: '#fbbf24'
+  },
+  {
+    emoji: '🥚', nombre: 'Huevo blanco', detalle: 'Por kg · mayorista',
+    precio: 38, unidad: '/kg', cambio: -6.31, semana: 'mes',
+    fuente: 'SIAP-INEGI Ene 2026', categoria: 'avicola',
+    historia: [42, 41, 41, 40, 39, 39, 38], orden: 6,
+    color: '#fde68a'
+  },
+  {
+    emoji: '🐑', nombre: 'Cordero Pelibuey', detalle: '35-45 kg · en pie',
+    precio: 78, unidad: '/kg', cambio: 3.4, semana: 'mes',
+    fuente: 'SNIIM Ovinos', categoria: 'ovinos',
+    historia: [74, 75, 75, 76, 77, 77, 78], orden: 7,
+    color: '#c084fc'
+  },
+  {
+    emoji: '🍯', nombre: 'Miel multifloral', detalle: 'Por kg · acopio',
+    precio: 92, unidad: '/kg', cambio: 4.8, semana: 'mes',
+    fuente: 'SIAP-SADER', categoria: 'apicola',
+    historia: [87, 88, 88, 89, 90, 91, 92], orden: 8,
+    color: '#fbbf24'
+  }
 ];
 let MERCADO = [...MERCADO_FALLBACK];
-function pintarMercadoMini() {
-  const cont = document.getElementById('mercadoMini');
-  if (!cont) return;
-  cont.innerHTML = MERCADO.slice(0,4).map(m => `
-    <div class="mercado-mini-row">
-      <div class="mm-emoji">${m.emoji}</div>
-      <div class="mm-info">
-        <div class="mm-name">${m.nombre}</div>
-        <div class="mm-detail">${m.detalle}</div>
+
+// Generador de sparkline SVG inline
+function sparkline(arr, color, w = 70, h = 26) {
+  if (!arr || arr.length < 2) return '';
+  const min = Math.min(...arr), max = Math.max(...arr);
+  const range = max - min || 1;
+  const stepX = w / (arr.length - 1);
+  const pts = arr.map((v, i) => `${(i*stepX).toFixed(1)},${(h - ((v-min)/range)*h).toFixed(1)}`).join(' ');
+  const lastY = (h - ((arr[arr.length-1]-min)/range)*h).toFixed(1);
+  const lastX = ((arr.length-1)*stepX).toFixed(1);
+  // Área debajo del sparkline (gradient fill)
+  const areaPts = `0,${h} ${pts} ${lastX},${h}`;
+  return `
+    <svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sg-${Math.random().toString(36).slice(2,8)}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}" stop-opacity=".4"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <polyline points="${areaPts}" fill="${color}22"/>
+      <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${lastX}" cy="${lastY}" r="2.5" fill="${color}"/>
+      <circle cx="${lastX}" cy="${lastY}" r="5" fill="${color}" opacity=".3"/>
+    </svg>
+  `;
+}
+
+function cardMercado(m, mini = false) {
+  const up = (m.cambio || 0) >= 0;
+  const arrow = up ? '↗' : '↘';
+  const cls = up ? 'mp-up' : 'mp-down';
+  const cambioAbs = Math.abs(m.cambio || 0).toFixed(1);
+  const precioFmt = m.precio < 10 ? m.precio.toFixed(2) : Math.round(m.precio);
+  const color = m.color || (up ? '#22c55e' : '#ef4444');
+
+  return `
+    <div class="mp-row" onclick="navigateTo('mercado')">
+      <div class="mp-emoji-wrap" style="background:linear-gradient(135deg, ${color}22, ${color}08);">
+        <span class="mp-emoji">${m.emoji}</span>
       </div>
-      <div>
-        <div class="mm-price">$${m.precio.toFixed(m.precio<10?2:0)}</div>
-        <div class="mm-change ${m.cambio>=0?'mm-change--up':'mm-change--down'}">
-          ${m.cambio>=0?'▲':'▼'} ${Math.abs(m.cambio).toFixed(1)}%
+      <div class="mp-info">
+        <div class="mp-top-row">
+          <span class="mp-name">${m.nombre}</span>
+          <span class="mp-fuente">${m.fuente || 'SIAP'}</span>
+        </div>
+        <div class="mp-detail">${m.detalle}</div>
+      </div>
+      <div class="mp-spark">${sparkline(m.historia, color, 70, 28)}</div>
+      <div class="mp-right">
+        <div class="mp-price">
+          <span class="mp-price-sign">$</span>${precioFmt}
+          <span class="mp-unit">${m.unidad || '/kg'}</span>
+        </div>
+        <div class="mp-change ${cls}">
+          <span class="mp-change-arrow">${arrow}</span>
+          ${cambioAbs}%
+          <span class="mp-change-period">vs ${m.semana || 'sem'}</span>
         </div>
       </div>
     </div>
-  `).join('');
+  `;
+}
+
+function pintarMercadoMini() {
+  const cont = document.getElementById('mercadoMini');
+  if (!cont) return;
+  cont.innerHTML = MERCADO.slice(0, 5).map(m => cardMercado(m, true)).join('');
 }
 function pintarMercadoFull() {
   const cont = document.getElementById('mercadoFull');
   if (!cont) return;
-  cont.innerHTML = MERCADO.map(m => `
-    <div class="mercado-mini-row">
-      <div class="mm-emoji">${m.emoji}</div>
-      <div class="mm-info">
-        <div class="mm-name">${m.nombre}</div>
-        <div class="mm-detail">${m.detalle}</div>
-      </div>
-      <div>
-        <div class="mm-price">$${m.precio.toFixed(m.precio<10?2:0)} MXN</div>
-        <div class="mm-change ${m.cambio>=0?'mm-change--up':'mm-change--down'}">
-          ${m.cambio>=0?'▲':'▼'} ${Math.abs(m.cambio).toFixed(1)}% vs sem. anterior
-        </div>
-      </div>
-    </div>
-  `).join('');
+  cont.innerHTML = MERCADO.map(m => cardMercado(m, false)).join('');
 
   // Stats
   const count = document.getElementById('mercadoCount');
