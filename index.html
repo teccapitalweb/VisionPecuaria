@@ -516,6 +516,11 @@ button { font-family: inherit; }
   display: flex; flex-direction: column;
   align-self: stretch;
 }
+.casco-hero-text .hero-cards-stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .casco-hero-content > .hero-roadmap { grid-area: roadmap; margin-top: 0; }
 .hero-smart-panel { grid-area: panel; }
 
@@ -773,6 +778,103 @@ button { font-family: inherit; }
   .hroad-footer { font-size: .72rem; padding-top: 10px; }
   .hroad-track::before, .hroad-fill { top: 27px; }
   .hroad-milestones { gap: 4px; }
+}
+
+/* ═══════════ HERO CARDS STACK (3 cards apiladas a la izquierda) ═══════════ */
+.hero-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+.hero-card-v {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all .3s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  min-height: 78px;
+}
+.hero-card-v::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background .25s;
+}
+.hero-card-v:hover {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(212,160,23,.4);
+  transform: translateX(4px);
+}
+.hero-card-v:hover::before { background: linear-gradient(180deg, #ffd96b, #d4a017); }
+
+.hcv-left {
+  flex-shrink: 0;
+}
+.hcv-icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(212,160,23,.04));
+  border: 1px solid rgba(212,160,23,.2);
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.2));
+}
+.hero-card-v--hato .hcv-icon { background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.04)); border-color: rgba(34,197,94,.25); }
+.hero-card-v--cursos .hcv-icon { background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(59,130,246,.04)); border-color: rgba(59,130,246,.25); }
+.hero-card-v--certs .hcv-icon { background: linear-gradient(135deg, rgba(251,191,36,.2), rgba(251,191,36,.04)); border-color: rgba(251,191,36,.3); }
+
+.hcv-body { min-width: 0; }
+.hcv-num {
+  font: 800 1.5rem/1 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.8px;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.hcv-num span:first-child {
+  background: linear-gradient(135deg, #ffd96b, #f5d77a, #d4a017);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hcv-unit {
+  font: 600 .8rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.65);
+  letter-spacing: .3px;
+}
+.hcv-sub {
+  font: 500 .72rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  margin-top: 3px;
+  letter-spacing: .3px;
+}
+.hcv-arrow {
+  font: 700 1.2rem 'Plus Jakarta Sans', sans-serif;
+  color: rgba(255,255,255,.3);
+  transition: all .25s;
+  flex-shrink: 0;
+}
+.hero-card-v:hover .hcv-arrow { color: #fbbf24; transform: translateX(4px); }
+
+/* Mobile: cards más compactas */
+@media (max-width: 880px) {
+  .hero-cards-stack { gap: 10px; margin-top: 18px; }
+  .hero-card-v { padding: 12px 14px; gap: 12px; min-height: 0; }
+  .hcv-icon { width: 40px; height: 40px; font-size: 21px; }
+  .hcv-num { font-size: 1.3rem; }
+  .hcv-unit { font-size: .76rem; }
+  .hcv-sub { font-size: .68rem; }
 }
 
 /* ═══════════ HERO SMART PANEL (reemplaza termómetro circular) ═══════════ */
@@ -4721,27 +4823,39 @@ button { font-family: inherit; }
               <p class="casco-hero-sub" id="termoExplicacion">
                 Todo lo que necesitas saber para tomar la mejor decisión del día.
               </p>
-              <div class="hero-stats" id="heroStats">
-                <div class="hero-stat">
-                  <div class="hero-stat-icon">🐄</div>
-                  <div>
-                    <div class="hero-stat-num" id="statAnimales">0</div>
-                    <div class="hero-stat-label">animales</div>
+              <div class="hero-cards-stack">
+                <!-- Card 1: Mi hato -->
+                <div class="hero-card-v hero-card-v--hato" onclick="navigateTo('hato')">
+                  <div class="hcv-left">
+                    <div class="hcv-icon">🐄</div>
                   </div>
+                  <div class="hcv-body">
+                    <div class="hcv-num"><span id="statAnimales">0</span> <span class="hcv-unit">animales</span></div>
+                    <div class="hcv-sub">en tu hato</div>
+                  </div>
+                  <div class="hcv-arrow">→</div>
                 </div>
-                <div class="hero-stat">
-                  <div class="hero-stat-icon">🎬</div>
-                  <div>
-                    <div class="hero-stat-num" id="statCursos">0</div>
-                    <div class="hero-stat-label">cursos</div>
+                <!-- Card 2: Cursos -->
+                <div class="hero-card-v hero-card-v--cursos" onclick="navigateTo('establo')">
+                  <div class="hcv-left">
+                    <div class="hcv-icon">🎬</div>
                   </div>
+                  <div class="hcv-body">
+                    <div class="hcv-num"><span id="statCursos">0</span> <span class="hcv-unit">cursos</span></div>
+                    <div class="hcv-sub">en aprendizaje</div>
+                  </div>
+                  <div class="hcv-arrow">→</div>
                 </div>
-                <div class="hero-stat">
-                  <div class="hero-stat-icon">🏆</div>
-                  <div>
-                    <div class="hero-stat-num" id="statCertificados">0</div>
-                    <div class="hero-stat-label">certificados</div>
+                <!-- Card 3: Certificados -->
+                <div class="hero-card-v hero-card-v--certs" onclick="navigateTo('certificados')">
+                  <div class="hcv-left">
+                    <div class="hcv-icon">🏆</div>
                   </div>
+                  <div class="hcv-body">
+                    <div class="hcv-num"><span id="statCertificados">0</span> <span class="hcv-unit">certificados</span></div>
+                    <div class="hcv-sub">obtenidos</div>
+                  </div>
+                  <div class="hcv-arrow">→</div>
                 </div>
               </div>
             </div>
