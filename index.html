@@ -778,12 +778,15 @@ button { font-family: inherit; }
 /* ═══════════ HERO SMART PANEL (reemplaza termómetro circular) ═══════════ */
 .hero-smart-panel {
   flex-shrink: 0;
-  width: 320px;
+  width: 100%;
   display: flex; flex-direction: column;
   gap: 12px;
   position: relative;
   z-index: 2;
+  align-self: stretch;
 }
+/* Los 3 bloques se reparten la altura disponible para llenar la columna */
+.hero-smart-panel .hsp-block { flex: 1; min-height: 78px; }
 
 .hsp-block {
   background: rgba(255,255,255,.06);
@@ -834,6 +837,52 @@ button { font-family: inherit; }
   color: rgba(255,255,255,.65);
   margin-top: 3px;
   letter-spacing: .3px;
+}
+
+/* MINI MERCADO en el smart panel */
+.hsp-market {
+  background:
+    radial-gradient(circle at 100% 100%, rgba(34,197,94,.12), transparent 70%),
+    rgba(255,255,255,.06);
+  cursor: pointer;
+}
+.hsp-market-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.hsp-market-link {
+  font: 700 .62rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.45);
+  letter-spacing: .5px;
+  transition: color .2s;
+}
+.hsp-market:hover .hsp-market-link { color: #fbbf24; }
+.hsp-market-rows {
+  display: flex; flex-direction: column;
+  gap: 5px;
+}
+.hsp-market-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font: 600 .8rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+}
+.hsp-mr-name {
+  color: rgba(255,255,255,.7);
+  font-size: .78rem;
+}
+.hsp-mr-price {
+  font: 800 .85rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.3px;
+}
+.hsp-mr-price small {
+  font-size: .6rem;
+  color: rgba(255,255,255,.4);
+  margin-left: 1px;
+  font-weight: 600;
 }
 
 /* TIP DEL DÍA */
@@ -914,9 +963,9 @@ button { font-family: inherit; }
 
 /* Mobile */
 @media (max-width: 880px) {
-  .hero-smart-panel { width: 100%; }
   .hsp-weather-icon { font-size: 38px; }
   .hsp-weather-temp { font-size: 1.7rem; }
+  .hero-smart-panel .hsp-block { flex: 0 0 auto; min-height: 0; }
 }
 
 /* TERMÓMETRO PECUARIO */
@@ -2929,21 +2978,22 @@ button { font-family: inherit; }
   .sidebar {
     transform: translateX(-100%);
     box-shadow: 8px 0 30px rgba(0,0,0,.4);
+    visibility: hidden;
   }
-  .sidebar.open { transform: translateX(0); }
-  .main { margin-left: 0; }
-  .menu-toggle-btn { display: inline-flex; }
-  .content { padding: 16px; }
-  .main-topbar { padding: 14px 16px; gap: 12px; }
-  .casco-hero { padding: 24px 20px; border-radius: 20px; }
-  .casco-hero-content { gap: 18px; }
+  .sidebar.open { transform: translateX(0); visibility: visible; }
+  .main { margin-left: 0; width: 100%; max-width: 100vw; }
+  .menu-toggle-btn { display: inline-flex !important; flex-shrink: 0; }
+  .main-topbar { padding: 12px 14px; gap: 10px; position: sticky; top: 0; z-index: 50; }
+  .content { padding: 14px; overflow-x: hidden; }
+  .topbar-greeting h2 { font-size: 1rem; }
+  .topbar-greeting p { font-size: .72rem; }
+  .casco-hero { padding: 22px 16px; border-radius: 18px; }
+  .casco-hero-content { gap: 16px; }
   .hero-stats { gap: 8px; }
-  .hero-stat { padding: 10px 14px; gap: 10px; }
+  .hero-stat { padding: 10px 12px; gap: 10px; flex: 1; min-width: 0; }
   .hero-stat-icon { width: 36px; height: 36px; font-size: 20px; }
   .hero-stat-num { font-size: 1.15rem; }
-  .hero-stat-label { font-size: .65rem; }
-  .termometro { width: 140px; height: 140px; margin: 0 auto; }
-  .termo-num { font-size: 2rem; }
+  .hero-stat-label { font-size: .62rem; letter-spacing: .5px; }
   .section-head h1 { font-size: 1.3rem; }
   .modal { padding: 26px 20px; }
 
@@ -4697,6 +4747,21 @@ button { font-family: inherit; }
                   TIP DEL DÍA
                 </div>
                 <div class="hsp-tip-text" id="heroTipText">Cargando consejo del día...</div>
+              </div>
+              <!-- MINI MERCADO (3 precios destacados) -->
+              <div class="hsp-block hsp-market" onclick="navigateTo('mercado')">
+                <div class="hsp-market-head">
+                  <span class="hsp-tip-label" style="color:#4ade80;">
+                    <span class="hsp-tip-dot" style="background:#22c55e;box-shadow:0 0 8px #22c55e;"></span>
+                    MERCADO HOY
+                  </span>
+                  <span class="hsp-market-link">Ver todo →</span>
+                </div>
+                <div class="hsp-market-rows" id="hspMarketRows">
+                  <div class="hsp-market-row"><span>🐂</span><span class="hsp-mr-name">Becerro</span><span class="hsp-mr-price">$78<small>/kg</small></span></div>
+                  <div class="hsp-market-row"><span>🥛</span><span class="hsp-mr-name">Leche</span><span class="hsp-mr-price">$9.2<small>/L</small></span></div>
+                  <div class="hsp-market-row"><span>🐔</span><span class="hsp-mr-name">Pollo</span><span class="hsp-mr-price">$47<small>/kg</small></span></div>
+                </div>
               </div>
               <!-- PRÓXIMA ACCIÓN -->
               <div class="hsp-block hsp-action" id="heroActionCard">
