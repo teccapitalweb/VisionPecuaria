@@ -1047,20 +1047,111 @@ button { font-family: inherit; }
 }
 .hsp-action-btn {
   flex-shrink: 0;
-  width: 38px; height: 38px;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%);
+  background-size: 200% 200%;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   color: #fff;
-  font: 800 1.3rem 'Plus Jakarta Sans', sans-serif;
+  font: 800 1.4rem 'Plus Jakarta Sans', sans-serif;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 16px rgba(34,197,94,.4);
-  transition: all .25s;
+  box-shadow:
+    0 6px 18px rgba(34,197,94,.45),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -2px 6px rgba(0,0,0,.15);
+  position: relative;
+  overflow: hidden;
+  animation: actionBtnPulse 2.4s ease-in-out infinite, actionBtnShine 4s ease-in-out infinite;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+}
+/* Pulso rítmico para llamar la atención */
+@keyframes actionBtnPulse {
+  0%, 100% {
+    box-shadow:
+      0 6px 18px rgba(34,197,94,.45),
+      0 0 0 0 rgba(34,197,94,.5),
+      inset 0 1px 0 rgba(255,255,255,.25),
+      inset 0 -2px 6px rgba(0,0,0,.15);
+  }
+  50% {
+    box-shadow:
+      0 8px 22px rgba(34,197,94,.55),
+      0 0 0 10px rgba(34,197,94,0),
+      inset 0 1px 0 rgba(255,255,255,.25),
+      inset 0 -2px 6px rgba(0,0,0,.15);
+  }
+}
+/* Gradiente que se mueve */
+@keyframes actionBtnShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+/* Brillo diagonal que cruza el botón cada cierto tiempo */
+.hsp-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 70%; height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,.45) 50%,
+    transparent 70%
+  );
+  animation: actionBtnSweep 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes actionBtnSweep {
+  0%, 60%, 100% { left: -100%; }
+  80% { left: 130%; }
+}
+/* La flecha respira sutilmente */
+.hsp-action-btn {
+  /* override anterior */
 }
 .hsp-action-btn:hover {
-  transform: translateX(3px);
-  box-shadow: 0 10px 22px rgba(34,197,94,.55);
+  transform: translateX(4px) scale(1.08);
+  box-shadow:
+    0 14px 32px rgba(34,197,94,.65),
+    0 0 0 4px rgba(34,197,94,.2),
+    inset 0 1px 0 rgba(255,255,255,.3);
+  filter: brightness(1.12);
+  animation-play-state: paused;
+}
+.hsp-action-btn:active {
+  transform: translateX(2px) scale(.96);
+  box-shadow: 0 4px 10px rgba(34,197,94,.4);
+}
+
+/* La card entera se ilumina al hover */
+.hsp-action {
+  position: relative;
+  overflow: hidden;
+}
+.hsp-action::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx, 100%) var(--my, 50%), rgba(34,197,94,.18), transparent 50%);
+  opacity: 0;
+  transition: opacity .35s;
+  pointer-events: none;
+}
+.hsp-action:hover::after { opacity: 1; }
+.hsp-action:hover .hsp-action-emoji { animation-play-state: paused; transform: scale(1.2) rotate(8deg); }
+
+/* Ripple effect al click */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.6);
+  pointer-events: none;
+  transform: scale(0);
+  animation: rippleExpand .6s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes rippleExpand {
+  to { transform: scale(1); opacity: 0; }
 }
 
 /* Mobile */
@@ -4899,7 +4990,7 @@ button { font-family: inherit; }
                   <div class="hsp-action-label">SIGUIENTE PASO</div>
                   <div class="hsp-action-text" id="heroActionText">Registra tu primer animal</div>
                 </div>
-                <button class="hsp-action-btn" id="heroActionBtn" onclick="ejecutarAccionSugerida()">→</button>
+                <button class="hsp-action-btn" id="heroActionBtn" onclick="ejecutarAccionSugerida(event); event.stopPropagation();">→</button>
               </div>
             </div>
 
@@ -6266,7 +6357,20 @@ function actualizarRutaGanadero() {
   }
 }
 
-window.ejecutarAccionSugerida = function() {
+window.ejecutarAccionSugerida = function(ev) {
+  // Ripple effect en el botón
+  const btn = document.getElementById('heroActionBtn');
+  if (btn && ev) {
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'btn-ripple';
+    const size = Math.max(rect.width, rect.height) * 2;
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (ev.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (ev.clientY - rect.top - size/2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
   if (!_accionActual) return;
   if (_accionActual === 'abrirModalAnimal' && typeof abrirModalAnimal === 'function') {
     abrirModalAnimal();
@@ -6275,6 +6379,18 @@ window.ejecutarAccionSugerida = function() {
     if (typeof navigateTo === 'function') navigateTo(dest);
   }
 };
+
+// Glow sigue al cursor en la card de acción
+document.addEventListener('mousemove', (e) => {
+  const card = document.getElementById('heroActionCard');
+  if (!card) return;
+  const rect = card.getBoundingClientRect();
+  if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  card.style.setProperty('--mx', x + '%');
+  card.style.setProperty('--my', y + '%');
+});
 
 // Cargar clima al inicio y refrescar cada 30 min
 document.addEventListener('DOMContentLoaded', () => {
