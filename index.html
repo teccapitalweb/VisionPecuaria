@@ -6056,8 +6056,8 @@ window.__rancho.contarCertificados = async function() {
 
 // ⚙️ CONFIGURACIÓN — Cambia estos valores:
 const VIP_CONFIG = {
-  whatsappGroup: 'https://chat.whatsapp.com/REEMPLAZAR_LINK_GRUPO',
-  whatsappPersonal: '5212383738143', // tu número (sin +)
+  whatsappGroup: 'https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m',
+  whatsappPersonal: '522361049715', // tu número (sin +)
   descuentoPct: 20,
   mensajeDescuento: 'Hola, soy miembro VIP de Visión Pecuaria y quiero canjear mi descuento del 20%'
 };
@@ -6193,10 +6193,6 @@ window.agendarWebinar = function() {
 };
 
 window.abrirGrupoWhatsApp = function() {
-  if (VIP_CONFIG.whatsappGroup.includes('REEMPLAZAR')) {
-    toast('Configura el link del grupo en VIP_CONFIG', 'error', '⚙️');
-    return;
-  }
   window.open(VIP_CONFIG.whatsappGroup, '_blank', 'noopener');
 };
 
