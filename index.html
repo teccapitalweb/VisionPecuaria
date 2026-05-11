@@ -4695,6 +4695,170 @@ button { font-family: inherit; }
 }
 .btn-guardar:disabled { opacity: .6; cursor: not-allowed; }
 
+/* ═══════════ MODAL CONFIRMACIÓN ELIMINAR ANIMAL ═══════════ */
+.confirm-eliminar-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.confirm-eliminar-overlay.show { opacity: 1; }
+
+.confirm-eliminar-modal {
+  background: linear-gradient(180deg, rgba(40,15,15,.95), rgba(20,8,8,.98));
+  border: 1px solid rgba(239,68,68,.3);
+  border-radius: 22px;
+  padding: 32px 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transform: scale(.85) translateY(20px);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.6),
+    0 0 100px rgba(239,68,68,.15),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+.confirm-eliminar-overlay.show .confirm-eliminar-modal {
+  transform: scale(1) translateY(0);
+}
+.confirm-eliminar-modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ef4444, #dc2626, #ef4444, transparent);
+  animation: dangerSlide 2.5s ease-in-out infinite;
+}
+@keyframes dangerSlide {
+  0%, 100% { opacity: .5; }
+  50% { opacity: 1; }
+}
+
+.confirm-eliminar-icon-wrap {
+  position: relative;
+  width: 80px; height: 80px;
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.confirm-eliminar-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(239,68,68,.25);
+  animation: pulseDanger 1.8s ease-out infinite;
+}
+@keyframes pulseDanger {
+  0% { transform: scale(.7); opacity: .9; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.confirm-eliminar-icon {
+  position: relative;
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  box-shadow:
+    0 10px 24px rgba(239,68,68,.45),
+    inset 0 1px 0 rgba(255,255,255,.2);
+  z-index: 1;
+  animation: iconShake .6s ease-in-out;
+}
+@keyframes iconShake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+
+.confirm-eliminar-title {
+  font: 800 1.35rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: -.4px;
+}
+
+.confirm-eliminar-desc {
+  font: 500 .92rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.75);
+  margin: 0 0 24px;
+}
+.confirm-eliminar-desc strong {
+  color: #fbbf24;
+  font-weight: 700;
+}
+.confirm-eliminar-warn {
+  color: #fca5a5;
+  font-weight: 700;
+}
+
+.confirm-eliminar-actions {
+  display: flex; gap: 10px;
+}
+.confirm-btn {
+  flex: 1;
+  padding: 13px 18px;
+  border-radius: 12px;
+  font: 700 .88rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.confirm-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.confirm-btn-cancel {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.85);
+}
+.confirm-btn-cancel:hover:not(:disabled) {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.2);
+  transform: translateY(-1px);
+}
+
+.confirm-btn-delete {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(239,68,68,.4);
+}
+.confirm-btn-delete:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(239,68,68,.55);
+}
+.confirm-btn-delete:active:not(:disabled) {
+  transform: translateY(0) scale(.97);
+}
+
+.confirm-loading {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: confirmSpin .7s linear infinite;
+  display: inline-block;
+}
+@keyframes confirmSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+  .confirm-eliminar-modal { padding: 28px 22px 22px; }
+  .confirm-eliminar-title { font-size: 1.2rem; }
+  .confirm-eliminar-actions { flex-direction: column-reverse; }
+}
+
 /* ═══════════ TABS DEL MODAL ANIMAL ═══════════ */
 .anim-tabs {
   display: grid;
@@ -7563,22 +7727,92 @@ function actualizarStatsHato() {
   if (elEdadDet) elEdadDet.textContent = stats.edadProm > 0 ? 'del hato' : 'registra edad';
 }
 
-window.eliminarAnimal = async function(animalId, nombre) {
+window.eliminarAnimal = function(animalId, nombre) {
   if (!animalId) return;
-  const confirmar = confirm(`¿Eliminar a "${nombre || 'este animal'}" del hato?\n\nEsta acción no se puede deshacer.`);
-  if (!confirmar) return;
+  abrirConfirmEliminar(animalId, nombre);
+};
+
+// Modal de confirmación elegante para eliminar animal
+function abrirConfirmEliminar(animalId, nombre) {
+  // Eliminar modal previo si existe
+  const existing = document.getElementById('confirmEliminarModal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'confirmEliminarModal';
+  modal.className = 'confirm-eliminar-overlay';
+  modal.innerHTML = `
+    <div class="confirm-eliminar-modal">
+      <div class="confirm-eliminar-icon-wrap">
+        <div class="confirm-eliminar-pulse"></div>
+        <div class="confirm-eliminar-icon">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+          </svg>
+        </div>
+      </div>
+      <h3 class="confirm-eliminar-title">¿Eliminar este animal?</h3>
+      <p class="confirm-eliminar-desc">
+        Vas a borrar a <strong>${(nombre || 'este animal').replace(/</g,'&lt;')}</strong> de tu hato.<br>
+        Esta acción <span class="confirm-eliminar-warn">no se puede deshacer</span>.
+      </p>
+      <div class="confirm-eliminar-actions">
+        <button class="confirm-btn confirm-btn-cancel" onclick="cerrarConfirmEliminar()">
+          Cancelar
+        </button>
+        <button class="confirm-btn confirm-btn-delete" onclick="ejecutarEliminarAnimal('${animalId}', '${(nombre||'').replace(/'/g,"\\'")}')">
+          🗑️ Sí, eliminar
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  // Animar entrada
+  requestAnimationFrame(() => modal.classList.add('show'));
+  // Click en backdrop cierra
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) cerrarConfirmEliminar();
+  });
+  // ESC cierra
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      cerrarConfirmEliminar();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+}
+
+window.cerrarConfirmEliminar = function() {
+  const m = document.getElementById('confirmEliminarModal');
+  if (!m) return;
+  m.classList.remove('show');
+  setTimeout(() => m.remove(), 250);
+};
+
+window.ejecutarEliminarAnimal = async function(animalId, nombre) {
+  // Bloquear botones durante el delete
+  const modal = document.getElementById('confirmEliminarModal');
+  if (modal) {
+    const btns = modal.querySelectorAll('.confirm-btn');
+    btns.forEach(b => b.disabled = true);
+    const delBtn = modal.querySelector('.confirm-btn-delete');
+    if (delBtn) delBtn.innerHTML = '<span class="confirm-loading"></span> Eliminando...';
+  }
 
   try {
     const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     const db = window.__rancho?.db;
     if (!db) throw new Error('Sin conexión a base de datos');
     await deleteDoc(doc(db, 'animales', animalId));
+    cerrarConfirmEliminar();
     if (typeof toast === 'function') toast(`Animal "${nombre || ''}" eliminado del hato`, 'success', '🗑️');
-    // El listener onSnapshot del hato refrescará la UI sola
   } catch(e) {
     console.error('Error al eliminar animal:', e);
+    cerrarConfirmEliminar();
     if (typeof toast === 'function') toast('No se pudo eliminar. Intenta de nuevo.', 'error', '❌');
-    else alert('Error al eliminar: ' + e.message);
   }
 };
 
