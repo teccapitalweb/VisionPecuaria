@@ -1772,6 +1772,41 @@ button { font-family: inherit; }
   transform: translateY(-3px);
   border-color: rgba(212,160,23,.3);
 }
+.animal-card:hover .animal-delete-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+.animal-delete-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(239,68,68,.3);
+  background: rgba(15,15,15,.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fca5a5;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(.85);
+  transition: all .22s cubic-bezier(.2,.8,.2,1);
+  z-index: 2;
+}
+.animal-delete-btn:hover {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border-color: #ef4444;
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(239,68,68,.4);
+}
+.animal-delete-btn:active {
+  transform: scale(.94);
+}
+/* En mobile el botón siempre visible */
+@media (max-width: 880px) {
+  .animal-delete-btn { opacity: .85; transform: scale(1); }
+}
 .animal-photo {
   width: 100%; aspect-ratio: 1.2;
   background: linear-gradient(135deg, var(--leather), var(--field-800));
@@ -5217,23 +5252,23 @@ button { font-family: inherit; }
         <div class="hato-stats-grid">
           <div class="hato-stat">
             <div class="hato-stat-label">Total cabezas</div>
-            <div class="hato-stat-value">5</div>
-            <div class="hato-stat-detail">Bovino · Engorda</div>
+            <div class="hato-stat-value" id="hatoStatTotal">0</div>
+            <div class="hato-stat-detail" id="hatoStatTotalDetail">Sin animales</div>
           </div>
           <div class="hato-stat">
             <div class="hato-stat-label">Peso promedio</div>
-            <div class="hato-stat-value">340 kg</div>
-            <div class="hato-stat-detail">+12 kg este mes</div>
+            <div class="hato-stat-value" id="hatoStatPeso">0 kg</div>
+            <div class="hato-stat-detail" id="hatoStatPesoDetail">por cabeza</div>
           </div>
           <div class="hato-stat">
             <div class="hato-stat-label">Valor estimado</div>
-            <div class="hato-stat-value">$161,500</div>
-            <div class="hato-stat-detail">a $95/kg en pie</div>
+            <div class="hato-stat-value" id="hatoStatValor">$0</div>
+            <div class="hato-stat-detail" id="hatoStatValorDetail">según mercado</div>
           </div>
           <div class="hato-stat">
-            <div class="hato-stat-label">GDP promedio</div>
-            <div class="hato-stat-value">0.95 kg</div>
-            <div class="hato-stat-detail">por día</div>
+            <div class="hato-stat-label">Edad promedio</div>
+            <div class="hato-stat-value" id="hatoStatEdad">0 años</div>
+            <div class="hato-stat-detail" id="hatoStatEdadDetail">del hato</div>
           </div>
         </div>
 
@@ -7201,10 +7236,140 @@ const EMOJI_TIPO = {
   caballo: '🐎', pollo: '🐔'
 };
 
+function calcularStatsHato(animales) {
+  if (!animales || animales.length === 0) {
+    return { total: 0, pesoProm: 0, valor: 0, edadProm: 0, tipoMayoritario: '', precioRef: 95 };
+  }
+  // Helpers
+  const parseNumero = (v) => {
+    if (typeof v === 'number') return v;
+    if (!v) return 0;
+    const m = String(v).match(/[\d.]+/);
+    return m ? parseFloat(m[0]) : 0;
+  };
+
+  const total = animales.length;
+
+  // Peso promedio
+  const pesos = animales.map(a => parseNumero(a.peso)).filter(p => p > 0);
+  const pesoProm = pesos.length ? Math.round(pesos.reduce((a,b)=>a+b,0) / pesos.length) : 0;
+
+  // Edad promedio
+  const edades = animales.map(a => parseNumero(a.edad)).filter(e => e > 0);
+  const edadProm = edades.length ? (edades.reduce((a,b)=>a+b,0) / edades.length).toFixed(1) : 0;
+
+  // Tipo mayoritario para mostrar el detalle
+  const tipoCount = {};
+  animales.forEach(a => {
+    const t = (a.tipo || 'bovino').toLowerCase();
+    tipoCount[t] = (tipoCount[t] || 0) + 1;
+  });
+  const tipoMayoritario = Object.entries(tipoCount).sort((a,b) => b[1]-a[1])[0]?.[0] || 'bovino';
+
+  // Precio de referencia según el tipo mayoritario (del mercado)
+  const PRECIOS_REF = {
+    bovino: 95,    // vaca abasto $/kg
+    porcino: 51,   // cerdo en pie
+    avicola: 47,
+    pollo: 47,
+    cerdo: 51,
+    oveja: 78,
+    ovino: 78,
+    cabra: 65,
+    caprino: 65,
+    caballo: 88,
+    equino: 88
+  };
+  // Si tenemos los datos del mercado en vivo, usarlos
+  let precioRef = PRECIOS_REF[tipoMayoritario] || 95;
+  try {
+    if (window.MERCADO && Array.isArray(window.MERCADO)) {
+      // Buscar producto del mercado que coincida con el tipo mayoritario
+      const mapaTipoMercado = {
+        bovino: 'vaca-abasto',
+        porcino: 'cerdo-pie',
+        cerdo: 'cerdo-pie',
+        avicola: 'pollo-pie',
+        pollo: 'pollo-pie',
+        oveja: 'cordero-pelibuey',
+        ovino: 'cordero-pelibuey',
+        cabra: 'cabra-lechera',
+        caprino: 'cabra-lechera'
+      };
+      const idBuscado = mapaTipoMercado[tipoMayoritario];
+      const producto = window.MERCADO.find(m => m.id === idBuscado);
+      if (producto?.precio) precioRef = producto.precio;
+    }
+  } catch(e) {}
+
+  // Valor estimado = suma de (peso × precio) de cada animal
+  let valor = 0;
+  animales.forEach(a => {
+    const p = parseNumero(a.peso);
+    if (p > 0) valor += p * precioRef;
+    else valor += 400 * precioRef; // estimación por defecto si no hay peso
+  });
+
+  return { total, pesoProm, valor: Math.round(valor), edadProm, tipoMayoritario, precioRef };
+}
+
+function actualizarStatsHato() {
+  const animales = window.__rancho?.animales || [];
+  const stats = calcularStatsHato(animales);
+
+  const elTotal = document.getElementById('hatoStatTotal');
+  const elTotalDet = document.getElementById('hatoStatTotalDetail');
+  const elPeso = document.getElementById('hatoStatPeso');
+  const elPesoDet = document.getElementById('hatoStatPesoDetail');
+  const elValor = document.getElementById('hatoStatValor');
+  const elValorDet = document.getElementById('hatoStatValorDetail');
+  const elEdad = document.getElementById('hatoStatEdad');
+  const elEdadDet = document.getElementById('hatoStatEdadDetail');
+
+  if (elTotal) elTotal.textContent = stats.total;
+  if (elTotalDet) {
+    if (stats.total === 0) elTotalDet.textContent = 'Sin animales';
+    else {
+      const tipoLabel = stats.tipoMayoritario.charAt(0).toUpperCase() + stats.tipoMayoritario.slice(1);
+      elTotalDet.textContent = `${tipoLabel} · ${stats.total === 1 ? '1 cabeza' : stats.total + ' cabezas'}`;
+    }
+  }
+  if (elPeso) elPeso.textContent = stats.pesoProm > 0 ? `${stats.pesoProm} kg` : '— kg';
+  if (elPesoDet) elPesoDet.textContent = stats.pesoProm > 0 ? 'por cabeza' : 'registra peso';
+
+  if (elValor) elValor.textContent = `$${stats.valor.toLocaleString('es-MX')}`;
+  if (elValorDet) elValorDet.textContent = `a $${stats.precioRef}/kg en pie`;
+
+  if (elEdad) elEdad.textContent = stats.edadProm > 0 ? `${stats.edadProm} años` : '— años';
+  if (elEdadDet) elEdadDet.textContent = stats.edadProm > 0 ? 'del hato' : 'registra edad';
+}
+
+window.eliminarAnimal = async function(animalId, nombre) {
+  if (!animalId) return;
+  const confirmar = confirm(`¿Eliminar a "${nombre || 'este animal'}" del hato?\n\nEsta acción no se puede deshacer.`);
+  if (!confirmar) return;
+
+  try {
+    const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho?.db;
+    if (!db) throw new Error('Sin conexión a base de datos');
+    await deleteDoc(doc(db, 'animales', animalId));
+    if (typeof toast === 'function') toast(`Animal "${nombre || ''}" eliminado del hato`, 'success', '🗑️');
+    // El listener onSnapshot del hato refrescará la UI sola
+  } catch(e) {
+    console.error('Error al eliminar animal:', e);
+    if (typeof toast === 'function') toast('No se pudo eliminar. Intenta de nuevo.', 'error', '❌');
+    else alert('Error al eliminar: ' + e.message);
+  }
+};
+
 function pintarHato() {
   const cont = document.getElementById('hatoGrid');
   if (!cont) return;
   const animales = window.__rancho?.animales || [];
+
+  // Actualizar los stats arriba SIEMPRE
+  actualizarStatsHato();
 
   if (animales.length === 0) {
     cont.innerHTML = `
@@ -7218,8 +7383,17 @@ function pintarHato() {
     return;
   }
 
-  cont.innerHTML = animales.map(a => `
+  cont.innerHTML = animales.map(a => {
+    const nombreEsc = (a.nombre || '').replace(/'/g, "\\'");
+    return `
     <div class="animal-card">
+      <button class="animal-delete-btn" onclick="event.stopPropagation(); eliminarAnimal('${a.id || ''}', '${nombreEsc}')" title="Eliminar animal">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>
+      </button>
       <div class="animal-photo">${a.emoji || EMOJI_TIPO[a.tipo] || '🐄'}</div>
       <div class="animal-name">${a.nombre || 'Sin nombre'}</div>
       <div class="animal-tag">${a.tag || '—'} · ${a.raza || 'Sin raza'}</div>
@@ -7228,7 +7402,8 @@ function pintarHato() {
         <div><div class="animal-stat-label">Edad</div><div class="animal-stat-value">${a.edad || '—'}</div></div>
       </div>
     </div>
-  `).join('') + `
+    `;
+  }).join('') + `
     <div class="add-animal-card" onclick="abrirModalAnimal()">
       <div class="add-animal-icon">+</div>
       <div class="add-animal-text">Agregar animal</div>
