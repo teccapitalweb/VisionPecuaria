@@ -12208,132 +12208,242 @@ window.pintarBitacora = function() {
 };
 
 // ═══════════════════════════════════════════════════════════════════
-// 🏛️ APOYOS DEL GOBIERNO
-// Programas activos en México 2026 para productores pecuarios
+// 🏛️ APOYOS DEL GOBIERNO — Conectado a Firestore (colección `apoyos`)
+// Los datos se editan desde Firebase Console, sin tocar código.
+// La info se actualiza en tiempo real para todos los usuarios.
 // ═══════════════════════════════════════════════════════════════════
 
-const APOYOS_GOB = [
+// Apoyos por defecto (FALLBACK si no hay nada en Firestore o falla la conexión)
+// Estos datos son los que se cargarán inicialmente a Firestore.
+// Verificados en mayo 2026 con fuentes oficiales gob.mx
+const APOYOS_DEFAULT = [
   {
-    nombre: 'PROGAN Productivo',
+    id: 'produccion-bienestar',
+    nombre: 'Producción para el Bienestar',
     institucion: 'SADER · BIENESTAR',
-    descripcion: 'Apoyo a pequeños productores pecuarios para mejorar la productividad del hato, identificación SINIIGA y sanidad animal.',
-    montos: '$650 a $1,000 MXN por vientre/colmena',
-    requisitos: ['Estar inscrito en el Padrón Ganadero Nacional (PGN)', 'Tener UPP activa', 'Hasta 35 vientres bovinos (pequeño productor)', 'Aretes SINIIGA vigentes'],
-    fuente: 'gob.mx/agricultura',
-    url: 'https://www.gob.mx/agricultura/acciones-y-programas/produccion-pecuaria',
-    color: '#22c55e',
-    emoji: '🐄'
+    descripcion: 'Apoyo directo anual a pequeños productores rurales con superficies de hasta 20 hectáreas de temporal, 5 hectáreas de riego, o apicultores con hasta 100 colmenas. Para 2026 incluye productores de miel y lechería en pequeña escala.',
+    montos: '$7,300 a $24,000 MXN anuales (según cultivo/producto y hectáreas)',
+    requisitos: [
+      'Estar inscrito en el Padrón de Productores de SADER',
+      'Acreditar legal posesión del predio o ser apicultor',
+      'No estar inscrito en Sembrando Vida',
+      'Identificación oficial vigente y CURP',
+      'Actualización anual de datos en enero'
+    ],
+    fuente: 'programasparaelbienestar.gob.mx',
+    url: 'https://programasparaelbienestar.gob.mx/produccion-para-el-bienestar/',
+    color: '#a855f7',
+    emoji: '🤝',
+    vigente: true,
+    actualizado: '2026-05'
   },
   {
+    id: 'volver-a-crecer',
+    nombre: 'Volver a Crecer (FND)',
+    institucion: 'Financiera Nacional para el Desarrollo Agropecuario',
+    descripcion: 'Programa anunciado por la presidenta Sheinbaum en mayo 2026: liquidación total o reestructuración de créditos vencidos con la Financiera Rural/FND. Beneficia a 59,967 pequeños productores con créditos considerados impagables.',
+    montos: 'Liberación total si la deuda es menor a $397,551 MXN (45,000 UDIS) · 30% descuento si es mayor',
+    requisitos: [
+      'Tener crédito vencido con la FND',
+      'Pequeño productor agropecuario',
+      'Mujeres productoras: incorporación desde mayo 2026',
+      'Hombres pequeños productores: desde junio 2026'
+    ],
+    fuente: 'gob.mx (anuncio presidencial)',
+    url: 'https://www.gob.mx/agricultura',
+    color: '#22c55e',
+    emoji: '💰',
+    vigente: true,
+    actualizado: '2026-05'
+  },
+  {
+    id: 'siniiga',
     nombre: 'SINIIGA - Registro de identificación',
     institucion: 'SENASICA · CNOG',
-    descripcion: 'Identificación individual obligatoria de ganado bovino mediante doble arete con folio nacional. Trámite necesario para acceder a programas y comercializar.',
-    montos: 'Aretes desde $40 MXN (subsidiados en zonas marginadas)',
-    requisitos: ['Inscripción en el PGN', 'Tener UPP activa con clave', 'Aretado por técnico autorizado'],
+    descripcion: 'Sistema Nacional de Identificación Individual de Ganado. Identificación obligatoria mediante doble arete con folio nacional. Trámite indispensable para movilizar ganado, acceder a programas federales y comercializar.',
+    montos: 'Aretes desde $30 MXN (cuota simbólica). Subsidiados en zonas marginadas.',
+    requisitos: [
+      'Inscripción en el Padrón Ganadero Nacional (PGN)',
+      'Tener UPP activa con clave',
+      'Aretado realizado por técnico autorizado',
+      'Acudir a Asociación o Unión Ganadera local'
+    ],
     fuente: 'siniiga.org.mx',
     url: 'https://www.siniiga.org.mx',
     color: '#fbbf24',
-    emoji: '🏷️'
+    emoji: '🏷️',
+    vigente: true,
+    actualizado: '2026-05'
   },
   {
-    nombre: 'FIRA - Crédito para producción pecuaria',
+    id: 'fira',
+    nombre: 'FIRA - Crédito agropecuario',
     institucion: 'FIRA · Banco de México',
-    descripcion: 'Créditos refaccionarios para infraestructura, equipo, semovientes; crédito de avío para alimentación, sanidad y operación. Tasas preferenciales.',
-    montos: 'Desde $50,000 hasta $30 millones MXN. Tasas TIIE + 2 a 6 puntos.',
-    requisitos: ['Proyecto productivo viable', 'Garantías', 'RFC activo', 'Buen historial crediticio'],
+    descripcion: 'Fideicomisos Instituidos en Relación con la Agricultura. Créditos refaccionarios para infraestructura, equipo y semovientes. Crédito de avío para alimentación, sanidad y operación. Tasas preferenciales mediante banca comercial intermediaria.',
+    montos: 'Desde $50,000 hasta $30 millones MXN. Tasas TIIE + 2 a 6 puntos según garantías.',
+    requisitos: [
+      'Proyecto productivo viable',
+      'Garantías reales o líquidas',
+      'RFC activo y buen historial crediticio',
+      'Tramitar a través de banca comercial autorizada (Banorte, BBVA, Banamex, etc.)'
+    ],
     fuente: 'fira.gob.mx',
     url: 'https://www.fira.gob.mx',
     color: '#3b82f6',
-    emoji: '🏦'
+    emoji: '🏦',
+    vigente: true,
+    actualizado: '2026-05'
   },
   {
-    nombre: 'FONDEN Agropecuario / SADER',
-    institucion: 'SADER · CADENA',
-    descripcion: 'Apoyos directos en caso de contingencias climáticas (sequía, heladas, inundaciones) que afecten al hato productivo.',
-    montos: 'Variable según severidad y región. Incluye seguros catastróficos.',
-    requisitos: ['Productor en zona declarada de emergencia', 'Padrón actualizado', 'Validación SADER'],
-    fuente: 'gob.mx/agricultura',
-    url: 'https://www.gob.mx/agricultura',
-    color: '#ef4444',
-    emoji: '🌪️'
-  },
-  {
-    nombre: 'Producción para el Bienestar (Pecuario)',
-    institucion: 'SADER · BIENESTAR',
-    descripcion: 'Apoyo directo a pequeños productores rurales con menos de 10 hectáreas o hato pequeño. Pago anual.',
-    montos: '$6,000 a $10,000 MXN anuales',
-    requisitos: ['Pequeño productor agrícola/pecuario', 'Estar en el Padrón de Beneficiarios', 'No recibir apoyos duplicados'],
-    fuente: 'gob.mx/agricultura',
-    url: 'https://www.gob.mx/agricultura/produccionparaelbienestar',
-    color: '#a855f7',
-    emoji: '🤝'
-  },
-  {
+    id: 'campanas-zoosanitarias',
     nombre: 'Campañas zoosanitarias - SENASICA',
     institucion: 'SENASICA',
-    descripcion: 'Apoyo gratuito o subsidiado para vacunación oficial (brucelosis, tuberculosis, derriengue), pruebas diagnósticas y certificación de hatos libres.',
-    montos: 'Servicios sin costo o con cuota recuperación. Vacunas oficiales gratuitas.',
-    requisitos: ['Solicitud al CESAVE estatal', 'UPP registrada', 'Programar visita del MVZ oficial'],
+    descripcion: 'Apoyo gratuito o subsidiado para vacunación oficial obligatoria: brucelosis, tuberculosis, rabia paralítica (derriengue), garrapata. Pruebas diagnósticas. Certificación de hatos libres. Atención por CESAVE estatal.',
+    montos: 'Servicios gratuitos o cuota de recuperación mínima. Vacunas oficiales sin costo.',
+    requisitos: [
+      'UPP registrada en PGN',
+      'Solicitud al CESAVE de tu estado',
+      'Programar visita del MVZ oficial',
+      'Cumplir con NOMs sanitarias aplicables'
+    ],
     fuente: 'senasica.gob.mx',
     url: 'https://www.gob.mx/senasica',
     color: '#10b981',
-    emoji: '💉'
+    emoji: '💉',
+    vigente: true,
+    actualizado: '2026-05'
   },
   {
-    nombre: 'Cobertura de precios agropecuarios - ASERCA',
-    institucion: 'SADER · ASERCA',
-    descripcion: 'Esquemas de cobertura para asegurar el precio de venta del ganado en pie o leche frente a la volatilidad del mercado.',
-    montos: 'Variable según volumen y producto. Subsidio del 50-70% de la prima.',
-    requisitos: ['Productor inscrito en SAGARPA-ASERCA', 'Proyecto comercial demostrable', 'Contrato con comercializador'],
-    fuente: 'gob.mx/aserca',
-    url: 'https://www.gob.mx/aserca',
-    color: '#0ea5e9',
-    emoji: '📈'
+    id: 'apoyo-emergente-ganaderos',
+    nombre: 'Apoyo emergente a ganaderos exportadores',
+    institucion: 'SADER · Gobiernos estatales',
+    descripcion: 'Programa federal-estatal lanzado en 2026 ante el cierre de la frontera con EU para exportación de ganado. Incluye sementales bovinos, maquinaria, financiamiento y mejoramiento genético. Estados activos: Sonora, Coahuila, Durango, Chihuahua, Tamaulipas.',
+    montos: 'Variable. Inversión total federal-estatal de cientos de millones por estado.',
+    requisitos: [
+      'Ser ganadero registrado en estado exportador',
+      'Acercarse a la Unión Ganadera Regional o Asociación local',
+      'Demostrar afectación por cierre de frontera',
+      'Padrón ganadero estatal actualizado'
+    ],
+    fuente: 'gob.mx (programa estatal)',
+    url: 'https://www.gob.mx/agricultura',
+    color: '#ef4444',
+    emoji: '🐂',
+    vigente: true,
+    actualizado: '2026-05'
   },
   {
+    id: 'inifap-asistencia',
     nombre: 'INIFAP - Capacitación y asistencia técnica',
     institucion: 'INIFAP',
-    descripcion: 'Cursos gratuitos, asistencia técnica y transferencia de tecnología para mejorar manejo, genética, nutrición y sanidad.',
-    montos: 'Gratuito en su mayoría',
-    requisitos: ['Solicitar al CIR (Centro de Investigación Regional)', 'Productor activo'],
+    descripcion: 'Instituto Nacional de Investigaciones Forestales, Agrícolas y Pecuarias. Cursos, asistencia técnica y transferencia de tecnología para mejorar manejo, genética, nutrición, sanidad y prácticas pecuarias sustentables.',
+    montos: 'Gratuito en su mayoría. Algunos cursos especializados con cuota mínima.',
+    requisitos: [
+      'Productor agropecuario activo',
+      'Solicitar al CIR (Centro de Investigación Regional) más cercano',
+      'Disponibilidad para asistir a capacitaciones'
+    ],
     fuente: 'inifap.gob.mx',
     url: 'https://www.inifap.gob.mx',
     color: '#84cc16',
-    emoji: '🎓'
+    emoji: '🎓',
+    vigente: true,
+    actualizado: '2026-05'
+  },
+  {
+    id: 'fertilizantes-bienestar',
+    nombre: 'Fertilizantes para el Bienestar',
+    institucion: 'SADER · Seguridad Alimentaria Mexicana',
+    descripcion: 'Entrega gratuita de fertilizante (urea y triple 17) a pequeños productores de granos básicos, café, cacao, miel y caña de azúcar. Productores con superficie limitada de hasta 3 hectáreas.',
+    montos: 'Fertilizante gratuito según tipo de cultivo y hectáreas registradas',
+    requisitos: [
+      'Estar previamente inscrito en Producción para el Bienestar 2024',
+      'No haber recibido fertilizante en 2025',
+      'Cultivos elegibles: maíz, frijol, café, cacao, caña, miel'
+    ],
+    fuente: 'programasparaelbienestar.gob.mx',
+    url: 'https://programasparaelbienestar.gob.mx/fertilizantes-para-el-bienestar/',
+    color: '#16a34a',
+    emoji: '🌱',
+    vigente: true,
+    actualizado: '2026-05'
   }
 ];
+
+let _apoyosCache = []; // Caché local de apoyos (se llena desde Firestore)
+let _apoyosUnsub = null; // Para desuscribirse del listener
+
+// Inicializa el listener de Firestore en la colección 'apoyos'
+window.iniciarApoyosFirestore = async function() {
+  try {
+    const { collection, onSnapshot, query, where, orderBy } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho?.db;
+    if (!db) {
+      console.warn('[Apoyos] Firestore no disponible, usando fallback');
+      _apoyosCache = APOYOS_DEFAULT;
+      pintarApoyos();
+      return;
+    }
+
+    // Limpiar listener previo si existe
+    if (_apoyosUnsub) { try { _apoyosUnsub(); } catch(e){} _apoyosUnsub = null; }
+
+    // Listener en tiempo real: cualquier cambio se refleja al instante
+    const q = query(collection(db, 'apoyos'), where('vigente', '==', true));
+    _apoyosUnsub = onSnapshot(q, (snap) => {
+      if (snap.empty) {
+        // Si la colección está vacía, usar los defaults y mostrar aviso al admin
+        console.info('[Apoyos] Colección vacía en Firestore. Usando datos por defecto. Carga los apoyos al admin Firebase.');
+        _apoyosCache = APOYOS_DEFAULT;
+      } else {
+        _apoyosCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      }
+      pintarApoyos();
+    }, (err) => {
+      console.warn('[Apoyos] Error escuchando Firestore, usando fallback:', err.code);
+      _apoyosCache = APOYOS_DEFAULT;
+      pintarApoyos();
+    });
+  } catch(e) {
+    console.warn('[Apoyos] No se pudo iniciar Firestore listener:', e);
+    _apoyosCache = APOYOS_DEFAULT;
+    pintarApoyos();
+  }
+};
 
 window.pintarApoyos = function() {
   const cont = document.getElementById('apoyosGrid');
   if (!cont) return;
-  cont.innerHTML = APOYOS_GOB.map(a => `
-    <div class="apoyo-card" style="--apoyo-color:${a.color};">
+  // Si no hay caché todavía, usar fallback
+  const data = (_apoyosCache && _apoyosCache.length) ? _apoyosCache : APOYOS_DEFAULT;
+  cont.innerHTML = data.map(a => `
+    <div class="apoyo-card" style="--apoyo-color:${a.color || '#fbbf24'};">
       <div class="apoyo-head">
-        <div class="apoyo-icon">${a.emoji}</div>
+        <div class="apoyo-icon">${a.emoji || '🏛️'}</div>
         <div class="apoyo-info">
-          <h3>${a.nombre}</h3>
-          <div class="apoyo-instituc">${a.institucion}</div>
+          <h3>${a.nombre || ''}</h3>
+          <div class="apoyo-instituc">${a.institucion || ''}</div>
         </div>
       </div>
-      <p class="apoyo-desc">${a.descripcion}</p>
+      <p class="apoyo-desc">${a.descripcion || ''}</p>
       <div class="apoyo-monto">
         <div class="apoyo-monto-label">💰 Apoyo</div>
-        <div class="apoyo-monto-val">${a.montos}</div>
+        <div class="apoyo-monto-val">${a.montos || 'Variable'}</div>
       </div>
       <div class="apoyo-req">
         <div class="apoyo-req-label">📋 Requisitos principales</div>
-        <ul>${a.requisitos.map(r => `<li>${r}</li>`).join('')}</ul>
+        <ul>${(a.requisitos || []).map(r => `<li>${r}</li>`).join('')}</ul>
       </div>
-      <a href="${a.url}" target="_blank" class="apoyo-link">
-        🔗 Más info en ${a.fuente} →
+      <a href="${a.url || '#'}" target="_blank" rel="noopener" class="apoyo-link">
+        🔗 Más info en ${a.fuente || 'gob.mx'} →
       </a>
     </div>
   `).join('');
 };
 
-// Pintar al iniciar
+// Iniciar el listener de Firestore cuando esté lista la app
 setTimeout(() => {
-  try { pintarApoyos(); } catch(e) {}
+  try { iniciarApoyosFirestore(); } catch(e) {}
   try { pintarBitacora(); } catch(e) {}
 }, 2000);
 
