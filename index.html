@@ -4708,6 +4708,732 @@ button { font-family: inherit; }
 }
 .btn-guardar:disabled { opacity: .6; cursor: not-allowed; }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* 🩺 BOTIQUÍN — Diagnóstico veterinario                       */
+/* ═══════════════════════════════════════════════════════════ */
+.diag-warning {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(251,191,36,.03));
+  border: 1px solid rgba(251,191,36,.25);
+  border-radius: 14px;
+  margin-bottom: 22px;
+  font: 500 .85rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+}
+.diag-warning-icon { font-size: 24px; flex-shrink: 0; }
+.diag-warning strong { color: #fbbf24; display: block; margin-bottom: 3px; }
+
+.diag-step-card {
+  display: flex; gap: 18px;
+  padding: 22px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.diag-step-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4a017, #f5d77a);
+  color: #0a2540;
+  display: flex; align-items: center; justify-content: center;
+  font: 900 1.1rem 'Plus Jakarta Sans', sans-serif;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(212,160,23,.4);
+}
+.diag-step-content { flex: 1; min-width: 0; }
+.diag-step-content h3 {
+  font: 800 1.1rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 4px 0 14px;
+  letter-spacing: -.3px;
+}
+.diag-help {
+  font: 500 .82rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.55);
+  margin: -8px 0 14px;
+}
+
+.diag-especie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+.diag-especie {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 10px;
+  background: rgba(255,255,255,.04);
+  border: 2px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+  color: rgba(255,255,255,.75);
+}
+.diag-especie:hover {
+  background: rgba(255,255,255,.07);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.diag-especie-active {
+  background: linear-gradient(135deg, rgba(212,160,23,.25), rgba(212,160,23,.08));
+  border-color: #fbbf24;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(212,160,23,.25);
+}
+.diag-especie-emoji { font-size: 32px; }
+.diag-especie-label {
+  font: 700 .82rem 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -.2px;
+}
+
+.diag-cat-titulo {
+  font: 800 .68rem 'Montserrat', sans-serif;
+  color: rgba(212,160,23,.85);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin: 14px 0 8px;
+}
+.diag-cat-titulo:first-child { margin-top: 0; }
+.diag-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px;
+}
+.diag-sintoma {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+  color: rgba(255,255,255,.75);
+  text-align: left;
+}
+.diag-sintoma:hover {
+  background: rgba(255,255,255,.06);
+  color: #fff;
+}
+.diag-sintoma-sel {
+  background: linear-gradient(135deg, rgba(34,197,94,.2), rgba(34,197,94,.05));
+  border-color: #22c55e;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(34,197,94,.2);
+}
+.diag-sintoma-emoji { font-size: 18px; flex-shrink: 0; }
+.diag-sintoma-label {
+  font: 600 .78rem 'Inter', sans-serif;
+  letter-spacing: .1px;
+}
+
+.diag-extra-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.diag-actions {
+  display: flex; gap: 12px;
+  margin: 22px 0;
+}
+.diag-btn-reset {
+  padding: 13px 22px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.8);
+  border-radius: 12px;
+  font: 700 .88rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+}
+.diag-btn-reset:hover { background: rgba(255,255,255,.12); }
+.diag-btn-diagnosticar {
+  flex: 1;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, #d4a017, #f5d77a, #d4a017);
+  background-size: 200% 100%;
+  color: #0a2540;
+  border: none;
+  border-radius: 12px;
+  font: 800 .95rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(212,160,23,.4), inset 0 1px 0 rgba(255,255,255,.3);
+  transition: all .25s;
+  animation: btnGoldShine 4s ease-in-out infinite;
+}
+.diag-btn-diagnosticar:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(212,160,23,.55);
+}
+
+/* Resultados */
+.diag-resultados-header {
+  margin: 28px 0 18px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(34,197,94,.12), transparent);
+  border: 1px solid rgba(34,197,94,.25);
+  border-radius: 14px;
+}
+.diag-resultados-header h2 {
+  font: 800 1.4rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 6px;
+}
+.diag-resultados-header p {
+  font: 500 .85rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.7);
+  margin: 0;
+}
+
+.diag-resultado-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-left: 4px solid var(--sev-color, #94a3b8);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.diag-resultado-head {
+  display: flex; gap: 14px; align-items: flex-start;
+  margin-bottom: 12px;
+}
+.diag-resultado-rank {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sev-color), color-mix(in srgb, var(--sev-color) 60%, black));
+  color: #fff;
+  font: 900 1.1rem 'Plus Jakarta Sans', sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3);
+}
+.diag-resultado-info { flex: 1; min-width: 0; }
+.diag-resultado-info h3 {
+  font: 800 1.15rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 6px;
+  letter-spacing: -.3px;
+}
+.diag-resultado-badges {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.diag-badge {
+  display: inline-block;
+  font: 800 .65rem 'Montserrat', sans-serif;
+  letter-spacing: .8px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid;
+  text-transform: uppercase;
+}
+.diag-badge-prob { background: rgba(212,160,23,.18); color: #fbbf24; border-color: rgba(212,160,23,.3); }
+.diag-badge-notif { background: rgba(239,68,68,.18); color: #fca5a5; border-color: rgba(239,68,68,.4); }
+
+.diag-resultado-desc {
+  font: 500 .9rem/1.55 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+  margin: 0 0 16px;
+}
+
+.diag-resultado-grid {
+  display: flex; flex-direction: column;
+  gap: 10px;
+}
+.diag-resultado-block {
+  padding: 12px 14px;
+  background: rgba(0,0,0,.25);
+  border-radius: 10px;
+  border-left: 3px solid;
+}
+.diag-block-coincidencias { border-left-color: #22c55e; }
+.diag-block-tratamiento { border-left-color: #3b82f6; }
+.diag-block-prevencion { border-left-color: #fbbf24; }
+.diag-block-label {
+  font: 800 .68rem 'Montserrat', sans-serif;
+  letter-spacing: 1px;
+  color: #fbbf24;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.diag-block-coincidencias .diag-block-label { color: #4ade80; }
+.diag-block-tratamiento .diag-block-label { color: #93c5fd; }
+.diag-block-prevencion .diag-block-label { color: #fbbf24; }
+.diag-block-content {
+  font: 500 .85rem/1.55 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+}
+.diag-block-content p { margin: 0; }
+.diag-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  margin: 3px 3px 0 0;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px;
+  font: 600 .72rem 'Inter', sans-serif;
+}
+.diag-chip-match {
+  background: rgba(34,197,94,.15);
+  border-color: rgba(34,197,94,.35);
+  color: #4ade80;
+}
+
+.diag-resultado-fuente {
+  font: 500 .72rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.45);
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.diag-disclaimer {
+  margin-top: 22px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(239,68,68,.08), transparent);
+  border: 1px solid rgba(239,68,68,.2);
+  border-radius: 14px;
+}
+.diag-disclaimer h3 {
+  font: 800 1rem 'Plus Jakarta Sans', sans-serif;
+  color: #fca5a5;
+  margin: 0 0 8px;
+}
+.diag-disclaimer p {
+  font: 500 .85rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.78);
+  margin: 0 0 8px;
+}
+.diag-disclaimer p:last-child { margin-bottom: 0; }
+.diag-disclaimer strong { color: #fff; }
+
+.diag-no-match {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255,255,255,.04);
+  border-radius: 14px;
+}
+.diag-no-match h3 {
+  color: #fff; font: 800 1.2rem 'Plus Jakarta Sans', sans-serif;
+  margin: 12px 0 8px;
+}
+.diag-no-match p {
+  color: rgba(255,255,255,.7); font-size: .9rem; max-width: 400px; margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🧮 CALCULADORA PECUARIA                                     */
+/* ═══════════════════════════════════════════════════════════ */
+.calc-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(0,0,0,.25);
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+.calc-tab {
+  flex: 1;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  color: rgba(255,255,255,.55);
+  font: 700 .9rem 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all .25s;
+}
+.calc-tab:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.04); }
+.calc-tab-active {
+  background: linear-gradient(135deg, rgba(212,160,23,.25), rgba(212,160,23,.08));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(212,160,23,.35), 0 4px 12px rgba(212,160,23,.15);
+}
+
+.calc-info-box {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(59,130,246,.12), rgba(59,130,246,.02));
+  border: 1px solid rgba(59,130,246,.2);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  font: 500 .82rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+}
+.calc-info-box strong { color: #93c5fd; display: block; margin-bottom: 3px; }
+
+.calc-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.calc-form-grid > div { display: flex; flex-direction: column; }
+
+.calc-result-hero {
+  padding: 24px 22px;
+  border-radius: 16px;
+  text-align: center;
+  margin: 22px 0 18px;
+  position: relative;
+  overflow: hidden;
+}
+.calc-result-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  opacity: .6;
+}
+.calc-hero-ganancia {
+  background: linear-gradient(135deg, rgba(34,197,94,.2), rgba(34,197,94,.05));
+  border: 1px solid rgba(34,197,94,.35);
+  color: #4ade80;
+}
+.calc-hero-perdida {
+  background: linear-gradient(135deg, rgba(239,68,68,.2), rgba(239,68,68,.05));
+  border: 1px solid rgba(239,68,68,.35);
+  color: #fca5a5;
+}
+.calc-hero-info {
+  background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(59,130,246,.04));
+  border: 1px solid rgba(59,130,246,.3);
+  color: #93c5fd;
+}
+.calc-hero-label {
+  font: 800 .7rem 'Montserrat', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: .9;
+}
+.calc-hero-num {
+  font: 900 3.2rem/1 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -2px;
+  margin: 6px 0;
+}
+.calc-hero-sub {
+  font: 600 .95rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.8);
+}
+.calc-hero-sub strong { color: #fff; }
+
+.calc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.calc-stat {
+  padding: 14px 16px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+}
+.calc-stat-icon { font-size: 20px; margin-bottom: 4px; }
+.calc-stat-label {
+  font: 700 .68rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.5);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.calc-stat-val {
+  font: 800 1.25rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -.5px;
+}
+
+.calc-breakdown {
+  padding: 16px 18px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  margin-top: 14px;
+}
+.calc-breakdown h4 {
+  font: 800 .85rem 'Plus Jakarta Sans', sans-serif;
+  color: #fbbf24;
+  margin: 0 0 10px;
+}
+.calc-breakdown-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  font: 500 .85rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.75);
+}
+.calc-breakdown-row strong { color: #fff; }
+.calc-breakdown-total {
+  border-top: 2px solid rgba(212,160,23,.3);
+  border-bottom: none;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+.calc-breakdown-total span,
+.calc-breakdown-total strong { color: #fbbf24; font-weight: 800; font-size: 1rem; }
+
+.calc-warning {
+  margin-top: 14px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(239,68,68,.15), rgba(239,68,68,.03));
+  border: 1px solid rgba(239,68,68,.3);
+  border-radius: 12px;
+  color: #fca5a5;
+  font: 500 .88rem/1.5 'Inter', sans-serif;
+}
+.calc-warning strong { color: #ef4444; }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 📓 BITÁCORA DIGITAL                                          */
+/* ═══════════════════════════════════════════════════════════ */
+.bita-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.bita-stat-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.bita-stat-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.bita-stat-prox::before { background: #3b82f6; }
+.bita-stat-hoy::before { background: #ef4444; }
+.bita-stat-total::before { background: #fbbf24; }
+.bita-stat-mes::before { background: #22c55e; }
+.bita-stat-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.05);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.bita-stat-num {
+  font: 900 1.8rem/1 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -1px;
+}
+.bita-stat-label {
+  font: 600 .7rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.6);
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.bita-filters {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.bita-filters .hato-filter { min-width: 180px; }
+
+.bita-timeline {
+  display: flex; flex-direction: column;
+  gap: 18px;
+}
+.bita-grupo { display: flex; flex-direction: column; gap: 6px; }
+.bita-grupo-fecha {
+  font: 800 .72rem 'Montserrat', sans-serif;
+  color: #fbbf24;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  background: rgba(212,160,23,.08);
+  border-left: 3px solid #fbbf24;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.bita-evento {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  border-left: 3px solid var(--ev-color, #94a3b8);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.bita-evento:hover {
+  background: rgba(255,255,255,.06);
+  transform: translateX(3px);
+}
+.bita-ev-body { min-width: 0; }
+.bita-ev-head {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px; margin-bottom: 4px;
+}
+.bita-ev-animal {
+  font: 600 .78rem 'Inter', sans-serif;
+  color: rgba(212,160,23,.85);
+}
+.bita-empty {
+  text-align: center;
+  padding: 50px 20px;
+  background: rgba(255,255,255,.03);
+  border-radius: 14px;
+}
+.bita-empty h3 { color: #fff; margin: 14px 0 6px; }
+.bita-empty p { color: rgba(255,255,255,.6); font-size: .88rem; margin-bottom: 18px; }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🏛️ APOYOS DEL GOBIERNO                                       */
+/* ═══════════════════════════════════════════════════════════ */
+.apoyos-info-box {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(212,160,23,.1), rgba(212,160,23,.02));
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: 14px;
+  margin-bottom: 22px;
+  font: 500 .85rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.85);
+}
+.apoyos-info-box strong { color: #fbbf24; display: block; margin-bottom: 3px; }
+
+.apoyos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+.apoyo-card {
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all .25s;
+}
+.apoyo-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--apoyo-color);
+  opacity: .6;
+}
+.apoyo-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--apoyo-color);
+  box-shadow: 0 14px 30px rgba(0,0,0,.3), 0 0 40px color-mix(in srgb, var(--apoyo-color) 15%, transparent);
+}
+.apoyo-head {
+  display: flex; gap: 12px; align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.apoyo-icon {
+  width: 50px; height: 50px;
+  background: color-mix(in srgb, var(--apoyo-color) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--apoyo-color) 35%, transparent);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.apoyo-info h3 {
+  font: 800 1.05rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 3px;
+  letter-spacing: -.3px;
+}
+.apoyo-instituc {
+  font: 700 .68rem 'Montserrat', sans-serif;
+  color: var(--apoyo-color);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.apoyo-desc {
+  font: 500 .85rem/1.5 'Inter', sans-serif;
+  color: rgba(255,255,255,.78);
+  margin: 0 0 14px;
+}
+.apoyo-monto {
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--apoyo-color) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--apoyo-color) 25%, transparent);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.apoyo-monto-label {
+  font: 700 .62rem 'Montserrat', sans-serif;
+  color: var(--apoyo-color);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.apoyo-monto-val {
+  font: 700 .92rem 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+}
+.apoyo-req-label {
+  font: 700 .62rem 'Montserrat', sans-serif;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.apoyo-req ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  display: flex; flex-direction: column;
+  gap: 4px;
+}
+.apoyo-req li {
+  font: 500 .78rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.7);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.4;
+}
+.apoyo-req li::before {
+  content: '✓';
+  position: absolute;
+  left: 0; top: 0;
+  color: var(--apoyo-color);
+  font-weight: 800;
+}
+.apoyo-link {
+  display: inline-block;
+  font: 700 .82rem 'Plus Jakarta Sans', sans-serif;
+  color: var(--apoyo-color);
+  text-decoration: none;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.05);
+  transition: opacity .2s;
+}
+.apoyo-link:hover { opacity: .8; }
+
+@media (max-width: 720px) {
+  .diag-step-card { padding: 16px 14px; gap: 12px; }
+  .diag-step-num { width: 30px; height: 30px; font-size: .9rem; }
+  .diag-cat-grid { grid-template-columns: 1fr 1fr; }
+  .diag-actions { flex-direction: column-reverse; }
+  .diag-extra-row { grid-template-columns: 1fr; }
+  .calc-hero-num { font-size: 2.3rem; }
+  .apoyos-grid { grid-template-columns: 1fr; }
+  .bita-stats-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ═══════════ FORM PREMIUM DEL DETALLE ANIMAL ═══════════ */
 .md-pane-form {
   display: flex;
@@ -6105,6 +6831,10 @@ button { font-family: inherit; }
         <span class="sb-nav-icon">🌾</span>
         <span class="sb-nav-label">Potrero</span>
       </button>
+      <button class="sb-nav-item" data-section="apoyos">
+        <span class="sb-nav-icon">🏛️</span>
+        <span class="sb-nav-label">Apoyos Gob</span>
+      </button>
       <button class="sb-nav-item" data-section="botiquin" data-vip="true">
         <span class="sb-nav-icon">⚕️</span>
         <span class="sb-nav-label">Botiquín</span>
@@ -6779,25 +7509,354 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
-      <!-- ⚕️ BOTIQUÍN                                               -->
+      <!-- 🩺 BOTIQUÍN — Diagnóstico veterinario                       -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-botiquin">
         <div class="section-head">
           <div>
-            <h1>⚕️ El Botiquín</h1>
-            <p>Diagnóstico veterinario asistido por IA — 22 enfermedades cubiertas</p>
+            <h1>🩺 El Botiquín</h1>
+            <p>Diagnóstico veterinario · 22 enfermedades según SENASICA, INIFAP y SADER</p>
           </div>
         </div>
-        <div class="widget" style="text-align:center;padding:60px 28px;">
-          <div style="font-size:64px;margin-bottom:16px;">🩺</div>
-          <h3 style="font:800 1.3rem 'Montserrat',sans-serif;margin-bottom:10px;">Diagnóstico veterinario IA</h3>
-          <p style="color:rgba(255,255,255,.7);max-width:480px;margin:0 auto 20px;line-height:1.5;">
-            Selecciona la especie, los síntomas y la población afectada. La IA te dará un diagnóstico probable, tratamiento y prevención.
-          </p>
-          <button class="modal-cta" style="max-width:300px;margin:0 auto;" onclick="abrirModalVIP()">
-            🔬 Iniciar diagnóstico
+
+        <div class="diag-warning">
+          <span class="diag-warning-icon">⚠️</span>
+          <div>
+            <strong>Asistente orientativo, no reemplaza a un MVZ.</strong>
+            Si tu animal presenta síntomas graves, contacta a un Médico Veterinario Zootecnista certificado.
+            Las enfermedades de notificación obligatoria deben reportarse a SENASICA (01 800 751 2100).
+          </div>
+        </div>
+
+        <div class="diag-step-card">
+          <div class="diag-step-num">1</div>
+          <div class="diag-step-content">
+            <h3>¿Qué especie es tu animal?</h3>
+            <div class="diag-especie-grid">
+              <button class="diag-especie diag-especie-active" data-especie="bovino" onclick="diagSeleccionarEspecie('bovino')">
+                <span class="diag-especie-emoji">🐄</span>
+                <span class="diag-especie-label">Bovino</span>
+              </button>
+              <button class="diag-especie" data-especie="porcino" onclick="diagSeleccionarEspecie('porcino')">
+                <span class="diag-especie-emoji">🐖</span>
+                <span class="diag-especie-label">Porcino</span>
+              </button>
+              <button class="diag-especie" data-especie="ovino" onclick="diagSeleccionarEspecie('ovino')">
+                <span class="diag-especie-emoji">🐑</span>
+                <span class="diag-especie-label">Ovino</span>
+              </button>
+              <button class="diag-especie" data-especie="caprino" onclick="diagSeleccionarEspecie('caprino')">
+                <span class="diag-especie-emoji">🐐</span>
+                <span class="diag-especie-label">Caprino</span>
+              </button>
+              <button class="diag-especie" data-especie="avicola" onclick="diagSeleccionarEspecie('avicola')">
+                <span class="diag-especie-emoji">🐔</span>
+                <span class="diag-especie-label">Aves</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="diag-step-card">
+          <div class="diag-step-num">2</div>
+          <div class="diag-step-content">
+            <h3>Selecciona los síntomas que observas</h3>
+            <p class="diag-help">Marca todos los que apliquen. Mientras más síntomas marques, más preciso será el diagnóstico.</p>
+            <div class="diag-sintomas-grid" id="diagSintomasGrid"></div>
+          </div>
+        </div>
+
+        <div class="diag-step-card">
+          <div class="diag-step-num">3</div>
+          <div class="diag-step-content">
+            <h3>Información adicional <small style="color:rgba(255,255,255,.45);">(opcional)</small></h3>
+            <div class="diag-extra-row">
+              <div>
+                <label class="md-form-label">Edad aproximada</label>
+                <select class="md-form-input" id="diagEdad">
+                  <option value="">— Cualquiera —</option>
+                  <option value="neonato">Recién nacido / Lactante</option>
+                  <option value="joven">Joven (destetado a 1 año)</option>
+                  <option value="adulto">Adulto (1+ año)</option>
+                </select>
+              </div>
+              <div>
+                <label class="md-form-label">¿Cuántos animales afectados?</label>
+                <select class="md-form-input" id="diagPoblacion">
+                  <option value="1">1 animal aislado</option>
+                  <option value="pocos">Pocos animales (2-5)</option>
+                  <option value="brote">Brote en el hato (6+)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="diag-actions">
+          <button class="diag-btn-reset" onclick="diagReset()">↺ Empezar de nuevo</button>
+          <button class="diag-btn-diagnosticar" onclick="diagDiagnosticar()">🔍 Generar diagnóstico</button>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div id="diagResultados" style="display:none;"></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 🧮 CALCULADORA PECUARIA                                   -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-calculadora">
+        <div class="section-head">
+          <div>
+            <h1>🧮 Calculadora Pecuaria</h1>
+            <p>Rentabilidad, forraje y nutrición — base científica MVZ</p>
+          </div>
+        </div>
+
+        <div class="calc-tabs">
+          <button class="calc-tab calc-tab-active" data-tab="rentabilidad" onclick="calcCambiarTab('rentabilidad')">
+            💰 Rentabilidad
+          </button>
+          <button class="calc-tab" data-tab="forraje" onclick="calcCambiarTab('forraje')">
+            🌾 Forraje
+          </button>
+          <button class="calc-tab" data-tab="nutricion" onclick="calcCambiarTab('nutricion')">
+            🥗 Nutrición
           </button>
         </div>
+
+        <!-- TAB: RENTABILIDAD -->
+        <div class="calc-pane" id="calcPaneRentabilidad">
+          <div class="calc-info-box">
+            <span class="lote-info-icon">💡</span>
+            <div>
+              <strong>¿Estás ganando o perdiendo plata real?</strong>
+              Esta calculadora usa los precios en vivo del mercado (SIAP-SADER) y tu hato real para sacar tu margen exacto.
+            </div>
+          </div>
+
+          <div class="calc-form-grid">
+            <div>
+              <label class="md-form-label">Tipo de animal</label>
+              <select class="md-form-input" id="calcTipo" onchange="calcActualizarPrecioMercado()">
+                <option value="becerro">🐃 Becerro engorda</option>
+                <option value="vaca">🐄 Vaca abasto</option>
+                <option value="toro">🐂 Toro</option>
+                <option value="cerdo">🐖 Cerdo en pie</option>
+                <option value="oveja">🐑 Ovino</option>
+                <option value="cabra">🐐 Caprino</option>
+                <option value="pollo">🐔 Pollo en pie</option>
+              </select>
+            </div>
+            <div>
+              <label class="md-form-label">Peso de venta (kg)</label>
+              <input type="number" class="md-form-input" id="calcPesoVenta" value="400" placeholder="400">
+            </div>
+            <div>
+              <label class="md-form-label">Precio venta $/kg <small id="calcPrecioMercado" style="color:#4ade80;font-weight:700;"></small></label>
+              <input type="number" class="md-form-input" id="calcPrecioVenta" step="0.5" placeholder="Auto desde mercado">
+            </div>
+            <div>
+              <label class="md-form-label">Días de engorda</label>
+              <input type="number" class="md-form-input" id="calcDias" value="240" placeholder="240">
+            </div>
+            <div>
+              <label class="md-form-label">Costo compra inicial ($)</label>
+              <input type="number" class="md-form-input" id="calcCostoCompra" value="14000" placeholder="14000">
+            </div>
+            <div>
+              <label class="md-form-label">Costo alimentación/día ($)</label>
+              <input type="number" class="md-form-input" id="calcCostoDia" value="35" step="0.5" placeholder="35">
+            </div>
+            <div>
+              <label class="md-form-label">Vacunas y sanidad total ($)</label>
+              <input type="number" class="md-form-input" id="calcCostoSanidad" value="400" placeholder="400">
+            </div>
+            <div>
+              <label class="md-form-label">Otros costos ($)</label>
+              <input type="number" class="md-form-input" id="calcCostoOtros" value="500" placeholder="500">
+            </div>
+          </div>
+
+          <button class="diag-btn-diagnosticar" style="margin-top:18px;" onclick="calcRentabilidad()">📊 Calcular rentabilidad</button>
+
+          <div id="calcResultadoRent" style="display:none;"></div>
+        </div>
+
+        <!-- TAB: FORRAJE -->
+        <div class="calc-pane" id="calcPaneForraje" style="display:none;">
+          <div class="calc-info-box">
+            <span class="lote-info-icon">🌾</span>
+            <div>
+              <strong>Calculadora de forraje y materia seca.</strong>
+              Basado en la fórmula NRC (National Research Council): el ganado bovino consume aprox. 2-3% de su peso vivo en materia seca al día.
+            </div>
+          </div>
+
+          <div class="calc-form-grid">
+            <div>
+              <label class="md-form-label">Tipo de animal</label>
+              <select class="md-form-input" id="forrajeTipo">
+                <option value="bovino-engorda" data-ms="2.5">🐂 Bovino engorda (2.5%)</option>
+                <option value="bovino-lechera" data-ms="3.5">🐄 Vaca lechera (3.5%)</option>
+                <option value="bovino-seca" data-ms="2.0">🐄 Vaca seca (2.0%)</option>
+                <option value="ovino-caprino" data-ms="3.0">🐑 Ovino/Caprino (3.0%)</option>
+              </select>
+            </div>
+            <div>
+              <label class="md-form-label">Peso vivo promedio (kg)</label>
+              <input type="number" class="md-form-input" id="forrajePeso" value="400" placeholder="400">
+            </div>
+            <div>
+              <label class="md-form-label">Cantidad de animales</label>
+              <input type="number" class="md-form-input" id="forrajeAnimales" value="50" placeholder="50">
+            </div>
+            <div>
+              <label class="md-form-label">Días a planificar</label>
+              <input type="number" class="md-form-input" id="forrajeDias" value="30" placeholder="30">
+            </div>
+            <div>
+              <label class="md-form-label">% Materia seca del forraje</label>
+              <select class="md-form-input" id="forrajeTipoAlimento">
+                <option value="25">Pasto verde fresco (25% MS)</option>
+                <option value="30">Ensilaje de maíz (30% MS)</option>
+                <option value="50">Heno henificado (50% MS)</option>
+                <option value="88">Concentrado (88% MS)</option>
+                <option value="90">Alfalfa achicalada (90% MS)</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="diag-btn-diagnosticar" style="margin-top:18px;" onclick="calcForraje()">🌾 Calcular forraje requerido</button>
+
+          <div id="calcResultadoForraje" style="display:none;"></div>
+        </div>
+
+        <!-- TAB: NUTRICIÓN -->
+        <div class="calc-pane" id="calcPaneNutricion" style="display:none;">
+          <div class="calc-info-box">
+            <span class="lote-info-icon">🥗</span>
+            <div>
+              <strong>Requerimientos nutricionales por categoría animal.</strong>
+              Calcula proteína cruda (PC), energía metabolizable (EM/Mcal), calcio y fósforo según NRC y normativa SAGARPA-SENASICA.
+            </div>
+          </div>
+
+          <div class="calc-form-grid">
+            <div>
+              <label class="md-form-label">Categoría animal</label>
+              <select class="md-form-input" id="nutCategoria">
+                <option value="vaca-lactante">🥛 Vaca lactante (alta producción)</option>
+                <option value="vaca-seca">🐄 Vaca seca / mantenimiento</option>
+                <option value="becerro-engorda">🐂 Becerro engorda</option>
+                <option value="becerro-lactante">🍼 Becerro lactante</option>
+                <option value="toro-reproductor">🐂 Toro reproductor</option>
+                <option value="ovino-engorda">🐑 Ovino engorda</option>
+                <option value="caprino-lechera">🐐 Cabra lechera</option>
+                <option value="cerdo-engorda">🐖 Cerdo engorda</option>
+                <option value="cerda-gestante">🐷 Cerda gestante</option>
+              </select>
+            </div>
+            <div>
+              <label class="md-form-label">Peso vivo (kg)</label>
+              <input type="number" class="md-form-input" id="nutPeso" value="400" placeholder="400">
+            </div>
+            <div>
+              <label class="md-form-label">Producción esperada</label>
+              <input type="text" class="md-form-input" id="nutProduccion" placeholder="Ej. 20 L/día, 1 kg GDP">
+            </div>
+          </div>
+
+          <button class="diag-btn-diagnosticar" style="margin-top:18px;" onclick="calcNutricion()">🥗 Calcular requerimientos</button>
+
+          <div id="calcResultadoNut" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 📓 BITÁCORA DIGITAL                                       -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-bitacora">
+        <div class="section-head">
+          <div>
+            <h1>📓 Bitácora Digital</h1>
+            <p>Calendario unificado · eventos registrados en todo tu hato</p>
+          </div>
+        </div>
+
+        <div class="bita-stats-grid">
+          <div class="bita-stat-card bita-stat-prox">
+            <div class="bita-stat-icon">📅</div>
+            <div>
+              <div class="bita-stat-num" id="bitaProxNum">0</div>
+              <div class="bita-stat-label">Próximos 7 días</div>
+            </div>
+          </div>
+          <div class="bita-stat-card bita-stat-hoy">
+            <div class="bita-stat-icon">🔔</div>
+            <div>
+              <div class="bita-stat-num" id="bitaHoyNum">0</div>
+              <div class="bita-stat-label">Hoy</div>
+            </div>
+          </div>
+          <div class="bita-stat-card bita-stat-total">
+            <div class="bita-stat-icon">📋</div>
+            <div>
+              <div class="bita-stat-num" id="bitaTotalNum">0</div>
+              <div class="bita-stat-label">Total registrados</div>
+            </div>
+          </div>
+          <div class="bita-stat-card bita-stat-mes">
+            <div class="bita-stat-icon">📊</div>
+            <div>
+              <div class="bita-stat-num" id="bitaMesNum">0</div>
+              <div class="bita-stat-label">Este mes</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bita-filters">
+          <select class="hato-filter" id="bitaFilterTipo" onchange="pintarBitacora()">
+            <option value="">Todos los eventos</option>
+            <option value="vacuna">💉 Vacunas</option>
+            <option value="enfermedad">🤒 Enfermedades</option>
+            <option value="parto">🍼 Partos</option>
+            <option value="venta">💰 Ventas</option>
+            <option value="muerte">⚰️ Muertes</option>
+            <option value="nota">📝 Notas</option>
+          </select>
+          <select class="hato-filter" id="bitaFilterPeriodo" onchange="pintarBitacora()">
+            <option value="todos">Todos los periodos</option>
+            <option value="hoy">Hoy</option>
+            <option value="semana">Última semana</option>
+            <option value="mes">Último mes</option>
+            <option value="3meses">Últimos 3 meses</option>
+          </select>
+        </div>
+
+        <div class="bita-timeline" id="bitaTimeline"></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 🏛️ APOYOS DEL GOBIERNO                                    -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-apoyos">
+        <div class="section-head">
+          <div>
+            <h1>🏛️ Apoyos del Gobierno</h1>
+            <p>Programas activos para productores pecuarios — SADER, FIRA, BIENESTAR</p>
+          </div>
+        </div>
+
+        <div class="apoyos-info-box">
+          <span class="lote-info-icon">📋</span>
+          <div>
+            <strong>Información actualizada al 2026.</strong>
+            Los programas y montos pueden cambiar. Verifica siempre con la fuente oficial antes de tramitar.
+            Si tu programa de interés no aparece, llama a SADER al 01 800 0876 565.
+          </div>
+        </div>
+
+        <div class="apoyos-grid" id="apoyosGrid"></div>
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
@@ -9820,6 +10879,7 @@ window.__rancho.iniciarHato = async function() {
       pintarHatoCasco();
       pintarHato();
       refrescarTermometro();
+      try { pintarBitacora(); } catch(e) {}
     }, (err) => {
       console.warn('Sin acceso a animales:', err.code);
       window.__rancho.animales = [];
@@ -10148,22 +11208,17 @@ window.canjearDescuento = function() {
 // HERRAMIENTAS DEL POTRERO
 // ═══════════════════════════════════════════════════════════
 const TOOLS = [
-  { icon:'⚕️', name:'Diagnóstico veterinario IA', desc:'22 enfermedades cubiertas con tratamiento y prevención', vip:true, accion:'botiquin' },
-  { icon:'💰', name:'Calculadora pecuaria', desc:'Costo por kilo, rentabilidad real de tu hato', vip:true },
-  { icon:'📊', name:'Mercado en tiempo real', desc:'Precios SIAP-SADER actualizados diario', vip:false, accion:'mercado' },
-  { icon:'📓', name:'Bitácora digital', desc:'Vacunación, desparasitación, eventos', vip:true, accion:'hato' },
-  { icon:'🌡️', name:'Predicción de clima', desc:'Próximos 7 días por región', vip:true },
-  { icon:'🏛️', name:'Apoyos del gobierno', desc:'PROGAN, FIRA, SINIIGA y más', vip:true },
-  { icon:'💊', name:'Catálogo medicamentos', desc:'Dosis, retiro, presentaciones', vip:true },
-  { icon:'📐', name:'Conversor pecuario', desc:'Pesos, medidas, alimentación', vip:false }
+  { icon:'🩺', name:'Diagnóstico veterinario', desc:'22 enfermedades cubiertas con tratamiento basado en SENASICA/INIFAP', vip:false, accion:'botiquin' },
+  { icon:'🧮', name:'Calculadora pecuaria', desc:'Rentabilidad, forraje y nutrición MVZ profesional', vip:false, accion:'calculadora' },
+  { icon:'📓', name:'Bitácora digital', desc:'Calendario unificado de vacunas, eventos y tareas', vip:false, accion:'bitacora' },
+  { icon:'💰', name:'Mercado en tiempo real', desc:'Precios SIAP-SADER actualizados diario', vip:false, accion:'mercado' },
+  { icon:'🏛️', name:'Apoyos del gobierno', desc:'PROGAN, FIRA, SINIIGA, FAPPA y más', vip:false, accion:'apoyos' }
 ];
 function pintarTools() {
-  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
   document.getElementById('toolsGrid').innerHTML = TOOLS.map(t => {
-    const locked = t.vip && !isVip;
-    const onclick = locked ? `abrirModalVIP('Esta herramienta es exclusiva de Élite Pecuario.')` : (t.accion ? `navigateTo('${t.accion}')` : `toast('Próximamente: ${t.name}', 'success', '🌾')`);
+    const onclick = t.accion ? `navigateTo('${t.accion}')` : `toast('Próximamente: ${t.name}', 'success', '🌾')`;
     return `
-      <div class="tool-card ${locked?'locked':''}" onclick="${onclick}">
+      <div class="tool-card" onclick="${onclick}">
         <div class="tool-icon">${t.icon}</div>
         <div class="tool-name">${t.name}</div>
         <div class="tool-desc">${t.desc}</div>
@@ -10172,6 +11227,1124 @@ function pintarTools() {
   }).join('');
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// 🩺 SISTEMA DE DIAGNÓSTICO VETERINARIO
+// Base de datos: 22 enfermedades comunes del ganado en México
+// Fuentes: SENASICA, INIFAP, SADER, Club Ganadero, Veterinaria Digital
+// ═══════════════════════════════════════════════════════════════════
+
+const SINTOMAS_CATALOGO = [
+  // Generales
+  { id: 'fiebre', label: 'Fiebre / temperatura alta', emoji: '🌡️', categoria: 'general' },
+  { id: 'apatia', label: 'Apatía / depresión', emoji: '😴', categoria: 'general' },
+  { id: 'noCome', label: 'No come (anorexia)', emoji: '🚫', categoria: 'general' },
+  { id: 'perdidaPeso', label: 'Pérdida de peso', emoji: '📉', categoria: 'general' },
+  { id: 'debilidad', label: 'Debilidad general', emoji: '😩', categoria: 'general' },
+  { id: 'deshidratacion', label: 'Deshidratación', emoji: '💧', categoria: 'general' },
+  // Digestivos
+  { id: 'diarrea', label: 'Diarrea', emoji: '💩', categoria: 'digestivo' },
+  { id: 'diarreaSangre', label: 'Diarrea con sangre', emoji: '🩸', categoria: 'digestivo' },
+  { id: 'noRumia', label: 'No rumia', emoji: '🤐', categoria: 'digestivo' },
+  { id: 'timpanismo', label: 'Vientre inflamado (timpanismo)', emoji: '🎈', categoria: 'digestivo' },
+  { id: 'vomito', label: 'Vómito', emoji: '🤢', categoria: 'digestivo' },
+  // Respiratorios
+  { id: 'tos', label: 'Tos', emoji: '😷', categoria: 'respiratorio' },
+  { id: 'dificultadRespirar', label: 'Dificultad para respirar', emoji: '😮‍💨', categoria: 'respiratorio' },
+  { id: 'secrecionNasal', label: 'Secreción nasal', emoji: '🤧', categoria: 'respiratorio' },
+  { id: 'respiracionRapida', label: 'Respiración rápida', emoji: '💨', categoria: 'respiratorio' },
+  // Locomoción
+  { id: 'cojera', label: 'Cojera', emoji: '🦵', categoria: 'locomocion' },
+  { id: 'temblores', label: 'Temblores musculares', emoji: '〰️', categoria: 'locomocion' },
+  { id: 'paralisis', label: 'Parálisis', emoji: '⛔', categoria: 'locomocion' },
+  { id: 'caidas', label: 'Se cae / no se levanta', emoji: '⬇️', categoria: 'locomocion' },
+  // Piel y mucosas
+  { id: 'palidez', label: 'Encías pálidas (anemia)', emoji: '🤍', categoria: 'piel' },
+  { id: 'ictericia', label: 'Mucosas amarillas (ictericia)', emoji: '🟡', categoria: 'piel' },
+  { id: 'hinchazon', label: 'Hinchazón en piel', emoji: '🎈', categoria: 'piel' },
+  { id: 'heridas', label: 'Heridas / lesiones', emoji: '🩹', categoria: 'piel' },
+  { id: 'caidaPelo', label: 'Caída de pelo / dermatitis', emoji: '🪒', categoria: 'piel' },
+  // Reproductivo / ubre
+  { id: 'mastitis', label: 'Ubre inflamada / dolor', emoji: '⚠️', categoria: 'reproductivo' },
+  { id: 'leche', label: 'Leche con sangre o pus', emoji: '🥛', categoria: 'reproductivo' },
+  { id: 'aborto', label: 'Aborto / mortinatos', emoji: '😢', categoria: 'reproductivo' },
+  { id: 'infertilidad', label: 'Infertilidad / repite celo', emoji: '🔁', categoria: 'reproductivo' },
+  // Neurológicos
+  { id: 'salivacion', label: 'Salivación excesiva', emoji: '💦', categoria: 'neurologico' },
+  { id: 'agresividad', label: 'Agresividad / comportamiento raro', emoji: '😡', categoria: 'neurologico' },
+  { id: 'convulsiones', label: 'Convulsiones', emoji: '⚡', categoria: 'neurologico' },
+  // Garrapatas / parásitos
+  { id: 'garrapatas', label: 'Garrapatas visibles', emoji: '🕷️', categoria: 'parasito' },
+  { id: 'moscas', label: 'Moscas / heridas con larvas', emoji: '🪰', categoria: 'parasito' }
+];
+
+const ENFERMEDADES_DB = [
+  // ═══ BOVINOS ═══
+  {
+    id: 'mastitis',
+    nombre: 'Mastitis bovina',
+    especies: ['bovino'],
+    severidad: 'media',
+    sintomas: ['mastitis', 'leche', 'fiebre', 'apatia'],
+    descripcion: 'Inflamación de la glándula mamaria por bacterias (E. coli, Staphylococcus, Streptococcus). Causa más común de pérdidas económicas en vacas lecheras.',
+    tratamiento: 'Antibiótico intramamario (cefalexina, amoxicilina) por 3-5 días. Antiinflamatorio (flunixin meglumine). Vaciado completo del cuarto afectado 2-3 veces al día. RETIRO de leche durante tratamiento + 96 horas post-tratamiento.',
+    prevencion: 'Higiene en ordeño: pre-dipping y post-dipping con yodo. Secado de pezones. Buen mantenimiento del equipo de ordeño. Vacuna J5 en vacas de alta producción.',
+    notificable: false,
+    fuente: 'SAGARPA-SENASICA · INIFAP'
+  },
+  {
+    id: 'fiebreEmbarque',
+    nombre: 'Fiebre de embarque (Complejo Respiratorio Bovino)',
+    especies: ['bovino'],
+    severidad: 'alta',
+    sintomas: ['fiebre', 'tos', 'secrecionNasal', 'dificultadRespirar', 'apatia', 'noCome'],
+    descripcion: 'Neumonía multifactorial causada por estrés del traslado + virus (BRSV, BVD, IBR) + bacterias (Mannheimia, Pasteurella). Común en becerros recién llegados a engorda.',
+    tratamiento: 'Antibiótico de amplio espectro (tilmicosina, florfenicol, tulatromicina) 1-2 dosis. Antiinflamatorio. Aislar animales enfermos. Mejorar ventilación.',
+    prevencion: 'Vacunación 2 semanas antes del transporte (IBR, BVD, BRSV, PI3, Mannheimia). Manejo bajo en estrés. Cuarentena 21 días al llegar.',
+    notificable: false,
+    fuente: 'INIFAP CENID Salud Animal'
+  },
+  {
+    id: 'timpanismoBovino',
+    nombre: 'Timpanismo (empacho)',
+    especies: ['bovino', 'ovino', 'caprino'],
+    severidad: 'alta',
+    sintomas: ['timpanismo', 'dificultadRespirar', 'noRumia', 'apatia', 'salivacion'],
+    descripcion: 'Acumulación de gases en el rumen. Puede ser espumoso (por leguminosas como alfalfa fresca) o libre (por obstrucción esofágica).',
+    tratamiento: 'URGENCIA. Pasar sonda esofágica para liberar gas. En timpanismo espumoso: aceite mineral o tensoactivo (poloxaleno) oral. Si severo: trocarización del flanco izquierdo por MVZ.',
+    prevencion: 'Evitar pastoreo en alfalfa o tréboles muy tiernos. Introducir granos gradualmente. Ofrecer forraje seco antes de leguminosas frescas.',
+    notificable: false,
+    fuente: 'SADER · Club Ganadero'
+  },
+  {
+    id: 'anaplasmosis',
+    nombre: 'Anaplasmosis bovina',
+    especies: ['bovino'],
+    severidad: 'alta',
+    sintomas: ['fiebre', 'palidez', 'debilidad', 'ictericia', 'perdidaPeso', 'apatia', 'garrapatas'],
+    descripcion: 'Enfermedad hemoparasitaria por Anaplasma marginale. Transmitida por garrapatas Boophilus microplus, moscas hematófagas y agujas contaminadas. Prevalencia >50% en regiones tropicales de México.',
+    tratamiento: 'Oxitetraciclina larga acción (20 mg/kg IM, 1-3 dosis cada 3 días). Imidocarb dipropionato 3 mg/kg. Soporte: vitaminas B12, fluidos. Casos graves: transfusión sanguínea.',
+    prevencion: 'Control de garrapatas con ixodicidas. Cuarentena de animales nuevos. Desinfección de agujas entre animales. Vacuna donde disponible.',
+    notificable: false,
+    fuente: 'INIFAP-CENID-SA · SENASICA'
+  },
+  {
+    id: 'brucelosis',
+    nombre: 'Brucelosis bovina',
+    especies: ['bovino', 'ovino', 'caprino'],
+    severidad: 'alta',
+    sintomas: ['aborto', 'infertilidad'],
+    descripcion: 'Zoonosis bacteriana (Brucella abortus en bovinos, B. melitensis en caprinos). Causa abortos en último tercio de gestación. SE TRANSMITE A HUMANOS por leche cruda y contacto con productos del parto.',
+    tratamiento: 'NO HAY tratamiento curativo. SACRIFICIO obligatorio del animal positivo. Notificación a SENASICA.',
+    prevencion: 'Vacunación cepa RB51 en becerras 3-8 meses. Pruebas serológicas anuales. Eliminación de positivos. Pasteurización de leche.',
+    notificable: true,
+    fuente: 'SENASICA · Campaña Nacional NOM-041-ZOO-1995'
+  },
+  {
+    id: 'tuberculosis',
+    nombre: 'Tuberculosis bovina',
+    especies: ['bovino'],
+    severidad: 'alta',
+    sintomas: ['tos', 'perdidaPeso', 'debilidad', 'dificultadRespirar'],
+    descripcion: 'Zoonosis bacteriana por Mycobacterium bovis. Curso crónico. Transmisión por aerosoles, leche cruda. Difícil de diagnosticar en etapas tempranas.',
+    tratamiento: 'NO HAY tratamiento permitido en ganado. SACRIFICIO obligatorio. Notificación inmediata a SENASICA.',
+    prevencion: 'Prueba de tuberculina anual. Eliminación de reactivos positivos. Hatos libres certificados. Pasteurización de leche.',
+    notificable: true,
+    fuente: 'SENASICA · Campaña Nacional NOM-031-ZOO-1995'
+  },
+  {
+    id: 'rabia',
+    nombre: 'Rabia paralítica bovina (derriengue)',
+    especies: ['bovino', 'ovino', 'caprino', 'porcino'],
+    severidad: 'alta',
+    sintomas: ['paralisis', 'caidas', 'salivacion', 'agresividad', 'convulsiones', 'debilidad'],
+    descripcion: 'Zoonosis viral mortal transmitida por mordedura de murciélago hematófago (Desmodus rotundus). 100% mortal una vez que aparecen síntomas. MUY GRAVE.',
+    tratamiento: 'NO HAY tratamiento. Eutanasia humanitaria. NOTIFICACIÓN INMEDIATA a SENASICA. Protección de personal en contacto.',
+    prevencion: 'Vacunación anual con vacuna inactivada en zonas endémicas. Control de murciélagos hematófagos (warfarina en gel). Refugio nocturno del ganado.',
+    notificable: true,
+    fuente: 'SENASICA · NOM-067-ZOO-2007'
+  },
+  {
+    id: 'diarreaViralBovina',
+    nombre: 'Diarrea viral bovina (DVB/BVD)',
+    especies: ['bovino'],
+    severidad: 'alta',
+    sintomas: ['diarrea', 'fiebre', 'aborto', 'noCome', 'apatia'],
+    descripcion: 'Viral (Pestivirus). Causa diarrea aguda, abortos, infertilidad, becerros persistentemente infectados (PI). Pérdidas económicas altas.',
+    tratamiento: 'Sintomático: fluidos, electrolitos, antibióticos contra infecciones secundarias. NO existe tratamiento antiviral específico.',
+    prevencion: 'Vacunación con virus modificado en hembras 30 días antes de monta. Identificación y eliminación de PIs. Cuarentena de animales nuevos.',
+    notificable: false,
+    fuente: 'INIFAP · SENASICA'
+  },
+  {
+    id: 'clostridiosis',
+    nombre: 'Clostridiosis (carbón sintomático / pierna negra)',
+    especies: ['bovino', 'ovino'],
+    severidad: 'alta',
+    sintomas: ['fiebre', 'cojera', 'hinchazon', 'apatia', 'noCome'],
+    descripcion: 'Bacteriana por Clostridium chauvoei. Afecta a bovinos jóvenes (4 meses - 2 años). Muerte súbita en 12-48h. Endémica en México.',
+    tratamiento: 'Penicilina G dosis altas vía intramuscular si se detecta a tiempo. Drenaje quirúrgico del músculo afectado. Pronóstico reservado.',
+    prevencion: 'Vacuna polivalente clostridial (bacterina anaerobia) anual desde los 4 meses. Refuerzo en zonas endémicas.',
+    notificable: false,
+    fuente: 'SENASICA · Club Ganadero'
+  },
+  {
+    id: 'leptospirosis',
+    nombre: 'Leptospirosis',
+    especies: ['bovino', 'porcino', 'ovino', 'caprino'],
+    severidad: 'media',
+    sintomas: ['fiebre', 'ictericia', 'aborto', 'infertilidad', 'palidez'],
+    descripcion: 'Zoonosis bacteriana (Leptospira spp). Transmisión por orina contaminada, agua estancada. Causa abortos, ictericia, mortalidad en neonatos.',
+    tratamiento: 'Estreptomicina 25 mg/kg IM o oxitetraciclina 20 mg/kg IM. Tratar todo el hato durante brotes.',
+    prevencion: 'Vacuna pentavalente (serovariedades hardjo, pomona, canicola, icterohaemorrhagiae, grippotyphosa). Control de roedores. Aguas limpias.',
+    notificable: false,
+    fuente: 'INIFAP · SENASICA'
+  },
+  {
+    id: 'cetosisGestacional',
+    nombre: 'Cetosis / Toxemia de la preñez',
+    especies: ['bovino', 'ovino', 'caprino'],
+    severidad: 'media',
+    sintomas: ['noCome', 'debilidad', 'apatia', 'perdidaPeso'],
+    descripcion: 'Trastorno metabólico por balance energético negativo en hembras de alta producción al inicio de la lactancia o final de gestación.',
+    tratamiento: 'Solución de glucosa 50% IV (250-500 mL). Propilenglicol 250-300 mL oral 2 veces al día por 3-5 días. Dexametasona en casos severos.',
+    prevencion: 'Adecuada condición corporal al parto (3.0-3.5). Suplementación energética 3 semanas antes y después del parto. Evitar engrasamiento excesivo.',
+    notificable: false,
+    fuente: 'NRC · MVZ Práctica Clínica'
+  },
+  {
+    id: 'hipocalcemia',
+    nombre: 'Fiebre de leche / Hipocalcemia puerperal',
+    especies: ['bovino', 'caprino'],
+    severidad: 'alta',
+    sintomas: ['caidas', 'temblores', 'paralisis', 'debilidad', 'noCome'],
+    descripcion: 'Deficiencia de calcio al inicio de la lactancia. Común en vacas Holstein de 3+ partos. Urgencia metabólica.',
+    tratamiento: 'URGENCIA. Gluconato de calcio 23% IV lento (500 mL) bajo monitoreo cardíaco. Repetir SC si recurre. Recuperación en 2-4 horas.',
+    prevencion: 'Dieta aniónica las 3 semanas previas al parto. Suplemento de vitamina D 7-10 días antes del parto. Limitar calcio en seca.',
+    notificable: false,
+    fuente: 'NRC Dairy · MVZ Práctica'
+  },
+
+  // ═══ PORCINOS ═══
+  {
+    id: 'pestePorcina',
+    nombre: 'Peste porcina clásica',
+    especies: ['porcino'],
+    severidad: 'alta',
+    sintomas: ['fiebre', 'apatia', 'diarrea', 'temblores', 'noCome', 'palidez', 'paralisis'],
+    descripcion: 'Viral altamente contagiosa. ENFERMEDAD DE NOTIFICACIÓN OBLIGATORIA. México declarado libre desde 2009 pero hay riesgo de reintroducción.',
+    tratamiento: 'NO HAY tratamiento. SACRIFICIO sanitario. Notificación inmediata a SENASICA.',
+    prevencion: 'Vacunación (donde aplique). Cuarentena estricta. Bioseguridad en granjas. Importaciones controladas.',
+    notificable: true,
+    fuente: 'SENASICA · NOM-037-ZOO-1995'
+  },
+  {
+    id: 'parvovirosisPorcina',
+    nombre: 'Parvovirosis porcina',
+    especies: ['porcino'],
+    severidad: 'media',
+    sintomas: ['aborto', 'infertilidad'],
+    descripcion: 'Viral. Causa fallas reproductivas: momificaciones, mortinatos, lechones débiles. Las cerdas no muestran otros signos.',
+    tratamiento: 'No hay tratamiento curativo. Manejo de las pérdidas reproductivas.',
+    prevencion: 'Vacunación de cerdas y sementales 2-4 semanas antes de monta. Refuerzo cada 6 meses.',
+    notificable: false,
+    fuente: 'SENASICA · MVZ Porcicultura'
+  },
+  {
+    id: 'colibacilosisLechones',
+    nombre: 'Colibacilosis (diarrea de lechones)',
+    especies: ['porcino', 'bovino'],
+    severidad: 'alta',
+    sintomas: ['diarrea', 'deshidratacion', 'debilidad', 'caidas'],
+    descripcion: 'E. coli en lechones recién nacidos. Diarrea profusa, deshidratación rápida. Mortalidad alta sin tratamiento.',
+    tratamiento: 'Rehidratación oral (electrolitos). Antibiótico vía oral (enrofloxacina, gentamicina). Mantener temperatura corporal.',
+    prevencion: 'Calostro adecuado primeras 6 horas. Vacuna a cerdas antes del parto. Higiene en maternidad. Temperatura óptima.',
+    notificable: false,
+    fuente: 'INIFAP · SENASICA'
+  },
+
+  // ═══ AVES ═══
+  {
+    id: 'newcastleAves',
+    nombre: 'Enfermedad de Newcastle',
+    especies: ['avicola'],
+    severidad: 'alta',
+    sintomas: ['tos', 'dificultadRespirar', 'diarrea', 'paralisis', 'temblores', 'apatia'],
+    descripcion: 'Viral altamente contagiosa. Una de las enfermedades más devastadoras en aves. Notificación obligatoria.',
+    tratamiento: 'NO HAY tratamiento curativo. SACRIFICIO de aves enfermas. Cuarentena del lote. Notificación a SENASICA.',
+    prevencion: 'Vacunación La Sota a 7 días + refuerzo. Bioseguridad estricta. Control de aves silvestres.',
+    notificable: true,
+    fuente: 'SENASICA · NOM-013-ZOO-1994'
+  },
+  {
+    id: 'salmonelosisAves',
+    nombre: 'Salmonelosis aviar',
+    especies: ['avicola'],
+    severidad: 'media',
+    sintomas: ['diarrea', 'apatia', 'noCome', 'debilidad'],
+    descripcion: 'Bacteriana (Salmonella pullorum/gallinarum/enteritidis). Pérdidas productivas. Zoonosis: contamina huevo y carne.',
+    tratamiento: 'Antibióticos (enrofloxacina, sulfas). Considerar eliminación si es para postura comercial por riesgo zoonótico.',
+    prevencion: 'Lotes libres certificados. Higiene en incubación. Control de roedores y moscas. Vacuna en producción comercial.',
+    notificable: true,
+    fuente: 'SENASICA'
+  },
+  {
+    id: 'coccidiosisAves',
+    nombre: 'Coccidiosis aviar',
+    especies: ['avicola'],
+    severidad: 'media',
+    sintomas: ['diarreaSangre', 'apatia', 'noCome', 'debilidad', 'perdidaPeso'],
+    descripcion: 'Parasitaria por Eimeria spp. Frecuente en pollos de engorda y pavipollos. Daña intestino.',
+    tratamiento: 'Anticoccidiales: amprolio en agua de bebida 0.012-0.024% por 5-7 días. Toltrazuril, sulfaquinoxalina.',
+    prevencion: 'Coccidiostatos en alimento (salinomicina, monensina). Manejo de cama seca. Densidad adecuada.',
+    notificable: false,
+    fuente: 'INIFAP · SENASICA'
+  },
+
+  // ═══ OVINOS / CAPRINOS ═══
+  {
+    id: 'enterotoxemia',
+    nombre: 'Enterotoxemia (Clostridium perfringens)',
+    especies: ['ovino', 'caprino', 'bovino'],
+    severidad: 'alta',
+    sintomas: ['caidas', 'convulsiones', 'diarrea', 'temblores', 'paralisis'],
+    descripcion: 'Bacteriana. Muerte súbita en animales bien alimentados con cambios bruscos de dieta. Tipos C y D.',
+    tratamiento: 'Antitoxina específica si está disponible. Antibiótico (penicilina) + antiinflamatorio. Pronóstico reservado.',
+    prevencion: 'Vacuna bacterina-toxoide clostridial 2 veces al año. Cambios graduales de dieta. Evitar engorda muy rápida.',
+    notificable: false,
+    fuente: 'SENASICA · INIFAP'
+  },
+  {
+    id: 'gusaneraMiasis',
+    nombre: 'Miasis (gusanera)',
+    especies: ['bovino', 'ovino', 'caprino', 'porcino'],
+    severidad: 'media',
+    sintomas: ['heridas', 'moscas', 'cojera'],
+    descripcion: 'Infestación de heridas con larvas de moscas (Cochliomyia macellaria). El gusano barrenador (C. hominivorax) está ERRADICADO en México pero hay vigilancia.',
+    tratamiento: 'Limpieza mecánica de larvas. Aplicación de larvicida (cipermetrina, ivermectina tópica). Antibiótico si hay infección. Notificar a SENASICA si sospecha de gusano barrenador.',
+    prevencion: 'Inspección frecuente. Evitar heridas (descorne, castración a edad correcta). Aplicar larvicida preventivo en heridas frescas.',
+    notificable: true,
+    fuente: 'SENASICA · Campaña Nacional'
+  },
+  {
+    id: 'parasitosisInternos',
+    nombre: 'Parasitosis gastrointestinal',
+    especies: ['bovino', 'ovino', 'caprino', 'porcino'],
+    severidad: 'baja',
+    sintomas: ['diarrea', 'perdidaPeso', 'palidez', 'debilidad', 'apatia', 'caidaPelo'],
+    descripcion: 'Nematodos (Haemonchus, Ostertagia, Cooperia), céstodos (Moniezia), trematodos (Fasciola). Pérdidas productivas crónicas.',
+    tratamiento: 'Antihelmínticos: ivermectina 0.2 mg/kg, albendazol 5-10 mg/kg, levamisol 8 mg/kg. Rotar principios activos para evitar resistencia.',
+    prevencion: 'Desparasitación estratégica 2-3 veces/año según región. Rotación de potreros. Monitoreo de carga parasitaria por coprología.',
+    notificable: false,
+    fuente: 'INIFAP · MVZ Práctica Rural'
+  },
+  {
+    id: 'pietin',
+    nombre: 'Pietín ovino-caprino (Foot rot)',
+    especies: ['ovino', 'caprino'],
+    severidad: 'media',
+    sintomas: ['cojera', 'heridas'],
+    descripcion: 'Bacteriana (Dichelobacter nodosus + Fusobacterium). Húmeda, lesiones en pezuñas. Cojera severa.',
+    tratamiento: 'Despezuñado y limpieza. Baño de pezuñas con sulfato de zinc 10% o formol 5%. Antibiótico sistémico (oxitetraciclina) en casos severos.',
+    prevencion: 'Pediluvio regular. Drenaje en corrales. Recorte de pezuñas. Vacunación en zonas endémicas.',
+    notificable: false,
+    fuente: 'SENASICA · MVZ Práctica'
+  }
+];
+
+let _diagEspecie = 'bovino';
+let _diagSintomasSel = new Set();
+
+window.diagSeleccionarEspecie = function(especie) {
+  _diagEspecie = especie;
+  _diagSintomasSel.clear();
+  document.querySelectorAll('.diag-especie').forEach(b => {
+    b.classList.toggle('diag-especie-active', b.dataset.especie === especie);
+  });
+  diagPintarSintomas();
+  document.getElementById('diagResultados').style.display = 'none';
+};
+
+function diagPintarSintomas() {
+  const cont = document.getElementById('diagSintomasGrid');
+  if (!cont) return;
+  // Agrupar por categoría
+  const categorias = {
+    general: '🌡️ Generales',
+    digestivo: '🍽️ Digestivos',
+    respiratorio: '😷 Respiratorios',
+    locomocion: '🦵 Locomoción',
+    piel: '🩹 Piel y mucosas',
+    reproductivo: '🐣 Reproductivo / ubre',
+    neurologico: '🧠 Neurológicos',
+    parasito: '🪰 Parásitos externos'
+  };
+  let html = '';
+  Object.entries(categorias).forEach(([cat, titulo]) => {
+    const sintomasCat = SINTOMAS_CATALOGO.filter(s => s.categoria === cat);
+    if (!sintomasCat.length) return;
+    html += `<div class="diag-cat-titulo">${titulo}</div>`;
+    html += '<div class="diag-cat-grid">';
+    sintomasCat.forEach(s => {
+      const sel = _diagSintomasSel.has(s.id);
+      html += `
+        <button class="diag-sintoma ${sel?'diag-sintoma-sel':''}" data-id="${s.id}" onclick="diagToggleSintoma('${s.id}')">
+          <span class="diag-sintoma-emoji">${s.emoji}</span>
+          <span class="diag-sintoma-label">${s.label}</span>
+        </button>
+      `;
+    });
+    html += '</div>';
+  });
+  cont.innerHTML = html;
+}
+
+window.diagToggleSintoma = function(id) {
+  if (_diagSintomasSel.has(id)) _diagSintomasSel.delete(id);
+  else _diagSintomasSel.add(id);
+  diagPintarSintomas();
+};
+
+window.diagReset = function() {
+  _diagSintomasSel.clear();
+  document.getElementById('diagEdad').value = '';
+  document.getElementById('diagPoblacion').value = '1';
+  diagPintarSintomas();
+  document.getElementById('diagResultados').style.display = 'none';
+};
+
+window.diagDiagnosticar = function() {
+  if (_diagSintomasSel.size === 0) {
+    toast('Selecciona al menos 1 síntoma', 'error', '⚠️');
+    return;
+  }
+
+  const sintomasActivos = [..._diagSintomasSel];
+
+  // Calcular match con cada enfermedad
+  const resultados = ENFERMEDADES_DB
+    .filter(enf => enf.especies.includes(_diagEspecie))
+    .map(enf => {
+      const matchSintomas = enf.sintomas.filter(s => sintomasActivos.includes(s));
+      const sintomasNoCoinciden = sintomasActivos.filter(s => !enf.sintomas.includes(s));
+      // Score: % de síntomas de la enfermedad que están presentes × ponderado por # de síntomas marcados
+      const recall = matchSintomas.length / enf.sintomas.length;
+      const precision = matchSintomas.length / sintomasActivos.length;
+      const score = (recall * 0.6 + precision * 0.4) * 100;
+      return { ...enf, matchSintomas, score: Math.round(score) };
+    })
+    .filter(r => r.matchSintomas.length > 0)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 5);
+
+  diagPintarResultados(resultados, sintomasActivos);
+};
+
+function diagPintarResultados(resultados, sintomasActivos) {
+  const cont = document.getElementById('diagResultados');
+  if (!cont) return;
+
+  if (resultados.length === 0) {
+    cont.innerHTML = `
+      <div class="diag-no-match">
+        <div style="font-size:60px;">🤔</div>
+        <h3>No encontramos enfermedades que coincidan</h3>
+        <p>Los síntomas que marcaste no coinciden con nuestra base de datos. <strong>Consulta a un MVZ certificado lo antes posible.</strong></p>
+        <p style="margin-top:14px;font-size:.85rem;">SENASICA: <strong>01 800 751 2100</strong></p>
+      </div>
+    `;
+    cont.style.display = 'block';
+    cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  const SEVERIDAD_INFO = {
+    alta: { color: '#ef4444', label: 'GRAVE', icon: '🚨' },
+    media: { color: '#fbbf24', label: 'MODERADA', icon: '⚠️' },
+    baja: { color: '#4ade80', label: 'LEVE', icon: '✓' }
+  };
+
+  const html = `
+    <div class="diag-resultados-header">
+      <h2>🔬 Diagnósticos posibles</h2>
+      <p>Ordenados por probabilidad según los síntomas que marcaste. <strong style="color:#fbbf24;">Esta es una orientación, no un diagnóstico definitivo.</strong></p>
+    </div>
+    ${resultados.map((r, idx) => {
+      const sev = SEVERIDAD_INFO[r.severidad];
+      return `
+      <div class="diag-resultado-card" style="--sev-color:${sev.color};">
+        <div class="diag-resultado-head">
+          <div class="diag-resultado-rank">${idx + 1}</div>
+          <div class="diag-resultado-info">
+            <h3>${r.nombre}</h3>
+            <div class="diag-resultado-badges">
+              <span class="diag-badge diag-badge-prob">${r.score}% probabilidad</span>
+              <span class="diag-badge diag-badge-sev" style="background:${sev.color}20;color:${sev.color};border-color:${sev.color}50;">
+                ${sev.icon} ${sev.label}
+              </span>
+              ${r.notificable ? '<span class="diag-badge diag-badge-notif">🚨 NOTIFICACIÓN OBLIGATORIA SENASICA</span>' : ''}
+            </div>
+          </div>
+        </div>
+
+        <p class="diag-resultado-desc">${r.descripcion}</p>
+
+        <div class="diag-resultado-grid">
+          <div class="diag-resultado-block diag-block-coincidencias">
+            <div class="diag-block-label">🎯 Síntomas que coinciden (${r.matchSintomas.length}/${r.sintomas.length})</div>
+            <div class="diag-block-content">
+              ${r.matchSintomas.map(sid => {
+                const s = SINTOMAS_CATALOGO.find(x => x.id === sid);
+                return s ? `<span class="diag-chip diag-chip-match">${s.emoji} ${s.label}</span>` : '';
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="diag-resultado-block diag-block-tratamiento">
+            <div class="diag-block-label">💉 Tratamiento sugerido</div>
+            <div class="diag-block-content"><p>${r.tratamiento}</p></div>
+          </div>
+
+          <div class="diag-resultado-block diag-block-prevencion">
+            <div class="diag-block-label">🛡️ Prevención</div>
+            <div class="diag-block-content"><p>${r.prevencion}</p></div>
+          </div>
+        </div>
+
+        <div class="diag-resultado-fuente">📚 <strong>Fuente:</strong> ${r.fuente}</div>
+      </div>
+      `;
+    }).join('')}
+
+    <div class="diag-disclaimer">
+      <h3>⚕️ Importante</h3>
+      <p>Este sistema es una <strong>herramienta de orientación</strong> basada en la base de datos de SENASICA, INIFAP y SADER. NO reemplaza el diagnóstico clínico de un Médico Veterinario Zootecnista certificado.</p>
+      <p>Si tu animal presenta <strong>síntomas graves</strong> (no se levanta, dificultad respiratoria severa, parálisis, sangrado), busca atención veterinaria <strong>de urgencia</strong>.</p>
+      <p><strong>SENASICA — Notificación de enfermedades:</strong> 01 800 751 2100</p>
+    </div>
+  `;
+  cont.innerHTML = html;
+  cont.style.display = 'block';
+  cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Inicializar al cargar la sección Botiquín
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => diagPintarSintomas(), 1000);
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// 🧮 CALCULADORA PECUARIA — Rentabilidad + Forraje + Nutrición
+// ═══════════════════════════════════════════════════════════════════
+
+window.calcCambiarTab = function(tab) {
+  document.querySelectorAll('.calc-tab').forEach(t => {
+    t.classList.toggle('calc-tab-active', t.dataset.tab === tab);
+  });
+  document.getElementById('calcPaneRentabilidad').style.display = tab === 'rentabilidad' ? 'block' : 'none';
+  document.getElementById('calcPaneForraje').style.display = tab === 'forraje' ? 'block' : 'none';
+  document.getElementById('calcPaneNutricion').style.display = tab === 'nutricion' ? 'block' : 'none';
+};
+
+window.calcActualizarPrecioMercado = function() {
+  const tipo = document.getElementById('calcTipo').value;
+  const elInput = document.getElementById('calcPrecioVenta');
+  const elHint = document.getElementById('calcPrecioMercado');
+  const precio = precioOficialPorTipo(tipo);
+  if (elInput && !elInput.value) elInput.value = precio;
+  if (elHint) elHint.textContent = `(SIAP: $${precio}/kg)`;
+};
+// Auto-llenar al cargar
+setTimeout(() => { try { calcActualizarPrecioMercado(); } catch(e) {} }, 1500);
+
+window.calcRentabilidad = function() {
+  const pesoVenta = parseFloat(document.getElementById('calcPesoVenta').value) || 0;
+  const precioVenta = parseFloat(document.getElementById('calcPrecioVenta').value) || 0;
+  const dias = parseFloat(document.getElementById('calcDias').value) || 0;
+  const costoCompra = parseFloat(document.getElementById('calcCostoCompra').value) || 0;
+  const costoDia = parseFloat(document.getElementById('calcCostoDia').value) || 0;
+  const costoSanidad = parseFloat(document.getElementById('calcCostoSanidad').value) || 0;
+  const costoOtros = parseFloat(document.getElementById('calcCostoOtros').value) || 0;
+
+  if (!pesoVenta || !precioVenta || !dias) {
+    toast('Completa peso, precio y días', 'error', '⚠️');
+    return;
+  }
+
+  const ingreso = pesoVenta * precioVenta;
+  const costoAlim = costoDia * dias;
+  const costoTotal = costoCompra + costoAlim + costoSanidad + costoOtros;
+  const utilidad = ingreso - costoTotal;
+  const margen = (utilidad / ingreso) * 100;
+  const roi = (utilidad / costoTotal) * 100;
+  const utilidadDia = utilidad / dias;
+  const costoKg = costoTotal / pesoVenta;
+  const precioMinimo = costoTotal / pesoVenta;
+
+  const esGanancia = utilidad >= 0;
+  const colorMain = esGanancia ? '#4ade80' : '#ef4444';
+
+  const cont = document.getElementById('calcResultadoRent');
+  cont.innerHTML = `
+    <div class="calc-result-hero ${esGanancia ? 'calc-hero-ganancia' : 'calc-hero-perdida'}">
+      <div class="calc-hero-label">${esGanancia ? '✅ GANANCIA NETA' : '❌ PÉRDIDA'}</div>
+      <div class="calc-hero-num">$${utilidad.toLocaleString('es-MX', {maximumFractionDigits: 0})}</div>
+      <div class="calc-hero-sub">${esGanancia ? 'Ganas' : 'Pierdes'} <strong>$${Math.abs(utilidadDia).toFixed(2)}</strong> por día</div>
+    </div>
+
+    <div class="calc-stats-grid">
+      <div class="calc-stat">
+        <div class="calc-stat-icon">💵</div>
+        <div class="calc-stat-label">Ingreso</div>
+        <div class="calc-stat-val">$${ingreso.toLocaleString('es-MX', {maximumFractionDigits: 0})}</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">💸</div>
+        <div class="calc-stat-label">Costo total</div>
+        <div class="calc-stat-val">$${costoTotal.toLocaleString('es-MX', {maximumFractionDigits: 0})}</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">📊</div>
+        <div class="calc-stat-label">Margen</div>
+        <div class="calc-stat-val" style="color:${colorMain}">${margen.toFixed(1)}%</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">📈</div>
+        <div class="calc-stat-label">ROI</div>
+        <div class="calc-stat-val" style="color:${colorMain}">${roi.toFixed(1)}%</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">⚖️</div>
+        <div class="calc-stat-label">Costo por kg producido</div>
+        <div class="calc-stat-val">$${costoKg.toFixed(2)}/kg</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">🎯</div>
+        <div class="calc-stat-label">Precio mínimo (punto eq.)</div>
+        <div class="calc-stat-val">$${precioMinimo.toFixed(2)}/kg</div>
+      </div>
+    </div>
+
+    <div class="calc-breakdown">
+      <h4>🔍 Desglose de costos</h4>
+      <div class="calc-breakdown-row"><span>Compra inicial</span><strong>$${costoCompra.toLocaleString('es-MX')}</strong></div>
+      <div class="calc-breakdown-row"><span>Alimentación ($${costoDia}/día × ${dias} días)</span><strong>$${costoAlim.toLocaleString('es-MX')}</strong></div>
+      <div class="calc-breakdown-row"><span>Vacunas y sanidad</span><strong>$${costoSanidad.toLocaleString('es-MX')}</strong></div>
+      <div class="calc-breakdown-row"><span>Otros costos</span><strong>$${costoOtros.toLocaleString('es-MX')}</strong></div>
+      <div class="calc-breakdown-row calc-breakdown-total"><span>TOTAL</span><strong>$${costoTotal.toLocaleString('es-MX')}</strong></div>
+    </div>
+
+    ${esGanancia ? '' : `
+      <div class="calc-warning">
+        <strong>⚠️ Atención:</strong> tus números actuales no son rentables. Para no perder, necesitas vender mínimo a <strong>$${precioMinimo.toFixed(2)}/kg</strong> o reducir costos.
+      </div>
+    `}
+  `;
+  cont.style.display = 'block';
+  cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+window.calcForraje = function() {
+  const tipoSelect = document.getElementById('forrajeTipo');
+  const pctMS = parseFloat(tipoSelect.options[tipoSelect.selectedIndex].dataset.ms);
+  const peso = parseFloat(document.getElementById('forrajePeso').value) || 0;
+  const animales = parseFloat(document.getElementById('forrajeAnimales').value) || 0;
+  const dias = parseFloat(document.getElementById('forrajeDias').value) || 0;
+  const pctMSAlimento = parseFloat(document.getElementById('forrajeTipoAlimento').value) || 30;
+
+  if (!peso || !animales || !dias) {
+    toast('Completa peso, animales y días', 'error', '⚠️');
+    return;
+  }
+
+  // Materia seca diaria por animal (kg)
+  const msDiariaPorAnimal = peso * (pctMS / 100);
+  // Materia fresca diaria por animal (lo que realmente comen, considerando % MS del alimento)
+  const mfDiariaPorAnimal = msDiariaPorAnimal / (pctMSAlimento / 100);
+  // Totales del hato
+  const msHatoDia = msDiariaPorAnimal * animales;
+  const mfHatoDia = mfDiariaPorAnimal * animales;
+  const mfHatoPeriodo = mfHatoDia * dias;
+  const msHatoPeriodo = msHatoDia * dias;
+  // Costo aproximado (suponiendo $3/kg materia fresca como promedio)
+  const costoEstimado = mfHatoPeriodo * 3;
+
+  const cont = document.getElementById('calcResultadoForraje');
+  cont.innerHTML = `
+    <div class="calc-result-hero calc-hero-info">
+      <div class="calc-hero-label">🌾 FORRAJE REQUERIDO</div>
+      <div class="calc-hero-num">${mfHatoPeriodo.toLocaleString('es-MX', {maximumFractionDigits: 0})} kg</div>
+      <div class="calc-hero-sub">Para tu hato durante <strong>${dias} días</strong></div>
+    </div>
+
+    <div class="calc-stats-grid">
+      <div class="calc-stat">
+        <div class="calc-stat-icon">📅</div>
+        <div class="calc-stat-label">Por día (todo el hato)</div>
+        <div class="calc-stat-val">${mfHatoDia.toFixed(1)} kg</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">🐄</div>
+        <div class="calc-stat-label">Por animal/día</div>
+        <div class="calc-stat-val">${mfDiariaPorAnimal.toFixed(1)} kg</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">💧</div>
+        <div class="calc-stat-label">Materia seca/animal/día</div>
+        <div class="calc-stat-val">${msDiariaPorAnimal.toFixed(2)} kg</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">📦</div>
+        <div class="calc-stat-label">MS total periodo</div>
+        <div class="calc-stat-val">${msHatoPeriodo.toLocaleString('es-MX', {maximumFractionDigits: 0})} kg</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">💵</div>
+        <div class="calc-stat-label">Costo estimado*</div>
+        <div class="calc-stat-val">$${costoEstimado.toLocaleString('es-MX', {maximumFractionDigits: 0})}</div>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">🚰</div>
+        <div class="calc-stat-label">Agua/animal/día</div>
+        <div class="calc-stat-val">${(peso * 0.1).toFixed(0)} L</div>
+      </div>
+    </div>
+
+    <div class="calc-breakdown">
+      <h4>📐 Fórmula aplicada (NRC)</h4>
+      <p style="font:600 .85rem 'Inter',sans-serif;color:rgba(255,255,255,.85);line-height:1.6;">
+        <strong>Materia Seca diaria</strong> = Peso vivo × ${pctMS}% (según categoría)<br>
+        <strong>Forraje fresco</strong> = Materia Seca ÷ (% MS del alimento)<br>
+        <strong>Agua</strong> = ~10% del peso vivo en climas templados (más en calor)
+      </p>
+      <p style="font-size:.78rem;color:rgba(255,255,255,.5);margin-top:8px;">* Costo estimado a $3/kg promedio. Ajusta según tus precios locales.</p>
+    </div>
+  `;
+  cont.style.display = 'block';
+  cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+// Base de datos nutricional (NRC + SAGARPA)
+const NUT_REQUERIMIENTOS = {
+  'vaca-lactante': {
+    label: 'Vaca lactante alta producción',
+    pcDieta: 17, // % proteína cruda en la dieta
+    emKg: 2.7,   // Mcal EM/kg MS
+    caGr: 90,    // gramos calcio/día por 600 kg
+    pGr: 60,     // gramos fósforo/día por 600 kg
+    msDia: 4.0,  // % peso vivo en MS
+    notas: 'Para vacas que producen +25 L/día. La dieta debe tener 40-50% forraje y 50-60% concentrado.'
+  },
+  'vaca-seca': {
+    label: 'Vaca seca / mantenimiento',
+    pcDieta: 11,
+    emKg: 2.0,
+    caGr: 35,
+    pGr: 22,
+    msDia: 2.0,
+    notas: 'En las últimas 3 semanas pre-parto, aumentar PC al 14-15% y dieta aniónica para prevenir hipocalcemia.'
+  },
+  'becerro-engorda': {
+    label: 'Becerro engorda',
+    pcDieta: 14,
+    emKg: 2.8,
+    caGr: 30,
+    pGr: 20,
+    msDia: 2.5,
+    notas: 'Para ganancia de peso ~1.2-1.5 kg/día. Energía es la limitante principal en engorda.'
+  },
+  'becerro-lactante': {
+    label: 'Becerro lactante (calostro/destete)',
+    pcDieta: 22,
+    emKg: 3.0,
+    caGr: 13,
+    pGr: 9,
+    msDia: 3.0,
+    notas: 'Calostro primeras 6 horas (10% del peso). Iniciador granulado desde semana 1.'
+  },
+  'toro-reproductor': {
+    label: 'Toro reproductor',
+    pcDieta: 12,
+    emKg: 2.3,
+    caGr: 40,
+    pGr: 28,
+    msDia: 2.0,
+    notas: 'Condición corporal 6/9 ideal. Suplementación con vitamina E y selenio para calidad seminal.'
+  },
+  'ovino-engorda': {
+    label: 'Ovino engorda',
+    pcDieta: 16,
+    emKg: 2.7,
+    caGr: 6,
+    pGr: 4,
+    msDia: 3.5,
+    notas: 'Para ganancia ~200-300 g/día. Cuidado con urolitiasis: relación Ca:P 2:1.'
+  },
+  'caprino-lechera': {
+    label: 'Cabra lechera',
+    pcDieta: 16,
+    emKg: 2.5,
+    caGr: 9,
+    pGr: 6,
+    msDia: 4.5,
+    notas: 'Para producción ~2-3 L/día. Las cabras consumen más MS por kg que vacas.'
+  },
+  'cerdo-engorda': {
+    label: 'Cerdo engorda',
+    pcDieta: 16,
+    emKg: 3.3,
+    caGr: 8,
+    pGr: 6,
+    msDia: 4.0,
+    notas: 'PC alta al inicio (18%) y baja al final (14%). Aminoácidos esenciales: lisina, metionina, treonina.'
+  },
+  'cerda-gestante': {
+    label: 'Cerda gestante',
+    pcDieta: 14,
+    emKg: 3.0,
+    caGr: 18,
+    pGr: 12,
+    msDia: 2.5,
+    notas: 'Restricción alimenticia hasta día 90 de gestación. Aumentar 30% en último mes.'
+  }
+};
+
+window.calcNutricion = function() {
+  const cat = document.getElementById('nutCategoria').value;
+  const peso = parseFloat(document.getElementById('nutPeso').value) || 0;
+  const produccion = document.getElementById('nutProduccion').value.trim();
+  const req = NUT_REQUERIMIENTOS[cat];
+  if (!req || !peso) {
+    toast('Completa categoría y peso', 'error', '⚠️');
+    return;
+  }
+
+  // Cálculos
+  const msDiaria = peso * (req.msDia / 100);
+  const pcDiaria = msDiaria * (req.pcDieta / 100);
+  const emTotal = msDiaria * req.emKg;
+  // Ajuste lineal de Ca y P por peso (los valores base son para peso típico de la categoría)
+  const pesoBase = cat.includes('vaca') ? 600 : cat.includes('cerd') ? 100 : cat.includes('ovino') || cat.includes('caprino') ? 50 : 400;
+  const caAjustado = req.caGr * (peso / pesoBase);
+  const pAjustado = req.pGr * (peso / pesoBase);
+
+  const cont = document.getElementById('calcResultadoNut');
+  cont.innerHTML = `
+    <div class="calc-result-hero calc-hero-info">
+      <div class="calc-hero-label">🥗 REQUERIMIENTOS DIARIOS</div>
+      <div class="calc-hero-num">${msDiaria.toFixed(1)} kg MS</div>
+      <div class="calc-hero-sub">${req.label} de <strong>${peso} kg</strong>${produccion ? ' · ' + produccion : ''}</div>
+    </div>
+
+    <div class="calc-stats-grid">
+      <div class="calc-stat">
+        <div class="calc-stat-icon">🧬</div>
+        <div class="calc-stat-label">Proteína cruda (PC)</div>
+        <div class="calc-stat-val">${pcDiaria.toFixed(2)} kg</div>
+        <small style="color:rgba(255,255,255,.5);font-size:.7rem;">${req.pcDieta}% de la dieta</small>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">⚡</div>
+        <div class="calc-stat-label">Energía Metabolizable</div>
+        <div class="calc-stat-val">${emTotal.toFixed(1)} Mcal</div>
+        <small style="color:rgba(255,255,255,.5);font-size:.7rem;">${req.emKg} Mcal/kg MS</small>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">🦴</div>
+        <div class="calc-stat-label">Calcio (Ca)</div>
+        <div class="calc-stat-val">${caAjustado.toFixed(0)} g</div>
+        <small style="color:rgba(255,255,255,.5);font-size:.7rem;">por día</small>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">⚪</div>
+        <div class="calc-stat-label">Fósforo (P)</div>
+        <div class="calc-stat-val">${pAjustado.toFixed(0)} g</div>
+        <small style="color:rgba(255,255,255,.5);font-size:.7rem;">relación Ca:P ~${(caAjustado/pAjustado).toFixed(1)}:1</small>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">🌾</div>
+        <div class="calc-stat-label">Materia seca/día</div>
+        <div class="calc-stat-val">${msDiaria.toFixed(1)} kg</div>
+        <small style="color:rgba(255,255,255,.5);font-size:.7rem;">${req.msDia}% del peso vivo</small>
+      </div>
+      <div class="calc-stat">
+        <div class="calc-stat-icon">💧</div>
+        <div class="calc-stat-label">Agua diaria</div>
+        <div class="calc-stat-val">${(peso * 0.1).toFixed(0)} L</div>
+        <small style="color:rgba(255,255,255,.5);font-size:.7rem;">10% del peso vivo</small>
+      </div>
+    </div>
+
+    <div class="calc-breakdown">
+      <h4>📚 Recomendaciones MVZ</h4>
+      <p style="font:500 .9rem/1.5 'Inter',sans-serif;color:rgba(255,255,255,.85);">${req.notas}</p>
+      <p style="font-size:.75rem;color:rgba(255,255,255,.45);margin-top:10px;">📚 <strong>Fuente:</strong> NRC (National Research Council) · SAGARPA · INIFAP</p>
+    </div>
+  `;
+  cont.style.display = 'block';
+  cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// 📓 BITÁCORA DIGITAL
+// Lee todos los eventos de todos los animales y los muestra en timeline
+// ═══════════════════════════════════════════════════════════════════
+window.pintarBitacora = function() {
+  const animales = window.__rancho?.animales || [];
+  const filtroTipo = document.getElementById('bitaFilterTipo')?.value || '';
+  const filtroPeriodo = document.getElementById('bitaFilterPeriodo')?.value || 'todos';
+
+  // Flatten todos los eventos
+  const todos = [];
+  animales.forEach(a => {
+    (a.eventos || []).forEach(ev => {
+      todos.push({
+        ...ev,
+        animalId: a.id,
+        animalNombre: a.nombre,
+        animalTag: a.tag,
+        animalEmoji: a.emoji || '🐄'
+      });
+    });
+  });
+
+  // Ordenar por fecha desc
+  todos.sort((a,b) => {
+    const fa = a.fecha ? new Date(a.fecha).getTime() : (a.creado || 0);
+    const fb = b.fecha ? new Date(b.fecha).getTime() : (b.creado || 0);
+    return fb - fa;
+  });
+
+  // Aplicar filtros
+  let filtrados = todos;
+  if (filtroTipo) filtrados = filtrados.filter(e => e.tipo === filtroTipo);
+  if (filtroPeriodo !== 'todos') {
+    const ahora = Date.now();
+    const MS_DIA = 86400000;
+    const limites = { hoy: MS_DIA, semana: 7*MS_DIA, mes: 30*MS_DIA, '3meses': 90*MS_DIA };
+    const limite = limites[filtroPeriodo];
+    if (limite) {
+      filtrados = filtrados.filter(e => {
+        const t = e.fecha ? new Date(e.fecha).getTime() : (e.creado || 0);
+        return ahora - t <= limite;
+      });
+    }
+  }
+
+  // Stats
+  const ahora = Date.now();
+  const MS_DIA = 86400000;
+  const hoy = todos.filter(e => {
+    const t = e.fecha ? new Date(e.fecha).getTime() : (e.creado || 0);
+    return ahora - t <= MS_DIA;
+  }).length;
+  const semana = todos.filter(e => {
+    const t = e.fecha ? new Date(e.fecha).getTime() : (e.creado || 0);
+    return ahora - t <= 7*MS_DIA;
+  }).length;
+  const mes = todos.filter(e => {
+    const t = e.fecha ? new Date(e.fecha).getTime() : (e.creado || 0);
+    return ahora - t <= 30*MS_DIA;
+  }).length;
+
+  const elH = document.getElementById('bitaHoyNum'); if (elH) elH.textContent = hoy;
+  const elP = document.getElementById('bitaProxNum'); if (elP) elP.textContent = semana;
+  const elM = document.getElementById('bitaMesNum'); if (elM) elM.textContent = mes;
+  const elT = document.getElementById('bitaTotalNum'); if (elT) elT.textContent = todos.length;
+
+  // Timeline
+  const cont = document.getElementById('bitaTimeline');
+  if (!cont) return;
+
+  if (filtrados.length === 0) {
+    cont.innerHTML = `
+      <div class="bita-empty">
+        <div style="font-size:60px;">📓</div>
+        <h3>Sin eventos registrados ${filtroTipo || filtroPeriodo !== 'todos' ? 'en este filtro' : ''}</h3>
+        <p>Los eventos que registres en cada animal aparecerán aquí.</p>
+        <button class="btn-registrar-animal" onclick="navigateTo('hato')">→ Ir a Mi Hato</button>
+      </div>
+    `;
+    return;
+  }
+
+  const TIPO_INFO = {
+    nota: { emoji: '📝', label: 'Nota', color: '#94a3b8' },
+    enfermedad: { emoji: '🤒', label: 'Enfermedad', color: '#fbbf24' },
+    vacuna: { emoji: '💉', label: 'Vacuna', color: '#22c55e' },
+    parto: { emoji: '🍼', label: 'Parto', color: '#f472b6' },
+    venta: { emoji: '💰', label: 'Venta', color: '#fbbf24' },
+    muerte: { emoji: '⚰️', label: 'Muerte', color: '#ef4444' }
+  };
+
+  // Agrupar por fecha
+  const grupos = {};
+  filtrados.forEach(ev => {
+    const fecha = ev.fecha || (ev.creado ? new Date(ev.creado).toISOString().slice(0,10) : 'sin-fecha');
+    if (!grupos[fecha]) grupos[fecha] = [];
+    grupos[fecha].push(ev);
+  });
+
+  const html = Object.entries(grupos).map(([fecha, eventos]) => {
+    const fechaFmt = fecha === 'sin-fecha' ? 'Sin fecha' : new Date(fecha).toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    return `
+      <div class="bita-grupo">
+        <div class="bita-grupo-fecha">📅 ${fechaFmt}</div>
+        ${eventos.map(ev => {
+          const info = TIPO_INFO[ev.tipo] || TIPO_INFO.nota;
+          const costo = ev.costo ? `<span class="md-ev-costo">$${parseFloat(ev.costo).toLocaleString('es-MX')}</span>` : '';
+          return `
+            <div class="bita-evento" style="--ev-color:${info.color};" onclick="abrirDetalleAnimal('${ev.animalId}')">
+              <div class="md-ev-icon">${info.emoji}</div>
+              <div class="bita-ev-body">
+                <div class="bita-ev-head">
+                  <span class="md-ev-tipo">${info.label}</span>
+                  <span class="bita-ev-animal">${ev.animalEmoji} ${ev.animalNombre || 'Sin nombre'}${ev.animalTag ? ' · ' + ev.animalTag : ''}</span>
+                </div>
+                <div class="md-ev-nota">${(ev.nota||'').replace(/</g,'&lt;') || '<em style="color:rgba(255,255,255,.4)">Sin descripción</em>'}</div>
+                ${costo}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }).join('');
+
+  cont.innerHTML = html;
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// 🏛️ APOYOS DEL GOBIERNO
+// Programas activos en México 2026 para productores pecuarios
+// ═══════════════════════════════════════════════════════════════════
+
+const APOYOS_GOB = [
+  {
+    nombre: 'PROGAN Productivo',
+    institucion: 'SADER · BIENESTAR',
+    descripcion: 'Apoyo a pequeños productores pecuarios para mejorar la productividad del hato, identificación SINIIGA y sanidad animal.',
+    montos: '$650 a $1,000 MXN por vientre/colmena',
+    requisitos: ['Estar inscrito en el Padrón Ganadero Nacional (PGN)', 'Tener UPP activa', 'Hasta 35 vientres bovinos (pequeño productor)', 'Aretes SINIIGA vigentes'],
+    fuente: 'gob.mx/agricultura',
+    url: 'https://www.gob.mx/agricultura/acciones-y-programas/produccion-pecuaria',
+    color: '#22c55e',
+    emoji: '🐄'
+  },
+  {
+    nombre: 'SINIIGA - Registro de identificación',
+    institucion: 'SENASICA · CNOG',
+    descripcion: 'Identificación individual obligatoria de ganado bovino mediante doble arete con folio nacional. Trámite necesario para acceder a programas y comercializar.',
+    montos: 'Aretes desde $40 MXN (subsidiados en zonas marginadas)',
+    requisitos: ['Inscripción en el PGN', 'Tener UPP activa con clave', 'Aretado por técnico autorizado'],
+    fuente: 'siniiga.org.mx',
+    url: 'https://www.siniiga.org.mx',
+    color: '#fbbf24',
+    emoji: '🏷️'
+  },
+  {
+    nombre: 'FIRA - Crédito para producción pecuaria',
+    institucion: 'FIRA · Banco de México',
+    descripcion: 'Créditos refaccionarios para infraestructura, equipo, semovientes; crédito de avío para alimentación, sanidad y operación. Tasas preferenciales.',
+    montos: 'Desde $50,000 hasta $30 millones MXN. Tasas TIIE + 2 a 6 puntos.',
+    requisitos: ['Proyecto productivo viable', 'Garantías', 'RFC activo', 'Buen historial crediticio'],
+    fuente: 'fira.gob.mx',
+    url: 'https://www.fira.gob.mx',
+    color: '#3b82f6',
+    emoji: '🏦'
+  },
+  {
+    nombre: 'FONDEN Agropecuario / SADER',
+    institucion: 'SADER · CADENA',
+    descripcion: 'Apoyos directos en caso de contingencias climáticas (sequía, heladas, inundaciones) que afecten al hato productivo.',
+    montos: 'Variable según severidad y región. Incluye seguros catastróficos.',
+    requisitos: ['Productor en zona declarada de emergencia', 'Padrón actualizado', 'Validación SADER'],
+    fuente: 'gob.mx/agricultura',
+    url: 'https://www.gob.mx/agricultura',
+    color: '#ef4444',
+    emoji: '🌪️'
+  },
+  {
+    nombre: 'Producción para el Bienestar (Pecuario)',
+    institucion: 'SADER · BIENESTAR',
+    descripcion: 'Apoyo directo a pequeños productores rurales con menos de 10 hectáreas o hato pequeño. Pago anual.',
+    montos: '$6,000 a $10,000 MXN anuales',
+    requisitos: ['Pequeño productor agrícola/pecuario', 'Estar en el Padrón de Beneficiarios', 'No recibir apoyos duplicados'],
+    fuente: 'gob.mx/agricultura',
+    url: 'https://www.gob.mx/agricultura/produccionparaelbienestar',
+    color: '#a855f7',
+    emoji: '🤝'
+  },
+  {
+    nombre: 'Campañas zoosanitarias - SENASICA',
+    institucion: 'SENASICA',
+    descripcion: 'Apoyo gratuito o subsidiado para vacunación oficial (brucelosis, tuberculosis, derriengue), pruebas diagnósticas y certificación de hatos libres.',
+    montos: 'Servicios sin costo o con cuota recuperación. Vacunas oficiales gratuitas.',
+    requisitos: ['Solicitud al CESAVE estatal', 'UPP registrada', 'Programar visita del MVZ oficial'],
+    fuente: 'senasica.gob.mx',
+    url: 'https://www.gob.mx/senasica',
+    color: '#10b981',
+    emoji: '💉'
+  },
+  {
+    nombre: 'Cobertura de precios agropecuarios - ASERCA',
+    institucion: 'SADER · ASERCA',
+    descripcion: 'Esquemas de cobertura para asegurar el precio de venta del ganado en pie o leche frente a la volatilidad del mercado.',
+    montos: 'Variable según volumen y producto. Subsidio del 50-70% de la prima.',
+    requisitos: ['Productor inscrito en SAGARPA-ASERCA', 'Proyecto comercial demostrable', 'Contrato con comercializador'],
+    fuente: 'gob.mx/aserca',
+    url: 'https://www.gob.mx/aserca',
+    color: '#0ea5e9',
+    emoji: '📈'
+  },
+  {
+    nombre: 'INIFAP - Capacitación y asistencia técnica',
+    institucion: 'INIFAP',
+    descripcion: 'Cursos gratuitos, asistencia técnica y transferencia de tecnología para mejorar manejo, genética, nutrición y sanidad.',
+    montos: 'Gratuito en su mayoría',
+    requisitos: ['Solicitar al CIR (Centro de Investigación Regional)', 'Productor activo'],
+    fuente: 'inifap.gob.mx',
+    url: 'https://www.inifap.gob.mx',
+    color: '#84cc16',
+    emoji: '🎓'
+  }
+];
+
+window.pintarApoyos = function() {
+  const cont = document.getElementById('apoyosGrid');
+  if (!cont) return;
+  cont.innerHTML = APOYOS_GOB.map(a => `
+    <div class="apoyo-card" style="--apoyo-color:${a.color};">
+      <div class="apoyo-head">
+        <div class="apoyo-icon">${a.emoji}</div>
+        <div class="apoyo-info">
+          <h3>${a.nombre}</h3>
+          <div class="apoyo-instituc">${a.institucion}</div>
+        </div>
+      </div>
+      <p class="apoyo-desc">${a.descripcion}</p>
+      <div class="apoyo-monto">
+        <div class="apoyo-monto-label">💰 Apoyo</div>
+        <div class="apoyo-monto-val">${a.montos}</div>
+      </div>
+      <div class="apoyo-req">
+        <div class="apoyo-req-label">📋 Requisitos principales</div>
+        <ul>${a.requisitos.map(r => `<li>${r}</li>`).join('')}</ul>
+      </div>
+      <a href="${a.url}" target="_blank" class="apoyo-link">
+        🔗 Más info en ${a.fuente} →
+      </a>
+    </div>
+  `).join('');
+};
+
+// Pintar al iniciar
+setTimeout(() => {
+  try { pintarApoyos(); } catch(e) {}
+  try { pintarBitacora(); } catch(e) {}
+}, 2000);
+
+// Cuando llegan animales actualizar bitácora
+const _originalSetAnimales = window.__rancho?.setAnimales;
 // ═══════════════════════════════════════════════════════════
 // LOGROS
 // ═══════════════════════════════════════════════════════════
