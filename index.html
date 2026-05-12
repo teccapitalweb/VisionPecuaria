@@ -6827,21 +6827,25 @@ button { font-family: inherit; }
         <span class="sb-nav-icon">🐄</span>
         <span class="sb-nav-label">Mi Hato</span>
       </button>
-      <button class="sb-nav-item" data-section="potrero">
-        <span class="sb-nav-icon">🌾</span>
-        <span class="sb-nav-label">Potrero</span>
+      <button class="sb-nav-item" data-section="botiquin">
+        <span class="sb-nav-icon">🩺</span>
+        <span class="sb-nav-label">Diagnóstico</span>
       </button>
-      <button class="sb-nav-item" data-section="apoyos">
-        <span class="sb-nav-icon">🏛️</span>
-        <span class="sb-nav-label">Apoyos Gob</span>
+      <button class="sb-nav-item" data-section="calculadora">
+        <span class="sb-nav-icon">🧮</span>
+        <span class="sb-nav-label">Calculadora</span>
       </button>
-      <button class="sb-nav-item" data-section="botiquin" data-vip="true">
-        <span class="sb-nav-icon">⚕️</span>
-        <span class="sb-nav-label">Botiquín</span>
+      <button class="sb-nav-item" data-section="bitacora">
+        <span class="sb-nav-icon">📓</span>
+        <span class="sb-nav-label">Bitácora</span>
       </button>
       <button class="sb-nav-item" data-section="mercado">
         <span class="sb-nav-icon">💰</span>
         <span class="sb-nav-label">Mercado</span>
+      </button>
+      <button class="sb-nav-item" data-section="apoyos">
+        <span class="sb-nav-icon">🏛️</span>
+        <span class="sb-nav-label">Apoyos Gob</span>
       </button>
 
       <div class="sb-section-label">Aprendizaje</div>
@@ -6867,9 +6871,9 @@ button { font-family: inherit; }
       </button>
 
       <div class="sb-section-label">Tu carrera</div>
-      <button class="sb-nav-item" data-section="bitacora">
-        <span class="sb-nav-icon">📓</span>
-        <span class="sb-nav-label">Bitácora del Capataz</span>
+      <button class="sb-nav-item" data-section="bitacora-capataz">
+        <span class="sb-nav-icon">🏆</span>
+        <span class="sb-nav-label">Mi progreso</span>
       </button>
       <button class="sb-nav-item" data-section="certificados">
         <span class="sb-nav-icon">🎖️</span>
@@ -7496,18 +7500,6 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
-      <!-- 🌾 POTRERO (HERRAMIENTAS)                                 -->
-      <!-- ════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-potrero">
-        <div class="section-head">
-          <div>
-            <h1>🌾 El Potrero</h1>
-            <p>Herramientas profesionales para el día a día del rancho</p>
-          </div>
-        </div>
-        <div class="tools-grid" id="toolsGrid"></div>
-      </section>
-
       <!-- ════════════════════════════════════════════════════════ -->
       <!-- 🩺 BOTIQUÍN — Diagnóstico veterinario                       -->
       <!-- ════════════════════════════════════════════════════════ -->
@@ -7905,7 +7897,7 @@ button { font-family: inherit; }
       <!-- ════════════════════════════════════════════════════════ -->
       <!-- 📓 BITÁCORA DEL CAPATAZ                                   -->
       <!-- ════════════════════════════════════════════════════════ -->
-      <section class="section" id="section-bitacora">
+      <section class="section" id="section-bitacora-capataz">
         <div class="section-head">
           <div>
             <h1>📓 Bitácora del Capataz</h1>
@@ -11205,7 +11197,7 @@ window.canjearDescuento = function() {
 };
 
 // ═══════════════════════════════════════════════════════════
-// HERRAMIENTAS DEL POTRERO
+// HERRAMIENTAS (mantenido por compatibilidad — el Potrero fue eliminado)
 // ═══════════════════════════════════════════════════════════
 const TOOLS = [
   { icon:'🩺', name:'Diagnóstico veterinario', desc:'22 enfermedades cubiertas con tratamiento basado en SENASICA/INIFAP', vip:false, accion:'botiquin' },
@@ -11215,7 +11207,9 @@ const TOOLS = [
   { icon:'🏛️', name:'Apoyos del gobierno', desc:'PROGAN, FIRA, SINIIGA, FAPPA y más', vip:false, accion:'apoyos' }
 ];
 function pintarTools() {
-  document.getElementById('toolsGrid').innerHTML = TOOLS.map(t => {
+  const cont = document.getElementById('toolsGrid');
+  if (!cont) return; // El Potrero fue eliminado, ya no hay grid
+  cont.innerHTML = TOOLS.map(t => {
     const onclick = t.accion ? `navigateTo('${t.accion}')` : `toast('Próximamente: ${t.name}', 'success', '🌾')`;
     return `
       <div class="tool-card" onclick="${onclick}">
