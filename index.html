@@ -2123,12 +2123,18 @@ button { font-family: inherit; }
 .establo-hero-tag {
   display: inline-block;
   font-size: .72rem; font-weight: 800; letter-spacing: 1.5px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--field-deep);
-  padding: 5px 12px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  padding: 6px 14px;
   border-radius: 100px;
   width: fit-content;
   margin-bottom: 0;
+  box-shadow: 0 6px 16px rgba(34,197,94,.35), 0 0 0 1px rgba(255,255,255,.1) inset;
+  animation: tagPulse 2.5s ease-in-out infinite;
+}
+@keyframes tagPulse {
+  0%, 100% { box-shadow: 0 6px 16px rgba(34,197,94,.35), 0 0 0 1px rgba(255,255,255,.1) inset; }
+  50% { box-shadow: 0 8px 22px rgba(34,197,94,.55), 0 0 0 1px rgba(255,255,255,.15) inset; }
 }
 .establo-hero-title {
   font: 800 clamp(1.5rem, 3vw, 2.3rem)/1.15 'Montserrat', sans-serif;
@@ -7316,12 +7322,12 @@ button { font-family: inherit; }
           <div class="establo-hero-bg" id="establoHeroBg"></div>
           <div class="establo-hero-overlay"></div>
           <div class="establo-hero-content">
-            <span class="establo-hero-tag" id="establoHeroTag">⭐ DESTACADO</span>
+            <span class="establo-hero-tag" id="establoHeroTag">🎁 CORTESÍA · 100% GRATIS</span>
             <h1 class="establo-hero-title" id="establoHeroTitle">El Establo</h1>
             <p class="establo-hero-desc" id="establoHeroDesc">Capacitaciones especializadas para que domines tu negocio pecuario.</p>
             <div class="establo-hero-meta" id="establoHeroMeta"></div>
             <button class="establo-hero-cta" id="establoHeroCta">
-              ▶ Empezar curso
+              🎬 Ver gratis ahora
             </button>
           </div>
         </div>
