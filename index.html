@@ -3170,7 +3170,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: 16px;
   padding: 16px 22px;
-  margin-bottom: 22px;
+  margin: 8px 0 32px;
   background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(212,160,23,.05));
   border: 1px solid rgba(212,160,23,.45);
   border-radius: 16px;
@@ -6854,6 +6854,11 @@ button { font-family: inherit; }
         <span class="sb-nav-label">Establo</span>
         <span class="sb-nav-badge" id="badgeCursos" style="display:none;">0</span>
       </button>
+      <button class="sb-nav-item" data-section="cineteca" data-vip="true">
+        <span class="sb-nav-icon">🎬</span>
+        <span class="sb-nav-label">Cineteca</span>
+        <span class="sb-nav-badge" id="badgeVideos" style="display:none;">0</span>
+      </button>
       <button class="sb-nav-item" data-section="biblioteca" data-vip="true">
         <span class="sb-nav-icon">📚</span>
         <span class="sb-nav-label">Biblioteca</span>
@@ -7388,6 +7393,39 @@ button { font-family: inherit; }
             </div>
             <div class="cine-clases-list" id="cineClasesList"></div>
           </aside>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 🎬 CINETECA (videos sueltos)                              -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-cineteca">
+        <div class="section-head">
+          <div>
+            <h1>🎬 La Cineteca</h1>
+            <p>Webinars, masterclasses y videos especializados</p>
+          </div>
+        </div>
+
+        <!-- Filtros de categoría -->
+        <div class="cineteca-filter" id="cinetecaFilter">
+          <button class="cineteca-chip active" data-cat="todos">Todos</button>
+        </div>
+
+        <!-- Loading -->
+        <div id="cinetecaLoading" class="establo-loading">
+          <div class="boot-spin" style="width:32px;height:32px"></div>
+          <p>Cargando videos...</p>
+        </div>
+
+        <!-- Grid de videos -->
+        <div class="cineteca-grid" id="cinetecaGrid"></div>
+
+        <!-- Vacío -->
+        <div id="cinetecaVacio" class="establo-vacio" style="display:none;">
+          <div style="font-size:64px;margin-bottom:16px;">🎬</div>
+          <h3>La cineteca está siendo preparada</h3>
+          <p>Los webinars y videos especializados se publicarán pronto.</p>
         </div>
       </section>
 
@@ -7993,6 +8031,20 @@ button { font-family: inherit; }
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
     <button class="modal-cta-secondary" onclick="suscribirElite('mensual')">o paga $200 MXN/mes (Capataz Pro)</button>
+  </div>
+</div>
+
+<!-- VIDEO MODAL (cineteca) -->
+<div class="video-modal" id="videoModal" onclick="if(event.target===this)cerrarVideoModal()">
+  <div class="video-modal-box">
+    <button class="video-modal-close" onclick="cerrarVideoModal()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="video-modal-player" id="videoModalPlayer"></div>
+    <div class="video-modal-info">
+      <h3 id="videoModalTitulo">Título</h3>
+      <p id="videoModalDesc">Descripción</p>
+    </div>
   </div>
 </div>
 
@@ -12423,6 +12475,107 @@ function pintarLogros() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// 🎬 CINETECA — videos sueltos (colección 'videos' de Firestore)
+// ═══════════════════════════════════════════════════════════
+let VIDEOS_FIRESTORE = [];
+let cinetecaCatActiva = 'todos';
+
+function thumbnailYoutube(url) {
+  const id = extraerYoutubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+}
+
+function cardVideo(v) {
+  const thumb = thumbnailYoutube(v.url);
+  const ytId = extraerYoutubeId(v.url);
+  return `
+    <div class="video-card" onclick="abrirVideoModal('${v.id}')">
+      <div class="video-thumb">
+        ${thumb ? `<img src="${thumb}" alt="${(v.titulo||'').replace(/"/g,'&quot;')}" loading="lazy">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;">🎥</div>`}
+        <div class="video-thumb-play">
+          <div class="video-thumb-play-icon">▶</div>
+        </div>
+        ${v.duracion ? `<div class="video-thumb-duracion">${v.duracion}</div>` : ''}
+      </div>
+      <div class="video-info">
+        ${v.categoria ? `<span class="video-categoria">${v.categoria}</span>` : ''}
+        <div class="video-titulo">${v.titulo || 'Sin título'}</div>
+        <div class="video-meta">
+          ${v.instructor ? `<span>👤 ${v.instructor}</span>` : ''}
+          ${v.mes ? `<span>📅 ${v.mes}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function pintarCineteca() {
+  const loading = document.getElementById('cinetecaLoading');
+  const vacio = document.getElementById('cinetecaVacio');
+  const grid = document.getElementById('cinetecaGrid');
+  loading.style.display = 'none';
+
+  if (!VIDEOS_FIRESTORE.length) {
+    vacio.style.display = 'block';
+    grid.innerHTML = '';
+    return;
+  }
+  vacio.style.display = 'none';
+
+  // Pintar filtros (categorías únicas)
+  const filterCont = document.getElementById('cinetecaFilter');
+  const cats = [...new Set(VIDEOS_FIRESTORE.map(v => v.categoria).filter(Boolean))];
+  filterCont.innerHTML = `<button class="cineteca-chip ${cinetecaCatActiva==='todos'?'active':''}" onclick="filtrarCineteca('todos', this)">Todos</button>` +
+    cats.map(c => `<button class="cineteca-chip ${cinetecaCatActiva===c?'active':''}" onclick="filtrarCineteca('${c}', this)">${c}</button>`).join('');
+
+  let videos = VIDEOS_FIRESTORE;
+  if (cinetecaCatActiva !== 'todos') videos = videos.filter(v => v.categoria === cinetecaCatActiva);
+
+  // Ordenar por fecha desc
+  videos.sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+
+  grid.innerHTML = videos.map(cardVideo).join('');
+
+  const badge = document.getElementById('badgeVideos');
+  if (badge && VIDEOS_FIRESTORE.length > 0) {
+    badge.textContent = VIDEOS_FIRESTORE.length;
+    badge.style.display = '';
+  }
+}
+
+window.filtrarCineteca = function(cat, btn) {
+  cinetecaCatActiva = cat;
+  pintarCineteca();
+};
+
+window.abrirVideoModal = function(videoId) {
+  const v = VIDEOS_FIRESTORE.find(x => x.id === videoId);
+  if (!v) return;
+  // Verificar VIP
+  const isVip = window.__rancho?.userPlan && window.__rancho.userPlan() === 'vip';
+  if (!isVip) {
+    abrirModalVIP('Este video es exclusivo para miembros Élite Pecuario.');
+    return;
+  }
+  const ytId = extraerYoutubeId(v.url);
+  const player = document.getElementById('videoModalPlayer');
+  if (ytId) {
+    player.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+  } else {
+    player.innerHTML = `<iframe src="${v.url}" allowfullscreen></iframe>`;
+  }
+  document.getElementById('videoModalTitulo').textContent = v.titulo || 'Sin título';
+  document.getElementById('videoModalDesc').textContent = `${v.instructor ? '👤 ' + v.instructor : ''} ${v.duracion ? '· ⏱ ' + v.duracion : ''} ${v.categoria ? '· 🏷️ ' + v.categoria : ''}`.trim();
+  document.getElementById('videoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+window.cerrarVideoModal = function() {
+  document.getElementById('videoModal').classList.remove('active');
+  document.getElementById('videoModalPlayer').innerHTML = '';
+  document.body.style.overflow = '';
+};
+
+// ═══════════════════════════════════════════════════════════
 // 📚 BIBLIOTECA — PDFs (colección 'pdfs' de Firestore)
 // ═══════════════════════════════════════════════════════════
 let PDFS_FIRESTORE = [];
@@ -12711,6 +12864,18 @@ window.__rancho.iniciarContenido = async function() {
         }
       }, ms);
     }
+
+    const tVideos = safetyTimeout('cinetecaLoading', 'cinetecaVacio');
+    onSnapshot(collection(db, 'videos'), (snap) => {
+      clearTimeout(tVideos);
+      VIDEOS_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      pintarCineteca();
+    }, (err) => {
+      clearTimeout(tVideos);
+      console.warn('Sin permisos para videos:', err.message);
+      document.getElementById('cinetecaLoading').style.display = 'none';
+      document.getElementById('cinetecaVacio').style.display = 'block';
+    });
 
     const tPdfs = safetyTimeout('bibliotecaLoading', 'bibliotecaVacio');
     onSnapshot(collection(db, 'pdfs'), (snap) => {
