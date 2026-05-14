@@ -5444,6 +5444,205 @@ button { font-family: inherit; }
   .bita-stats-grid { grid-template-columns: 1fr 1fr; }
 }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* 📡 PRÓXIMO WEBINAR — Widget contador regresivo              */
+/* ═══════════════════════════════════════════════════════════ */
+.prox-webinar-wrap {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(255,255,255,.08);
+}
+.pw-loading {
+  display: flex; align-items: center; gap: 10px;
+  padding: 16px;
+  color: rgba(255,255,255,.5);
+  font-size: .85rem;
+}
+.pw-spin {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(212,160,23,.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: pwSpin 1s linear infinite;
+}
+@keyframes pwSpin { to { transform: rotate(360deg); } }
+
+.pw-empty {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.03);
+  border: 1px dashed rgba(255,255,255,.08);
+  border-radius: 12px;
+}
+.pw-empty-icon { font-size: 28px; opacity: .5; }
+.pw-empty-text { display: flex; flex-direction: column; gap: 3px; }
+.pw-empty-text strong { color: rgba(255,255,255,.85); font-size: .9rem; font-weight: 700; }
+.pw-empty-text span { color: rgba(255,255,255,.5); font-size: .78rem; }
+
+.pw-card {
+  position: relative;
+  padding: 18px 18px 16px;
+  background:
+    linear-gradient(135deg, rgba(59,130,246,.12), rgba(59,130,246,.03)),
+    rgba(0,0,0,.25);
+  border: 1px solid rgba(59,130,246,.28);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: pwIn .4s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes pwIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pw-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+  opacity: .8;
+  animation: pwShine 3s ease-in-out infinite;
+}
+@keyframes pwShine {
+  0%, 100% { opacity: .4; }
+  50% { opacity: 1; }
+}
+
+.pw-header {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.pw-badge {
+  font: 800 .65rem 'Montserrat', sans-serif;
+  letter-spacing: 1.3px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 100px;
+  box-shadow: 0 4px 10px rgba(59,130,246,.4);
+  text-transform: uppercase;
+}
+.pw-count-pill {
+  font: 700 .68rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.6);
+  background: rgba(255,255,255,.05);
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.pw-title {
+  font: 800 1.05rem/1.3 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  margin: 0 0 10px;
+  letter-spacing: -.3px;
+}
+
+.pw-meta {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.pw-meta-item {
+  font: 600 .75rem 'Inter', sans-serif;
+  color: rgba(255,255,255,.7);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.pw-meta-item:first-child { color: #93c5fd; }
+
+/* Countdown */
+.pw-countdown {
+  display: flex; align-items: stretch; justify-content: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: rgba(0,0,0,.4);
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+.pw-time-block {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.pw-time-num {
+  font: 900 1.7rem/1 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #fff 60%, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(147,197,253,.3);
+}
+.pw-time-block-seg .pw-time-num {
+  background: linear-gradient(180deg, #fbbf24 60%, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pwSegPulse 1s ease-in-out infinite;
+}
+@keyframes pwSegPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .85; transform: scale(.98); }
+}
+.pw-time-label {
+  font: 700 .55rem 'Montserrat', sans-serif;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+}
+.pw-time-sep {
+  font: 900 1.4rem/1.3 'Plus Jakarta Sans', sans-serif;
+  color: rgba(147,197,253,.3);
+  align-self: center;
+  user-select: none;
+}
+
+.pw-btn {
+  display: block;
+  text-align: center;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font: 800 .88rem 'Plus Jakarta Sans', sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(59,130,246,.35), inset 0 1px 0 rgba(255,255,255,.2);
+  transition: all .2s cubic-bezier(.2,.8,.2,1);
+  letter-spacing: .3px;
+}
+.pw-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(59,130,246,.55), inset 0 1px 0 rgba(255,255,255,.25);
+  filter: brightness(1.08);
+}
+.pw-btn-disabled {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.5);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.pw-btn-disabled:hover {
+  transform: none;
+  filter: none;
+  box-shadow: none;
+}
+
+@media (max-width: 720px) {
+  .pw-countdown { gap: 2px; padding: 10px 4px; }
+  .pw-time-num { font-size: 1.35rem; }
+  .pw-time-sep { font-size: 1.1rem; }
+  .pw-time-label { font-size: .5rem; }
+  .pw-header { flex-direction: column; align-items: flex-start; }
+}
+
 /* ═══════════ FORM PREMIUM DEL DETALLE ANIMAL ═══════════ */
 .md-pane-form {
   display: flex;
@@ -7147,6 +7346,14 @@ button { font-family: inherit; }
               <span class="mp-live-info" id="mercadoUpdatedAt">SIAP · SNIIM · UGRJ</span>
             </div>
             <div class="mercado-mini-list" id="mercadoMini"></div>
+
+            <!-- 📡 PRÓXIMO WEBINAR — Contador regresivo -->
+            <div class="prox-webinar-wrap" id="proxWebinarWrap">
+              <div class="pw-loading">
+                <div class="pw-spin"></div>
+                <span>Buscando próximos webinars...</span>
+              </div>
+            </div>
           </div>
 
           <div class="casco-bottom-side">
@@ -9161,6 +9368,152 @@ function cardMercado(m, mini = false) {
   `;
 }
 
+// ═══════════════════════════════════════════════════════════
+// 📡 PRÓXIMO WEBINAR — Widget del Casco con contador regresivo
+// ═══════════════════════════════════════════════════════════
+let _pwInterval = null;
+
+function pwFechaSesion(s) {
+  // Combina fecha + hora a un Date
+  if (!s.fecha) return null;
+  const horaStr = s.hora || '00:00';
+  // Normalizar hora: "7:00 PM" → "19:00"
+  let h = horaStr.trim();
+  let h24 = h;
+  const ampmMatch = h.match(/(\d{1,2}):?(\d{0,2})\s*(am|pm|AM|PM)/);
+  if (ampmMatch) {
+    let hh = parseInt(ampmMatch[1], 10);
+    const mm = ampmMatch[2] ? parseInt(ampmMatch[2], 10) : 0;
+    const ampm = ampmMatch[3].toLowerCase();
+    if (ampm === 'pm' && hh < 12) hh += 12;
+    if (ampm === 'am' && hh === 12) hh = 0;
+    h24 = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+  }
+  try {
+    return new Date(s.fecha + 'T' + h24 + ':00');
+  } catch(e) {
+    return null;
+  }
+}
+
+window.pintarProxWebinar = function() {
+  const cont = document.getElementById('proxWebinarWrap');
+  if (!cont) return;
+  const sesiones = window.SESIONES_FIRESTORE || [];
+  const ahora = Date.now();
+
+  // Filtrar próximas (no live, no terminadas)
+  const proximas = sesiones
+    .map(s => ({ ...s, _fechaMs: pwFechaSesion(s)?.getTime() }))
+    .filter(s => s._fechaMs && s._fechaMs > ahora)
+    .sort((a,b) => a._fechaMs - b._fechaMs);
+
+  // Limpiar interval previo
+  if (_pwInterval) { clearInterval(_pwInterval); _pwInterval = null; }
+
+  if (proximas.length === 0) {
+    cont.innerHTML = `
+      <div class="pw-empty">
+        <div class="pw-empty-icon">📡</div>
+        <div class="pw-empty-text">
+          <strong>Sin webinars programados</strong>
+          <span>Los próximos eventos en vivo aparecerán aquí</span>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const prox = proximas[0];
+  const fechaDate = new Date(prox._fechaMs);
+  const fechaFmt = fechaDate.toLocaleDateString('es-MX', {
+    weekday: 'long', day: 'numeric', month: 'long'
+  });
+  const horaFmt = fechaDate.toLocaleTimeString('es-MX', {
+    hour: 'numeric', minute: '2-digit', hour12: true
+  });
+
+  // Si hay link, botón activo; si no, mostrar mensaje
+  const btnHtml = prox.link
+    ? `<a href="${prox.link}" target="_blank" rel="noopener" class="pw-btn">📡 Entrar al webinar</a>`
+    : `<div class="pw-btn pw-btn-disabled">🔒 Link no disponible aún</div>`;
+
+  cont.innerHTML = `
+    <div class="pw-card">
+      <div class="pw-header">
+        <span class="pw-badge">📡 PRÓXIMO WEBINAR</span>
+        <span class="pw-count-pill" id="pwCountPill">⏰ ${proximas.length} programado${proximas.length>1?'s':''}</span>
+      </div>
+
+      <h3 class="pw-title">${(prox.titulo || 'Sin título').replace(/</g,'&lt;')}</h3>
+
+      <div class="pw-meta">
+        ${prox.instructor ? `<span class="pw-meta-item">👤 ${(prox.instructor||'').replace(/</g,'&lt;')}</span>` : ''}
+        <span class="pw-meta-item">📅 ${fechaFmt.charAt(0).toUpperCase() + fechaFmt.slice(1)}</span>
+        <span class="pw-meta-item">🕐 ${horaFmt}</span>
+      </div>
+
+      <div class="pw-countdown" id="pwCountdown" data-target="${prox._fechaMs}">
+        <div class="pw-time-block">
+          <div class="pw-time-num" id="pwDias">--</div>
+          <div class="pw-time-label">Días</div>
+        </div>
+        <div class="pw-time-sep">:</div>
+        <div class="pw-time-block">
+          <div class="pw-time-num" id="pwHoras">--</div>
+          <div class="pw-time-label">Horas</div>
+        </div>
+        <div class="pw-time-sep">:</div>
+        <div class="pw-time-block">
+          <div class="pw-time-num" id="pwMins">--</div>
+          <div class="pw-time-label">Minutos</div>
+        </div>
+        <div class="pw-time-sep">:</div>
+        <div class="pw-time-block pw-time-block-seg">
+          <div class="pw-time-num" id="pwSegs">--</div>
+          <div class="pw-time-label">Segundos</div>
+        </div>
+      </div>
+
+      ${btnHtml}
+    </div>
+  `;
+
+  // Función de actualización de contador
+  const target = prox._fechaMs;
+  const tick = () => {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      // El webinar comenzó — repintar todo para mostrar el siguiente
+      if (_pwInterval) { clearInterval(_pwInterval); _pwInterval = null; }
+      setTimeout(() => pintarProxWebinar(), 500);
+      return;
+    }
+    const dias = Math.floor(diff / 86400000);
+    const horas = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const segs = Math.floor((diff % 60000) / 1000);
+    const dEl = document.getElementById('pwDias');
+    const hEl = document.getElementById('pwHoras');
+    const mEl = document.getElementById('pwMins');
+    const sEl = document.getElementById('pwSegs');
+    if (dEl) dEl.textContent = String(dias).padStart(2,'0');
+    if (hEl) hEl.textContent = String(horas).padStart(2,'0');
+    if (mEl) mEl.textContent = String(mins).padStart(2,'0');
+    if (sEl) sEl.textContent = String(segs).padStart(2,'0');
+  };
+  tick();
+  _pwInterval = setInterval(tick, 1000);
+};
+// Exponer SESIONES_FIRESTORE globalmente para que pintarProxWebinar lo lea
+const _pwInit = setInterval(() => {
+  if (typeof SESIONES_FIRESTORE !== 'undefined') {
+    window.SESIONES_FIRESTORE = SESIONES_FIRESTORE;
+    clearInterval(_pwInit);
+    try { pintarProxWebinar(); } catch(e) {}
+  }
+}, 500);
+
 function pintarMercadoMini() {
   const cont = document.getElementById('mercadoMini');
   if (!cont) return;
@@ -9172,14 +9525,14 @@ function pintarMercadoMini() {
       destacados.push(m);
       yaVistas.add(m.categoria);
     }
-    if (destacados.length >= 7) break;
+    if (destacados.length >= 3) break;
   }
   // Si quedan slots por llenar, completar con los primeros del catálogo
-  if (destacados.length < 7) {
+  if (destacados.length < 3) {
     for (const m of MERCADO) {
       if (!destacados.includes(m)) {
         destacados.push(m);
-        if (destacados.length >= 7) break;
+        if (destacados.length >= 3) break;
       }
     }
   }
@@ -12903,12 +13256,16 @@ window.__rancho.iniciarContenido = async function() {
     onSnapshot(collection(db, 'sesiones'), (snap) => {
       clearTimeout(tSes);
       SESIONES_FIRESTORE = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      window.SESIONES_FIRESTORE = SESIONES_FIRESTORE;
       pintarSesiones();
+      try { pintarProxWebinar(); } catch(e) {}
     }, (err) => {
       clearTimeout(tSes);
       console.warn('Sin permisos para sesiones:', err.message);
       document.getElementById('vivoLoading').style.display = 'none';
+      window.SESIONES_FIRESTORE = SESIONES_FIRESTORE;
       pintarSesiones();
+      try { pintarProxWebinar(); } catch(e) {}
     });
   } catch(e) {
     console.error('Error iniciando contenido:', e);
