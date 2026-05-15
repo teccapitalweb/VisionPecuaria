@@ -5635,6 +5635,34 @@ button { font-family: inherit; }
   box-shadow: none;
 }
 
+.pw-btn-gcal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 11px 16px;
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  font: 700 .82rem 'Plus Jakarta Sans', sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  letter-spacing: .2px;
+  transition: all .2s cubic-bezier(.2,.8,.2,1);
+}
+.pw-btn-gcal:hover {
+  background: rgba(212,160,23,.12);
+  border-color: rgba(212,160,23,.4);
+  color: #fbbf24;
+  transform: translateY(-1px);
+}
+.pw-btn-gcal svg {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
 @media (max-width: 720px) {
   .pw-countdown { gap: 2px; padding: 10px 4px; }
   .pw-time-num { font-size: 1.35rem; }
@@ -9366,6 +9394,28 @@ window.pintarProxWebinar = function() {
     ? `<a href="${prox.link}" target="_blank" rel="noopener" class="pw-btn">📡 Entrar al webinar</a>`
     : `<div class="pw-btn pw-btn-disabled">🔒 Link no disponible aún</div>`;
 
+  // Generar URL de Google Calendar
+  const gcalUrl = (() => {
+    const start = new Date(prox._fechaMs);
+    const durMin = parseInt((prox.duracion || '60').toString().match(/\d+/)?.[0] || '60', 10);
+    const end = new Date(prox._fechaMs + durMin * 60000);
+    const fmtGcal = (d) => {
+      return d.getUTCFullYear() +
+        String(d.getUTCMonth()+1).padStart(2,'0') +
+        String(d.getUTCDate()).padStart(2,'0') + 'T' +
+        String(d.getUTCHours()).padStart(2,'0') +
+        String(d.getUTCMinutes()).padStart(2,'0') + '00Z';
+    };
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: prox.titulo || 'Webinar Visión Pecuaria',
+      dates: `${fmtGcal(start)}/${fmtGcal(end)}`,
+      details: `Webinar de Visión Pecuaria.${prox.instructor ? '\n\nInstructor: ' + prox.instructor : ''}${prox.link ? '\n\nLink: ' + prox.link : ''}`,
+      location: prox.link || 'Online'
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  })();
+
   cont.innerHTML = `
     <div class="pw-card">
       <div class="pw-header">
@@ -9404,6 +9454,12 @@ window.pintarProxWebinar = function() {
       </div>
 
       ${btnHtml}
+      <a href="${gcalUrl}" target="_blank" rel="noopener" class="pw-btn-gcal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Recordarme en Google Calendar
+      </a>
     </div>
   `;
 
