@@ -2275,6 +2275,313 @@ button { font-family: inherit; }
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════ */
+/* SECCIÓN: CONFIGURACIÓN                                            */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Banner cancelación */
+.cfg-banner {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--rxl);
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.cfg-banner-warning {
+  background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(217,119,6,.08));
+  border: 1px solid rgba(251,191,36,.35);
+}
+.cfg-banner-icon { font-size: 28px; flex-shrink: 0; }
+.cfg-banner-content { flex: 1; min-width: 200px; font-size: .85rem; color: rgba(255,255,255,.85); }
+.cfg-banner-content strong { color: #fbbf24; }
+.cfg-banner-content div { margin-top: 3px; font-size: .8rem; color: rgba(255,255,255,.65); }
+.cfg-banner-btn {
+  background: #fbbf24;
+  color: #0a1f0f;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 100px;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+}
+.cfg-banner-btn:hover { filter: brightness(1.08); }
+
+/* Bloques */
+.cfg-bloque {
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--rxl);
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.cfg-zona-peligro {
+  border-color: rgba(239,68,68,.2);
+  background: rgba(239,68,68,.03);
+}
+.cfg-bloque-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.cfg-bloque-head h2 {
+  font: 800 1.15rem 'Montserrat', sans-serif;
+  margin: 0;
+}
+.cfg-bloque-head p {
+  font-size: .78rem;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+
+/* Mi cuenta */
+.cfg-cuenta {
+  display: flex; align-items: center; gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.cfg-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--field-deep);
+  font: 800 1.5rem 'Montserrat', sans-serif;
+  flex-shrink: 0;
+  border: 3px solid rgba(212,160,23,.3);
+}
+.cfg-cuenta-info { flex: 1; min-width: 220px; }
+.cfg-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  font-size: .85rem;
+  gap: 12px;
+}
+.cfg-row:last-child { border-bottom: none; }
+.cfg-row-label {
+  color: rgba(255,255,255,.55);
+  font-weight: 600;
+}
+.cfg-row-value {
+  color: #fff;
+  font-weight: 700;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Card del plan */
+.cfg-plan-card {
+  background: linear-gradient(135deg, rgba(15,61,39,.65), rgba(10,31,18,.85));
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: var(--rxl);
+  padding: 22px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+.cfg-plan-card.is-vip {
+  border-color: rgba(212,160,23,.5);
+  background: linear-gradient(135deg, rgba(212,160,23,.12), rgba(15,61,39,.7));
+}
+.cfg-plan-card.is-vip::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(212,160,23,.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cfg-plan-tag {
+  font-size: .72rem;
+  letter-spacing: 1.5px;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+.cfg-plan-precio {
+  font: 800 1.7rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.cfg-plan-precio small {
+  font-size: .8rem;
+  color: rgba(255,255,255,.55);
+  font-weight: 600;
+  margin-left: 4px;
+}
+.cfg-plan-detalles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+.cfg-plan-detalle {
+  background: rgba(0,0,0,.25);
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+.cfg-plan-detalle span {
+  display: block;
+  font-size: .7rem;
+  color: rgba(255,255,255,.5);
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 600;
+}
+.cfg-plan-detalle strong {
+  font-size: .85rem;
+  color: #fff;
+  font-weight: 700;
+}
+.cfg-plan-detalle strong.warning { color: #fbbf24; }
+.cfg-plan-detalle strong.success { color: #22c55e; }
+
+/* Acciones */
+.cfg-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cfg-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: 'Montserrat', sans-serif;
+  transition: all .2s;
+}
+.cfg-btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+}
+.cfg-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(212,160,23,.3);
+}
+.cfg-btn-secondary {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.1);
+  color: #fff;
+}
+.cfg-btn-secondary:hover {
+  background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.18);
+}
+.cfg-btn-warning {
+  background: rgba(251,191,36,.1);
+  border-color: rgba(251,191,36,.35);
+  color: #fbbf24;
+}
+.cfg-btn-warning:hover { background: rgba(251,191,36,.18); }
+.cfg-btn-danger {
+  background: rgba(239,68,68,.1);
+  border-color: rgba(239,68,68,.35);
+  color: #ef4444;
+}
+.cfg-btn-danger:hover { background: rgba(239,68,68,.18); }
+.cfg-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Preferencias / Switches */
+.cfg-pref-list { display: flex; flex-direction: column; gap: 14px; }
+.cfg-pref-item {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.03);
+  border-radius: var(--rl);
+}
+.cfg-pref-info { flex: 1; min-width: 0; }
+.cfg-pref-titulo {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 3px;
+}
+.cfg-pref-sub {
+  font-size: .76rem;
+  color: rgba(255,255,255,.55);
+  line-height: 1.4;
+}
+
+/* Switch toggle */
+.cfg-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.cfg-switch input {
+  opacity: 0;
+  width: 0; height: 0;
+}
+.cfg-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255,255,255,.15);
+  border-radius: 100px;
+  transition: background-color .2s;
+}
+.cfg-switch-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px; width: 18px;
+  left: 3px; bottom: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform .2s;
+}
+.cfg-switch input:checked + .cfg-switch-slider {
+  background-color: var(--gold);
+}
+.cfg-switch input:checked + .cfg-switch-slider::before {
+  transform: translateX(20px);
+}
+.cfg-switch input:disabled + .cfg-switch-slider {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Privacidad list */
+.cfg-priv-list { display: flex; flex-direction: column; gap: 14px; }
+.cfg-priv-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px;
+  background: rgba(255,255,255,.03);
+  border-radius: var(--rl);
+}
+.cfg-priv-icon { font-size: 22px; flex-shrink: 0; }
+.cfg-priv-item strong {
+  display: block;
+  font-size: .9rem;
+  color: #fff;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.cfg-priv-item p {
+  font-size: .78rem;
+  color: rgba(255,255,255,.6);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
 /* SECCIÓN: SOPORTE TÉCNICO                                          */
 /* ═══════════════════════════════════════════════════════════════ */
 
@@ -8240,7 +8547,7 @@ button { font-family: inherit; }
     </div>
 
     <div class="sb-foot">
-      <button class="sb-foot-btn" onclick="navigateTo('caseta')">
+      <button class="sb-foot-btn" onclick="navigateTo('config')">
         <span>⚙️</span> <span>Configuración</span>
       </button>
       <button class="sb-foot-btn sb-foot-btn--exit" onclick="cerrarSesion()">
@@ -9343,6 +9650,203 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
+      <!-- ⚙️ CONFIGURACIÓN                                          -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-config">
+        <div class="section-head">
+          <div>
+            <h1>⚙️ Configuración</h1>
+            <p>Gestiona tu cuenta, suscripción y preferencias</p>
+          </div>
+        </div>
+
+        <!-- Banner de aviso si está cancelado -->
+        <div class="cfg-banner cfg-banner-warning" id="cfgBannerCancelado" style="display:none;">
+          <div class="cfg-banner-icon">⚠️</div>
+          <div class="cfg-banner-content">
+            <strong>Tu suscripción Élite está cancelada</strong>
+            <div>Sigues teniendo acceso completo hasta el <strong id="cfgFechaFin">—</strong>. Después regresas automáticamente a Explorador FREE.</div>
+          </div>
+          <button class="cfg-banner-btn" onclick="reactivarSuscripcion()">Reactivar</button>
+        </div>
+
+        <!-- Mi cuenta -->
+        <div class="cfg-bloque">
+          <div class="cfg-bloque-head">
+            <span style="font-size:22px;">👤</span>
+            <div>
+              <h2>Mi cuenta</h2>
+              <p>Información de tu perfil</p>
+            </div>
+          </div>
+          <div class="cfg-cuenta">
+            <div class="cfg-avatar" id="cfgAvatar">V</div>
+            <div class="cfg-cuenta-info">
+              <div class="cfg-row">
+                <span class="cfg-row-label">Nombre</span>
+                <span class="cfg-row-value" id="cfgNombre">—</span>
+              </div>
+              <div class="cfg-row">
+                <span class="cfg-row-label">Correo</span>
+                <span class="cfg-row-value" id="cfgEmail">—</span>
+              </div>
+              <div class="cfg-row">
+                <span class="cfg-row-label">Miembro desde</span>
+                <span class="cfg-row-value" id="cfgRegistro">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="cfg-actions">
+            <button class="cfg-btn cfg-btn-secondary" onclick="cambiarPassword()">
+              🔑 Cambiar contraseña
+            </button>
+          </div>
+        </div>
+
+        <!-- Mi suscripción -->
+        <div class="cfg-bloque">
+          <div class="cfg-bloque-head">
+            <span style="font-size:22px;">💎</span>
+            <div>
+              <h2>Mi suscripción</h2>
+              <p>Estado y administración de tu plan</p>
+            </div>
+          </div>
+
+          <!-- Card del plan actual -->
+          <div class="cfg-plan-card" id="cfgPlanCard">
+            <div class="cfg-plan-tag" id="cfgPlanTag">EXPLORADOR · FREE</div>
+            <div class="cfg-plan-precio" id="cfgPlanPrecio">Gratis</div>
+            <div class="cfg-plan-detalles" id="cfgPlanDetalles">
+              <div class="cfg-plan-detalle">
+                <span>Estado</span>
+                <strong id="cfgPlanEstado">Activo</strong>
+              </div>
+              <div class="cfg-plan-detalle">
+                <span>Próximo cobro</span>
+                <strong id="cfgPlanProximo">—</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones dinámicas -->
+          <div class="cfg-actions" id="cfgPlanActions">
+            <!-- Se llena por JS -->
+          </div>
+        </div>
+
+        <!-- Preferencias -->
+        <div class="cfg-bloque">
+          <div class="cfg-bloque-head">
+            <span style="font-size:22px;">🎛️</span>
+            <div>
+              <h2>Preferencias</h2>
+              <p>Personaliza tu experiencia</p>
+            </div>
+          </div>
+          <div class="cfg-pref-list">
+            <div class="cfg-pref-item">
+              <div class="cfg-pref-info">
+                <div class="cfg-pref-titulo">🔔 Notificaciones por correo</div>
+                <div class="cfg-pref-sub">Recibe avisos de webinars, cursos nuevos y noticias del sector</div>
+              </div>
+              <label class="cfg-switch">
+                <input type="checkbox" id="cfgPrefNotif" checked onchange="guardarPreferencia('notificacionesEmail', this.checked)">
+                <span class="cfg-switch-slider"></span>
+              </label>
+            </div>
+            <div class="cfg-pref-item">
+              <div class="cfg-pref-info">
+                <div class="cfg-pref-titulo">📰 Resumen semanal del mercado</div>
+                <div class="cfg-pref-sub">Cada lunes te enviamos los precios y noticias clave</div>
+              </div>
+              <label class="cfg-switch">
+                <input type="checkbox" id="cfgPrefSemanal" onchange="guardarPreferencia('resumenSemanal', this.checked)">
+                <span class="cfg-switch-slider"></span>
+              </label>
+            </div>
+            <div class="cfg-pref-item">
+              <div class="cfg-pref-info">
+                <div class="cfg-pref-titulo">🌙 Tema oscuro</div>
+                <div class="cfg-pref-sub">El único tema disponible por ahora. Tema claro próximamente.</div>
+              </div>
+              <label class="cfg-switch">
+                <input type="checkbox" checked disabled>
+                <span class="cfg-switch-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacidad -->
+        <div class="cfg-bloque">
+          <div class="cfg-bloque-head">
+            <span style="font-size:22px;">🔒</span>
+            <div>
+              <h2>Privacidad y datos</h2>
+              <p>Tu información siempre es tuya</p>
+            </div>
+          </div>
+          <div class="cfg-priv-list">
+            <div class="cfg-priv-item">
+              <span class="cfg-priv-icon">🐄</span>
+              <div>
+                <strong>Tu hato es privado</strong>
+                <p>Solo tú puedes ver los animales que registras. Ni siquiera Visión Pecuaria los ve sin que tú los publiques.</p>
+              </div>
+            </div>
+            <div class="cfg-priv-item">
+              <span class="cfg-priv-icon">📥</span>
+              <div>
+                <strong>Descargar mis datos</strong>
+                <p>Descarga un archivo JSON con todo tu rancho: animales, certificados, configuración.</p>
+                <button class="cfg-btn cfg-btn-secondary" style="margin-top:8px;" onclick="descargarMisDatos()">
+                  📥 Descargar mis datos
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zona peligrosa -->
+        <div class="cfg-bloque cfg-zona-peligro">
+          <div class="cfg-bloque-head">
+            <span style="font-size:22px;">⚠️</span>
+            <div>
+              <h2>Zona delicada</h2>
+              <p>Acciones que afectan tu cuenta de forma permanente</p>
+            </div>
+          </div>
+          <div class="cfg-priv-list">
+            <div class="cfg-priv-item">
+              <span class="cfg-priv-icon">🚪</span>
+              <div>
+                <strong>Cerrar todas las sesiones</strong>
+                <p>Cierra tu sesión en todos los dispositivos donde hayas iniciado sesión.</p>
+                <button class="cfg-btn cfg-btn-warning" style="margin-top:8px;" onclick="cerrarSesion()">
+                  Cerrar sesión en este dispositivo
+                </button>
+              </div>
+            </div>
+            <div class="cfg-priv-item">
+              <span class="cfg-priv-icon">🗑️</span>
+              <div>
+                <strong>Solicitar eliminación de cuenta</strong>
+                <p>Esto borra permanentemente tu cuenta y todos tus datos (animales, certificados, avisos). No es reversible.</p>
+                <button class="cfg-btn cfg-btn-danger" style="margin-top:8px;" onclick="solicitarEliminarCuenta()">
+                  Solicitar eliminación de cuenta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;padding:24px 0 8px;color:rgba(255,255,255,.3);font-size:.7rem;">
+          Visión Pecuaria · TEC CAPITAL Group · v2.4
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
       <!-- 🛟 SOPORTE TÉCNICO — Centro de ayuda                       -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-caseta">
@@ -10154,8 +10658,16 @@ onAuthStateChanged(auth, async (user) => {
       if (snapM.exists()) {
         const m = snapM.data();
         const vence = m.vence ? new Date(m.vence) : null;
-        const activoVIP = m.estado === 'activo' && (vence ? vence > new Date() : true);
-        if (activoVIP) userPlan = 'vip';
+        const activoNormal = m.estado === 'activo' && (vence ? vence > new Date() : true);
+
+        // CANCELADO pero válido hasta fechaFin
+        let activoCancelado = false;
+        if (m.cancelado === true && m.fechaFin) {
+          const ff = m.fechaFin?.toDate ? m.fechaFin.toDate() : new Date(m.fechaFin);
+          activoCancelado = ff > new Date();
+        }
+
+        if (activoNormal || activoCancelado) userPlan = 'vip';
       }
     } catch (e) { console.warn('No se pudo verificar VIP:', e.code || e); }
 
@@ -16242,7 +16754,348 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 1500);
 });
 
-// Cerrar modales con ESC (radar)
+// ═══════════════════════════════════════════════════════════
+// ⚙️ CONFIGURACIÓN — Sistema de cuenta y suscripción
+// ═══════════════════════════════════════════════════════════
+
+// Endpoint Railway para crear sesión del Stripe Customer Portal
+// Cambiar por tu URL real cuando tengas el endpoint deployado
+const STRIPE_PORTAL_ENDPOINT = 'https://visionpecuaria-stripe.up.railway.app/create-portal-session';
+
+// Pinta toda la sección Configuración
+window.pintarConfig = function() {
+  const m = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
+  const user = (typeof currentUser !== 'undefined' && currentUser) || {};
+  const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
+
+  // ── Mi cuenta ──────────────────────────────────────────
+  const nombre = user.displayName || user.email?.split('@')[0] || 'Ganadero';
+  const iniciales = nombre.split(' ').slice(0,2).map(s => s[0]).join('').toUpperCase();
+  const elAv = document.getElementById('cfgAvatar');
+  if (elAv) elAv.textContent = iniciales;
+  const elN = document.getElementById('cfgNombre');
+  if (elN) elN.textContent = nombre;
+  const elE = document.getElementById('cfgEmail');
+  if (elE) elE.textContent = user.email || '—';
+  const elR = document.getElementById('cfgRegistro');
+  if (elR) {
+    const creacion = user.metadata?.creationTime;
+    if (creacion) {
+      const d = new Date(creacion);
+      elR.textContent = d.toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+    } else {
+      elR.textContent = '—';
+    }
+  }
+
+  // ── Mi suscripción ─────────────────────────────────────
+  const card = document.getElementById('cfgPlanCard');
+  const tag = document.getElementById('cfgPlanTag');
+  const precio = document.getElementById('cfgPlanPrecio');
+  const estado = document.getElementById('cfgPlanEstado');
+  const proximo = document.getElementById('cfgPlanProximo');
+  const acciones = document.getElementById('cfgPlanActions');
+  const banner = document.getElementById('cfgBannerCancelado');
+  const fechaFinEl = document.getElementById('cfgFechaFin');
+
+  // Detectar tipo de plan y estado
+  const tipoPlan = m.tipoPlan || (m.fechaUltimaActivacion ? 'mensual' : null); // 'mensual' | 'anual'
+  const cancelado = m.cancelado === true;
+  const fechaFin = m.fechaFin?.toDate ? m.fechaFin.toDate() : (m.fechaFin ? new Date(m.fechaFin) : null);
+  const fechaUlt = m.fechaUltimaActivacion ? new Date(m.fechaUltimaActivacion) : null;
+
+  // Calcular fecha próximo cobro (si no cancelado)
+  let proxCobro = null;
+  if (fechaUlt && !cancelado) {
+    const dur = tipoPlan === 'anual' ? 365 : 30;
+    proxCobro = new Date(fechaUlt.getTime() + dur * 86400000);
+  }
+
+  // ESCENARIOS
+  if (plan === 'vip' && !cancelado) {
+    // ── VIP ACTIVO ─────────────────────────────
+    card.classList.add('is-vip');
+    tag.textContent = (tipoPlan === 'anual' ? '🌟 ÉLITE ANUAL' : '🌟 ÉLITE MENSUAL');
+    precio.innerHTML = tipoPlan === 'anual'
+      ? '$1,920 <small>MXN/año</small>'
+      : '$200 <small>MXN/mes</small>';
+    estado.textContent = '✅ Activa';
+    estado.className = 'success';
+    proximo.textContent = proxCobro
+      ? proxCobro.toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' })
+      : '—';
+    if (banner) banner.style.display = 'none';
+
+    acciones.innerHTML =
+      '<button class="cfg-btn cfg-btn-primary" onclick="abrirStripePortal()">' +
+        '💳 Administrar pago / Cambiar plan' +
+      '</button>' +
+      '<button class="cfg-btn cfg-btn-danger" onclick="cancelarSuscripcion()">' +
+        '❌ Cancelar suscripción' +
+      '</button>';
+
+  } else if (plan === 'vip' && cancelado && fechaFin) {
+    // ── VIP CANCELADO pero válido hasta fechaFin ───────
+    card.classList.add('is-vip');
+    tag.textContent = '⚠️ ÉLITE · CANCELADA';
+    precio.innerHTML = '<span style="color:#fbbf24;">Acceso hasta el fin del periodo</span>';
+    estado.textContent = '⚠️ Cancelada';
+    estado.className = 'warning';
+    proximo.textContent = 'Sin cobros futuros';
+
+    // Banner amarillo
+    if (banner) banner.style.display = 'flex';
+    if (fechaFinEl) {
+      fechaFinEl.textContent = fechaFin.toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+    }
+
+    acciones.innerHTML =
+      '<button class="cfg-btn cfg-btn-primary" onclick="reactivarSuscripcion()">' +
+        '🔄 Reactivar suscripción' +
+      '</button>' +
+      '<button class="cfg-btn cfg-btn-secondary" onclick="abrirStripePortal()">' +
+        '💳 Ver historial de pagos' +
+      '</button>';
+
+  } else {
+    // ── FREE / EXPLORADOR ──────────────────────
+    card.classList.remove('is-vip');
+    tag.textContent = '🆓 EXPLORADOR · FREE';
+    precio.innerHTML = 'Gratis';
+    estado.textContent = '✅ Activo';
+    estado.className = 'success';
+    proximo.textContent = 'Sin cobros';
+    if (banner) banner.style.display = 'none';
+
+    acciones.innerHTML =
+      '<button class="cfg-btn cfg-btn-primary" onclick="suscribirElite(\'mensual\')">' +
+        '🚀 Hazte Élite · $200/mes' +
+      '</button>' +
+      '<button class="cfg-btn cfg-btn-secondary" onclick="suscribirElite(\'anual\')">' +
+        '🌟 Plan anual · $1,920 (ahorras $480)' +
+      '</button>';
+  }
+
+  // ── Preferencias ───────────────────────────
+  const prefNotif = document.getElementById('cfgPrefNotif');
+  if (prefNotif) prefNotif.checked = m.notificacionesEmail !== false;
+  const prefSem = document.getElementById('cfgPrefSemanal');
+  if (prefSem) prefSem.checked = m.resumenSemanal === true;
+};
+
+// ── ABRIR STRIPE CUSTOMER PORTAL ─────────────────────────
+window.abrirStripePortal = async function() {
+  const user = currentUser;
+  if (!user) { alert('Inicia sesión primero'); return; }
+
+  // Modal de loading
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999;';
+  overlay.innerHTML = '<div style="background:#0a1f12;padding:32px;border-radius:16px;color:#fff;text-align:center;border:1px solid rgba(212,160,23,.3);">' +
+    '<div style="font-size:32px;margin-bottom:14px;">💳</div>' +
+    '<div style="font-weight:700;">Abriendo Portal de Stripe…</div>' +
+    '<div style="font-size:.8rem;color:rgba(255,255,255,.6);margin-top:6px;">Te redirigimos en un momento</div>' +
+  '</div>';
+  document.body.appendChild(overlay);
+
+  try {
+    const idToken = await user.getIdToken();
+    const r = await fetch(STRIPE_PORTAL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + idToken
+      },
+      body: JSON.stringify({
+        uid: user.uid,
+        email: user.email,
+        returnUrl: window.location.href
+      })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error('Sin URL del portal');
+    }
+  } catch(e) {
+    document.body.removeChild(overlay);
+    console.error('Error abriendo Stripe Portal:', e);
+    // Fallback: WhatsApp directo
+    const msg = encodeURIComponent('Hola, necesito ayuda con mi suscripción de Visión Pecuaria. UID: ' + user.uid + ' Email: ' + user.email);
+    if (confirm('No pudimos abrir el portal de Stripe automáticamente. ¿Quieres que te ayudemos por WhatsApp?')) {
+      window.open('https://wa.me/5212361100649?text=' + msg, '_blank');
+    }
+  }
+};
+
+// ── CANCELAR SUSCRIPCIÓN ─────────────────────────────────
+window.cancelarSuscripcion = function() {
+  if (!confirm('¿Seguro que quieres cancelar tu suscripción Élite?\n\nMantendrás acceso completo hasta el final del periodo pagado, después regresarás a Explorador FREE.\n\nPodrás reactivar cuando quieras.')) return;
+
+  // Stripe Portal maneja la cancelación real
+  abrirStripePortal();
+};
+
+// ── REACTIVAR SUSCRIPCIÓN ────────────────────────────────
+window.reactivarSuscripcion = function() {
+  abrirStripePortal();
+};
+
+// ── SUSCRIBIRSE A ÉLITE ──────────────────────────────────
+// (esta función ya existe en la app, solo wrapping por si)
+if (typeof window.suscribirElite !== 'function') {
+  window.suscribirElite = function(tipo) {
+    const links = {
+      mensual: 'https://buy.stripe.com/[tu_link_mensual]',
+      anual: 'https://buy.stripe.com/[tu_link_anual]'
+    };
+    window.open(links[tipo] || links.mensual, '_blank');
+  };
+}
+
+// ── CAMBIAR CONTRASEÑA ───────────────────────────────────
+window.cambiarPassword = async function() {
+  const user = currentUser;
+  if (!user || !user.email) { alert('No hay sesión activa'); return; }
+  if (!confirm('Te enviaremos un correo a ' + user.email + ' con instrucciones para cambiar tu contraseña.\n\n¿Continuamos?')) return;
+
+  try {
+    const { getAuth, sendPasswordResetEmail } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js");
+    const auth = getAuth();
+    await sendPasswordResetEmail(auth, user.email);
+    alert('✅ Listo, revisa tu correo (incluyendo SPAM). El link expira en 1 hora.');
+  } catch(e) {
+    console.error('Error enviando reset:', e);
+    alert('No se pudo enviar el correo: ' + (e.message || e.code));
+  }
+};
+
+// ── GUARDAR PREFERENCIA ──────────────────────────────────
+window.guardarPreferencia = async function(campo, valor) {
+  const m = MIEMBRO_ACTUAL;
+  if (!m || !m._docId) return;
+  try {
+    const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const coleccion = m._tipo === 'free' ? 'usuarios_free' : 'miembros';
+    await updateDoc(doc(db, coleccion, m._docId), { [campo]: valor });
+    m[campo] = valor;
+  } catch(e) {
+    console.warn('No se pudo guardar preferencia:', e);
+  }
+};
+
+// ── DESCARGAR MIS DATOS ──────────────────────────────────
+window.descargarMisDatos = function() {
+  const user = currentUser || {};
+  const m = MIEMBRO_ACTUAL || {};
+  const datos = {
+    cuenta: {
+      uid: user.uid,
+      email: user.email,
+      nombre: user.displayName,
+      registro: user.metadata?.creationTime
+    },
+    rancho: {
+      nombre: m.nombreRancho,
+      emoji: m.emojiRancho,
+      ubicacion: m.ubicacionRancho,
+      especialidad: m.especialidadRancho,
+      hectareas: m.hectareasRancho,
+      whatsapp: m.whatsappRancho
+    },
+    suscripcion: {
+      plan: window.__rancho?.userPlan ? window.__rancho.userPlan() : 'free',
+      tipo: m.tipoPlan,
+      fechaUltimaActivacion: m.fechaUltimaActivacion,
+      cancelado: m.cancelado || false,
+      fechaFin: m.fechaFin
+    },
+    animales: window.__rancho?.animales || [],
+    certificados: window.__rancho?.certificadosCount || 0,
+    cursosDesbloqueados: m.cursosDesbloqueados || [],
+    preferencias: {
+      notificacionesEmail: m.notificacionesEmail !== false,
+      resumenSemanal: m.resumenSemanal === true
+    },
+    exportado: new Date().toISOString()
+  };
+
+  const json = JSON.stringify(datos, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mis-datos-vision-pecuaria-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+// ── SOLICITAR ELIMINACIÓN DE CUENTA ──────────────────────
+window.solicitarEliminarCuenta = function() {
+  const user = currentUser || {};
+  const m = MIEMBRO_ACTUAL || {};
+  const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
+
+  let mensaje = 'ATENCIÓN: Esta acción es PERMANENTE.\n\n';
+  mensaje += 'Se eliminarán:\n';
+  mensaje += '• Tu cuenta y acceso\n';
+  mensaje += '• Todos tus animales registrados\n';
+  mensaje += '• Tus certificados\n';
+  mensaje += '• Tus avisos en Comunidad\n';
+  mensaje += '• Tu progreso y configuración\n\n';
+  if (plan === 'vip') {
+    mensaje += '⚠️ Eres Élite Pecuario. Si cancelas la cuenta NO se reembolsa el periodo pagado.\nPrimero cancela la suscripción para no perder dinero.\n\n';
+  }
+  mensaje += '¿Confirmas que quieres solicitar la eliminación?';
+
+  if (!confirm(mensaje)) return;
+
+  // Pedir confirmación final con palabra clave
+  const palabra = prompt('Para confirmar, escribe la palabra: ELIMINAR');
+  if (palabra !== 'ELIMINAR') {
+    alert('Cancelado. Tu cuenta sigue activa.');
+    return;
+  }
+
+  // Mandar a WhatsApp con plantilla
+  const msg = encodeURIComponent(
+    'Solicito eliminación de mi cuenta en Visión Pecuaria.\n\n' +
+    'Email: ' + (user.email || '—') + '\n' +
+    'UID: ' + (user.uid || '—') + '\n' +
+    'Rancho: ' + (m.nombreRancho || '—') + '\n' +
+    'Plan actual: ' + plan + '\n\n' +
+    'Confirmo que entiendo que la eliminación es permanente.'
+  );
+  window.open('https://wa.me/5212361100649?text=' + msg, '_blank');
+  alert('Te redirigimos a WhatsApp. Te confirmaremos por ahí cuando se procese la eliminación (máx 48 horas).');
+};
+
+// Repintar Configuración cuando se navega a esa sección
+const _navOrig = window.navigateTo;
+if (typeof _navOrig === 'function') {
+  window.navigateTo = function(section) {
+    _navOrig(section);
+    if (section === 'config') {
+      setTimeout(() => { try { pintarConfig(); } catch(e) { console.warn(e); } }, 100);
+    }
+  };
+}
+
+// Repintar config también cuando cargan los datos del miembro
+const _origPintarMiProgreso = window.pintarMiProgreso;
+if (typeof _origPintarMiProgreso === 'function') {
+  window.pintarMiProgreso = function() {
+    _origPintarMiProgreso();
+    try { if (document.getElementById('section-config')?.classList.contains('active')) pintarConfig(); } catch(e) {}
+  };
+}
+
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (typeof cerrarModalAviso === 'function') cerrarModalAviso();
