@@ -1872,6 +1872,408 @@ button { font-family: inherit; }
 .add-animal-text { font-weight: 600; color: var(--gold-light); }
 
 /* ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+/* SECCIÓN: RADAR DE COMUNIDAD (marketplace de ranchos)              */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.rad-btn-publicar {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+  border: none;
+  padding: 11px 18px;
+  border-radius: 100px;
+  font-size: .88rem; font-weight: 800;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  box-shadow: 0 6px 16px rgba(212,160,23,.25);
+  transition: all .2s;
+}
+.rad-btn-publicar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(212,160,23,.4);
+}
+
+.rad-filtros {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  margin-bottom: 22px;
+  align-items: center;
+}
+.rad-filtros-grupo {
+  display: flex; gap: 6px; flex-wrap: wrap; flex: 1;
+}
+.rad-chip {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.7);
+  padding: 7px 14px;
+  border-radius: 100px;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: 'Montserrat', sans-serif;
+}
+.rad-chip:hover {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+}
+.rad-chip.active {
+  background: rgba(212,160,23,.18);
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+.rad-select {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: .85rem;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+.rad-select option { background: #0a1f12; }
+
+.rad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+.rad-vacio {
+  text-align: center;
+  padding: 60px 28px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--rxl);
+}
+.rad-vacio-icon { font-size: 56px; margin-bottom: 14px; }
+.rad-vacio h3 { font: 800 1.15rem 'Montserrat',sans-serif; margin-bottom: 6px; }
+.rad-vacio p { color: rgba(255,255,255,.6); max-width: 380px; margin: 0 auto; }
+
+.rad-card {
+  background: rgba(15,61,39,.55);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rxl);
+  overflow: hidden;
+  transition: transform .2s, border-color .2s;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.rad-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,160,23,.4);
+}
+.rad-card-foto {
+  width: 100%;
+  height: 180px;
+  background: rgba(0,0,0,.3);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.rad-card-foto.sin-foto {
+  background: linear-gradient(135deg, rgba(15,61,39,.6), rgba(10,31,18,.6));
+  font-size: 56px;
+}
+.rad-card-tipo {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,.5);
+}
+.rad-card-tipo.venta   { color: #4ade80; border:1px solid #4ade80; }
+.rad-card-tipo.compra  { color: #60a5fa; border:1px solid #60a5fa; }
+.rad-card-tipo.ofrezco { color: #fbbf24; border:1px solid #fbbf24; }
+.rad-card-tipo.busco   { color: #c084fc; border:1px solid #c084fc; }
+.rad-card-tipo.aviso   { color: #d4d4d8; border:1px solid #d4d4d8; }
+
+.rad-card-fotos-count {
+  position: absolute;
+  bottom: 10px; right: 10px;
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-size: .7rem;
+  padding: 3px 8px;
+  border-radius: 100px;
+  backdrop-filter: blur(6px);
+}
+
+.rad-card-body {
+  padding: 14px;
+  flex: 1;
+  display: flex; flex-direction: column;
+}
+.rad-card-categoria {
+  font-size: .68rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.rad-card-titulo {
+  font: 800 .98rem/1.3 'Montserrat',sans-serif;
+  color: #fff;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rad-card-precio {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  margin-bottom: 10px;
+}
+.rad-card-precio .sin-precio {
+  font-size: .8rem;
+  color: rgba(255,255,255,.5);
+  font-weight: 600;
+}
+.rad-card-desc {
+  font-size: .8rem;
+  color: rgba(255,255,255,.7);
+  line-height: 1.4;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rad-card-rancho {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  background: rgba(0,0,0,.25);
+  border-radius: 10px;
+  margin-top: auto;
+}
+.rad-card-rancho-emoji {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.rad-card-rancho-info { flex: 1; min-width: 0; }
+.rad-card-rancho-nombre {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rad-card-rancho-meta {
+  font-size: .68rem;
+  color: rgba(255,255,255,.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rad-card-rancho-badge {
+  font-size: .65rem;
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.35);
+  color: var(--gold-light);
+  padding: 2px 7px;
+  border-radius: 100px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rad-card-actions {
+  display: flex; gap: 8px;
+  padding: 0 14px 14px;
+}
+.rad-card-btn-wa {
+  flex: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: #25D366;
+  color: #fff;
+  border: none;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: 'Montserrat',sans-serif;
+  transition: filter .15s;
+}
+.rad-card-btn-wa:hover { filter: brightness(1.1); }
+.rad-card-btn-ver {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.7);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.rad-card-btn-ver:hover { background: rgba(255,255,255,.1); color: #fff; }
+.rad-card-btn-eliminar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px;
+  background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  color: #ef4444;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.rad-card-btn-eliminar:hover { background: rgba(239,68,68,.2); }
+
+.rad-card-fecha {
+  font-size: .68rem;
+  color: rgba(255,255,255,.4);
+  padding: 0 14px 10px;
+}
+
+/* Modal: Publicar aviso */
+.modal-aviso {
+  background: linear-gradient(180deg, rgba(15,61,39,.97), rgba(10,31,18,.99));
+  border: 1px solid rgba(212,160,23,.35);
+  border-radius: var(--rxl);
+  padding: 28px 26px;
+  max-width: 580px; width: 100%;
+  max-height: 92vh; overflow-y: auto;
+  position: relative;
+  animation: modalIn .35s cubic-bezier(.2,.8,.3,1.2);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(212,160,23,.12);
+}
+.mav-grid-tipos {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 4px;
+}
+@media (max-width: 480px) {
+  .mav-grid-tipos { grid-template-columns: repeat(3, 1fr); }
+}
+.mav-tipo-btn {
+  background: rgba(255,255,255,.04);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 10px 4px;
+  font-size: .7rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  font-family: 'Montserrat',sans-serif;
+  transition: all .15s;
+  text-align: center;
+}
+.mav-tipo-btn-emoji { font-size: 18px; display:block; margin-bottom: 3px; }
+.mav-tipo-btn:hover { background: rgba(255,255,255,.08); }
+.mav-tipo-btn.sel {
+  background: rgba(212,160,23,.15);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+.mav-fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.mav-foto-slot {
+  aspect-ratio: 1;
+  background: rgba(0,0,0,.25);
+  border: 2px dashed rgba(255,255,255,.15);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.4);
+  cursor: pointer;
+  font-size: 24px;
+  position: relative;
+  background-size: cover; background-position: center;
+  overflow: hidden;
+}
+.mav-foto-slot.lleno {
+  border-style: solid;
+  border-color: var(--gold);
+}
+.mav-foto-quitar {
+  position: absolute;
+  top: 4px; right: 4px;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.mav-foto-input { display: none; }
+
+.mav-textarea {
+  width: 100%;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #fff;
+  font-size: .9rem;
+  font-family: 'Montserrat',sans-serif;
+  resize: vertical;
+  min-height: 90px;
+}
+.mav-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Modal Detalle Aviso */
+.modal-aviso-detalle {
+  background: linear-gradient(180deg, rgba(15,61,39,.97), rgba(10,31,18,.99));
+  border: 1px solid rgba(212,160,23,.35);
+  border-radius: var(--rxl);
+  padding: 0;
+  max-width: 600px; width: 100%;
+  max-height: 92vh; overflow-y: auto;
+  position: relative;
+  animation: modalIn .35s cubic-bezier(.2,.8,.3,1.2);
+}
+.rad-det-fotos {
+  width: 100%;
+  height: 280px;
+  background: rgba(0,0,0,.3);
+  position: relative;
+  overflow: hidden;
+}
+.rad-det-foto-actual {
+  width: 100%; height: 100%;
+  background-size: cover; background-position: center;
+}
+.rad-det-thumbs {
+  display: flex; gap: 6px;
+  padding: 10px 14px;
+  overflow-x: auto;
+}
+.rad-det-thumb {
+  width: 60px; height: 60px;
+  border-radius: 8px;
+  background-size: cover; background-position: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+}
+.rad-det-thumb.activa { border-color: var(--gold); }
+.rad-det-body { padding: 0 24px 24px; }
+
+/* ═══════════════════════════════════════════════════════════════ */
 /* SECCIÓN: MI PROGRESO v2 (perfil + roadmap + misiones + logros)   */
 /* ═══════════════════════════════════════════════════════════════ */
 
@@ -8646,22 +9048,53 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
-      <!-- 📡 RADAR                                                  -->
+      <!-- 📡 RADAR DE COMUNIDAD — Marketplace de ranchos             -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-radar">
-        <div class="section-head">
+        <div class="section-head" style="align-items:center;">
           <div>
             <h1>📡 Radar de Comunidad</h1>
-            <p>Conecta con otros productores Élite Pecuario en México</p>
+            <p>Compra · Vende · Conecta con otros ranchos en México</p>
           </div>
+          <button class="rad-btn-publicar" onclick="abrirModalAviso()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>Publicar aviso</span>
+          </button>
         </div>
-        <div class="widget" style="text-align:center;padding:50px 28px;">
-          <div style="font-size:60px;margin-bottom:16px;">🗺️</div>
-          <h3 style="font:800 1.3rem 'Montserrat',sans-serif;margin-bottom:10px;">Próximamente</h3>
-          <p style="color:rgba(255,255,255,.7);max-width:520px;margin:0 auto;line-height:1.5;">
-            Mapa interactivo con productores Élite cercanos a tu zona. Comparte experiencias, conecta con expertos regionales y forma tu red ganadera.
-          </p>
+
+        <!-- Filtros -->
+        <div class="rad-filtros">
+          <div class="rad-filtros-grupo" id="radFiltrosTipo">
+            <button class="rad-chip active" data-tipo="todos">Todos</button>
+            <button class="rad-chip" data-tipo="venta">🟢 Vendo</button>
+            <button class="rad-chip" data-tipo="compra">🔵 Compro</button>
+            <button class="rad-chip" data-tipo="ofrezco">🟡 Ofrezco</button>
+            <button class="rad-chip" data-tipo="busco">🟣 Busco</button>
+            <button class="rad-chip" data-tipo="aviso">⚪ Aviso</button>
+          </div>
+          <select class="rad-select" id="radFiltroCategoria">
+            <option value="todas">Todas las categorías</option>
+            <option value="ganado">🐄 Ganado</option>
+            <option value="forraje">🌾 Forraje</option>
+            <option value="insumos">💊 Insumos / Medicamentos</option>
+            <option value="servicios">🩺 Servicios (MVZ, transporte)</option>
+            <option value="tierra">🏞️ Tierras / Renta</option>
+            <option value="equipo">🚜 Equipo / Maquinaria</option>
+            <option value="otro">📋 Otro</option>
+          </select>
         </div>
+
+        <!-- Estados -->
+        <div id="radLoading" class="rad-vacio">
+          <div class="rad-vacio-icon">⏳</div>
+          <h3>Cargando avisos…</h3>
+        </div>
+        <div id="radVacio" class="rad-vacio" style="display:none;">
+          <div class="rad-vacio-icon">📭</div>
+          <h3>Aún no hay avisos en esta categoría</h3>
+          <p>Sé el primero en publicar y conecta con otros ranchos.</p>
+        </div>
+        <div id="radGrid" class="rad-grid"></div>
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
@@ -8695,6 +9128,106 @@ button { font-family: inherit; }
 
     </div>
   </main>
+</div>
+
+<!-- ════════ MODAL: PUBLICAR AVISO ════════ -->
+<div class="modal-overlay" id="modalAviso" onclick="if(event.target===this)cerrarModalAviso()">
+  <div class="modal-aviso">
+    <button class="modal-close" onclick="cerrarModalAviso()">×</button>
+
+    <div class="mr-head">
+      <div class="mr-head-icon">📢</div>
+      <div>
+        <h3>Publicar aviso en Radar</h3>
+        <p>Conecta con otros ranchos en México</p>
+      </div>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Tipo de aviso *</label>
+      <div class="mav-grid-tipos" id="mavTipos">
+        <button type="button" class="mav-tipo-btn sel" data-tipo="venta"><span class="mav-tipo-btn-emoji">🟢</span>Vendo</button>
+        <button type="button" class="mav-tipo-btn" data-tipo="compra"><span class="mav-tipo-btn-emoji">🔵</span>Compro</button>
+        <button type="button" class="mav-tipo-btn" data-tipo="ofrezco"><span class="mav-tipo-btn-emoji">🟡</span>Ofrezco</button>
+        <button type="button" class="mav-tipo-btn" data-tipo="busco"><span class="mav-tipo-btn-emoji">🟣</span>Busco</button>
+        <button type="button" class="mav-tipo-btn" data-tipo="aviso"><span class="mav-tipo-btn-emoji">⚪</span>Aviso</button>
+      </div>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Categoría *</label>
+      <select id="mavCategoria" class="mr-select">
+        <option value="ganado">🐄 Ganado</option>
+        <option value="forraje">🌾 Forraje / Alimento</option>
+        <option value="insumos">💊 Insumos / Medicamentos</option>
+        <option value="servicios">🩺 Servicios (MVZ, transporte)</option>
+        <option value="tierra">🏞️ Tierras / Renta</option>
+        <option value="equipo">🚜 Equipo / Maquinaria</option>
+        <option value="otro">📋 Otro</option>
+      </select>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Título *</label>
+      <input type="text" id="mavTitulo" class="mr-input" placeholder="Ej. 5 becerros holstein de 6 meses" maxlength="80">
+    </div>
+
+    <div class="mr-row mr-section">
+      <div>
+        <label class="mr-label">Precio (MXN)</label>
+        <input type="number" id="mavPrecio" class="mr-input" placeholder="Opcional" min="0">
+      </div>
+      <div>
+        <label class="mr-label">Cantidad</label>
+        <input type="text" id="mavCantidad" class="mr-input" placeholder="Ej. 5 cabezas" maxlength="30">
+      </div>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Descripción *</label>
+      <textarea id="mavDescripcion" class="mav-textarea" placeholder="Describe lo que ofreces/buscas: raza, edad, condiciones, ubicación exacta..." maxlength="500"></textarea>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">WhatsApp de contacto *</label>
+      <input type="tel" id="mavWhatsapp" class="mr-input" placeholder="Ej. 2361049715 (10 dígitos)" maxlength="15">
+      <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:4px;">Sin lada de país, solo el número a 10 dígitos. Los interesados te contactarán directo.</div>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Fotos (máx 3)</label>
+      <div class="mav-fotos-grid">
+        <label class="mav-foto-slot" id="mavFotoSlot0">
+          <input type="file" class="mav-foto-input" accept="image/*" onchange="cargarFotoAviso(0, this)">
+          <span class="mav-foto-placeholder">+</span>
+        </label>
+        <label class="mav-foto-slot" id="mavFotoSlot1">
+          <input type="file" class="mav-foto-input" accept="image/*" onchange="cargarFotoAviso(1, this)">
+          <span class="mav-foto-placeholder">+</span>
+        </label>
+        <label class="mav-foto-slot" id="mavFotoSlot2">
+          <input type="file" class="mav-foto-input" accept="image/*" onchange="cargarFotoAviso(2, this)">
+          <span class="mav-foto-placeholder">+</span>
+        </label>
+      </div>
+      <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-top:6px;">Las fotos se comprimen y guardan en Base64. Tamaño máximo 600px de ancho.</div>
+    </div>
+
+    <div class="mr-error" id="mavError"></div>
+
+    <div class="mr-actions">
+      <button class="mr-btn-cancelar" onclick="cerrarModalAviso()">Cancelar</button>
+      <button class="mr-btn-guardar" id="mavBtnPublicar" onclick="publicarAviso()">Publicar aviso</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODAL: VER DETALLE AVISO ════════ -->
+<div class="modal-overlay" id="modalAvisoDetalle" onclick="if(event.target===this)cerrarModalAvisoDetalle()">
+  <div class="modal-aviso-detalle">
+    <button class="modal-close" onclick="cerrarModalAvisoDetalle()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,.5);z-index:10;">×</button>
+    <div id="radDetalleBody"></div>
+  </div>
 </div>
 
 <!-- ════════ MODAL: EDITAR RANCHO ════════ -->
@@ -10650,12 +11183,13 @@ window.__rancho.cargarMiembro = async function() {
     const db = window.__rancho.db;
     const user = window.__rancho.auth?.currentUser;
     if (!db || !user) return;
+    window.__rancho.usuarioUid = user.uid; // Para Radar y otros módulos
 
     // 1. Buscar primero en 'miembros' por uid (es el ID del doc)
     const refMiembro = doc(db, 'miembros', user.uid);
     onSnapshot(refMiembro, (snap) => {
       if (snap.exists()) {
-        MIEMBRO_ACTUAL = { _docId: snap.id, _tipo: 'miembro', ...snap.data() };
+        MIEMBRO_ACTUAL = { _docId: snap.id, _uid: user.uid, _tipo: 'miembro', ...snap.data() };
         if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
         return;
       }
@@ -10663,7 +11197,7 @@ window.__rancho.cargarMiembro = async function() {
       const refFree = doc(db, 'usuarios_free', user.uid);
       onSnapshot(refFree, (snapFree) => {
         if (snapFree.exists()) {
-          MIEMBRO_ACTUAL = { _docId: snapFree.id, _tipo: 'free', ...snapFree.data() };
+          MIEMBRO_ACTUAL = { _docId: snapFree.id, _uid: user.uid, _tipo: 'free', ...snapFree.data() };
         } else {
           MIEMBRO_ACTUAL = null;
         }
@@ -14784,6 +15318,513 @@ console.log('✅ [SCRIPT-2] FIN — funciones:', {
   iniciarCertificados: typeof window.__rancho.iniciarCertificados,
   emitirCertificado: typeof emitirCertificado,
   abrirPreviewCertificado: typeof window.abrirPreviewCertificado
+});
+</script>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- 📡 RADAR DE COMUNIDAD — Marketplace de ranchos                -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<script>
+// Estado local
+let AVISOS_FIRESTORE = [];
+let radFiltroTipo = 'todos';
+let radFiltroCategoria = 'todas';
+let mavTipoSel = 'venta';
+let mavFotos = [null, null, null]; // base64 strings
+let radDetalleFotoActiva = 0;
+
+// Etiquetas legibles
+const RAD_TIPOS = {
+  venta:   { label:'VENDO',   emoji:'🟢', clase:'venta'   },
+  compra:  { label:'COMPRO',  emoji:'🔵', clase:'compra'  },
+  ofrezco: { label:'OFREZCO', emoji:'🟡', clase:'ofrezco' },
+  busco:   { label:'BUSCO',   emoji:'🟣', clase:'busco'   },
+  aviso:   { label:'AVISO',   emoji:'⚪', clase:'aviso'   }
+};
+const RAD_CATEGORIAS = {
+  ganado:    '🐄 Ganado',
+  forraje:   '🌾 Forraje',
+  insumos:   '💊 Insumos',
+  servicios: '🩺 Servicios',
+  tierra:    '🏞️ Tierras',
+  equipo:    '🚜 Equipo',
+  otro:      '📋 Otro'
+};
+
+// ── INICIAR: suscribirse a colección avisos ───────────────────
+window.__rancho = window.__rancho || {};
+window.__rancho.iniciarRadar = async function() {
+  try {
+    const { collection, onSnapshot, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    if (!db) return;
+
+    const q = query(collection(db, 'avisos'), orderBy('creado', 'desc'));
+    onSnapshot(q, (snap) => {
+      AVISOS_FIRESTORE = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(a => a.activo !== false);
+      pintarRadar();
+    }, (err) => {
+      console.warn('Sin acceso a avisos:', err.code);
+      document.getElementById('radLoading').style.display = 'none';
+      document.getElementById('radVacio').style.display = 'block';
+    });
+  } catch(e) { console.error('Error iniciando radar:', e); }
+};
+
+// ── PINTAR el grid filtrado ───────────────────────────────────
+window.pintarRadar = function() {
+  const loading = document.getElementById('radLoading');
+  const vacio = document.getElementById('radVacio');
+  const grid = document.getElementById('radGrid');
+  if (!grid) return;
+
+  if (loading) loading.style.display = 'none';
+
+  let lista = AVISOS_FIRESTORE.slice();
+  if (radFiltroTipo !== 'todos') lista = lista.filter(a => a.tipo === radFiltroTipo);
+  if (radFiltroCategoria !== 'todas') lista = lista.filter(a => a.categoria === radFiltroCategoria);
+
+  if (lista.length === 0) {
+    vacio.style.display = 'block';
+    grid.innerHTML = '';
+    return;
+  }
+  vacio.style.display = 'none';
+
+  // Mi UID para mostrar botón borrar en mis propios avisos
+  const miUid = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?._uid) ||
+                (typeof firebase !== 'undefined' && firebase?.auth?.currentUser?.uid) ||
+                window.__rancho?.usuarioUid || '';
+
+  grid.innerHTML = lista.map(a => {
+    const tipo = RAD_TIPOS[a.tipo] || RAD_TIPOS.aviso;
+    const cat  = RAD_CATEGORIAS[a.categoria] || '📋 Otro';
+    const fotos = a.fotos || [];
+    const tieneFoto = fotos.length > 0;
+    const precio = (typeof a.precio === 'number' && a.precio > 0)
+      ? '$' + a.precio.toLocaleString('es-MX') + ' MXN' + (a.cantidad ? ' · ' + a.cantidad : '')
+      : '<span class="sin-precio">' + (a.cantidad || 'Consultar precio') + '</span>';
+
+    const ranchoBadge = a.ranchoNivel
+      ? '<span class="rad-card-rancho-badge">Nv ' + a.ranchoNivel + '</span>'
+      : '';
+
+    const ranchoMeta = [a.ranchoUbicacion, a.ranchoEspecialidad].filter(Boolean).join(' · ');
+
+    const fechaTxt = formatearFechaAviso(a.creado);
+    const wa = a.whatsapp ? a.whatsapp.replace(/\D/g, '') : '';
+    const msgWA = encodeURIComponent('Hola! Vi tu aviso en Visión Pecuaria: "' + (a.titulo || '') + '". Me interesa, ¿podemos hablar?');
+    const linkWA = wa ? 'https://wa.me/52' + wa + '?text=' + msgWA : '#';
+
+    const esMio = miUid && a.ranchoUid === miUid;
+    const btnEliminar = esMio
+      ? '<button class="rad-card-btn-eliminar" onclick="event.stopPropagation();eliminarAviso(\'' + a.id + '\')" title="Eliminar mi aviso">🗑️</button>'
+      : '';
+
+    return '<div class="rad-card">' +
+      '<div class="rad-card-foto ' + (tieneFoto ? '' : 'sin-foto') + '" ' +
+        (tieneFoto ? 'style="background-image:url(\'' + fotos[0].replace(/'/g,"\\'") + '\')"' : '') +
+        ' onclick="abrirAvisoDetalle(\'' + a.id + '\')">' +
+        (tieneFoto ? '' : '<span>' + tipo.emoji + '</span>') +
+        '<span class="rad-card-tipo ' + tipo.clase + '">' + tipo.label + '</span>' +
+        (fotos.length > 1 ? '<span class="rad-card-fotos-count">📷 ' + fotos.length + '</span>' : '') +
+      '</div>' +
+      '<div class="rad-card-body" onclick="abrirAvisoDetalle(\'' + a.id + '\')" style="cursor:pointer;">' +
+        '<div class="rad-card-categoria">' + cat + '</div>' +
+        '<div class="rad-card-titulo">' + escHTML(a.titulo || 'Sin título') + '</div>' +
+        '<div class="rad-card-precio">' + precio + '</div>' +
+        '<div class="rad-card-desc">' + escHTML(a.descripcion || '') + '</div>' +
+        '<div class="rad-card-rancho">' +
+          '<div class="rad-card-rancho-emoji">' + (a.ranchoEmoji || '🏡') + '</div>' +
+          '<div class="rad-card-rancho-info">' +
+            '<div class="rad-card-rancho-nombre">' + escHTML(a.ranchoNombre || 'Rancho') + '</div>' +
+            '<div class="rad-card-rancho-meta">' + escHTML(ranchoMeta || 'México') + '</div>' +
+          '</div>' +
+          ranchoBadge +
+        '</div>' +
+      '</div>' +
+      '<div class="rad-card-fecha">' + fechaTxt + '</div>' +
+      '<div class="rad-card-actions">' +
+        '<a href="' + linkWA + '" target="_blank" rel="noopener" class="rad-card-btn-wa" onclick="event.stopPropagation();contarVistaAviso(\'' + a.id + '\')">📱 Contactar por WhatsApp</a>' +
+        btnEliminar +
+      '</div>' +
+    '</div>';
+  }).join('');
+};
+
+function escHTML(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function formatearFechaAviso(t) {
+  if (!t) return '';
+  let d;
+  if (t.toDate) d = t.toDate();
+  else if (typeof t === 'number') d = new Date(t);
+  else d = new Date(t);
+  if (!d || isNaN(d.getTime())) return '';
+  const ahora = Date.now();
+  const diff = ahora - d.getTime();
+  const mins = Math.floor(diff / 60000);
+  const hrs = Math.floor(mins / 60);
+  const dias = Math.floor(hrs / 24);
+  if (mins < 1) return 'Hace un momento';
+  if (mins < 60) return 'Hace ' + mins + ' min';
+  if (hrs < 24) return 'Hace ' + hrs + ' h';
+  if (dias < 7) return 'Hace ' + dias + ' día' + (dias>1?'s':'');
+  return d.toLocaleDateString('es-MX', { day:'numeric', month:'short' });
+}
+
+// ── FILTROS ───────────────────────────────────────────────────
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('.rad-chip');
+  if (chip && chip.dataset.tipo) {
+    document.querySelectorAll('.rad-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    radFiltroTipo = chip.dataset.tipo;
+    pintarRadar();
+  }
+});
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'radFiltroCategoria') {
+    radFiltroCategoria = e.target.value;
+    pintarRadar();
+  }
+});
+
+// Selector de tipo en modal publicar
+document.addEventListener('click', (e) => {
+  const tipoBtn = e.target.closest('.mav-tipo-btn');
+  if (tipoBtn) {
+    document.querySelectorAll('.mav-tipo-btn').forEach(b => b.classList.remove('sel'));
+    tipoBtn.classList.add('sel');
+    mavTipoSel = tipoBtn.dataset.tipo;
+  }
+});
+
+// ── MODAL PUBLICAR ────────────────────────────────────────────
+window.abrirModalAviso = function() {
+  // Verificar que sea VIP
+  const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
+  if (plan !== 'vip' && plan !== 'elite') {
+    if (typeof abrirModalVIP === 'function') {
+      abrirModalVIP('Publicar avisos en Radar es exclusivo de miembros Élite. Únete para conectar con miles de ranchos en México.');
+    } else {
+      alert('Solo miembros Élite pueden publicar avisos.');
+    }
+    return;
+  }
+
+  // Reset form
+  document.getElementById('mavTitulo').value = '';
+  document.getElementById('mavPrecio').value = '';
+  document.getElementById('mavCantidad').value = '';
+  document.getElementById('mavDescripcion').value = '';
+  document.getElementById('mavCategoria').value = 'ganado';
+  // Pre-llenar WhatsApp si el rancho ya tiene
+  const m = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
+  document.getElementById('mavWhatsapp').value = m.whatsappRancho || localStorage.getItem('vp_wa_rancho') || '';
+  document.getElementById('mavError').textContent = '';
+  document.querySelectorAll('.mav-tipo-btn').forEach((b,i) => b.classList.toggle('sel', i === 0));
+  mavTipoSel = 'venta';
+  mavFotos = [null, null, null];
+  [0,1,2].forEach(i => actualizarSlotFoto(i));
+
+  document.getElementById('modalAviso').classList.add('active');
+};
+
+window.cerrarModalAviso = function() {
+  document.getElementById('modalAviso').classList.remove('active');
+};
+
+// ── FOTOS: comprimir y guardar en base64 ──────────────────────
+window.cargarFotoAviso = async function(idx, input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  if (file.size > 8 * 1024 * 1024) {
+    alert('Máx 8 MB por imagen. Comprime la foto.');
+    input.value = '';
+    return;
+  }
+  try {
+    const base64 = await comprimirImagen(file, 600, 0.7);
+    mavFotos[idx] = base64;
+    actualizarSlotFoto(idx);
+  } catch(e) {
+    console.error('Error procesando foto:', e);
+    alert('No se pudo procesar la imagen.');
+  }
+};
+
+function comprimirImagen(file, maxW, quality) {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const ratio = img.width > maxW ? maxW / img.width : 1;
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width * ratio;
+        canvas.height = img.height * ratio;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        res(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = rej;
+      img.src = e.target.result;
+    };
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+}
+
+function actualizarSlotFoto(idx) {
+  const slot = document.getElementById('mavFotoSlot' + idx);
+  if (!slot) return;
+  if (mavFotos[idx]) {
+    slot.classList.add('lleno');
+    slot.style.backgroundImage = 'url(\'' + mavFotos[idx] + '\')';
+    const ph = slot.querySelector('.mav-foto-placeholder');
+    if (ph) ph.style.display = 'none';
+    if (!slot.querySelector('.mav-foto-quitar')) {
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'mav-foto-quitar';
+      x.textContent = '×';
+      x.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        mavFotos[idx] = null;
+        actualizarSlotFoto(idx);
+      };
+      slot.appendChild(x);
+    }
+  } else {
+    slot.classList.remove('lleno');
+    slot.style.backgroundImage = '';
+    const ph = slot.querySelector('.mav-foto-placeholder');
+    if (ph) ph.style.display = '';
+    const x = slot.querySelector('.mav-foto-quitar');
+    if (x) x.remove();
+    const inp = slot.querySelector('input');
+    if (inp) inp.value = '';
+  }
+}
+
+// ── PUBLICAR ──────────────────────────────────────────────────
+window.publicarAviso = async function() {
+  const btn = document.getElementById('mavBtnPublicar');
+  const err = document.getElementById('mavError');
+  err.textContent = '';
+
+  const titulo = (document.getElementById('mavTitulo').value || '').trim();
+  const descripcion = (document.getElementById('mavDescripcion').value || '').trim();
+  const categoria = document.getElementById('mavCategoria').value;
+  const precioRaw = document.getElementById('mavPrecio').value;
+  const precio = precioRaw ? parseFloat(precioRaw) : 0;
+  const cantidad = (document.getElementById('mavCantidad').value || '').trim();
+  const whatsapp = (document.getElementById('mavWhatsapp').value || '').trim().replace(/\D/g,'');
+
+  if (!titulo || titulo.length < 5) { err.textContent = 'El título debe tener mínimo 5 caracteres'; return; }
+  if (!descripcion || descripcion.length < 10) { err.textContent = 'La descripción debe tener mínimo 10 caracteres'; return; }
+  if (!whatsapp || whatsapp.length !== 10) { err.textContent = 'WhatsApp debe ser de 10 dígitos (sin lada)'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Publicando…';
+
+  try {
+    const { collection, addDoc, serverTimestamp, doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    const m = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
+
+    // Snapshot del rancho al momento de publicar
+    const ranchoUid = m._uid || (window.__rancho?.usuarioUid) || '';
+    const ranchoNombre = m.nombreRancho || localStorage.getItem('vp_nombre_rancho') || 'Mi Rancho';
+    const ranchoEmoji  = m.emojiRancho  || localStorage.getItem('vp_emoji_rancho') || '🏡';
+    const ranchoUbica  = m.ubicacionRancho || localStorage.getItem('vp_ubica_rancho') || '';
+    const especId      = m.especialidadRancho || localStorage.getItem('vp_espec_rancho') || '';
+    const especObj     = (typeof ESPECIALIDADES !== 'undefined') ? ESPECIALIDADES.find(e => e.id === especId) : null;
+    const ranchoEspec  = especObj ? especObj.label.replace(/^[^\s]+\s/, '').replace(/\s*\([^)]*\)$/,'') : '';
+
+    // Nivel del rancho (recalcular en vivo)
+    let ranchoNivel = 1;
+    try {
+      const prog = mpCalcularProgreso();
+      const ni = mpNivelPorPct(prog.total);
+      ranchoNivel = ni.nivel;
+    } catch(e) {}
+
+    const fotos = mavFotos.filter(f => f);
+
+    const datos = {
+      tipo: mavTipoSel,
+      categoria,
+      titulo: titulo.slice(0, 80),
+      descripcion: descripcion.slice(0, 500),
+      precio,
+      cantidad: cantidad.slice(0, 30),
+      whatsapp,
+      fotos,
+      ranchoUid,
+      ranchoNombre,
+      ranchoEmoji,
+      ranchoUbicacion: ranchoUbica,
+      ranchoEspecialidad: ranchoEspec,
+      ranchoNivel,
+      ranchoPlan: 'elite',
+      creado: serverTimestamp(),
+      activo: true,
+      reportes: 0,
+      vistas: 0
+    };
+
+    await addDoc(collection(db, 'avisos'), datos);
+
+    // Guardar WhatsApp en perfil del rancho para no pedirlo de nuevo
+    try {
+      if (m._docId) {
+        const coleccion = m._tipo === 'free' ? 'usuarios_free' : 'miembros';
+        await updateDoc(doc(db, coleccion, m._docId), { whatsappRancho: whatsapp });
+        m.whatsappRancho = whatsapp;
+      } else {
+        localStorage.setItem('vp_wa_rancho', whatsapp);
+      }
+    } catch(e) {}
+
+    cerrarModalAviso();
+    btn.disabled = false;
+    btn.textContent = 'Publicar aviso';
+  } catch(e) {
+    console.error('Error publicando aviso:', e);
+    err.textContent = 'No se pudo publicar: ' + (e.message || 'error desconocido');
+    btn.disabled = false;
+    btn.textContent = 'Publicar aviso';
+  }
+};
+
+// ── DETALLE AVISO ─────────────────────────────────────────────
+window.abrirAvisoDetalle = function(id) {
+  const a = AVISOS_FIRESTORE.find(x => x.id === id);
+  if (!a) return;
+  contarVistaAviso(id);
+
+  const tipo = RAD_TIPOS[a.tipo] || RAD_TIPOS.aviso;
+  const cat  = RAD_CATEGORIAS[a.categoria] || '📋';
+  const fotos = a.fotos || [];
+  radDetalleFotoActiva = 0;
+
+  const precio = (typeof a.precio === 'number' && a.precio > 0)
+    ? '$' + a.precio.toLocaleString('es-MX') + ' MXN'
+    : 'Consultar precio';
+
+  const wa = a.whatsapp ? a.whatsapp.replace(/\D/g, '') : '';
+  const msgWA = encodeURIComponent('Hola! Vi tu aviso en Visión Pecuaria: "' + (a.titulo || '') + '". Me interesa, ¿podemos hablar?');
+  const linkWA = wa ? 'https://wa.me/52' + wa + '?text=' + msgWA : '#';
+
+  const ranchoMeta = [a.ranchoUbicacion, a.ranchoEspecialidad].filter(Boolean).join(' · ');
+
+  let fotosHTML = '';
+  if (fotos.length > 0) {
+    fotosHTML = '<div class="rad-det-fotos">' +
+      '<div class="rad-det-foto-actual" id="radDetFotoActual" style="background-image:url(\'' + fotos[0].replace(/'/g,"\\'") + '\')"></div>' +
+    '</div>';
+    if (fotos.length > 1) {
+      fotosHTML += '<div class="rad-det-thumbs">' +
+        fotos.map((f,i) => '<div class="rad-det-thumb ' + (i===0?'activa':'') + '" style="background-image:url(\'' + f.replace(/'/g,"\\'") + '\')" onclick="cambiarFotoDetalle(' + i + ')"></div>').join('') +
+      '</div>';
+    }
+  }
+
+  document.getElementById('radDetalleBody').innerHTML =
+    fotosHTML +
+    '<div class="rad-det-body">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">' +
+        '<span class="rad-card-tipo ' + tipo.clase + '" style="position:static;">' + tipo.label + '</span>' +
+        '<span style="color:var(--gold);font-size:.75rem;font-weight:700;letter-spacing:.5px;">' + cat + '</span>' +
+      '</div>' +
+      '<h2 style="font:800 1.3rem/1.3 \'Montserrat\',sans-serif;margin:8px 0;">' + escHTML(a.titulo || '') + '</h2>' +
+      '<div style="font-size:1.2rem;font-weight:800;color:var(--gold-light);margin-bottom:14px;">' + precio + (a.cantidad ? ' <span style="font-size:.85rem;color:rgba(255,255,255,.55);">· ' + escHTML(a.cantidad) + '</span>' : '') + '</div>' +
+      '<p style="color:rgba(255,255,255,.8);line-height:1.5;white-space:pre-wrap;margin-bottom:20px;">' + escHTML(a.descripcion || '') + '</p>' +
+
+      '<div style="background:rgba(0,0,0,.25);padding:14px;border-radius:12px;margin-bottom:20px;">' +
+        '<div style="font-size:.7rem;color:var(--gold);letter-spacing:1px;font-weight:700;margin-bottom:8px;">PUBLICADO POR</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;">' +
+          '<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">' + (a.ranchoEmoji || '🏡') + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-weight:800;font-size:1rem;color:#fff;">' + escHTML(a.ranchoNombre || 'Rancho') + '</div>' +
+            '<div style="font-size:.78rem;color:rgba(255,255,255,.6);margin-top:2px;">' + escHTML(ranchoMeta || 'México') + '</div>' +
+          '</div>' +
+          (a.ranchoNivel ? '<span class="rad-card-rancho-badge">Nv ' + a.ranchoNivel + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+
+      '<div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:14px;">' + formatearFechaAviso(a.creado) + (a.vistas ? ' · 👁️ ' + a.vistas + ' vista' + (a.vistas>1?'s':'') : '') + '</div>' +
+
+      '<a href="' + linkWA + '" target="_blank" rel="noopener" class="rad-card-btn-wa" style="width:100%;padding:14px;font-size:.95rem;">📱 Contactar por WhatsApp</a>' +
+    '</div>';
+
+  document.getElementById('modalAvisoDetalle').classList.add('active');
+};
+
+window.cerrarModalAvisoDetalle = function() {
+  document.getElementById('modalAvisoDetalle').classList.remove('active');
+};
+
+window.cambiarFotoDetalle = function(idx) {
+  // Buscar las fotos del aviso actual desde el DOM
+  const thumbs = document.querySelectorAll('.rad-det-thumb');
+  if (!thumbs[idx]) return;
+  const url = thumbs[idx].style.backgroundImage;
+  const main = document.getElementById('radDetFotoActual');
+  if (main) main.style.backgroundImage = url;
+  thumbs.forEach((t,i) => t.classList.toggle('activa', i === idx));
+  radDetalleFotoActiva = idx;
+};
+
+// ── CONTAR VISTA ──────────────────────────────────────────────
+const VISTAS_CONTADAS = new Set();
+window.contarVistaAviso = async function(id) {
+  if (VISTAS_CONTADAS.has(id)) return;
+  VISTAS_CONTADAS.add(id);
+  try {
+    const { doc, updateDoc, increment } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    await updateDoc(doc(db, 'avisos', id), { vistas: increment(1) });
+  } catch(e) { /* silencioso */ }
+};
+
+// ── ELIMINAR AVISO PROPIO ─────────────────────────────────────
+window.eliminarAviso = async function(id) {
+  const aviso = AVISOS_FIRESTORE.find(a => a.id === id);
+  if (!aviso) return;
+  if (!confirm('¿Eliminar tu aviso "' + (aviso.titulo || '') + '"? Esta acción no se puede deshacer.')) return;
+
+  try {
+    const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    await deleteDoc(doc(db, 'avisos', id));
+  } catch(e) {
+    console.error('Error eliminando aviso:', e);
+    alert('No se pudo eliminar el aviso.');
+  }
+};
+
+// ── INICIALIZAR cuando carga la app ───────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // Esperar a que Firebase esté listo
+  setTimeout(() => {
+    try { window.__rancho.iniciarRadar(); } catch(e) {}
+  }, 1500);
+});
+
+// Cerrar modales con ESC (radar)
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (typeof cerrarModalAviso === 'function') cerrarModalAviso();
+    if (typeof cerrarModalAvisoDetalle === 'function') cerrarModalAvisoDetalle();
+  }
 });
 </script>
 
