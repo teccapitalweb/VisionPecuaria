@@ -2274,6 +2274,251 @@ button { font-family: inherit; }
 .rad-det-body { padding: 0 24px 24px; }
 
 /* ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════ */
+/* SECCIÓN: SOPORTE TÉCNICO                                          */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.sop-contacto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.sop-contacto-card {
+  display: flex; align-items: center; gap: 14px;
+  background: linear-gradient(135deg, rgba(15,61,39,.55), rgba(10,31,18,.7));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rxl);
+  padding: 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.sop-contacto-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 50%, currentColor 200%);
+  opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+}
+.sop-contacto-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212,160,23,.4);
+  box-shadow: 0 12px 30px rgba(0,0,0,.3);
+}
+.sop-contacto-card:hover::before { opacity: .04; }
+.sop-wa { color: #25D366; }
+.sop-mail { color: #60a5fa; }
+.sop-bug { color: #f97316; }
+.sop-card-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,.06);
+}
+.sop-wa .sop-card-icon { background: rgba(37,211,102,.15); }
+.sop-mail .sop-card-icon { background: rgba(96,165,250,.15); }
+.sop-bug .sop-card-icon { background: rgba(249,115,22,.15); }
+.sop-card-content { flex: 1; min-width: 0; }
+.sop-card-title {
+  font: 800 1rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.sop-card-sub {
+  font-size: .78rem;
+  color: rgba(255,255,255,.6);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.sop-card-meta {
+  font-size: .75rem;
+  font-weight: 700;
+  color: currentColor;
+}
+.sop-card-arrow {
+  font-size: 24px;
+  color: rgba(255,255,255,.3);
+  transition: transform .25s, color .25s;
+  flex-shrink: 0;
+}
+.sop-contacto-card:hover .sop-card-arrow {
+  color: currentColor;
+  transform: translateX(4px);
+}
+
+/* Bloques */
+.sop-bloque {
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--rxl);
+  padding: 22px 22px 24px;
+  margin-bottom: 22px;
+}
+.sop-bloque-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.sop-bloque-head h2 {
+  font: 800 1.15rem 'Montserrat', sans-serif;
+  margin: 0;
+}
+.sop-bloque-head p {
+  font-size: .8rem;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+
+/* Guías */
+.sop-guias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.sop-guia {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--rl);
+  padding: 16px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.sop-guia:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,160,23,.35);
+  background: rgba(212,160,23,.06);
+}
+.sop-guia-icon { font-size: 28px; margin-bottom: 8px; }
+.sop-guia-titulo {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.sop-guia-paso {
+  font-size: .72rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* FAQ */
+.sop-faq-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.sop-faq {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--rl);
+  overflow: hidden;
+  transition: all .2s;
+}
+.sop-faq[open] {
+  background: rgba(212,160,23,.04);
+  border-color: rgba(212,160,23,.2);
+}
+.sop-faq summary {
+  padding: 14px 16px;
+  cursor: pointer;
+  font-size: .9rem;
+  font-weight: 600;
+  color: #fff;
+  list-style: none;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.sop-faq summary::-webkit-details-marker { display: none; }
+.sop-faq summary::after {
+  content: '+';
+  font-size: 22px;
+  color: var(--gold);
+  font-weight: 700;
+  transition: transform .25s;
+  flex-shrink: 0;
+}
+.sop-faq[open] summary::after {
+  content: '−';
+  transform: rotate(0deg);
+}
+.sop-faq-body {
+  padding: 0 16px 16px;
+  font-size: .85rem;
+  color: rgba(255,255,255,.75);
+  line-height: 1.55;
+}
+.sop-faq-body strong { color: #fff; font-weight: 700; }
+
+/* Estado del sistema */
+.sop-estado-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.sop-estado-item {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--rl);
+  padding: 14px;
+}
+.sop-estado-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+.sop-estado-dot.ok {
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34,197,94,.15);
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(34,197,94,.15); }
+  50%      { box-shadow: 0 0 0 7px rgba(34,197,94,.05); }
+}
+.sop-estado-nombre {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #fff;
+}
+.sop-estado-uptime {
+  font-size: .7rem;
+  color: rgba(255,255,255,.55);
+  margin-top: 2px;
+}
+
+/* Botón cerrar sesión */
+.sop-cerrar-row {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 12px;
+}
+.sop-btn-cerrar {
+  background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  color: #ef4444;
+  padding: 11px 22px;
+  border-radius: 100px;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: all .2s;
+}
+.sop-btn-cerrar:hover {
+  background: rgba(239,68,68,.18);
+  border-color: rgba(239,68,68,.5);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
 /* SECCIÓN: MI PROGRESO v2 (perfil + roadmap + misiones + logros)   */
 /* ═══════════════════════════════════════════════════════════════ */
 
@@ -9098,31 +9343,209 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
-      <!-- 📞 CASETA                                                 -->
+      <!-- 🛟 SOPORTE TÉCNICO — Centro de ayuda                       -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-caseta">
         <div class="section-head">
           <div>
-            <h1>📞 La Caseta</h1>
-            <p>Soporte, configuración y contacto directo con el equipo</p>
+            <h1>🛟 Soporte Técnico</h1>
+            <p>Centro de ayuda, guías rápidas y contacto directo con el equipo</p>
           </div>
         </div>
-        <div class="tools-grid">
-          <a href="https://wa.me/522361049715" target="_blank" rel="noopener noreferrer" class="tool-card" style="text-decoration:none;color:inherit;">
-            <div class="tool-icon">📱</div>
-            <div class="tool-name">WhatsApp directo</div>
-            <div class="tool-desc">Habla con el equipo de Visión Pecuaria al instante</div>
+
+        <!-- Contacto rápido — 3 cards prominentes -->
+        <div class="sop-contacto-grid">
+          <a href="https://wa.me/5212361100649?text=Hola%2C%20necesito%20ayuda%20con%20Visi%C3%B3n%20Pecuaria" target="_blank" rel="noopener" class="sop-contacto-card sop-wa">
+            <div class="sop-card-icon">💬</div>
+            <div class="sop-card-content">
+              <div class="sop-card-title">WhatsApp directo</div>
+              <div class="sop-card-sub">Respuesta en menos de 2 horas en horario laboral</div>
+              <div class="sop-card-meta">+52 1 236 110 0649</div>
+            </div>
+            <div class="sop-card-arrow">→</div>
           </a>
-          <a href="mailto:visionpecuaria12@gmail.com" class="tool-card" style="text-decoration:none;color:inherit;">
-            <div class="tool-icon">✉️</div>
-            <div class="tool-name">Correo electrónico</div>
-            <div class="tool-desc">visionpecuaria12@gmail.com</div>
+          <a href="mailto:visionpecuaria12@gmail.com?subject=Soporte%20Visi%C3%B3n%20Pecuaria" class="sop-contacto-card sop-mail">
+            <div class="sop-card-icon">✉️</div>
+            <div class="sop-card-content">
+              <div class="sop-card-title">Correo electrónico</div>
+              <div class="sop-card-sub">Para consultas detalladas o adjuntar archivos</div>
+              <div class="sop-card-meta">visionpecuaria12@gmail.com</div>
+            </div>
+            <div class="sop-card-arrow">→</div>
           </a>
-          <div class="tool-card" onclick="cerrarSesion()">
-            <div class="tool-icon">🚪</div>
-            <div class="tool-name">Cerrar sesión</div>
-            <div class="tool-desc">Salir del rancho digital</div>
+          <a href="https://wa.me/5212361100649?text=Hola%2C%20quiero%20reportar%20un%20bug%2Ferror%20en%20la%20plataforma%3A%0A%0ADescripci%C3%B3n%3A%20%0AD%C3%B3nde%20pas%C3%B3%3A%20%0AQu%C3%A9%20esperaba%3A%20" target="_blank" rel="noopener" class="sop-contacto-card sop-bug">
+            <div class="sop-card-icon">🐛</div>
+            <div class="sop-card-content">
+              <div class="sop-card-title">Reportar un error</div>
+              <div class="sop-card-sub">Encontraste algo roto? Avísanos y lo arreglamos</div>
+              <div class="sop-card-meta">Plantilla incluida</div>
+            </div>
+            <div class="sop-card-arrow">→</div>
+          </a>
+        </div>
+
+        <!-- Guías rápidas -->
+        <div class="sop-bloque">
+          <div class="sop-bloque-head">
+            <span style="font-size:24px;">📘</span>
+            <div>
+              <h2>Guías rápidas</h2>
+              <p>Aprende a sacarle el máximo a tu rancho digital</p>
+            </div>
           </div>
+          <div class="sop-guias-grid">
+            <div class="sop-guia" onclick="navigateTo('hato')">
+              <div class="sop-guia-icon">🐄</div>
+              <div class="sop-guia-titulo">Registra tu primer animal</div>
+              <div class="sop-guia-paso">3 pasos · 1 min</div>
+            </div>
+            <div class="sop-guia" onclick="navigateTo('calculadora')">
+              <div class="sop-guia-icon">🧮</div>
+              <div class="sop-guia-titulo">Calcula la rentabilidad de tu hato</div>
+              <div class="sop-guia-paso">Auto-llena desde el mercado</div>
+            </div>
+            <div class="sop-guia" onclick="navigateTo('diagnostico')">
+              <div class="sop-guia-icon">🩺</div>
+              <div class="sop-guia-titulo">Diagnostica enfermedades</div>
+              <div class="sop-guia-paso">22 enfermedades · síntomas</div>
+            </div>
+            <div class="sop-guia" onclick="navigateTo('mercado')">
+              <div class="sop-guia-icon">💰</div>
+              <div class="sop-guia-titulo">Revisa precios SIAP en tiempo real</div>
+              <div class="sop-guia-paso">Actualización cada 12h</div>
+            </div>
+            <div class="sop-guia" onclick="navigateTo('radar')">
+              <div class="sop-guia-icon">📡</div>
+              <div class="sop-guia-titulo">Publica avisos en Comunidad</div>
+              <div class="sop-guia-paso">Solo miembros Élite</div>
+            </div>
+            <div class="sop-guia" onclick="navigateTo('apoyos')">
+              <div class="sop-guia-icon">🏛️</div>
+              <div class="sop-guia-titulo">Solicita apoyos del gobierno</div>
+              <div class="sop-guia-paso">8 programas vigentes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preguntas frecuentes -->
+        <div class="sop-bloque">
+          <div class="sop-bloque-head">
+            <span style="font-size:24px;">❓</span>
+            <div>
+              <h2>Preguntas frecuentes</h2>
+              <p>Las dudas más comunes resueltas en segundos</p>
+            </div>
+          </div>
+          <div class="sop-faq-list" id="sopFaqList">
+            <details class="sop-faq">
+              <summary>¿Qué incluye la suscripción Élite Pecuario?</summary>
+              <div class="sop-faq-body">
+                Acceso completo a toda la Biblioteca de cursos, Diagnóstico veterinario, Calculadora de rentabilidad, Mercado en tiempo real, Mi Hato Virtual ilimitado, Bitácora con logros, Comunidad de ranchos, Webinars exclusivos y grupo VIP de WhatsApp con otros productores.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿Cómo cambio mi método de pago o cancelo la suscripción?</summary>
+              <div class="sop-faq-body">
+                Escríbenos por WhatsApp al <strong>+52 1 236 110 0649</strong> con tu correo registrado y te atendemos personalmente. La cancelación es inmediata y mantienes el acceso hasta el final del periodo pagado.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿Cada cuánto se actualizan los precios del mercado?</summary>
+              <div class="sop-faq-body">
+                Los precios del Mercado se actualizan automáticamente <strong>cada 12 horas</strong> con datos oficiales de SIAP-SADER. Las noticias del sector se actualizan cada 6 horas.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿Mis animales registrados son privados?</summary>
+              <div class="sop-faq-body">
+                Sí, completamente. Solo TÚ puedes ver tu hato. Ni siquiera otros miembros Élite ni el equipo de Visión Pecuaria pueden ver tus animales sin que tú los publiques en Comunidad.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿Quién puede publicar en Comunidad?</summary>
+              <div class="sop-faq-body">
+                Solo los miembros <strong>Élite Pecuario</strong> pueden publicar avisos. Todos los usuarios (incluso modo Explorador FREE) pueden ver los avisos publicados. Esto evita spam y mantiene la calidad de la comunidad.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿El diagnóstico veterinario reemplaza a un MVZ?</summary>
+              <div class="sop-faq-body">
+                <strong>No.</strong> El diagnóstico es una herramienta orientativa basada en información oficial de SENASICA/INIFAP/SADER. Ante cualquier sospecha de enfermedad, contacta a un Médico Veterinario Zootecnista certificado o a SENASICA al <strong>01 800 751 2100</strong>.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿Puedo descargar mis certificados de los cursos?</summary>
+              <div class="sop-faq-body">
+                Sí. Al completar un curso recibes un certificado oficial con QR de verificación. Lo descargas en PDF desde la sección <strong>Certificados</strong> del menú. Es válido permanentemente y verificable públicamente.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>Olvidé mi contraseña, ¿cómo la recupero?</summary>
+              <div class="sop-faq-body">
+                Ve a la pantalla de login y haz click en "¿Olvidaste tu contraseña?". Te llegará un correo con instrucciones. Si no llega, revisa SPAM o escríbenos por WhatsApp.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿La app funciona sin internet?</summary>
+              <div class="sop-faq-body">
+                Visión Pecuaria es una <strong>web app</strong>, requiere conexión para sincronizar tu hato, ver precios y cursos. Sin embargo, una vez cargada la página puedes navegar entre secciones aunque tengas conexión intermitente.
+              </div>
+            </details>
+            <details class="sop-faq">
+              <summary>¿Puedo usar la app en mi celular?</summary>
+              <div class="sop-faq-body">
+                Sí. Está optimizada para celular, tablet y computadora. Te recomendamos <strong>agregar el sitio a tu pantalla de inicio</strong> desde Chrome/Safari para acceso rápido como una app nativa.
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <!-- Estado del sistema -->
+        <div class="sop-bloque sop-estado">
+          <div class="sop-bloque-head">
+            <span style="font-size:24px;">⚙️</span>
+            <div>
+              <h2>Estado del sistema</h2>
+              <p>Todos los servicios funcionando correctamente</p>
+            </div>
+          </div>
+          <div class="sop-estado-grid">
+            <div class="sop-estado-item">
+              <span class="sop-estado-dot ok"></span>
+              <div>
+                <div class="sop-estado-nombre">Plataforma web</div>
+                <div class="sop-estado-uptime">Operativo</div>
+              </div>
+            </div>
+            <div class="sop-estado-item">
+              <span class="sop-estado-dot ok"></span>
+              <div>
+                <div class="sop-estado-nombre">Mercado SIAP</div>
+                <div class="sop-estado-uptime">Actualizado hace 6h</div>
+              </div>
+            </div>
+            <div class="sop-estado-item">
+              <span class="sop-estado-dot ok"></span>
+              <div>
+                <div class="sop-estado-nombre">Noticias</div>
+                <div class="sop-estado-uptime">Actualizado hace 2h</div>
+              </div>
+            </div>
+            <div class="sop-estado-item">
+              <span class="sop-estado-dot ok"></span>
+              <div>
+                <div class="sop-estado-nombre">Base de datos</div>
+                <div class="sop-estado-uptime">99.9% uptime</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sesión -->
+        <div class="sop-cerrar-row">
+          <button class="sop-btn-cerrar" onclick="cerrarSesion()">
+            🚪 Cerrar sesión
+          </button>
         </div>
       </section>
 
@@ -12525,7 +12948,7 @@ window.__rancho.contarCertificados = async function() {
 // ⚙️ CONFIGURACIÓN — Cambia estos valores:
 const VIP_CONFIG = {
   whatsappGroup: 'https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m',
-  whatsappPersonal: '522361049715', // tu número (sin +)
+  whatsappPersonal: '5212361100649', // tu número (sin +)
   descuentoPct: 20,
   mensajeDescuento: 'Hola, soy miembro VIP de Visión Pecuaria y quiero canjear mi descuento del 20%'
 };
