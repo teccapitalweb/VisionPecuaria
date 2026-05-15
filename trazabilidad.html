@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trazabilidad · Visión Pecuaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 0%, rgba(34,197,94,.15), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 100%, rgba(212,160,23,.1), transparent 60%),
+      #0a1f12;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .header {
+    text-align: center;
+    padding: 24px 0 20px;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .header h1 {
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, #f4d35e, #d4a017);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+  .header p { font-size: .8rem; color: rgba(255,255,255,.6); }
+
+  .auth-required {
+    max-width: 480px;
+    margin: 40px auto;
+    background: linear-gradient(180deg, rgba(212,160,23,.08), rgba(212,160,23,.02));
+    border: 1px solid rgba(212,160,23,.25);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+  .auth-required h2 { color: #fff; margin-bottom: 12px; font-size: 1.3rem; }
+  .auth-required p { color: rgba(255,255,255,.7); font-size: .9rem; line-height: 1.55; margin-bottom: 20px; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #d4a017, #f4d35e);
+    color: #0a1f12;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: transform .2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); }
+
+  .cert {
+    max-width: 600px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+    color: #1a1a1a;
+    border-radius: 18px;
+    padding: 32px 26px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #d4a017;
+    text-align: center;
+  }
+  .cert::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #0f3d27, #d4a017, #0f3d27);
+  }
+  .verificado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(34,197,94,.12);
+    color: #0a6e2d;
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: .85rem;
+    font-weight: 800;
+    border: 1px solid rgba(34,197,94,.3);
+    margin-bottom: 14px;
+  }
+  .pulse-dot {
+    width: 8px; height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+    50% { opacity: .7; box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+  }
+  .cert h2 {
+    font-size: 1.8rem;
+    color: #0f3d27;
+    margin: 6px 0 4px;
+    line-height: 1.1;
+  }
+  .arete {
+    font-family: 'JetBrains Mono', monospace;
+    color: #888;
+    font-size: 1rem;
+    margin-bottom: 18px;
+  }
+  .traza-id {
+    background: rgba(15,61,39,.06);
+    padding: 10px 16px;
+    border-radius: 10px;
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    color: #0f3d27;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    text-align: left;
+    margin: 20px 0;
+  }
+  .dato {
+    background: rgba(15,61,39,.05);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border-left: 3px solid #0f3d27;
+  }
+  .dato-label {
+    font-size: .65rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    font-weight: 700;
+  }
+  .dato-valor {
+    font-size: .92rem;
+    color: #0f3d27;
+    font-weight: 700;
+    margin-top: 3px;
+  }
+  .historial-titulo {
+    text-align: left;
+    color: #0f3d27;
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 24px 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #d4a017;
+  }
+  .evento {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(15,61,39,.04);
+    border-radius: 10px;
+    margin-bottom: 6px;
+    text-align: left;
+    border-left: 3px solid #d4a017;
+  }
+  .evento-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .evento-body { flex: 1; min-width: 0; }
+  .evento-tipo {
+    font-size: .7rem;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 700;
+    letter-spacing: .5px;
+  }
+  .evento-nota {
+    font-size: .85rem;
+    color: #0f3d27;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+  .evento-fecha {
+    font-size: .72rem;
+    color: #999;
+    margin-top: 2px;
+  }
+  .vacio {
+    text-align: center;
+    padding: 24px;
+    color: #999;
+    font-size: .9rem;
+  }
+  .footer-cert {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(0,0,0,.08);
+    font-size: .75rem;
+    color: #999;
+    line-height: 1.5;
+  }
+  .footer-cert strong { color: #0f3d27; }
+  .footer-cert a { color: #d4a017; text-decoration: none; font-weight: 700; }
+
+  .loading, .error {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,.6);
+  }
+  .loading-spin {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(212,160,23,.15);
+    border-top-color: #d4a017;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    .datos { grid-template-columns: 1fr; }
+    .cert { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🐂 Visión Pecuaria</h1>
+  <p>Verificación de trazabilidad pecuaria</p>
+</div>
+
+<div id="content">
+  <div class="loading">
+    <div class="loading-spin"></div>
+    <p>Verificando certificado...</p>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "1090773308779",
+  appId: "1:1090773308779:web:5e2cd49ed5e6fb71a37cb1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const params = new URLSearchParams(window.location.search);
+const animalId = params.get('id');
+const ownerUid = params.get('u');
+
+const cont = document.getElementById('content');
+
+function escapeHTML(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function detectarEspecie(animal) {
+  const t = ((animal.especie || animal.tipo || animal.raza || '') + ' ' + (animal.nombre || '')).toLowerCase();
+  if (/leche|holstein|jersey/.test(t)) return { emoji: '🐮', nombre: 'Bovino Lechero' };
+  if (/porcin|cerdo|puerco/.test(t)) return { emoji: '🐖', nombre: 'Porcino' };
+  if (/ovino|borrego|oveja/.test(t)) return { emoji: '🐑', nombre: 'Ovino' };
+  if (/caprino|cabra|chivo/.test(t)) return { emoji: '🐐', nombre: 'Caprino' };
+  if (/postura|gallina/.test(t)) return { emoji: '🐔', nombre: 'Aviar Postura' };
+  if (/pollo|ave/.test(t)) return { emoji: '🐔', nombre: 'Aviar Engorda' };
+  if (/equino|caballo|yegua/.test(t)) return { emoji: '🐎', nombre: 'Equino' };
+  return { emoji: '🐄', nombre: 'Bovino Engorda' };
+}
+
+function generarTrazaId(animal) {
+  const base = (animal.id || animalId || '') + (ownerUid || '');
+  let h = 0;
+  for (let i = 0; i < base.length; i++) {
+    h = ((h << 5) - h) + base.charCodeAt(i);
+    h |= 0;
+  }
+  return 'VP' + Math.abs(h).toString(36).toUpperCase().slice(0, 8);
+}
+
+const EVENTO_ICONS = {
+  nota: '📝',
+  vacuna: '💉',
+  desparasitacion: '🪱',
+  revision: '🩺',
+  sanidad: '🏥',
+  enfermedad: '🤒',
+  peso: '⚖️',
+  parto: '🍼',
+  monta: '💕',
+  venta: '💰',
+  compra: '🛒',
+  baja: '💀',
+  alimento: '🌾'
+};
+const EVENTO_LABELS = {
+  nota: 'Nota',
+  vacuna: 'Vacunación',
+  desparasitacion: 'Desparasitación',
+  revision: 'Revisión sanitaria',
+  sanidad: 'Sanidad',
+  enfermedad: 'Enfermedad',
+  peso: 'Pesaje',
+  parto: 'Parto',
+  monta: 'Monta / IA',
+  venta: 'Venta',
+  compra: 'Compra',
+  baja: 'Baja',
+  alimento: 'Alimentación'
+};
+
+function mostrarAuthRequerido() {
+  cont.innerHTML = `
+    <div class="auth-required">
+      <div style="font-size:48px;margin-bottom:12px;">🔒</div>
+      <h2>Acceso verificado requerido</h2>
+      <p>Este certificado de trazabilidad solo es visible para usuarios registrados de Visión Pecuaria. Esto protege la información del rancho y garantiza la verificación.</p>
+      <a class="btn" href="/VisionPecuaria/login.html">Iniciar sesión / Registrarme</a>
+      <p style="margin-top:14px;font-size:.78rem;color:rgba(255,255,255,.45);">Es gratis. Solo necesitas una cuenta.</p>
+    </div>
+  `;
+}
+
+function mostrarError(msg) {
+  cont.innerHTML = `
+    <div class="auth-required">
+      <div style="font-size:48px;margin-bottom:12px;">⚠️</div>
+      <h2>Certificado no disponible</h2>
+      <p>${escapeHTML(msg)}</p>
+      <a class="btn" href="/VisionPecuaria/">Volver al inicio</a>
+    </div>
+  `;
+}
+
+async function cargarCertificado() {
+  if (!animalId || !ownerUid) {
+    mostrarError('Link inválido. Falta información en el QR.');
+    return;
+  }
+
+  try {
+    // Cargar el animal
+    const refAnimal = doc(db, 'animales', animalId);
+    const snap = await getDoc(refAnimal);
+
+    if (!snap.exists()) {
+      mostrarError('Este animal no existe o fue dado de baja.');
+      return;
+    }
+
+    const animal = { id: snap.id, ...snap.data() };
+
+    // Cargar info del rancho (owner)
+    let rancho = {};
+    try {
+      const refMiembro = doc(db, 'miembros', ownerUid);
+      const snapMiembro = await getDoc(refMiembro);
+      if (snapMiembro.exists()) rancho = snapMiembro.data();
+    } catch(e) {
+      console.warn('No se pudo cargar info del rancho:', e);
+    }
+
+    const especieData = detectarEspecie(animal);
+    const trazaId = generarTrazaId(animal);
+    const eventos = (animal.eventos || []).slice().sort((a, b) => {
+      const fa = new Date(a.fecha || a.creado || 0).getTime();
+      const fb = new Date(b.fecha || b.creado || 0).getTime();
+      return fb - fa;
+    });
+
+    // Estado sanitario
+    const ultimaRevision = eventos
+      .filter(e => ['revision','sanidad','vacuna','desparasitacion'].includes(e.tipo))
+      .map(e => new Date(e.fecha || e.creado))[0];
+    const diasUltima = ultimaRevision ? Math.floor((Date.now() - ultimaRevision.getTime())/86400000) : null;
+    const estadoSanitario = diasUltima === null ? 'Sin registros'
+      : diasUltima <= 90 ? '✅ Vigente'
+      : diasUltima <= 180 ? '⚠️ Próximo a revisión'
+      : '🔴 Vencido';
+
+    cont.innerHTML = `
+      <div class="cert">
+        <div class="verificado-badge">
+          <span class="pulse-dot"></span>
+          Certificado Verificado
+        </div>
+
+        <div style="font-size:48px;">${especieData.emoji}</div>
+        <h2>${escapeHTML(animal.nombre || 'Sin nombre')}</h2>
+        <div class="arete">${escapeHTML(animal.arete || trazaId)}</div>
+
+        <div class="traza-id">${trazaId}</div>
+
+        <div class="datos">
+          <div class="dato">
+            <div class="dato-label">Especie</div>
+            <div class="dato-valor">${especieData.nombre}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Raza</div>
+            <div class="dato-valor">${escapeHTML(animal.raza || '—')}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Peso</div>
+            <div class="dato-valor">${animal.peso ? animal.peso + ' kg' : '—'}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Edad</div>
+            <div class="dato-valor">${animal.edad ? animal.edad + ' meses' : '—'}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Rancho</div>
+            <div class="dato-valor">${escapeHTML(rancho.nombreRancho || 'Sin nombre')}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Ubicación</div>
+            <div class="dato-valor">${escapeHTML(rancho.ubicacionRancho || '—')}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Estado sanitario</div>
+            <div class="dato-valor">${estadoSanitario}</div>
+          </div>
+          <div class="dato">
+            <div class="dato-label">Eventos</div>
+            <div class="dato-valor">${eventos.length} registrados</div>
+          </div>
+        </div>
+
+        <div class="historial-titulo">📋 Historial completo</div>
+        ${eventos.length === 0 ? `
+          <div class="vacio">Sin eventos registrados todavía.</div>
+        ` : eventos.slice(0, 30).map(ev => `
+          <div class="evento">
+            <span class="evento-icon">${EVENTO_ICONS[ev.tipo] || '📝'}</span>
+            <div class="evento-body">
+              <div class="evento-tipo">${EVENTO_LABELS[ev.tipo] || ev.tipo}</div>
+              <div class="evento-nota">${escapeHTML(ev.nota || ev.descripcion || '—')}</div>
+              <div class="evento-fecha">${ev.fecha ? new Date(ev.fecha).toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' }) : ''}${ev.costo ? ' · Costo: $' + ev.costo + ' MXN' : ''}</div>
+            </div>
+          </div>
+        `).join('')}
+        ${eventos.length > 30 ? `<div class="vacio">Mostrando los 30 más recientes de ${eventos.length} eventos totales</div>` : ''}
+
+        <div class="footer-cert">
+          Certificado emitido por <strong>Visión Pecuaria</strong><br>
+          Visto el ${new Date().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' })}<br>
+          <a href="https://www.visionpecuariamx.com">www.visionpecuariamx.com</a>
+        </div>
+      </div>
+    `;
+
+  } catch (e) {
+    console.error('Error cargando certificado:', e);
+    mostrarError('No se pudo cargar el certificado. Verifica el link o inténtalo más tarde.');
+  }
+}
+
+// Esperar autenticación
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    cargarCertificado();
+  } else {
+    mostrarAuthRequerido();
+  }
+});
+
+// Timeout de seguridad: si en 4s no hay user, mostrar login
+setTimeout(() => {
+  if (!auth.currentUser) {
+    mostrarAuthRequerido();
+  }
+}, 4000);
+</script>
+
+</body>
+</html>

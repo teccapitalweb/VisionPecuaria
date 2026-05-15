@@ -927,6 +927,172 @@ button { font-family: inherit; }
 }
 .pred-tip-text strong { color: #93c5fd; }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* CERTIFICADO TRAZABILIDAD QR                                   */
+/* ═══════════════════════════════════════════════════════════ */
+.cert-trazabilidad {
+  padding: 12px 0;
+  text-align: center;
+}
+.cert-traz-preview {
+  background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
+  color: #1a1a1a;
+  border-radius: 16px;
+  padding: 26px 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
+  position: relative;
+  overflow: hidden;
+  border: 4px solid #d4a017;
+}
+.cert-traz-preview::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #0f3d27, #d4a017, #0f3d27);
+}
+.cert-traz-logo {
+  font: 800 1.4rem 'Montserrat', sans-serif;
+  color: #0f3d27;
+  margin-bottom: 4px;
+  letter-spacing: -.5px;
+}
+.cert-traz-sub {
+  font-size: .7rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+.cert-traz-tipo {
+  display: inline-block;
+  background: #d4a017;
+  color: #fff;
+  font: 800 .7rem 'Montserrat', sans-serif;
+  padding: 5px 14px;
+  border-radius: 100px;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.cert-traz-nombre {
+  font: 800 1.8rem 'Montserrat', sans-serif;
+  color: #0f3d27;
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+.cert-traz-arete {
+  font: 700 1rem 'JetBrains Mono', monospace;
+  color: #888;
+  margin-bottom: 18px;
+}
+.cert-traz-qr-wrap {
+  background: #fff;
+  display: inline-block;
+  padding: 14px;
+  border-radius: 12px;
+  margin: 8px 0 16px;
+  border: 2px solid #e5e5e5;
+}
+.cert-traz-qr-wrap canvas, .cert-traz-qr-wrap img {
+  display: block;
+  margin: 0 auto;
+}
+.cert-traz-datos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  text-align: left;
+  margin: 18px 0;
+}
+.cert-traz-dato {
+  background: rgba(15,61,39,.05);
+  padding: 8px 11px;
+  border-radius: 8px;
+  border-left: 3px solid #0f3d27;
+}
+.cert-traz-dato-label {
+  font-size: .65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 700;
+}
+.cert-traz-dato-valor {
+  font-size: .92rem;
+  color: #0f3d27;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.cert-traz-verificado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34,197,94,.1);
+  color: #0a6e2d;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: .8rem;
+  font-weight: 700;
+  border: 1px solid rgba(34,197,94,.3);
+  margin-top: 8px;
+}
+.cert-traz-footer {
+  margin-top: 16px;
+  font-size: .7rem;
+  color: #aaa;
+}
+.cert-traz-footer strong { color: #0f3d27; }
+
+.cert-traz-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.cert-traz-btn {
+  background: linear-gradient(135deg, var(--gold), #f4d35e);
+  color: #0a1f12;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 100px;
+  font: 800 .85rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(212,160,23,.3);
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.cert-traz-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(212,160,23,.4);
+}
+.cert-traz-btn--alt {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow: none;
+}
+.cert-traz-btn--alt:hover {
+  background: rgba(255,255,255,.14);
+  box-shadow: none;
+}
+.cert-traz-info {
+  background: rgba(59,130,246,.08);
+  border: 1px solid rgba(59,130,246,.2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: .8rem;
+  color: rgba(255,255,255,.78);
+  line-height: 1.5;
+  margin-top: 14px;
+  text-align: left;
+}
+.cert-traz-info strong { color: #93c5fd; }
+
 .content { padding: 24px 28px 80px; }
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -11105,6 +11271,9 @@ button { font-family: inherit; }
       <button class="md-tab" data-tab="agregar" onclick="cambiarTabDetalle('agregar')">
         ➕ Registrar evento
       </button>
+      <button class="md-tab" data-tab="certificado" onclick="cambiarTabDetalle('certificado')">
+        🆔 Certificado QR
+      </button>
     </div>
 
     <!-- TAB HISTORIAL -->
@@ -11173,6 +11342,13 @@ button { font-family: inherit; }
         <button class="md-btn md-btn-save" onclick="guardarEventoAnimal()">
           <span>✓</span> Registrar evento
         </button>
+      </div>
+    </div>
+
+    <!-- TAB CERTIFICADO QR -->
+    <div class="md-pane" id="mdPaneCertificado" style="display:none;">
+      <div class="cert-trazabilidad" id="certTrazabilidadContent">
+        <!-- Se llena por JS al abrir -->
       </div>
     </div>
   </div>
@@ -13695,6 +13871,11 @@ window.cambiarTabDetalle = function(tab) {
   });
   document.getElementById('mdPaneHistorial').style.display = tab === 'historial' ? 'block' : 'none';
   document.getElementById('mdPaneAgregar').style.display = tab === 'agregar' ? 'block' : 'none';
+  const certPane = document.getElementById('mdPaneCertificado');
+  if (certPane) certPane.style.display = tab === 'certificado' ? 'block' : 'none';
+  if (tab === 'certificado' && typeof pintarCertificadoTrazabilidad === 'function') {
+    pintarCertificadoTrazabilidad();
+  }
 };
 
 window.seleccionarTipoEvento = function(tipo) {
@@ -17054,10 +17235,413 @@ function iniciarFuegosArtificiales() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 📊 PREDICCIÓN DE VENTA ÓPTIMA
-// Algoritmo zootécnico que combina datos del animal con
-// precios reales del SIAP-SADER para sugerir mejor momento
+// 🆔 CERTIFICADO TRAZABILIDAD QR — Sistema único en México
 // ═══════════════════════════════════════════════════════════
+
+// URL base de la página pública de trazabilidad
+const TRAZA_BASE_URL = 'https://teccapitalweb.github.io/VisionPecuaria/trazabilidad.html';
+
+// Cargar librería QR dinámicamente (solo cuando se necesita)
+function cargarQRLib() {
+  return new Promise((resolve, reject) => {
+    if (typeof qrcode !== 'undefined') return resolve(qrcode);
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    s.onload = () => resolve(window.qrcode);
+    s.onerror = () => reject(new Error('No se pudo cargar el generador de QR'));
+    document.head.appendChild(s);
+  });
+}
+
+// Generar SVG del QR
+function generarQRSVG(texto, tamPx = 220) {
+  if (typeof qrcode === 'undefined') return '';
+  const qr = qrcode(0, 'M'); // tipo 0 = auto, error correction Medium
+  qr.addData(texto);
+  qr.make();
+  const cellSize = Math.floor(tamPx / qr.getModuleCount());
+  const margin = 4;
+  return qr.createSvgTag({ cellSize, margin, scalable: true });
+}
+
+// Calcular hash corto del animal para el QR (más legible)
+function generarTrazaId(animal) {
+  const base = (animal.id || '') + (animal._uid || '');
+  // Hash simple para ID legible
+  let h = 0;
+  for (let i = 0; i < base.length; i++) {
+    h = ((h << 5) - h) + base.charCodeAt(i);
+    h |= 0;
+  }
+  return 'VP' + Math.abs(h).toString(36).toUpperCase().slice(0, 8);
+}
+
+// Datos zootécnicos del animal para el certificado
+function obtenerEspecieAnimalCert(animal) {
+  const t = ((animal.especie || animal.tipo || animal.raza || '') + ' ' + (animal.nombre || '')).toLowerCase();
+  if (/leche|holstein|jersey/.test(t)) return { emoji: '🐮', nombre: 'Bovino Lechero' };
+  if (/porcin|cerdo|puerco/.test(t)) return { emoji: '🐖', nombre: 'Porcino' };
+  if (/ovino|borrego|oveja/.test(t)) return { emoji: '🐑', nombre: 'Ovino' };
+  if (/caprino|cabra|chivo/.test(t)) return { emoji: '🐐', nombre: 'Caprino' };
+  if (/postura|gallina/.test(t)) return { emoji: '🐔', nombre: 'Aviar Postura' };
+  if (/pollo|ave/.test(t)) return { emoji: '🐔', nombre: 'Aviar Engorda' };
+  if (/equino|caballo|yegua/.test(t)) return { emoji: '🐎', nombre: 'Equino' };
+  return { emoji: '🐄', nombre: 'Bovino Engorda' };
+}
+
+// Pintar el certificado dentro del modal de detalle animal
+window.pintarCertificadoTrazabilidad = async function() {
+  const cont = document.getElementById('certTrazabilidadContent');
+  const animal = (typeof _animalDetalleActual !== 'undefined' && _animalDetalleActual) || {};
+  if (!cont) return;
+
+  // 🔒 Bloqueo VIP
+  if (typeof esVIP === 'function' && !esVIP()) {
+    cont.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="font-size:48px;margin-bottom:12px;">🔒</div>
+        <h3 style="font:800 1.2rem 'Montserrat',sans-serif;color:#fff;margin:0 0 8px;">Función Élite Pecuario</h3>
+        <p style="color:rgba(255,255,255,.65);font-size:.88rem;line-height:1.5;margin-bottom:18px;max-width:380px;margin-left:auto;margin-right:auto;">
+          El Certificado QR de Trazabilidad es exclusivo de miembros Élite. Permite a compradores y bancos verificar la legitimidad de tu animal con un solo escaneo.
+        </p>
+        <button class="cert-traz-btn" onclick="abrirModalVIP('Genera certificados QR de trazabilidad para tus animales — la única plataforma en México con esta función.')">
+          👑 Hazte Élite Pecuario
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Loading
+  cont.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,.5);">⏳ Generando certificado...</div>';
+
+  // Cargar lib QR
+  try {
+    await cargarQRLib();
+  } catch(e) {
+    cont.innerHTML = '<div style="text-align:center;padding:40px;color:#ef4444;">No se pudo cargar el generador de QR.</div>';
+    return;
+  }
+
+  // Datos
+  const trazaId = generarTrazaId(animal);
+  const urlPublica = TRAZA_BASE_URL + '?id=' + encodeURIComponent(animal.id) + '&u=' + encodeURIComponent(animal._uid || (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?._uid) || '');
+  const especieData = obtenerEspecieAnimalCert(animal);
+  const eventos = animal.eventos || [];
+  const totalEventos = eventos.length;
+  const ultimaRevision = eventos
+    .filter(e => ['revision','sanidad','vacuna','desparasitacion'].includes(e.tipo))
+    .map(e => new Date(e.fecha || e.creado))
+    .sort((a,b) => b - a)[0];
+  const diasUltima = ultimaRevision ? Math.floor((Date.now() - ultimaRevision.getTime())/86400000) : null;
+  const estadoSanitario = diasUltima === null ? 'Sin registros'
+    : diasUltima <= 90 ? '✅ Vigente'
+    : diasUltima <= 180 ? '⚠️ Próximo a revisión'
+    : '🔴 Vencido';
+
+  const miembro = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
+  const ranchoNombre = miembro.nombreRancho || 'Rancho sin nombre';
+  const ranchoUbicacion = miembro.ubicacionRancho || '—';
+  const ranchoEmoji = miembro.emojiRancho || '🐄';
+
+  const svgQR = generarQRSVG(urlPublica, 200);
+
+  cont.innerHTML = `
+    <div class="cert-traz-preview" id="certTrazPreview">
+      <div class="cert-traz-tipo">CERTIFICADO DE TRAZABILIDAD</div>
+      <div class="cert-traz-logo">${ranchoEmoji} Visión Pecuaria</div>
+      <div class="cert-traz-sub">Documento digital verificable</div>
+
+      <div style="font-size:36px;margin-bottom:6px;">${especieData.emoji}</div>
+      <div class="cert-traz-nombre">${escapeHTML(animal.nombre || 'Sin nombre')}</div>
+      <div class="cert-traz-arete">${escapeHTML(animal.arete || trazaId)}</div>
+
+      <div class="cert-traz-qr-wrap" id="certTrazQR">${svgQR}</div>
+
+      <div style="font-size:.75rem;color:#666;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">
+        ID Trazabilidad
+      </div>
+      <div style="font:800 1.05rem 'JetBrains Mono', monospace;color:#0f3d27;letter-spacing:1px;margin-bottom:14px;">
+        ${trazaId}
+      </div>
+
+      <div class="cert-traz-datos">
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Especie</div>
+          <div class="cert-traz-dato-valor">${especieData.nombre}</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Raza</div>
+          <div class="cert-traz-dato-valor">${escapeHTML(animal.raza || '—')}</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Peso</div>
+          <div class="cert-traz-dato-valor">${animal.peso ? animal.peso + ' kg' : '—'}</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Edad</div>
+          <div class="cert-traz-dato-valor">${animal.edad ? animal.edad + ' meses' : '—'}</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Rancho</div>
+          <div class="cert-traz-dato-valor">${escapeHTML(ranchoNombre)}</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Ubicación</div>
+          <div class="cert-traz-dato-valor">${escapeHTML(ranchoUbicacion)}</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Eventos</div>
+          <div class="cert-traz-dato-valor">${totalEventos} registrados</div>
+        </div>
+        <div class="cert-traz-dato">
+          <div class="cert-traz-dato-label">Sanidad</div>
+          <div class="cert-traz-dato-valor">${estadoSanitario}</div>
+        </div>
+      </div>
+
+      <div class="cert-traz-verificado">
+        ✓ Verificado por Visión Pecuaria
+      </div>
+
+      <div class="cert-traz-footer">
+        Emitido: <strong>${new Date().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' })}</strong><br>
+        Escanea el QR para ver el historial completo en línea
+      </div>
+    </div>
+
+    <div class="cert-traz-actions">
+      <button class="cert-traz-btn" onclick="descargarCertificadoPDF('${animal.id}')">
+        📄 Descargar PDF
+      </button>
+      <button class="cert-traz-btn cert-traz-btn--alt" onclick="compartirCertificadoWhatsApp('${animal.id}')">
+        📲 Compartir por WhatsApp
+      </button>
+      <button class="cert-traz-btn cert-traz-btn--alt" onclick="copiarLinkTrazabilidad('${urlPublica.replace(/'/g, "\\'")}')">
+        🔗 Copiar link
+      </button>
+    </div>
+
+    <div class="cert-traz-info">
+      💡 <strong>¿Cómo funciona?</strong> Comparte este certificado o el QR con compradores, bancos o autoridades. Al escanear el QR pueden verificar TODO el historial del animal: vacunas, revisiones sanitarias, dueños anteriores, eventos. Esto da confianza y agiliza ventas, créditos y exportaciones.
+    </div>
+  `;
+};
+
+// Descargar como PDF usando window.print con CSS específico
+window.descargarCertificadoPDF = function(animalId) {
+  if (typeof bloquearAccionVIP === 'function' && bloquearAccionVIP('Descargar certificados PDF es exclusivo de Élite Pecuario.')) return;
+
+  const preview = document.getElementById('certTrazPreview');
+  if (!preview) return;
+
+  // Abrir nueva ventana con solo el certificado
+  const win = window.open('', '_blank', 'width=700,height=900');
+  if (!win) {
+    if (typeof toast === 'function') toast('Permite ventanas emergentes para descargar', 'error');
+    return;
+  }
+
+  const animal = (typeof _animalDetalleActual !== 'undefined' && _animalDetalleActual) || {};
+  const nombre = animal.nombre || animal.arete || 'animal';
+
+  win.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Certificado VP - ${escapeHTML(nombre)}</title>
+      <style>
+        * { box-sizing: border-box; }
+        body {
+          margin: 0;
+          padding: 40px 20px;
+          font-family: 'Montserrat', Arial, sans-serif;
+          background: #f5f5f5;
+          display: flex;
+          justify-content: center;
+        }
+        .doc {
+          background: #fff;
+          width: 100%;
+          max-width: 600px;
+          padding: 40px 32px;
+          border: 6px solid #d4a017;
+          border-radius: 16px;
+          position: relative;
+          overflow: hidden;
+          text-align: center;
+        }
+        .doc::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 6px;
+          background: linear-gradient(90deg, #0f3d27, #d4a017, #0f3d27);
+        }
+        .tipo {
+          display: inline-block;
+          background: #d4a017;
+          color: #fff;
+          font-weight: 800;
+          font-size: 11px;
+          padding: 6px 18px;
+          border-radius: 100px;
+          letter-spacing: 2px;
+          margin-bottom: 18px;
+        }
+        h1 {
+          font-size: 28px;
+          color: #0f3d27;
+          margin: 0 0 4px;
+          letter-spacing: -.5px;
+        }
+        .sub {
+          font-size: 11px;
+          color: #999;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          margin-bottom: 24px;
+        }
+        .emoji { font-size: 48px; margin-bottom: 8px; }
+        .nombre { font-size: 30px; font-weight: 800; color: #0f3d27; margin: 4px 0; }
+        .arete { font-family: 'JetBrains Mono', monospace; color: #888; margin-bottom: 18px; font-size: 14px; }
+        .qr-wrap {
+          display: inline-block;
+          padding: 16px;
+          background: #fff;
+          border: 2px solid #e5e5e5;
+          border-radius: 12px;
+          margin: 12px 0;
+        }
+        .qr-wrap svg { display: block; width: 180px; height: 180px; }
+        .traza-id {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 16px;
+          font-weight: 800;
+          color: #0f3d27;
+          letter-spacing: 1.5px;
+          margin: 8px 0 20px;
+        }
+        .datos {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+          text-align: left;
+          margin: 16px 0;
+        }
+        .dato {
+          background: rgba(15,61,39,.04);
+          padding: 10px 12px;
+          border-radius: 8px;
+          border-left: 3px solid #0f3d27;
+        }
+        .dato-label {
+          font-size: 9px;
+          color: #888;
+          text-transform: uppercase;
+          letter-spacing: .5px;
+          font-weight: 700;
+        }
+        .dato-valor {
+          font-size: 13px;
+          color: #0f3d27;
+          font-weight: 700;
+          margin-top: 3px;
+        }
+        .verif {
+          display: inline-block;
+          background: rgba(34,197,94,.1);
+          color: #0a6e2d;
+          padding: 8px 16px;
+          border-radius: 100px;
+          font-size: 12px;
+          font-weight: 700;
+          border: 1px solid rgba(34,197,94,.3);
+          margin-top: 14px;
+        }
+        .footer {
+          margin-top: 18px;
+          font-size: 11px;
+          color: #aaa;
+          line-height: 1.5;
+        }
+        .footer strong { color: #0f3d27; }
+        @media print {
+          body { background: #fff; padding: 0; }
+          .doc { border-color: #d4a017 !important; box-shadow: none; }
+          .no-print { display: none; }
+        }
+        .print-btn {
+          position: fixed;
+          bottom: 20px; right: 20px;
+          background: #d4a017;
+          color: #0a1f12;
+          border: none;
+          padding: 14px 24px;
+          border-radius: 100px;
+          font-weight: 800;
+          cursor: pointer;
+          box-shadow: 0 8px 20px rgba(0,0,0,.3);
+          font-family: inherit;
+          font-size: 14px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="doc">${preview.innerHTML}</div>
+      <button class="print-btn no-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+      <script>
+        // Auto-abrir diálogo de impresión después de 500ms
+        setTimeout(() => window.print(), 800);
+      <\/script>
+    </body>
+    </html>
+  `);
+
+  // Re-aplicar clases para que el styling del PDF aplique
+  win.document.querySelectorAll('.cert-traz-preview').forEach(el => el.className = 'doc');
+  win.document.querySelectorAll('.cert-traz-tipo').forEach(el => el.className = 'tipo');
+  win.document.querySelectorAll('.cert-traz-logo').forEach(el => { el.tagName !== 'H1' && (el.outerHTML = el.outerHTML.replace(/<div/, '<h1').replace(/<\/div/, '</h1')); });
+  win.document.close();
+};
+
+// Compartir por WhatsApp
+window.compartirCertificadoWhatsApp = function(animalId) {
+  const animal = (typeof _animalDetalleActual !== 'undefined' && _animalDetalleActual) || {};
+  const trazaId = generarTrazaId(animal);
+  const url = TRAZA_BASE_URL + '?id=' + encodeURIComponent(animal.id) + '&u=' + encodeURIComponent(animal._uid || (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?._uid) || '');
+  const especie = obtenerEspecieAnimalCert(animal);
+  const msg = encodeURIComponent(
+    `🆔 *Certificado de Trazabilidad*\n\n` +
+    `${especie.emoji} *${animal.nombre || animal.arete}*\n` +
+    `ID: ${trazaId}\n` +
+    (animal.peso ? `Peso: ${animal.peso} kg\n` : '') +
+    (animal.raza ? `Raza: ${animal.raza}\n` : '') +
+    `\nHistorial completo verificable en:\n${url}\n\n` +
+    `📲 Certificado emitido por Visión Pecuaria - Plataforma pecuaria líder en México`
+  );
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+};
+
+window.copiarLinkTrazabilidad = function(url) {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      if (typeof toast === 'function') toast('Link copiado al portapapeles', 'success', '📋');
+    });
+  } else {
+    // Fallback antiguo
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    if (typeof toast === 'function') toast('Link copiado', 'success', '📋');
+  }
+};
+
+
 
 // Datos zootécnicos por especie (basados en NRC, FAO, INIFAP)
 const PRED_ESPECIES = {
