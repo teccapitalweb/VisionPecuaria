@@ -7291,43 +7291,6 @@ button { font-family: inherit; }
           </div>
         </div>
 
-        <!-- 🎓 WEBINAR (ancho completo, principal CTA) -->
-        <div class="vip-card vip-card--webinar" id="vipCardWebinar">
-          <div class="vip-pill vip-pill--green">
-            <span class="vip-pill-dot"></span>
-            <span>PRÓXIMO WEBINAR</span>
-          </div>
-          <h3 class="vip-card-title" id="webinarTitulo">Webinar Visión Pecuaria</h3>
-          <div class="vip-ponente">
-            <div class="vip-ponente-name" id="webinarPonente">Por anunciar</div>
-            <div class="vip-ponente-tag">Ponente invitado</div>
-          </div>
-          <div class="vip-fecha-row" id="webinarFechaRow">
-            <span>📅</span>
-            <span id="webinarFecha">Fecha por confirmar</span>
-          </div>
-          <div class="vip-countdown-label">⏱️ COMIENZA EN</div>
-          <div class="vip-countdown" id="webinarCountdown">
-            <div class="vip-time-box">
-              <div class="vip-time-num" id="cdDays">--</div>
-              <div class="vip-time-label">DÍAS</div>
-            </div>
-            <span class="vip-time-sep">:</span>
-            <div class="vip-time-box">
-              <div class="vip-time-num" id="cdHours">--</div>
-              <div class="vip-time-label">HORAS</div>
-            </div>
-            <span class="vip-time-sep">:</span>
-            <div class="vip-time-box">
-              <div class="vip-time-num" id="cdMins">--</div>
-              <div class="vip-time-label">MIN</div>
-            </div>
-          </div>
-          <button class="vip-btn vip-btn--green" onclick="agendarWebinar()">
-            <span>📅</span> Agendar en calendario
-          </button>
-        </div>
-
         <!-- 💰 MERCADO (izq) + WHATSAPP + DESCUENTO (der apilados) -->
         <div class="casco-bottom-grid">
           <div class="widget">
@@ -9323,15 +9286,26 @@ let _pwInterval = null;
 function pwFechaSesion(s) {
   // Combina fecha + hora a un Date
   if (!s.fecha) return null;
+
+  // Normalizar fecha base: aceptar "2026-05-15" o ISO completo "2026-05-15T..."
+  let fechaBase = s.fecha;
+  if (typeof fechaBase === 'object' && fechaBase.toDate) {
+    fechaBase = fechaBase.toDate().toISOString();
+  }
+  fechaBase = String(fechaBase);
+  // Tomar solo la parte de fecha si viene ISO completo
+  const fechaSoloMatch = fechaBase.match(/^(\d{4}-\d{2}-\d{2})/);
+  if (!fechaSoloMatch) return null;
+  const fechaYYYYMMDD = fechaSoloMatch[1];
+
+  // Parsear hora
   const horaStr = (s.hora || '00:00').toString().trim().toLowerCase();
   let h24 = '00:00';
 
-  // Intento 1: formato 24h "19:00" o "9:00"
   const m24 = horaStr.match(/^(\d{1,2}):(\d{2})$/);
   if (m24 && !horaStr.includes('am') && !horaStr.includes('pm')) {
     h24 = `${String(parseInt(m24[1],10)).padStart(2,'0')}:${m24[2]}`;
   } else {
-    // Intento 2: formato 12h con AM/PM (con o sin espacio, con o sin :00)
     const mAP = horaStr.match(/(\d{1,2})(?::(\d{1,2}))?\s*(am|pm)/);
     if (mAP) {
       let hh = parseInt(mAP[1], 10);
@@ -9344,7 +9318,7 @@ function pwFechaSesion(s) {
   }
 
   try {
-    return new Date(s.fecha + 'T' + h24 + ':00');
+    return new Date(fechaYYYYMMDD + 'T' + h24 + ':00');
   } catch(e) {
     return null;
   }
