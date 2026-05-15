@@ -10846,12 +10846,10 @@ window.__rancho = window.__rancho || {};
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════════════════
 // ═══════════════════════════════════════════════════════════
-// 🔐 SECCIONES BLOQUEADAS PARA FREE
-// Solo Casco, Soporte (caseta) y Configuración son libres.
-// Todo lo demás requiere Élite Pecuario.
+// 🔐 FUNCIONES BLOQUEADAS PARA FREE
+// Los usuarios FREE pueden VER todo, pero al intentar
+// ACCIONAR algo, sale el modal VIP.
 // ═══════════════════════════════════════════════════════════
-const SECCIONES_LIBRES_FREE = ['casco', 'caseta', 'config'];
-
 const MENSAJES_BLOQUEO = {
   hato:             'Para registrar y gestionar tu hato necesitas ser Élite Pecuario.',
   botiquin:         'El Diagnóstico Veterinario con 22 enfermedades es exclusivo de Élite Pecuario.',
@@ -10868,20 +10866,22 @@ const MENSAJES_BLOQUEO = {
   curso:            'Acceder a este curso requiere ser Élite Pecuario.'
 };
 
-window.navigateTo = function(section) {
-  // 🔒 Bloqueo para usuarios FREE
+// Helper global: ¿el usuario actual es VIP?
+window.esVIP = function() {
   const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
-  if (plan !== 'vip' && plan !== 'elite' && !SECCIONES_LIBRES_FREE.includes(section)) {
-    const msg = MENSAJES_BLOQUEO[section] || 'Esta función es exclusiva de Élite Pecuario.';
-    if (typeof abrirModalVIP === 'function') {
-      abrirModalVIP(msg);
-    } else {
-      alert(msg);
-    }
-    return;
-  }
+  return plan === 'vip' || plan === 'elite';
+};
 
-  // Permitimos entrar — usuario VIP o sección libre
+// Helper global: bloquear acción y mostrar modal VIP
+window.bloquearAccionVIP = function(razon) {
+  if (window.esVIP()) return false; // no bloquea
+  const msg = razon || 'Esta acción es exclusiva de Élite Pecuario.';
+  if (typeof abrirModalVIP === 'function') abrirModalVIP(msg);
+  return true; // bloqueado
+};
+
+window.navigateTo = function(section) {
+  // Todos pueden navegar y ver el contenido (modo "vitrina")
   document.querySelectorAll('.sb-nav-item').forEach(b => {
     b.classList.toggle('active', b.dataset.section === section);
   });
@@ -10894,38 +10894,23 @@ window.navigateTo = function(section) {
   // Mostrar/ocultar banner VIP según sección
   actualizarBannerVIP(section);
 
-  // 🎯 Mi Progreso: marcar misiones por navegación
-  try {
-    if (section === 'mercado' && typeof mpCompletarMision === 'function') {
-      mpCompletarMision('revisar_mercado');
-    }
-    if (section === 'curso' && typeof mpCompletarMision === 'function') {
-      mpCompletarMision('ver_leccion');
-    }
-  } catch(e) {}
+  // 🎯 Mi Progreso: marcar misiones por navegación (solo VIP)
+  if (window.esVIP()) {
+    try {
+      if (section === 'mercado' && typeof mpCompletarMision === 'function') {
+        mpCompletarMision('revisar_mercado');
+      }
+      if (section === 'curso' && typeof mpCompletarMision === 'function') {
+        mpCompletarMision('ver_leccion');
+      }
+    } catch(e) {}
+  }
 };
 
-// Pintar candados 🔒 en el sidebar para usuarios FREE
+// Mantener compatibilidad: la función pintarCandadosSidebar ahora es no-op
+// (ya no mostramos candados en el sidebar — los usuarios ven todo)
 window.pintarCandadosSidebar = function() {
-  const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
-  document.querySelectorAll('.sb-nav-item').forEach(btn => {
-    const section = btn.dataset.section;
-    if (!section) return;
-
-    // Quitar candado anterior si existe
-    const old = btn.querySelector('.sb-lock');
-    if (old) old.remove();
-
-    if (plan === 'vip' || plan === 'elite') return;
-    if (SECCIONES_LIBRES_FREE.includes(section)) return;
-
-    // Agregar candado dorado al final
-    const lock = document.createElement('span');
-    lock.className = 'sb-lock';
-    lock.textContent = '🔒';
-    lock.style.cssText = 'margin-left:auto;font-size:.8rem;opacity:.7;';
-    btn.appendChild(lock);
-  });
+  document.querySelectorAll('.sb-lock').forEach(el => el.remove());
 };
 
 document.querySelectorAll('.sb-nav-item').forEach(btn => {
@@ -11630,7 +11615,7 @@ window.pintarProxWebinar = function() {
       </div>
 
       ${btnHtml}
-      <a href="${gcalUrl}" target="_blank" rel="noopener" class="pw-btn-gcal">
+      <a href="${gcalUrl}" target="_blank" rel="noopener" class="pw-btn-gcal" onclick="return manejarGcalClick(event, '${gcalUrl.replace(/'/g, "\\'")}')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
@@ -12960,6 +12945,7 @@ function pintarHistorialAnimal(animal) {
 }
 
 window.guardarEventoAnimal = async function() {
+  if (bloquearAccionVIP('Registrar eventos en la Bitácora es exclusivo de Élite Pecuario.')) return;
   if (!_animalDetalleActual) return;
   const nota = document.getElementById('mdEventoNota').value.trim();
   const fecha = document.getElementById('mdEventoFecha').value;
@@ -13075,6 +13061,7 @@ function pintarHatoCasco() {
 // MODAL AGREGAR ANIMAL
 // ═══════════════════════════════════════════════════════════
 window.abrirModalAnimal = function() {
+  if (bloquearAccionVIP('Registrar y gestionar tu hato es exclusivo de Élite Pecuario.')) return;
   const m = document.getElementById('modalAnimal');
   if (!m) return;
   // Limpiar campos individuales
@@ -13753,8 +13740,18 @@ window.abrirGrupoWhatsApp = function() {
 };
 
 window.canjearDescuento = function() {
+  if (bloquearAccionVIP('El descuento del 20% en proveedores es exclusivo para miembros Élite Pecuario.')) return;
   const msg = encodeURIComponent(VIP_CONFIG.mensajeDescuento);
   window.open(`https://wa.me/${VIP_CONFIG.whatsappPersonal}?text=${msg}`, '_blank', 'noopener');
+};
+
+// Bloquea el "Recordarme en Google Calendar" si no es VIP
+window.manejarGcalClick = function(event, url) {
+  if (bloquearAccionVIP('Agendar recordatorios de webinars en tu calendario es exclusivo de Élite Pecuario.')) {
+    event.preventDefault();
+    return false;
+  }
+  return true;
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -14168,6 +14165,7 @@ window.diagReset = function() {
 };
 
 window.diagDiagnosticar = function() {
+  if (bloquearAccionVIP('El Diagnóstico Veterinario con 22 enfermedades es exclusivo de Élite Pecuario.')) return;
   if (_diagSintomasSel.size === 0) {
     toast('Selecciona al menos 1 síntoma', 'error', '⚠️');
     return;
@@ -14312,6 +14310,7 @@ window.calcActualizarPrecioMercado = function() {
 setTimeout(() => { try { calcActualizarPrecioMercado(); } catch(e) {} }, 1500);
 
 window.calcRentabilidad = function() {
+  if (bloquearAccionVIP('La Calculadora de Rentabilidad es exclusiva de Élite Pecuario.')) return;
   const pesoVenta = parseFloat(document.getElementById('calcPesoVenta').value) || 0;
   const precioVenta = parseFloat(document.getElementById('calcPrecioVenta').value) || 0;
   const dias = parseFloat(document.getElementById('calcDias').value) || 0;
@@ -14399,6 +14398,7 @@ window.calcRentabilidad = function() {
 };
 
 window.calcForraje = function() {
+  if (bloquearAccionVIP('La Calculadora de Forraje (NRC) es exclusiva de Élite Pecuario.')) return;
   const tipoSelect = document.getElementById('forrajeTipo');
   const pctMS = parseFloat(tipoSelect.options[tipoSelect.selectedIndex].dataset.ms);
   const peso = parseFloat(document.getElementById('forrajePeso').value) || 0;
@@ -14564,6 +14564,7 @@ const NUT_REQUERIMIENTOS = {
 };
 
 window.calcNutricion = function() {
+  if (bloquearAccionVIP('La Calculadora de Nutrición es exclusiva de Élite Pecuario.')) return;
   const cat = document.getElementById('nutCategoria').value;
   const peso = parseFloat(document.getElementById('nutPeso').value) || 0;
   const produccion = document.getElementById('nutProduccion').value.trim();
