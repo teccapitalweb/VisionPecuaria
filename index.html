@@ -10649,6 +10649,8 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     authProcessed = true;
     currentUser = user;
+    window.__rancho = window.__rancho || {};
+    window.__rancho.currentUser = user;
     setBootStatus('Cargando tu rancho...');
 
     // Buscar miembro VIP en Firestore — leer doc(uid) directo
@@ -16765,7 +16767,7 @@ const STRIPE_PORTAL_ENDPOINT = 'https://vp-stripe-production.up.railway.app/crea
 // Pinta toda la sección Configuración
 window.pintarConfig = function() {
   const m = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
-  const user = (typeof currentUser !== 'undefined' && currentUser) || {};
+  const user = window.__rancho?.currentUser || {};
   const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
 
   // ── Mi cuenta ──────────────────────────────────────────
@@ -16885,7 +16887,7 @@ window.pintarConfig = function() {
 
 // ── ABRIR STRIPE CUSTOMER PORTAL ─────────────────────────
 window.abrirStripePortal = async function() {
-  const user = currentUser;
+  const user = window.__rancho?.currentUser;
   if (!user) { alert('Inicia sesión primero'); return; }
 
   // Modal de loading
@@ -16957,7 +16959,7 @@ if (typeof window.suscribirElite !== 'function') {
 
 // ── CAMBIAR CONTRASEÑA ───────────────────────────────────
 window.cambiarPassword = async function() {
-  const user = currentUser;
+  const user = window.__rancho?.currentUser;
   if (!user || !user.email) { alert('No hay sesión activa'); return; }
   if (!confirm('Te enviaremos un correo a ' + user.email + ' con instrucciones para cambiar tu contraseña.\n\n¿Continuamos?')) return;
 
@@ -16989,7 +16991,7 @@ window.guardarPreferencia = async function(campo, valor) {
 
 // ── DESCARGAR MIS DATOS ──────────────────────────────────
 window.descargarMisDatos = function() {
-  const user = currentUser || {};
+  const user = window.__rancho?.currentUser || {};
   const m = MIEMBRO_ACTUAL || {};
   const datos = {
     cuenta: {
@@ -17037,7 +17039,7 @@ window.descargarMisDatos = function() {
 
 // ── SOLICITAR ELIMINACIÓN DE CUENTA ──────────────────────
 window.solicitarEliminarCuenta = function() {
-  const user = currentUser || {};
+  const user = window.__rancho?.currentUser || {};
   const m = MIEMBRO_ACTUAL || {};
   const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
 
