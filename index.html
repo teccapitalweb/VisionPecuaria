@@ -11032,8 +11032,17 @@ window.suscribirElite = async function(plan) {
 };
 
 // Monta el Stripe Embedded Checkout en overlay
-function montarStripeEmbeddedPortal(clientSecret) {
+async function montarStripeEmbeddedPortal(clientSecret) {
   const STRIPE_PK = 'pk_test_51TMAchPBgqsOPfUYtBbalhoOLnnGz6LymFleli7OxTDbiK4FNYX0K82ispYDb39zKJQXevyMtIPetxVAvq9hhb5P005VGgxu99';
+
+  // 🧹 Limpiar checkout previo si existe (Stripe NO permite múltiples Embedded)
+  if (window.__stripeCheckoutInstance) {
+    try { window.__stripeCheckoutInstance.destroy(); } catch(e) {}
+    window.__stripeCheckoutInstance = null;
+  }
+  // Eliminar overlay anterior si quedó
+  const overlayAnterior = document.getElementById('stripeCheckoutOverlay');
+  if (overlayAnterior) overlayAnterior.remove();
 
   const overlay = document.createElement('div');
   overlay.id = 'stripeCheckoutOverlay';
@@ -11131,6 +11140,11 @@ function montarStripeEmbeddedPortal(clientSecret) {
   document.body.style.overflow = 'hidden'; // bloquear scroll de fondo
 
   const cerrar = () => {
+    // Destruir instancia de Stripe para liberar el slot del Embedded
+    if (window.__stripeCheckoutInstance) {
+      try { window.__stripeCheckoutInstance.destroy(); } catch(e) {}
+      window.__stripeCheckoutInstance = null;
+    }
     overlay.style.animation = 'stripeOverlayIn .25s ease reverse';
     setTimeout(() => {
       overlay.remove();
@@ -11157,6 +11171,7 @@ function montarStripeEmbeddedPortal(clientSecret) {
   try {
     const stripe = Stripe(STRIPE_PK);
     stripe.initEmbeddedCheckout({ clientSecret }).then(checkout => {
+      window.__stripeCheckoutInstance = checkout; // guardar para poder destruir
       checkout.mount('#stripeEmbeddedContainer');
     }).catch(err => {
       console.error('Error mount Stripe:', err);
