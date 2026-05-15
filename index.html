@@ -10979,18 +10979,88 @@ window.suscribirElite = async function(plan) {
   toast('🚀 Conectando con Stripe...', 'success');
   try {
     const user = window.__rancho?.auth?.currentUser;
+    if (!user) throw new Error('Inicia sesión primero');
+
     const res = await fetch('https://visionpecuaria-webhook-production.up.railway.app/crear-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan, email: user?.email, uid: user?.uid })
+      body: JSON.stringify({
+        plan,
+        email: user.email,
+        uid: user.uid,
+        nombre: user.displayName || ''
+      })
     });
+
+    if (!res.ok) {
+      throw new Error('HTTP ' + res.status + ' del servidor de pagos');
+    }
+
     const data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else throw new Error(data.error || 'No se pudo conectar');
+    if (data.error) throw new Error(data.error);
+
+    // Modo 1: URL directa (redirect)
+    if (data.url) {
+      window.location.href = data.url;
+      return;
+    }
+
+    // Modo 2: clientSecret (Stripe Embedded Checkout)
+    if (data.clientSecret) {
+      if (typeof Stripe === 'undefined') {
+        const s = document.createElement('script');
+        s.src = 'https://js.stripe.com/v3/';
+        s.onload = () => montarStripeEmbeddedPortal(data.clientSecret);
+        document.head.appendChild(s);
+      } else {
+        montarStripeEmbeddedPortal(data.clientSecret);
+      }
+      return;
+    }
+
+    throw new Error('Respuesta inesperada del servidor');
   } catch (e) {
-    toast('Error: ' + e.message, 'error');
+    console.error('Error suscribiendo:', e);
+    const numero = '5212361100649';
+    const userEmail = window.__rancho?.auth?.currentUser?.email || '';
+    const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + userEmail + ' Plan: ' + plan);
+    toast('Error: ' + e.message + ' — abriendo WhatsApp...', 'error');
+    setTimeout(() => {
+      window.open('https://wa.me/' + numero + '?text=' + msg, '_blank');
+    }, 1500);
   }
 };
+
+// Monta el Stripe Embedded Checkout en overlay
+function montarStripeEmbeddedPortal(clientSecret) {
+  const STRIPE_PK = 'pk_test_51TMAchPBgqsOPfUYtBbalhoOLnnGz6LymFleli7OxTDbiK4FNYX0K82ispYDb39zKJQXevyMtIPetxVAvq9hhb5P005VGgxu99';
+
+  const overlay = document.createElement('div');
+  overlay.id = 'stripeCheckoutOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+  overlay.innerHTML = '<div style="background:#0a1f12;border-radius:16px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;position:relative;padding:24px;">' +
+    '<button id="stripeCheckoutCerrar" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;z-index:2;">×</button>' +
+    '<div id="stripeEmbeddedContainer"></div>' +
+  '</div>';
+  document.body.appendChild(overlay);
+
+  document.getElementById('stripeCheckoutCerrar').onclick = () => overlay.remove();
+
+  try {
+    const stripe = Stripe(STRIPE_PK);
+    stripe.initEmbeddedCheckout({ clientSecret }).then(checkout => {
+      checkout.mount('#stripeEmbeddedContainer');
+    }).catch(err => {
+      console.error('Error mount Stripe:', err);
+      overlay.remove();
+      toast('No se pudo cargar el formulario: ' + err.message, 'error');
+    });
+  } catch(err) {
+    console.error('Error Stripe:', err);
+    overlay.remove();
+    toast('Error cargando Stripe: ' + err.message, 'error');
+  }
+}
 
 // ═══════════════════════════════════════════════════════════
 // TOAST
