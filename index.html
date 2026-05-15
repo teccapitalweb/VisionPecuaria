@@ -9376,19 +9376,26 @@ let _pwInterval = null;
 function pwFechaSesion(s) {
   // Combina fecha + hora a un Date
   if (!s.fecha) return null;
-  const horaStr = s.hora || '00:00';
-  // Normalizar hora: "7:00 PM" → "19:00"
-  let h = horaStr.trim();
-  let h24 = h;
-  const ampmMatch = h.match(/(\d{1,2}):?(\d{0,2})\s*(am|pm|AM|PM)/);
-  if (ampmMatch) {
-    let hh = parseInt(ampmMatch[1], 10);
-    const mm = ampmMatch[2] ? parseInt(ampmMatch[2], 10) : 0;
-    const ampm = ampmMatch[3].toLowerCase();
-    if (ampm === 'pm' && hh < 12) hh += 12;
-    if (ampm === 'am' && hh === 12) hh = 0;
-    h24 = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+  const horaStr = (s.hora || '00:00').toString().trim().toLowerCase();
+  let h24 = '00:00';
+
+  // Intento 1: formato 24h "19:00" o "9:00"
+  const m24 = horaStr.match(/^(\d{1,2}):(\d{2})$/);
+  if (m24 && !horaStr.includes('am') && !horaStr.includes('pm')) {
+    h24 = `${String(parseInt(m24[1],10)).padStart(2,'0')}:${m24[2]}`;
+  } else {
+    // Intento 2: formato 12h con AM/PM (con o sin espacio, con o sin :00)
+    const mAP = horaStr.match(/(\d{1,2})(?::(\d{1,2}))?\s*(am|pm)/);
+    if (mAP) {
+      let hh = parseInt(mAP[1], 10);
+      const mm = mAP[2] ? parseInt(mAP[2], 10) : 0;
+      const ampm = mAP[3];
+      if (ampm === 'pm' && hh < 12) hh += 12;
+      if (ampm === 'am' && hh === 12) hh = 0;
+      h24 = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+    }
   }
+
   try {
     return new Date(s.fecha + 'T' + h24 + ':00');
   } catch(e) {
