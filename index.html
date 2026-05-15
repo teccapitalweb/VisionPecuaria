@@ -1897,6 +1897,173 @@ button { font-family: inherit; }
   font-size: .85rem; color: var(--gold-light);
   opacity: .5; transition: opacity .2s;
 }
+
+/* Botón "Editar rancho" prominente */
+.mp-btn-editar {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(212,160,23,.15);
+  border: 1px solid rgba(212,160,23,.4);
+  color: var(--gold-light);
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: .8rem; font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'Montserrat', sans-serif;
+}
+.mp-btn-editar:hover {
+  background: rgba(212,160,23,.25);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+.mp-btn-editar svg { stroke: var(--gold-light); }
+
+/* Modal: Editar Rancho */
+.modal-rancho {
+  background: linear-gradient(180deg, rgba(15,61,39,.97), rgba(10,31,18,.99));
+  border: 1px solid rgba(212,160,23,.35);
+  border-radius: var(--rxl);
+  padding: 28px 26px;
+  max-width: 520px; width: 100%;
+  max-height: 92vh; overflow-y: auto;
+  position: relative;
+  animation: modalIn .35s cubic-bezier(.2,.8,.3,1.2);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(212,160,23,.12);
+}
+.mr-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 4px;
+}
+.mr-head-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.mr-head h3 {
+  font: 800 1.15rem 'Montserrat', sans-serif;
+  color: #fff; margin: 0;
+}
+.mr-head p {
+  font-size: .78rem;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+.mr-section {
+  margin-top: 20px;
+}
+.mr-label {
+  font-size: .72rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: block;
+}
+.mr-input, .mr-select {
+  width: 100%;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #fff;
+  font-size: .9rem;
+  font-family: 'Montserrat', sans-serif;
+  transition: border-color .2s, background .2s;
+}
+.mr-input:focus, .mr-select:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(212,160,23,.08);
+}
+.mr-input::placeholder { color: rgba(255,255,255,.3); }
+.mr-select option { background: #0a1f12; color: #fff; }
+
+.mr-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 480px) {
+  .mr-row { grid-template-columns: 1fr; }
+}
+
+/* Selector de emojis */
+.mr-emoji-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  gap: 8px;
+  max-height: 140px;
+  overflow-y: auto;
+  padding: 4px;
+  background: rgba(0,0,0,.2);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.mr-emoji {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  width: 46px; height: 46px;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+  padding: 0;
+}
+.mr-emoji:hover {
+  background: rgba(212,160,23,.1);
+}
+.mr-emoji.mr-emoji-sel {
+  background: rgba(212,160,23,.2);
+  border-color: var(--gold);
+  transform: scale(1.1);
+}
+
+.mr-error {
+  color: #ef4444;
+  font-size: .78rem;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+.mr-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.mr-btn-cancelar, .mr-btn-guardar {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: .9rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+  border: none;
+}
+.mr-btn-cancelar {
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.8);
+  border: 1px solid rgba(255,255,255,.1);
+}
+.mr-btn-cancelar:hover {
+  background: rgba(255,255,255,.1);
+}
+.mr-btn-guardar {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--field-deep);
+}
+.mr-btn-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(212,160,23,.3);
+}
+.mr-btn-guardar:disabled {
+  opacity: .6; cursor: wait; transform: none;
+}
 .mp-rank-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(212,160,23,.12);
@@ -8374,13 +8541,17 @@ button { font-family: inherit; }
 
         <!-- Header del rancho -->
         <div class="mp-rancho-head">
-          <div>
+          <div style="flex:1;min-width:200px;">
             <div class="mp-rancho-label">RANCHO</div>
-            <div class="mp-rancho-name" onclick="editarNombreRancho()">
-              <span id="mpRanchoName">Mi Rancho</span>
-              <span class="mp-rancho-edit">✏️</span>
+            <div class="mp-rancho-name">
+              <span id="mpRanchoName">🏡 Mi Rancho</span>
             </div>
+            <div class="mp-rancho-sub" id="mpRanchoSub" style="font-size:.78rem;color:rgba(255,255,255,.55);margin-top:4px;"></div>
           </div>
+          <button class="mp-btn-editar" onclick="abrirModalRancho()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Editar rancho</span>
+          </button>
           <div class="mp-rank-badge" id="mpRankBadge">
             <span>🏆</span>
             <span id="mpRankText">Calculando posición…</span>
@@ -8550,6 +8721,64 @@ button { font-family: inherit; }
 
     </div>
   </main>
+</div>
+
+<!-- ════════ MODAL: EDITAR RANCHO ════════ -->
+<div class="modal-overlay" id="modalRancho" onclick="if(event.target===this)cerrarModalRancho()">
+  <div class="modal-rancho">
+    <button class="modal-close" onclick="cerrarModalRancho()">×</button>
+
+    <div class="mr-head">
+      <div class="mr-head-icon">🏡</div>
+      <div>
+        <h3>Personaliza tu rancho</h3>
+        <p>Estos datos aparecen en tu perfil y certificados</p>
+      </div>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Nombre del rancho *</label>
+      <input type="text" id="mrInputNombre" class="mr-input" placeholder="Ej. El Coyote, Rancho La Esperanza..." maxlength="40">
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Emoji del rancho</label>
+      <div class="mr-emoji-selector" id="mrEmojiSelector"></div>
+    </div>
+
+    <div class="mr-section">
+      <label class="mr-label">Ubicación</label>
+      <input type="text" id="mrInputUbicacion" class="mr-input" placeholder="Ej. Tehuacán, Puebla" maxlength="60">
+    </div>
+
+    <div class="mr-row mr-section">
+      <div>
+        <label class="mr-label">Especialidad</label>
+        <select id="mrInputEspec" class="mr-select">
+          <option value="">— Selecciona —</option>
+          <option value="bovinos">🐄 Bovinos (carne/leche)</option>
+          <option value="porcinos">🐖 Porcinos</option>
+          <option value="caprinos">🐐 Caprinos</option>
+          <option value="ovinos">🐑 Ovinos</option>
+          <option value="equinos">🐎 Equinos</option>
+          <option value="aviar">🐔 Aviar</option>
+          <option value="mixto">🌾 Mixto (varios)</option>
+          <option value="otro">❓ Otro</option>
+        </select>
+      </div>
+      <div>
+        <label class="mr-label">Hectáreas</label>
+        <input type="text" id="mrInputHectareas" class="mr-input" placeholder="Ej. 25" maxlength="10">
+      </div>
+    </div>
+
+    <div class="mr-error" id="mrError"></div>
+
+    <div class="mr-actions">
+      <button class="mr-btn-cancelar" onclick="cerrarModalRancho()">Cancelar</button>
+      <button class="mr-btn-guardar" id="mrBtnGuardar" onclick="guardarRancho()">Guardar</button>
+    </div>
+  </div>
 </div>
 
 <!-- ════════ MODAL VIP ════════ -->
@@ -13335,12 +13564,29 @@ window.pintarMiProgreso = function() {
   const elMR = document.getElementById('mpMisionesRacha');
   if (elMR) elMR.textContent = 'Racha ' + racha + (racha === 1 ? ' día' : ' días');
 
-  // Nombre del rancho
-  const ranchoNombre = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?.nombreRancho)
-    ? MIEMBRO_ACTUAL.nombreRancho
-    : 'Mi Rancho';
+  // Nombre del rancho + ubicación + emoji
+  const m = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
+  const ranchoNombre = m.nombreRancho || localStorage.getItem('vp_nombre_rancho') || 'Mi Rancho';
+  const ranchoEmoji  = m.emojiRancho  || localStorage.getItem('vp_emoji_rancho') || '🏡';
+  const ranchoUbica  = m.ubicacionRancho || localStorage.getItem('vp_ubica_rancho') || '';
+  const ranchoEspec  = m.especialidadRancho || localStorage.getItem('vp_espec_rancho') || '';
+  const ranchoHect   = m.hectareasRancho || localStorage.getItem('vp_hect_rancho') || '';
+
   const elRN = document.getElementById('mpRanchoName');
-  if (elRN) elRN.textContent = ranchoNombre;
+  if (elRN) elRN.innerHTML = ranchoEmoji + ' ' + ranchoNombre;
+
+  // Sub-info del rancho (ubicación / especialidad / hectáreas)
+  const elSub = document.getElementById('mpRanchoSub');
+  if (elSub) {
+    const partes = [];
+    if (ranchoUbica) partes.push('📍 ' + ranchoUbica);
+    if (ranchoEspec) {
+      const especObj = (typeof ESPECIALIDADES !== 'undefined') ? ESPECIALIDADES.find(e => e.id === ranchoEspec) : null;
+      if (especObj) partes.push(especObj.label);
+    }
+    if (ranchoHect) partes.push('🏞️ ' + ranchoHect + ' ha');
+    elSub.innerHTML = partes.length ? partes.join(' · ') : '<span style="opacity:.5">Toca el lápiz para personalizar tu rancho</span>';
+  }
 
   // Ranking (heurística simple basada en XP, sin query global)
   const elRank = document.getElementById('mpRankText');
@@ -13486,15 +13732,91 @@ window.pintarMiProgreso = function() {
 };
 
 // Editar nombre del rancho (modal simple con prompt nativo OK porque NO es destructivo)
-window.editarNombreRancho = async function() {
-  const actual = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?.nombreRancho) || '';
-  const nuevo = prompt('Nombre de tu rancho:', actual || 'El Coyote');
-  if (!nuevo || nuevo.trim() === '' || nuevo === actual) return;
-  const nombre = nuevo.trim().slice(0, 40);
+// ═══════════════════════════════════════════════════════════
+// 🏡 EDITAR RANCHO — Modal completo (nombre, emoji, ubicación, especialidad, hectáreas)
+// ═══════════════════════════════════════════════════════════
+const EMOJIS_RANCHO = ['🐄','🐂','🐮','🐃','🐎','🐖','🐑','🐐','🐔','🦃','🌾','🌽','🌵','🌻','🏡','🏞️','🤠','⭐','🌟','🔥','🌅','🏔️'];
+const ESPECIALIDADES = [
+  { id:'bovinos',  label:'🐄 Bovinos (carne/leche)' },
+  { id:'porcinos', label:'🐖 Porcinos' },
+  { id:'caprinos', label:'🐐 Caprinos' },
+  { id:'ovinos',   label:'🐑 Ovinos' },
+  { id:'equinos',  label:'🐎 Equinos' },
+  { id:'aviar',    label:'🐔 Aviar' },
+  { id:'mixto',    label:'🌾 Mixto (varios)' },
+  { id:'otro',     label:'❓ Otro' }
+];
 
-  // Pintar inmediato (optimista)
-  const elRN = document.getElementById('mpRanchoName');
-  if (elRN) elRN.textContent = nombre;
+window.abrirModalRancho = function() {
+  const m = MIEMBRO_ACTUAL || {};
+  const nombre   = m.nombreRancho   || localStorage.getItem('vp_nombre_rancho') || '';
+  const emoji    = m.emojiRancho    || localStorage.getItem('vp_emoji_rancho') || '🏡';
+  const ubica    = m.ubicacionRancho|| localStorage.getItem('vp_ubica_rancho') || '';
+  const espec    = m.especialidadRancho || localStorage.getItem('vp_espec_rancho') || '';
+  const hect     = m.hectareasRancho|| localStorage.getItem('vp_hect_rancho') || '';
+
+  // Pintar input values
+  document.getElementById('mrInputNombre').value = nombre;
+  document.getElementById('mrInputUbicacion').value = ubica;
+  document.getElementById('mrInputHectareas').value = hect;
+  document.getElementById('mrInputEspec').value = espec;
+
+  // Pintar selector de emojis
+  const sel = document.getElementById('mrEmojiSelector');
+  sel.innerHTML = EMOJIS_RANCHO.map(e => {
+    const sel = e === emoji ? 'mr-emoji-sel' : '';
+    return '<button type="button" class="mr-emoji ' + sel + '" data-emoji="' + e + '" onclick="seleccionarEmojiRancho(this)">' + e + '</button>';
+  }).join('');
+
+  document.getElementById('modalRancho').classList.add('active');
+  setTimeout(() => document.getElementById('mrInputNombre').focus(), 200);
+};
+
+window.cerrarModalRancho = function() {
+  document.getElementById('modalRancho').classList.remove('active');
+};
+
+window.seleccionarEmojiRancho = function(btn) {
+  document.querySelectorAll('.mr-emoji').forEach(b => b.classList.remove('mr-emoji-sel'));
+  btn.classList.add('mr-emoji-sel');
+};
+
+window.guardarRancho = async function() {
+  const btn = document.getElementById('mrBtnGuardar');
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+
+  const nombre = (document.getElementById('mrInputNombre').value || '').trim().slice(0,40);
+  const ubica  = (document.getElementById('mrInputUbicacion').value || '').trim().slice(0,60);
+  const espec  = document.getElementById('mrInputEspec').value || '';
+  const hect   = (document.getElementById('mrInputHectareas').value || '').trim().slice(0,10);
+  const emojiBtn = document.querySelector('.mr-emoji.mr-emoji-sel');
+  const emoji = emojiBtn ? emojiBtn.dataset.emoji : '🏡';
+
+  if (!nombre) {
+    btn.disabled = false; btn.textContent = 'Guardar';
+    document.getElementById('mrInputNombre').focus();
+    document.getElementById('mrError').textContent = 'El nombre del rancho es obligatorio';
+    return;
+  }
+  document.getElementById('mrError').textContent = '';
+
+  const datos = {
+    nombreRancho: nombre,
+    emojiRancho: emoji,
+    ubicacionRancho: ubica,
+    especialidadRancho: espec,
+    hectareasRancho: hect
+  };
+
+  // Fallback localStorage SIEMPRE (por si Firestore falla)
+  try {
+    localStorage.setItem('vp_nombre_rancho', nombre);
+    localStorage.setItem('vp_emoji_rancho', emoji);
+    localStorage.setItem('vp_ubica_rancho', ubica);
+    localStorage.setItem('vp_espec_rancho', espec);
+    localStorage.setItem('vp_hect_rancho', hect);
+  } catch(e) {}
 
   // Guardar en Firestore si hay miembro
   try {
@@ -13502,17 +13824,22 @@ window.editarNombreRancho = async function() {
       const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
       const db = window.__rancho.db;
       const coleccion = MIEMBRO_ACTUAL._tipo === 'free' ? 'usuarios_free' : 'miembros';
-      await updateDoc(doc(db, coleccion, MIEMBRO_ACTUAL._docId), { nombreRancho: nombre });
-      MIEMBRO_ACTUAL.nombreRancho = nombre;
-    } else {
-      // Fallback localStorage para usuarios sin doc
-      localStorage.setItem('vp_nombre_rancho', nombre);
+      await updateDoc(doc(db, coleccion, MIEMBRO_ACTUAL._docId), datos);
+      Object.assign(MIEMBRO_ACTUAL, datos);
     }
   } catch(e) {
-    console.warn('No se pudo guardar nombre del rancho:', e);
-    localStorage.setItem('vp_nombre_rancho', nombre);
+    console.warn('No se pudo guardar en Firestore (queda en localStorage):', e);
   }
+
+  cerrarModalRancho();
+  if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
+
+  btn.disabled = false;
+  btn.textContent = 'Guardar';
 };
+
+// Compat con código viejo
+window.editarNombreRancho = function() { abrirModalRancho(); };
 
 // Función legacy mantenida por compatibilidad
 function pintarLogros() {
@@ -14081,6 +14408,18 @@ window.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     cerrarModalVIP();
+    if (typeof cerrarModalRancho === 'function') cerrarModalRancho();
+  }
+});
+
+// Enter dentro del modal rancho = guardar
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const modalR = document.getElementById('modalRancho');
+    if (modalR && modalR.classList.contains('active') && e.target.tagName === 'INPUT') {
+      e.preventDefault();
+      if (typeof guardarRancho === 'function') guardarRancho();
+    }
   }
 });
 
