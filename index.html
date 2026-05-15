@@ -12241,7 +12241,43 @@ window.__rancho.cargarMiembro = async function() {
     const refMiembro = doc(db, 'miembros', user.uid);
     onSnapshot(refMiembro, (snap) => {
       if (snap.exists()) {
+        const erasFreeAntes = MIEMBRO_ACTUAL && MIEMBRO_ACTUAL._tipo === 'free';
+        const planAntes = window.__rancho?.userPlan ? window.__rancho.userPlan() : 'free';
+
         MIEMBRO_ACTUAL = { _docId: snap.id, _uid: user.uid, _tipo: 'miembro', ...snap.data() };
+
+        // 🎉 DETECTAR UPGRADE FREE → VIP en tiempo real
+        const datos = snap.data();
+        const vence = datos.vence ? new Date(datos.vence) : null;
+        const activoNormal = datos.estado === 'activo' && (vence ? vence > new Date() : true);
+        let activoCancelado = false;
+        if (datos.cancelado === true && datos.fechaFin) {
+          const ff = datos.fechaFin?.toDate ? datos.fechaFin.toDate() : new Date(datos.fechaFin);
+          activoCancelado = ff > new Date();
+        }
+        const ahoraEsVIP = activoNormal || activoCancelado;
+
+        if (ahoraEsVIP && (erasFreeAntes || planAntes === 'free')) {
+          // Actualizar el estado global de userPlan
+          userPlan = 'vip';
+          // Disparar animación de bienvenida
+          setTimeout(() => {
+            if (typeof mostrarBienvenidaVIP === 'function') mostrarBienvenidaVIP();
+          }, 600);
+          // Refrescar candados del sidebar
+          setTimeout(() => {
+            if (typeof pintarCandadosSidebar === 'function') pintarCandadosSidebar();
+            const badge = document.getElementById('sbPlanBadge');
+            if (badge) {
+              badge.textContent = '👑 ÉLITE';
+              badge.className = 'sb-badge-plan sb-badge-plan--vip';
+            }
+            const cta = document.getElementById('sbCtaVip');
+            if (cta) cta.style.display = 'none';
+            document.querySelectorAll('[data-vip]').forEach(b => b.removeAttribute('data-vip'));
+          }, 200);
+        }
+
         if (CURSOS_FIRESTORE.length > 0) pintarEstablo();
         return;
       }
@@ -15999,11 +16035,231 @@ window.addEventListener('DOMContentLoaded', () => {
   refrescarTermometro();
 });
 
+// ═══════════════════════════════════════════════════════════
+// 🎆 BIENVENIDA VIP — Modal + Fuegos artificiales
+// ═══════════════════════════════════════════════════════════
+window.mostrarBienvenidaVIP = function() {
+  // Evitar mostrar 2 veces en la misma sesión
+  if (window.__yaSeMostroBienvenidaVIP) return;
+  window.__yaSeMostroBienvenidaVIP = true;
+  // Persistir para que no se muestre en próximas recargas
+  try {
+    if (localStorage.getItem('vp_bienvenida_vip_mostrada') === '1') return;
+    localStorage.setItem('vp_bienvenida_vip_mostrada', '1');
+  } catch(e) {}
+
+  // Crear overlay y modal
+  const overlay = document.createElement('div');
+  overlay.id = 'vipWelcomeOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:100000;display:flex;align-items:center;justify-content:center;padding:20px;animation:vipWelcomeFadeIn .4s ease;';
+
+  overlay.innerHTML = `
+    <canvas id="vipFireworksCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+
+    <div id="vipWelcomeModal" style="
+      position:relative;z-index:2;
+      background:linear-gradient(160deg, #0f3d27 0%, #0a1f12 100%);
+      border:2px solid rgba(212,160,23,.5);
+      border-radius:24px;
+      padding:36px 28px;
+      max-width:520px;width:100%;
+      box-shadow:0 30px 100px rgba(0,0,0,.7), 0 0 80px rgba(212,160,23,.3);
+      text-align:center;
+      animation:vipWelcomeScale .6s cubic-bezier(.2,.8,.3,1.2);
+    ">
+      <div style="font-size:72px;margin-bottom:8px;animation:vipCrown 2s ease-in-out infinite;">👑</div>
+      <h1 style="
+        font:800 1.8rem/1.1 'Montserrat',sans-serif;
+        color:#fff;margin:0 0 6px;
+        background:linear-gradient(135deg, #d4a017, #f4d35e, #fff8dc);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        background-clip:text;
+      ">¡Bienvenido a Élite!</h1>
+      <p style="font-size:.92rem;color:rgba(255,255,255,.7);margin:0 0 22px;">
+        Tu pago fue confirmado. Acabas de desbloquear <strong style="color:#f4d35e;">TODO</strong> el rancho digital.
+      </p>
+
+      <div style="
+        background:rgba(0,0,0,.3);
+        border-radius:14px;
+        padding:16px;
+        text-align:left;
+        margin-bottom:22px;
+        max-height:240px;
+        overflow-y:auto;
+      ">
+        <div style="font-size:.7rem;color:#d4a017;font-weight:800;letter-spacing:1.5px;margin-bottom:10px;">DESBLOQUEASTE</div>
+        ${[
+          ['🐄','Mi Hato Virtual','Registra y gestiona animales ilimitados'],
+          ['🩺','Diagnóstico Veterinario','22 enfermedades · 33 síntomas'],
+          ['🧮','Calculadora Pecuaria','Rentabilidad, forraje y nutrición'],
+          ['📓','Bitácora digital','Timeline de eventos de tu hato'],
+          ['💰','Mercado SIAP en tiempo real','Precios actualizados cada 12h'],
+          ['🏛️','Apoyos del gobierno','8 programas verificados'],
+          ['🎓','Biblioteca de cursos completa','12 cursos especializados'],
+          ['📡','Webinars exclusivos','En vivo con expertos MVZ'],
+          ['🎖️','Certificados oficiales','Con QR de verificación'],
+          ['🌐','Comunidad de ranchos','Conecta con productores en México']
+        ].map(([icon, titulo, sub]) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 0;font-size:.82rem;">
+            <span style="font-size:18px;flex-shrink:0;">${icon}</span>
+            <div style="flex:1;min-width:0;">
+              <strong style="color:#fff;display:block;line-height:1.2;">${titulo}</strong>
+              <span style="color:rgba(255,255,255,.55);font-size:.74rem;">${sub}</span>
+            </div>
+            <span style="color:#4ade80;font-size:18px;flex-shrink:0;">✓</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <button onclick="cerrarBienvenidaVIP()" style="
+        width:100%;
+        padding:14px 22px;
+        background:linear-gradient(135deg, #d4a017, #f4d35e);
+        color:#0a1f12;
+        border:none;
+        border-radius:100px;
+        font:800 1rem 'Montserrat',sans-serif;
+        cursor:pointer;
+        box-shadow:0 8px 24px rgba(212,160,23,.4);
+        transition:transform .2s;
+      " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        🚀 Explorar mi rancho
+      </button>
+    </div>
+
+    <style>
+      @keyframes vipWelcomeFadeIn { from { opacity:0; } to { opacity:1; } }
+      @keyframes vipWelcomeScale { from { opacity:0; transform:scale(.85); } to { opacity:1; transform:scale(1); } }
+      @keyframes vipCrown { 0%,100% { transform:translateY(0) rotate(-5deg); } 50% { transform:translateY(-8px) rotate(5deg); } }
+    </style>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Lanzar fuegos artificiales
+  iniciarFuegosArtificiales();
+};
+
+window.cerrarBienvenidaVIP = function() {
+  const overlay = document.getElementById('vipWelcomeOverlay');
+  if (overlay) {
+    overlay.style.animation = 'vipWelcomeFadeIn .3s ease reverse';
+    setTimeout(() => overlay.remove(), 300);
+  }
+  if (window.__fuegosRAF) {
+    cancelAnimationFrame(window.__fuegosRAF);
+    window.__fuegosRAF = null;
+  }
+};
+
+// ── Sistema de fuegos artificiales en canvas ──────────────
+function iniciarFuegosArtificiales() {
+  const canvas = document.getElementById('vipFireworksCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = window.innerWidth;
+  const H = canvas.height = window.innerHeight;
+
+  const COLORES = ['#d4a017', '#f4d35e', '#ff6b35', '#4ade80', '#ffd700', '#fff8dc', '#fbbf24'];
+  const particulas = [];
+
+  // Crear un fuego artificial en una posición aleatoria
+  function lanzarFuego(x, y) {
+    const colorBase = COLORES[Math.floor(Math.random() * COLORES.length)];
+    const totalParticulas = 40 + Math.floor(Math.random() * 30);
+    for (let i = 0; i < totalParticulas; i++) {
+      const angle = (Math.PI * 2 * i) / totalParticulas;
+      const velocidad = 2 + Math.random() * 4;
+      particulas.push({
+        x: x,
+        y: y,
+        vx: Math.cos(angle) * velocidad,
+        vy: Math.sin(angle) * velocidad,
+        vida: 1,
+        color: Math.random() > 0.6 ? COLORES[Math.floor(Math.random() * COLORES.length)] : colorBase,
+        tam: 2 + Math.random() * 2
+      });
+    }
+  }
+
+  // Lanzar uno inicial al centro
+  lanzarFuego(W / 2, H * 0.4);
+
+  // Programar más fuegos cada cierto tiempo
+  let fuegosLanzados = 1;
+  const intervaloFuegos = setInterval(() => {
+    if (fuegosLanzados >= 8) {
+      clearInterval(intervaloFuegos);
+      return;
+    }
+    const x = W * 0.15 + Math.random() * W * 0.7;
+    const y = H * 0.15 + Math.random() * H * 0.5;
+    lanzarFuego(x, y);
+    fuegosLanzados++;
+  }, 500);
+
+  // Animación
+  function animar() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+    ctx.fillRect(0, 0, W, H);
+
+    for (let i = particulas.length - 1; i >= 0; i--) {
+      const p = particulas[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.08; // gravedad
+      p.vx *= 0.99; // fricción
+      p.vida -= 0.012;
+
+      if (p.vida <= 0) {
+        particulas.splice(i, 1);
+        continue;
+      }
+
+      // Estela
+      ctx.globalAlpha = p.vida;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.tam * p.vida, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Brillo extra
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = p.color;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    ctx.globalAlpha = 1;
+
+    if (particulas.length > 0 || fuegosLanzados < 8) {
+      window.__fuegosRAF = requestAnimationFrame(animar);
+    } else {
+      // Limpiar el canvas suavemente al terminar
+      setTimeout(() => {
+        if (canvas) ctx.clearRect(0, 0, W, H);
+      }, 500);
+    }
+  }
+  animar();
+
+  // Resize handler
+  const onResize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  window.addEventListener('resize', onResize);
+  setTimeout(() => window.removeEventListener('resize', onResize), 10000);
+}
+
 // Cerrar modales con ESC
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     cerrarModalVIP();
     if (typeof cerrarModalRancho === 'function') cerrarModalRancho();
+    if (typeof cerrarBienvenidaVIP === 'function' && document.getElementById('vipWelcomeOverlay')) {
+      cerrarBienvenidaVIP();
+    }
   }
 });
 
