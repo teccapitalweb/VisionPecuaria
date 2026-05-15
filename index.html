@@ -604,6 +604,329 @@ button { font-family: inherit; }
   }
 }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* SECCIÓN: PREDICCIÓN DE VENTA ÓPTIMA                          */
+/* ═══════════════════════════════════════════════════════════ */
+.pred-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 26px;
+  background: linear-gradient(135deg, rgba(212,160,23,.15), rgba(34,197,94,.08));
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: 18px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.pred-hero-icon {
+  font-size: 48px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(212,160,23,.4));
+}
+.pred-hero-text { flex: 1; min-width: 240px; }
+.pred-hero-text h2 {
+  font: 800 1.3rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0 0 6px;
+  background: linear-gradient(135deg, #fff, #f4d35e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.pred-hero-text p {
+  font-size: .85rem;
+  color: rgba(255,255,255,.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pred-bloque {
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.pred-bloque-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.pred-bloque-head h3 {
+  font: 800 1.05rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0;
+}
+.pred-bloque-head p {
+  font-size: .75rem;
+  color: rgba(255,255,255,.55);
+  margin: 2px 0 0;
+}
+
+.pred-animales-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+.pred-animal-card {
+  padding: 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: center;
+}
+.pred-animal-card:hover {
+  background: rgba(212,160,23,.08);
+  border-color: rgba(212,160,23,.35);
+  transform: translateY(-2px);
+}
+.pred-animal-card.selected {
+  background: rgba(212,160,23,.15);
+  border-color: var(--gold);
+  box-shadow: 0 6px 20px rgba(212,160,23,.2);
+}
+.pred-animal-emoji {
+  font-size: 30px;
+  margin-bottom: 6px;
+  display: block;
+}
+.pred-animal-nombre {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.pred-animal-peso {
+  font-size: .72rem;
+  color: rgba(255,255,255,.55);
+}
+
+.pred-animales-empty {
+  text-align: center;
+  padding: 32px 20px;
+  color: rgba(255,255,255,.5);
+  font-size: .85rem;
+}
+
+.pred-form {
+  display: grid;
+  gap: 14px;
+}
+.pred-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) {
+  .pred-form-row { grid-template-columns: 1fr; }
+}
+.pred-form-field { display: flex; flex-direction: column; gap: 6px; }
+.pred-form-field label {
+  font-size: .72rem;
+  color: rgba(255,255,255,.6);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.pred-form-field input,
+.pred-form-field select {
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  color: #fff;
+  padding: 11px 14px;
+  font: 600 .9rem 'Montserrat', sans-serif;
+  transition: all .2s;
+}
+.pred-form-field input:focus,
+.pred-form-field select:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(212,160,23,.05);
+}
+
+.pred-btn-analizar {
+  background: linear-gradient(135deg, var(--gold), #f4d35e);
+  color: #0a1f12;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 100px;
+  font: 800 .95rem 'Montserrat', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(212,160,23,.3);
+  transition: all .2s;
+  margin-top: 4px;
+}
+.pred-btn-analizar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(212,160,23,.4);
+}
+
+/* Resultados */
+.pred-resultados {
+  margin-top: 24px;
+  animation: predFadeIn .5s ease;
+}
+@keyframes predFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pred-veredicto {
+  padding: 26px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.pred-veredicto--esperar {
+  background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(34,197,94,.05));
+  border: 2px solid rgba(34,197,94,.4);
+}
+.pred-veredicto--vender {
+  background: linear-gradient(135deg, rgba(212,160,23,.18), rgba(212,160,23,.05));
+  border: 2px solid rgba(212,160,23,.5);
+}
+.pred-veredicto--alerta {
+  background: linear-gradient(135deg, rgba(239,68,68,.15), rgba(239,68,68,.05));
+  border: 2px solid rgba(239,68,68,.4);
+}
+.pred-veredicto-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.pred-veredicto--esperar .pred-veredicto-tag {
+  background: rgba(34,197,94,.2);
+  color: #4ade80;
+}
+.pred-veredicto--vender .pred-veredicto-tag {
+  background: rgba(212,160,23,.2);
+  color: #f4d35e;
+}
+.pred-veredicto--alerta .pred-veredicto-tag {
+  background: rgba(239,68,68,.2);
+  color: #ef4444;
+}
+.pred-veredicto h2 {
+  font: 800 1.5rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+.pred-veredicto p {
+  color: rgba(255,255,255,.78);
+  font-size: .9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pred-grid-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.pred-stat-card {
+  padding: 18px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 14px;
+}
+.pred-stat-icon { font-size: 24px; margin-bottom: 8px; }
+.pred-stat-label {
+  font-size: .7rem;
+  color: rgba(255,255,255,.55);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.pred-stat-value {
+  font: 800 1.4rem 'Montserrat', sans-serif;
+  color: #fff;
+}
+.pred-stat-value--gold {
+  background: linear-gradient(135deg, var(--gold), #f4d35e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.pred-stat-value--green { color: #4ade80; }
+.pred-stat-value--red { color: #ef4444; }
+.pred-stat-sub {
+  font-size: .72rem;
+  color: rgba(255,255,255,.5);
+  margin-top: 3px;
+}
+
+.pred-comparativa {
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+.pred-comparativa h3 {
+  font: 800 .98rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0 0 14px;
+}
+.pred-comp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pred-comp-row:last-child { border-bottom: none; }
+.pred-comp-label {
+  font-size: .85rem;
+  color: rgba(255,255,255,.75);
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+}
+.pred-comp-value {
+  font: 800 .95rem 'Montserrat', sans-serif;
+  color: #fff;
+  white-space: nowrap;
+}
+.pred-comp-value.success { color: #4ade80; }
+.pred-comp-value.warning { color: #fbbf24; }
+.pred-comp-value.danger { color: #ef4444; }
+
+.pred-tip {
+  background: rgba(59,130,246,.08);
+  border: 1px solid rgba(59,130,246,.25);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.pred-tip-icon { font-size: 18px; flex-shrink: 0; }
+.pred-tip-text {
+  font-size: .82rem;
+  color: rgba(255,255,255,.82);
+  line-height: 1.5;
+}
+.pred-tip-text strong { color: #93c5fd; }
+
 .content { padding: 24px 28px 80px; }
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -8679,6 +9002,10 @@ button { font-family: inherit; }
         <span class="sb-nav-icon">💰</span>
         <span class="sb-nav-label">Mercado</span>
       </button>
+      <button class="sb-nav-item" data-section="prediccion">
+        <span class="sb-nav-icon">📊</span>
+        <span class="sb-nav-label">Predicción</span>
+      </button>
       <button class="sb-nav-item" data-section="apoyos">
         <span class="sb-nav-icon">🏛️</span>
         <span class="sb-nav-label">Apoyos Gob</span>
@@ -9671,6 +9998,95 @@ button { font-family: inherit; }
           </div>
           <div class="mercado-mini-list" id="mercadoFull"></div>
         </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!-- 📊 PREDICCIÓN DE VENTA ÓPTIMA                              -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <section class="section" id="section-prediccion">
+        <div class="section-head">
+          <div>
+            <h1>📊 Predicción de Venta Óptima</h1>
+            <p>Algoritmo basado en SIAP-SADER · Te dice cuándo y cuánto vender</p>
+          </div>
+        </div>
+
+        <!-- Banner explicativo -->
+        <div class="pred-hero">
+          <div class="pred-hero-icon">🎯</div>
+          <div class="pred-hero-text">
+            <h2>¿Cuándo es el mejor momento de vender?</h2>
+            <p>Selecciona un animal de tu hato o registra uno nuevo para análisis. Calculamos peso óptimo, días recomendados, costo de alimento y ganancia esperada con precios reales del mercado.</p>
+          </div>
+        </div>
+
+        <!-- Selector de animales del hato -->
+        <div class="pred-bloque" id="predSelectorHato">
+          <div class="pred-bloque-head">
+            <span style="font-size:22px;">🐄</span>
+            <div>
+              <h3>Tus animales</h3>
+              <p>Click en uno para analizarlo</p>
+            </div>
+          </div>
+          <div id="predListaAnimales" class="pred-animales-grid">
+            <!-- Se llena por JS -->
+          </div>
+        </div>
+
+        <!-- O análisis manual -->
+        <div class="pred-bloque">
+          <div class="pred-bloque-head">
+            <span style="font-size:22px;">🧮</span>
+            <div>
+              <h3>Análisis manual</h3>
+              <p>O ingresa los datos sin animal registrado</p>
+            </div>
+          </div>
+
+          <div class="pred-form">
+            <div class="pred-form-row">
+              <div class="pred-form-field">
+                <label>Especie</label>
+                <select id="predEspecie" onchange="actualizarRangosPrediccion()">
+                  <option value="bovino-engorda">🐄 Bovino - Engorda</option>
+                  <option value="bovino-lechero">🐮 Bovino - Lechero</option>
+                  <option value="porcino">🐖 Porcino</option>
+                  <option value="ovino">🐑 Ovino (borrego)</option>
+                  <option value="caprino">🐐 Caprino (cabra)</option>
+                  <option value="aviar-pollo">🐔 Aviar - Pollo engorda</option>
+                  <option value="aviar-postura">🥚 Aviar - Postura</option>
+                  <option value="equino">🐎 Equino</option>
+                </select>
+              </div>
+              <div class="pred-form-field">
+                <label>Peso actual (kg)</label>
+                <input type="number" id="predPesoActual" placeholder="350" step="0.1">
+              </div>
+            </div>
+
+            <div class="pred-form-row">
+              <div class="pred-form-field">
+                <label>Edad (meses)</label>
+                <input type="number" id="predEdad" placeholder="18">
+              </div>
+              <div class="pred-form-field">
+                <label>Costo de alimento/día (MXN)</label>
+                <input type="number" id="predCostoDia" placeholder="45" step="0.1">
+              </div>
+            </div>
+
+            <button class="pred-btn-analizar" onclick="analizarPrediccion()">
+              📊 Analizar venta óptima
+            </button>
+          </div>
+        </div>
+
+        <!-- Resultados (oculto hasta analizar) -->
+        <div id="predResultados" class="pred-resultados" style="display:none;">
+          <!-- Se llena por JS -->
+        </div>
+
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
@@ -16638,7 +17054,371 @@ function iniciarFuegosArtificiales() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 🔔 SISTEMA DE ALERTAS INTELIGENTES
+// 📊 PREDICCIÓN DE VENTA ÓPTIMA
+// Algoritmo zootécnico que combina datos del animal con
+// precios reales del SIAP-SADER para sugerir mejor momento
+// ═══════════════════════════════════════════════════════════
+
+// Datos zootécnicos por especie (basados en NRC, FAO, INIFAP)
+const PRED_ESPECIES = {
+  'bovino-engorda': {
+    nombre: 'Bovino - Engorda',
+    emoji: '🐄',
+    pesoMin: 380, pesoOptimo: 480, pesoMax: 550,
+    gananciaDiaria: 1.1, // kg/día
+    productoSIAP: 'becerro', // término a buscar en SIAP
+    precioFallback: 89, // MXN/kg si no hay SIAP
+    unidad: 'kg',
+    tipMercado: 'Mejor precio en feb-jun (cuaresma y temporada seca)'
+  },
+  'bovino-lechero': {
+    nombre: 'Bovino - Lechero (lt/día)',
+    emoji: '🐮',
+    pesoMin: 450, pesoOptimo: 600, pesoMax: 700,
+    gananciaDiaria: 0,
+    productoSIAP: 'leche',
+    precioFallback: 11, // MXN/litro
+    unidad: 'litro/día',
+    tipMercado: 'Vaca productiva da 20-25 lt/día durante lactancia (305 días)'
+  },
+  'porcino': {
+    nombre: 'Porcino',
+    emoji: '🐖',
+    pesoMin: 90, pesoOptimo: 110, pesoMax: 130,
+    gananciaDiaria: 0.85,
+    productoSIAP: 'cerdo',
+    precioFallback: 56,
+    unidad: 'kg',
+    tipMercado: 'Pico de demanda en diciembre (Navidad/posadas)'
+  },
+  'ovino': {
+    nombre: 'Ovino (borrego)',
+    emoji: '🐑',
+    pesoMin: 30, pesoOptimo: 42, pesoMax: 55,
+    gananciaDiaria: 0.25,
+    productoSIAP: 'borrego',
+    precioFallback: 72,
+    unidad: 'kg',
+    tipMercado: 'Mejor precio en barbacoa (todo el año, picos en festividades)'
+  },
+  'caprino': {
+    nombre: 'Caprino (cabra)',
+    emoji: '🐐',
+    pesoMin: 25, pesoOptimo: 35, pesoMax: 45,
+    gananciaDiaria: 0.18,
+    productoSIAP: 'caprino',
+    precioFallback: 68,
+    unidad: 'kg',
+    tipMercado: 'Demanda fuerte en regiones del norte para cabrito'
+  },
+  'aviar-pollo': {
+    nombre: 'Aviar - Pollo engorda',
+    emoji: '🐔',
+    pesoMin: 1.8, pesoOptimo: 2.5, pesoMax: 3.0,
+    gananciaDiaria: 0.055,
+    productoSIAP: 'pollo',
+    precioFallback: 65,
+    unidad: 'kg',
+    tipMercado: 'Ciclos cortos de 42-49 días'
+  },
+  'aviar-postura': {
+    nombre: 'Aviar - Postura',
+    emoji: '🥚',
+    pesoMin: 1.5, pesoOptimo: 1.9, pesoMax: 2.2,
+    gananciaDiaria: 0,
+    productoSIAP: 'huevo',
+    precioFallback: 42,
+    unidad: 'kg huevo/mes',
+    tipMercado: 'Gallina productiva pone 25-28 huevos/mes durante 1-2 años'
+  },
+  'equino': {
+    nombre: 'Equino',
+    emoji: '🐎',
+    pesoMin: 350, pesoOptimo: 450, pesoMax: 600,
+    gananciaDiaria: 0.4,
+    productoSIAP: 'equino',
+    precioFallback: 45, // valor de carne, los caballos finos valen mucho más
+    unidad: 'kg',
+    tipMercado: 'Caballos finos pueden valer 10x más que precio de carne'
+  }
+};
+
+// Detectar especie desde un animal del hato
+window.detectarEspecieAnimal = function(animal) {
+  const t = ((animal.especie || animal.tipo || animal.raza || '') + ' ' + (animal.nombre || '')).toLowerCase();
+  if (/leche|lechera|holstein|jersey/.test(t)) return 'bovino-lechero';
+  if (/porcin|cerdo|puerco|marrano|cochi/.test(t)) return 'porcino';
+  if (/ovino|borrego|oveja|cordero/.test(t)) return 'ovino';
+  if (/caprino|cabra|chivo|cabrito/.test(t)) return 'caprino';
+  if (/postura|gallina|huevo/.test(t)) return 'aviar-postura';
+  if (/pollo|ave|aviar/.test(t)) return 'aviar-pollo';
+  if (/equino|caballo|yegua|potro/.test(t)) return 'equino';
+  return 'bovino-engorda'; // default
+};
+
+// Pintar lista de animales del hato en la sección Predicción
+window.pintarAnimalesPrediccion = function() {
+  const cont = document.getElementById('predListaAnimales');
+  if (!cont) return;
+  const animales = window.__rancho?.animales || [];
+
+  if (animales.length === 0) {
+    cont.innerHTML = `
+      <div class="pred-animales-empty" style="grid-column:1/-1;">
+        <div style="font-size:36px;margin-bottom:8px;">🐄</div>
+        <div>No tienes animales registrados todavía.</div>
+        <div style="margin-top:8px;">
+          <button class="pred-btn-analizar" onclick="navigateTo('hato')" style="padding:10px 18px;font-size:.82rem;">+ Registrar primer animal</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  cont.innerHTML = animales.map(a => {
+    const especie = detectarEspecieAnimal(a);
+    const cfg = PRED_ESPECIES[especie] || PRED_ESPECIES['bovino-engorda'];
+    return `
+      <div class="pred-animal-card" onclick="seleccionarAnimalPrediccion('${a.id}')" data-id="${a.id}">
+        <span class="pred-animal-emoji">${cfg.emoji}</span>
+        <div class="pred-animal-nombre">${a.nombre || a.arete || 'Sin nombre'}</div>
+        <div class="pred-animal-peso">${a.peso ? a.peso + ' kg' : 'Sin peso'}</div>
+      </div>
+    `;
+  }).join('');
+};
+
+// Seleccionar animal y autocompletar el formulario
+window.seleccionarAnimalPrediccion = function(animalId) {
+  const animal = (window.__rancho?.animales || []).find(a => a.id === animalId);
+  if (!animal) return;
+
+  // 🔒 Bloqueo VIP
+  if (typeof bloquearAccionVIP === 'function' && bloquearAccionVIP('La Predicción de Venta Óptima es exclusiva de Élite Pecuario.')) {
+    return;
+  }
+
+  // Marcar card seleccionada
+  document.querySelectorAll('.pred-animal-card').forEach(c => c.classList.remove('selected'));
+  const card = document.querySelector(`.pred-animal-card[data-id="${animalId}"]`);
+  if (card) card.classList.add('selected');
+
+  // Autocompletar form
+  const especie = detectarEspecieAnimal(animal);
+  document.getElementById('predEspecie').value = especie;
+  if (animal.peso) document.getElementById('predPesoActual').value = animal.peso;
+  if (animal.edad) document.getElementById('predEdad').value = animal.edad;
+
+  // Disparar análisis automático
+  setTimeout(() => analizarPrediccion(animal), 200);
+};
+
+window.actualizarRangosPrediccion = function() {
+  // Solo refresca un placeholder con peso óptimo de la especie
+  const especie = document.getElementById('predEspecie').value;
+  const cfg = PRED_ESPECIES[especie];
+  if (cfg) {
+    const inp = document.getElementById('predPesoActual');
+    if (inp && !inp.value) inp.placeholder = String(cfg.pesoMin);
+  }
+};
+
+// Obtener precio actual del SIAP (con fallback)
+function obtenerPrecioMercado(productoSIAP, precioFallback) {
+  const mercado = window.__rancho?.preciosMercado || [];
+  const match = mercado.find(p => {
+    const nombre = (p.producto || p.nombre || '').toLowerCase();
+    return nombre.includes(productoSIAP);
+  });
+  if (match) {
+    const precio = parseFloat(match.precio || match.valor || 0);
+    const variacion = parseFloat(match.variacion || match.cambio || 0);
+    if (precio > 0) return { precio, variacion, fuente: 'SIAP-SADER' };
+  }
+  return { precio: precioFallback, variacion: 0, fuente: 'Estimado promedio nacional' };
+}
+
+// EL ALGORITMO PRINCIPAL
+window.analizarPrediccion = function(animalRef) {
+  // 🔒 Bloqueo VIP
+  if (typeof bloquearAccionVIP === 'function' && bloquearAccionVIP('La Predicción de Venta Óptima es exclusiva de Élite Pecuario.')) {
+    return;
+  }
+
+  const especie = document.getElementById('predEspecie').value;
+  const cfg = PRED_ESPECIES[especie];
+  const pesoActual = parseFloat(document.getElementById('predPesoActual').value) || 0;
+  const edad = parseFloat(document.getElementById('predEdad').value) || 0;
+  const costoDia = parseFloat(document.getElementById('predCostoDia').value) || 0;
+
+  if (!pesoActual) {
+    if (typeof toast === 'function') toast('Ingresa el peso actual del animal', 'error', '⚠️');
+    return;
+  }
+
+  // Obtener precio del SIAP
+  const { precio, variacion, fuente } = obtenerPrecioMercado(cfg.productoSIAP, cfg.precioFallback);
+
+  // CÁLCULOS
+  let veredictoTipo, veredictoTag, veredictoTitulo, veredictoDesc;
+  let diasParaOptimo = 0;
+  let pesoMeta = cfg.pesoOptimo;
+  let ingresoActual, ingresoOptimo, ganancia, gastoAlimento;
+
+  // Caso especial: lechero/postura (no engorda, productivo)
+  if (especie === 'bovino-lechero' || especie === 'aviar-postura') {
+    diasParaOptimo = 0;
+    pesoMeta = pesoActual;
+    ingresoActual = ingresoOptimo = 0;
+    ganancia = 0;
+    gastoAlimento = 0;
+    veredictoTipo = 'vender';
+    veredictoTag = '💡 USO PRODUCTIVO';
+    veredictoTitulo = 'Animal productivo (no engorda)';
+    veredictoDesc = `Este tipo de animal genera ingresos por producción continua, no por venta única. ${cfg.tipMercado}`;
+  } else {
+    // Cálculo normal (engorda)
+    ingresoActual = pesoActual * precio;
+
+    if (pesoActual >= cfg.pesoOptimo) {
+      // Ya pasó óptimo o está en él
+      diasParaOptimo = 0;
+      if (pesoActual > cfg.pesoMax) {
+        veredictoTipo = 'alerta';
+        veredictoTag = '⚠️ VENDE YA';
+        veredictoTitulo = '¡Animal sobrepasado!';
+        veredictoDesc = `Tu animal ya rebasó el peso máximo óptimo (${cfg.pesoMax}${cfg.unidad}). Cada día extra son pérdidas por costo de alimento sin ganancia significativa. Véndelo cuanto antes.`;
+      } else {
+        veredictoTipo = 'vender';
+        veredictoTag = '🎯 VENTA RECOMENDADA';
+        veredictoTitulo = '¡Listo para vender!';
+        veredictoDesc = `Tu animal alcanzó el peso óptimo de venta. Aprovecha los precios actuales: ${variacion > 0 ? '📈 al alza' : variacion < 0 ? '📉 a la baja' : 'estables'}.`;
+      }
+      ingresoOptimo = ingresoActual;
+      ganancia = 0;
+      gastoAlimento = 0;
+    } else {
+      // Falta engorda
+      diasParaOptimo = Math.ceil((cfg.pesoOptimo - pesoActual) / cfg.gananciaDiaria);
+      ingresoOptimo = cfg.pesoOptimo * precio;
+      gastoAlimento = costoDia * diasParaOptimo;
+      ganancia = ingresoOptimo - ingresoActual - gastoAlimento;
+
+      if (diasParaOptimo > 365) {
+        veredictoTipo = 'alerta';
+        veredictoTag = '⚠️ TARDARÁ MUCHO';
+        veredictoTitulo = 'Engorda lenta detectada';
+        veredictoDesc = `Para llegar al peso óptimo te faltarían ${diasParaOptimo} días (${Math.round(diasParaOptimo/30)} meses). Considera revisar nutrición o vender antes.`;
+      } else if (ganancia <= 0) {
+        veredictoTipo = 'alerta';
+        veredictoTag = '⚠️ NO ES RENTABLE';
+        veredictoTitulo = 'Mejor vende ahora';
+        veredictoDesc = `Si engordas más, el costo de alimento ($${gastoAlimento.toLocaleString('es-MX')}) supera la ganancia esperada. Véndelo en su peso actual.`;
+      } else {
+        veredictoTipo = 'esperar';
+        veredictoTag = '✅ ESPERA Y GANA';
+        veredictoTitulo = `Vende en ${diasParaOptimo} días`;
+        const fechaOptima = new Date(Date.now() + diasParaOptimo * 86400000);
+        const fechaStr = fechaOptima.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+        veredictoDesc = `Si engordas hasta ${cfg.pesoOptimo}${cfg.unidad} (estimado: ${fechaStr}), tu ganancia neta será de $${Math.round(ganancia).toLocaleString('es-MX')} MXN.`;
+      }
+    }
+  }
+
+  // RENDER de resultados
+  const fechaOptima = new Date(Date.now() + diasParaOptimo * 86400000);
+  const fechaStr = diasParaOptimo > 0 ? fechaOptima.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' }) : 'Hoy';
+
+  const variacionTxt = variacion === 0 ? 'estable' : (variacion > 0 ? '+' : '') + variacion.toFixed(1) + '%';
+  const variacionClass = variacion > 0 ? 'success' : (variacion < 0 ? 'danger' : '');
+
+  const cont = document.getElementById('predResultados');
+  cont.style.display = 'block';
+  cont.innerHTML = `
+    <div class="pred-veredicto pred-veredicto--${veredictoTipo}">
+      <span class="pred-veredicto-tag">${veredictoTag}</span>
+      <h2>${veredictoTitulo}</h2>
+      <p>${veredictoDesc}</p>
+    </div>
+
+    <div class="pred-grid-stats">
+      <div class="pred-stat-card">
+        <div class="pred-stat-icon">⚖️</div>
+        <div class="pred-stat-label">Peso actual</div>
+        <div class="pred-stat-value">${pesoActual} ${cfg.unidad === 'kg' ? 'kg' : cfg.unidad}</div>
+        <div class="pred-stat-sub">Meta óptima: ${cfg.pesoOptimo} ${cfg.unidad === 'kg' ? 'kg' : cfg.unidad}</div>
+      </div>
+      <div class="pred-stat-card">
+        <div class="pred-stat-icon">📅</div>
+        <div class="pred-stat-label">Días para óptimo</div>
+        <div class="pred-stat-value pred-stat-value--gold">${diasParaOptimo > 0 ? diasParaOptimo : '0'}</div>
+        <div class="pred-stat-sub">${diasParaOptimo > 0 ? 'Vender el ' + fechaStr : 'Ya está listo'}</div>
+      </div>
+      <div class="pred-stat-card">
+        <div class="pred-stat-icon">💵</div>
+        <div class="pred-stat-label">Precio mercado</div>
+        <div class="pred-stat-value">$${precio.toLocaleString('es-MX')}</div>
+        <div class="pred-stat-sub">por ${cfg.unidad} · <span class="${variacionClass === 'success' ? 'success' : variacionClass === 'danger' ? 'danger' : ''}">${variacionTxt}</span></div>
+      </div>
+      <div class="pred-stat-card">
+        <div class="pred-stat-icon">💰</div>
+        <div class="pred-stat-label">${ganancia > 0 ? 'Ganancia esperada' : 'Ingreso actual'}</div>
+        <div class="pred-stat-value ${ganancia > 0 ? 'pred-stat-value--green' : 'pred-stat-value--gold'}">$${Math.round(ganancia > 0 ? ganancia : ingresoActual).toLocaleString('es-MX')}</div>
+        <div class="pred-stat-sub">${ganancia > 0 ? 'Después de costos' : 'Si vendes hoy'}</div>
+      </div>
+    </div>
+
+    ${especie !== 'bovino-lechero' && especie !== 'aviar-postura' ? `
+      <div class="pred-comparativa">
+        <h3>📊 Comparativa: vender hoy vs esperar</h3>
+        <div class="pred-comp-row">
+          <span class="pred-comp-label">Si vendes HOY (${pesoActual} ${cfg.unidad})</span>
+          <span class="pred-comp-value">$${Math.round(ingresoActual).toLocaleString('es-MX')} MXN</span>
+        </div>
+        ${diasParaOptimo > 0 ? `
+          <div class="pred-comp-row">
+            <span class="pred-comp-label">Si ESPERAS al óptimo (${cfg.pesoOptimo} ${cfg.unidad})</span>
+            <span class="pred-comp-value">$${Math.round(ingresoOptimo).toLocaleString('es-MX')} MXN</span>
+          </div>
+          <div class="pred-comp-row">
+            <span class="pred-comp-label">Costo de alimento (${diasParaOptimo} días × $${costoDia || 0}/día)</span>
+            <span class="pred-comp-value danger">- $${Math.round(gastoAlimento).toLocaleString('es-MX')} MXN</span>
+          </div>
+          <div class="pred-comp-row" style="border-top:2px solid rgba(212,160,23,.3);padding-top:14px;margin-top:6px;">
+            <span class="pred-comp-label"><strong>GANANCIA NETA esperando</strong></span>
+            <span class="pred-comp-value ${ganancia > 0 ? 'success' : 'danger'}">${ganancia > 0 ? '+' : ''}$${Math.round(ganancia).toLocaleString('es-MX')} MXN</span>
+          </div>
+        ` : ''}
+      </div>
+    ` : ''}
+
+    <div class="pred-tip">
+      <span class="pred-tip-icon">💡</span>
+      <div class="pred-tip-text">
+        <strong>Tip del mercado:</strong> ${cfg.tipMercado}
+        <br><span style="opacity:.6;font-size:.75rem;">Fuente del precio: ${fuente}</span>
+      </div>
+    </div>
+  `;
+
+  // Scroll suave a los resultados
+  setTimeout(() => {
+    cont.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 200);
+};
+
+// Repintar animales cuando se navega a la sección Predicción
+const _navOrigPred = window.navigateTo;
+if (typeof _navOrigPred === 'function') {
+  window.navigateTo = function(section) {
+    _navOrigPred(section);
+    if (section === 'prediccion') {
+      setTimeout(() => { try { pintarAnimalesPrediccion(); } catch(e){} }, 100);
+    }
+  };
+}
+
+
 // Genera alertas automáticas basadas en datos del rancho
 // ═══════════════════════════════════════════════════════════
 
