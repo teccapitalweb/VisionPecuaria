@@ -1872,31 +1872,68 @@ button { font-family: inherit; }
 .add-animal-text { font-weight: 600; color: var(--gold-light); }
 
 /* ═══════════════════════════════════════════════════════════ */
-/* SECCIÓN: BITÁCORA DEL CAPATAZ (perfil + logros)               */
-/* ═══════════════════════════════════════════════════════════ */
+/* SECCIÓN: MI PROGRESO v2 (perfil + roadmap + misiones + logros)   */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Header del rancho con nombre editable y ranking */
+.mp-rancho-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  margin-bottom: 20px;
+}
+.mp-rancho-label {
+  font-size: .7rem; color: var(--gold);
+  letter-spacing: 1.5px; font-weight: 700;
+  margin-bottom: 2px;
+}
+.mp-rancho-name {
+  font: 800 1.4rem/1.2 'Montserrat', sans-serif;
+  color: #fff;
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer;
+}
+.mp-rancho-name:hover .mp-rancho-edit { opacity: 1; }
+.mp-rancho-edit {
+  font-size: .85rem; color: var(--gold-light);
+  opacity: .5; transition: opacity .2s;
+}
+.mp-rank-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.35);
+  padding: 8px 14px;
+  border-radius: 100px;
+  color: var(--gold-light);
+  font-size: .8rem; font-weight: 700;
+}
+
+/* Card de perfil */
 .bitacora-hero {
-  background: linear-gradient(135deg, rgba(107,68,35,.4), rgba(15,61,39,.6));
-  border: 1px solid rgba(160,112,80,.3);
+  background: linear-gradient(180deg, rgba(15,61,39,.7) 0%, rgba(10,31,18,.85) 100%);
+  border: 1px solid rgba(212,160,23,.25);
   border-radius: var(--rxl);
-  padding: 28px;
-  margin-bottom: 24px;
-  display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.mp-hero-top {
+  display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 18px;
 }
 .bita-avatar-big {
-  width: 100px; height: 100px;
+  width: 80px; height: 80px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  border: 4px solid rgba(212,160,23,.4);
+  border: 3px solid rgba(212,160,23,.4);
   display: flex; align-items: center; justify-content: center;
   color: var(--field-deep);
-  font: 800 2.5rem 'Montserrat', sans-serif;
+  font: 800 2rem 'Montserrat', sans-serif;
   flex-shrink: 0;
-  box-shadow: 0 12px 30px rgba(212,160,23,.25);
+  box-shadow: 0 8px 24px rgba(212,160,23,.2);
 }
-.bita-info { flex: 1; min-width: 200px; }
+.bita-info { flex: 1; min-width: 180px; }
 .bita-info h2 {
-  font: 800 1.4rem/1.2 'Montserrat', sans-serif;
-  margin-bottom: 4px;
+  font: 800 1.2rem/1.2 'Montserrat', sans-serif;
+  margin-bottom: 6px;
 }
 .bita-rank {
   display: inline-flex; align-items: center; gap: 6px;
@@ -1905,11 +1942,42 @@ button { font-family: inherit; }
   border: 1px solid rgba(212,160,23,.4);
   border-radius: 100px;
   color: var(--gold-light);
-  font-size: .8rem; font-weight: 700;
-  margin-bottom: 10px;
+  font-size: .78rem; font-weight: 700;
 }
+
+/* Stats grid en el card de perfil */
+.mp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  flex: 0 0 auto;
+}
+@media (max-width: 700px) {
+  .mp-stats-grid { grid-template-columns: repeat(4, 1fr); width: 100%; }
+}
+.mp-stat {
+  background: rgba(255,255,255,.04);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  min-width: 70px;
+}
+.mp-stat-num {
+  font: 800 1.15rem 'Montserrat', sans-serif;
+  color: #fff;
+  line-height: 1;
+}
+.mp-stat-num.racha { color: #ff6b35; }
+.mp-stat-label {
+  font-size: .65rem;
+  color: rgba(255,255,255,.55);
+  margin-top: 4px;
+  letter-spacing: .3px;
+}
+
+/* Barra XP */
 .bita-xp-bar {
-  height: 8px;
+  height: 10px;
   background: rgba(255,255,255,.08);
   border-radius: 100px;
   overflow: hidden;
@@ -1921,22 +1989,224 @@ button { font-family: inherit; }
   border-radius: 100px;
   transition: width 1s cubic-bezier(.2,.8,.3,1);
 }
-.bita-xp-text {
-  font-size: .76rem;
-  color: rgba(255,255,255,.6);
+.mp-xp-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .76rem; color: rgba(255,255,255,.6);
+  margin-bottom: 8px;
+}
+.mp-xp-row strong { color: #fff; font-weight: 700; }
+.mp-xp-row .xp-falta { color: var(--gold); font-weight: 700; }
+
+/* Roadmap de niveles */
+.mp-roadmap {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.mp-nivel {
+  text-align: center;
+  position: relative;
+}
+.mp-nivel-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  background: rgba(255,255,255,.05);
+  border: 2px solid transparent;
+}
+.mp-nivel.completo .mp-nivel-icon {
+  background: var(--gold);
+  color: var(--field-deep);
+}
+.mp-nivel.actual .mp-nivel-icon {
+  background: rgba(212,160,23,.2);
+  border-color: var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 0 0 4px rgba(212,160,23,.1);
+}
+.mp-nivel.locked .mp-nivel-icon { color: #555; }
+.mp-nivel-name {
+  font-size: .72rem;
+  font-weight: 700;
+  color: #ddd;
+}
+.mp-nivel.completo .mp-nivel-name { color: var(--gold); }
+.mp-nivel.actual .mp-nivel-name { color: #fff; }
+.mp-nivel.locked .mp-nivel-name { color: #888; }
+.mp-nivel-sub {
+  font-size: .65rem;
+  color: rgba(255,255,255,.4);
+  margin-top: 2px;
+}
+.mp-nivel.actual .mp-nivel-sub { color: var(--gold); font-weight: 700; }
+
+/* Card de misiones del día */
+.mp-misiones {
+  background: rgba(15,61,39,.6);
+  border: 1px solid rgba(255,107,53,.3);
+  border-radius: var(--rxl);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.mp-misiones-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap; gap: 10px;
+}
+.mp-misiones-title {
+  display: flex; align-items: center; gap: 10px;
+}
+.mp-misiones-title-icon { font-size: 22px; }
+.mp-misiones-title h3 {
+  font: 800 1rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0;
+}
+.mp-misiones-title p {
+  font-size: .72rem;
+  color: rgba(255,255,255,.5);
+  margin: 2px 0 0;
+}
+.mp-racha-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,107,53,.15);
+  border: 1px solid rgba(255,107,53,.4);
+  padding: 5px 12px;
+  border-radius: 100px;
+  color: #ff6b35;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.mp-mision {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px;
+  background: rgba(255,255,255,.03);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: background .2s;
+}
+.mp-mision:last-child { margin-bottom: 0; }
+.mp-mision.completa {
+  background: rgba(40,167,69,.1);
+}
+.mp-mision-check {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.mp-mision.completa .mp-mision-check {
+  background: #28a745;
+  border-color: #28a745;
+  color: #fff;
+}
+.mp-mision-text {
+  flex: 1;
+  color: #fff;
+  font-size: .85rem;
+}
+.mp-mision.completa .mp-mision-text {
+  text-decoration: line-through;
+  color: rgba(255,255,255,.5);
+}
+.mp-mision-xp {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.mp-mision.completa .mp-mision-xp { color: #28a745; }
+
+/* Card de recompensas */
+.mp-recompensas {
+  background: rgba(15,61,39,.6);
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: var(--rxl);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.mp-recompensas-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.mp-recompensas-head h3 {
+  font: 800 1rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0;
+}
+.mp-recompensas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .mp-recompensas-grid { grid-template-columns: 1fr; }
+}
+.mp-recompensa {
+  background: rgba(212,160,23,.08);
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  transition: transform .2s;
+}
+.mp-recompensa:hover { transform: translateY(-2px); }
+.mp-recompensa.locked {
+  background: rgba(255,255,255,.03);
+  border-color: rgba(255,255,255,.08);
+  opacity: .6;
+}
+.mp-recompensa-icon { font-size: 28px; margin-bottom: 8px; }
+.mp-recompensa-title {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #fff;
+}
+.mp-recompensa-sub {
+  font-size: .7rem;
+  color: rgba(255,255,255,.55);
+  margin-top: 3px;
+}
+.mp-recompensa-nivel {
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.mp-recompensa.locked .mp-recompensa-nivel { color: rgba(255,255,255,.4); }
+
+/* Header de logros */
+.mp-logros-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mp-logros-head h3 {
+  font: 800 1.1rem 'Montserrat', sans-serif;
+  margin: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.mp-logros-count {
+  font-size: .8rem;
+  color: rgba(255,255,255,.55);
 }
 
+/* Logros con progreso real */
 .logros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 12px;
 }
 .logro {
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.08);
   border-radius: var(--rl);
-  padding: 16px 12px;
-  text-align: center;
+  padding: 14px;
   transition: transform .25s, border-color .25s;
   cursor: pointer;
 }
@@ -1944,11 +2214,40 @@ button { font-family: inherit; }
   transform: translateY(-3px);
   border-color: rgba(212,160,23,.3);
 }
-.logro-emoji { font-size: 36px; margin-bottom: 6px; display: block; }
-.logro-name { font-size: .82rem; font-weight: 700; color: #fff; }
-.logro-desc { font-size: .7rem; color: rgba(255,255,255,.5); margin-top: 3px; }
-.logro.locked { filter: grayscale(.7); opacity: .55; }
-.logro.locked .logro-emoji { filter: grayscale(1); }
+.logro.earned {
+  background: rgba(212,160,23,.08);
+  border-color: rgba(212,160,23,.3);
+}
+.logro-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.logro-emoji { font-size: 26px; flex-shrink: 0; }
+.logro-name { font-size: .85rem; font-weight: 700; color: #fff; line-height: 1.2; }
+.logro-desc { font-size: .7rem; color: rgba(255,255,255,.5); }
+.logro-progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,.08);
+  border-radius: 100px;
+  overflow: hidden;
+  margin: 8px 0 4px;
+}
+.logro-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 100px;
+  transition: width .8s;
+}
+.logro-progress-text {
+  font-size: .7rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+.logro.locked-deep {
+  filter: grayscale(.7);
+  opacity: .55;
+}
+.logro.locked-deep .logro-emoji { filter: grayscale(1); }
 
 /* ═══════════════════════════════════════════════════════════ */
 /* MODAL VIP                                                     */
@@ -7305,7 +7604,7 @@ button { font-family: inherit; }
           <div class="row-cine">
             <div class="row-cine-head">
               <div class="row-cine-title">🎬 Continúa tu aprendizaje</div>
-              <button class="widget-link" onclick="navigateTo('establo')">Ver Establo →</button>
+              <button class="widget-link" onclick="navigateTo('establo')">Ver biblioteca →</button>
             </div>
             <div class="row-cine-scroll" id="cineScrollHome"></div>
           </div>
@@ -7562,7 +7861,7 @@ button { font-family: inherit; }
       <section class="section" id="section-curso">
         <button class="cine-back" onclick="navigateTo('establo')">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-          <span>Volver al Establo</span>
+          <span>Volver a la biblioteca</span>
         </button>
 
         <div class="cine-layout">
@@ -8063,27 +8362,101 @@ button { font-family: inherit; }
       </section>
 
       <!-- ════════════════════════════════════════════════════════ -->
-      <!-- 📓 BITÁCORA DEL CAPATAZ                                   -->
+      <!-- 🏆 MI PROGRESO                                            -->
       <!-- ════════════════════════════════════════════════════════ -->
       <section class="section" id="section-bitacora-capataz">
         <div class="section-head">
           <div>
-            <h1>📓 Bitácora del Capataz</h1>
-            <p>Tu carrera pecuaria, tus logros, tu progreso</p>
+            <h1>🏆 Mi progreso</h1>
+            <p>Tu carrera pecuaria, tus logros, tus recompensas</p>
           </div>
         </div>
 
+        <!-- Header del rancho -->
+        <div class="mp-rancho-head">
+          <div>
+            <div class="mp-rancho-label">RANCHO</div>
+            <div class="mp-rancho-name" onclick="editarNombreRancho()">
+              <span id="mpRanchoName">Mi Rancho</span>
+              <span class="mp-rancho-edit">✏️</span>
+            </div>
+          </div>
+          <div class="mp-rank-badge" id="mpRankBadge">
+            <span>🏆</span>
+            <span id="mpRankText">Calculando posición…</span>
+          </div>
+        </div>
+
+        <!-- Card de perfil + stats + roadmap -->
         <div class="bitacora-hero">
-          <div class="bita-avatar-big" id="bitaAvatar">JR</div>
-          <div class="bita-info">
-            <h2 id="bitaName">Jorge Ramírez</h2>
-            <span class="bita-rank">🤠 Aprendiz de Capataz · Nivel 2</span>
-            <div class="bita-xp-bar"><div class="bita-xp-fill" id="bitaXpFill" style="width:35%"></div></div>
-            <div class="bita-xp-text"><strong>350</strong> / 1,000 XP — Faltan <strong>650 XP</strong> para Capataz</div>
+          <div class="mp-hero-top">
+            <div class="bita-avatar-big" id="bitaAvatar">JR</div>
+            <div class="bita-info">
+              <h2 id="bitaName">Jorge Ramírez</h2>
+              <span class="bita-rank" id="mpRankBadgeNivel">🤠 Aprendiz · Nivel 1</span>
+            </div>
+            <div class="mp-stats-grid">
+              <div class="mp-stat">
+                <div class="mp-stat-num racha" id="mpStatRacha">🔥 0</div>
+                <div class="mp-stat-label">días seguidos</div>
+              </div>
+              <div class="mp-stat">
+                <div class="mp-stat-num" id="mpStatAnimales">0</div>
+                <div class="mp-stat-label">animales</div>
+              </div>
+              <div class="mp-stat">
+                <div class="mp-stat-num" id="mpStatCursos">0</div>
+                <div class="mp-stat-label">cursos</div>
+              </div>
+              <div class="mp-stat">
+                <div class="mp-stat-num" id="mpStatActivo">1</div>
+                <div class="mp-stat-label">días activo</div>
+              </div>
+            </div>
           </div>
+
+          <!-- Barra XP -->
+          <div class="mp-xp-row">
+            <span><strong id="mpXpActual">0</strong> / <span id="mpXpMeta">100</span> XP</span>
+            <span class="xp-falta" id="mpXpFalta">Faltan 100 XP para Capataz</span>
+          </div>
+          <div class="bita-xp-bar"><div class="bita-xp-fill" id="bitaXpFill" style="width:0%"></div></div>
+
+          <!-- Roadmap de niveles -->
+          <div class="mp-roadmap" id="mpRoadmap"></div>
         </div>
 
-        <h3 style="font:800 1.1rem 'Montserrat',sans-serif;margin-bottom:14px;">🏆 Logros</h3>
+        <!-- Misiones del día -->
+        <div class="mp-misiones">
+          <div class="mp-misiones-head">
+            <div class="mp-misiones-title">
+              <span class="mp-misiones-title-icon">🎯</span>
+              <div>
+                <h3>Misiones de hoy</h3>
+                <p>Termina las 3 y suma <strong style="color:var(--gold)">+100 XP</strong> bonus</p>
+              </div>
+            </div>
+            <div class="mp-racha-badge">
+              🔥 <span id="mpMisionesRacha">Racha 0 días</span>
+            </div>
+          </div>
+          <div id="mpMisionesList"></div>
+        </div>
+
+        <!-- Recompensas -->
+        <div class="mp-recompensas">
+          <div class="mp-recompensas-head">
+            <span style="font-size:22px;">🎁</span>
+            <h3>Te falta poco para desbloquear</h3>
+          </div>
+          <div class="mp-recompensas-grid" id="mpRecompensasGrid"></div>
+        </div>
+
+        <!-- Logros con progreso real -->
+        <div class="mp-logros-head">
+          <h3>🏆 Logros</h3>
+          <span class="mp-logros-count" id="mpLogrosCount">0 de 12 desbloqueados</span>
+        </div>
         <div class="logros-grid" id="logrosGrid"></div>
       </section>
 
@@ -8123,7 +8496,7 @@ button { font-family: inherit; }
         <div id="certsVacio" class="establo-vacio" style="display:none;">
           <div style="font-size:64px;margin-bottom:16px;">🎖️</div>
           <h3>Aún no tienes certificados</h3>
-          <p>Completa tu primer curso del Establo para ganar tu primer certificado oficial.</p>
+          <p>Completa tu primer curso de la Biblioteca para ganar tu primer certificado oficial.</p>
         </div>
       </section>
 
@@ -8187,7 +8560,7 @@ button { font-family: inherit; }
     <h3>Conviértete en Élite Pecuario</h3>
     <p class="modal-sub" id="modalVipSub">Esta función está reservada para miembros Élite. Desbloquea TODO el rancho digital.</p>
     <ul class="modal-features">
-      <li>Acceso completo al Establo de cursos</li>
+      <li>Acceso completo a la Biblioteca de cursos</li>
       <li>Diagnóstico veterinario IA (22 enfermedades)</li>
       <li>Calculadora pecuaria de rentabilidad</li>
       <li>Mercado pecuario en tiempo real (SIAP-SADER)</li>
@@ -8696,6 +9069,11 @@ function pintarUsuario(user) {
   document.getElementById('bitaAvatar').textContent = iniciales;
   document.getElementById('bitaName').textContent = nombre;
 
+  // Refrescar Mi Progreso para mostrar nombre del rancho y stats correctos
+  if (typeof pintarMiProgreso === 'function') {
+    setTimeout(() => { try { pintarMiProgreso(); } catch(e) {} }, 300);
+  }
+
   const badge = document.getElementById('sbPlanBadge');
   if (userPlan === 'vip') {
     badge.textContent = '👑 ÉLITE';
@@ -8716,7 +9094,7 @@ function pintarUsuario(user) {
   } else if (h >= 19 || h < 5) {
     saludo = 'Buenas noches';
     emoji = '🌙';
-    subtitle = 'Cierra el día con un curso del Establo';
+    subtitle = 'Cierra el día con un curso de la Biblioteca';
   }
   const primerNombre = nombre.split(' ')[0];
   document.getElementById('greeting').innerHTML = `${saludo}, <span class="greet-name">${primerNombre}</span> ${emoji}`;
@@ -8750,6 +9128,16 @@ window.navigateTo = function(section) {
 
   // Mostrar/ocultar banner VIP según sección
   actualizarBannerVIP(section);
+
+  // 🎯 Mi Progreso: marcar misiones por navegación
+  try {
+    if (section === 'mercado' && typeof mpCompletarMision === 'function') {
+      mpCompletarMision('revisar_mercado');
+    }
+    if (section === 'curso' && typeof mpCompletarMision === 'function') {
+      mpCompletarMision('ver_leccion');
+    }
+  } catch(e) {}
 };
 
 document.querySelectorAll('.sb-nav-item').forEach(btn => {
@@ -8869,7 +9257,7 @@ function calcularScoreRancho() {
 function explicacionTermometro(score, animales, cursosActivos, cursosCompletados) {
   if (score >= 85) return `Excelente trabajo. Tienes ${animales} animal${animales!==1?'es':''} en tu hato y ${cursosCompletados} certificado${cursosCompletados!==1?'s':''} ganado${cursosCompletados!==1?'s':''}.`;
   if (score >= 60) return `Vas bien. Sigue completando cursos y registra más animales para subir tu termómetro.`;
-  if (animales === 0) return `Empieza registrando tu primer animal y completando un curso del Establo. Tu termómetro va a despegar.`;
+  if (animales === 0) return `Empieza registrando tu primer animal y completando un curso de la Biblioteca. Tu termómetro va a despegar.`;
   return `Tu rancho necesita atención. Completa cursos y registra más animales para activar todo el potencial.`;
 }
 
@@ -11217,6 +11605,7 @@ window.__rancho.iniciarHato = async function() {
       pintarHato();
       refrescarTermometro();
       try { pintarBitacora(); } catch(e) {}
+      if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
     }, (err) => {
       console.warn('Sin acceso a animales:', err.code);
       window.__rancho.animales = [];
@@ -11384,6 +11773,7 @@ window.__rancho.contarCertificados = async function() {
     onSnapshot(q, (snap) => {
       window.__rancho.certificadosCount = snap.size;
       refrescarTermometro();
+      if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
     }, (err) => {
       console.warn('Sin acceso a certificados:', err.code);
     });
@@ -12795,31 +13185,342 @@ setTimeout(() => {
 // Cuando llegan animales actualizar bitácora
 const _originalSetAnimales = window.__rancho?.setAnimales;
 // ═══════════════════════════════════════════════════════════
-// LOGROS
+// 🏆 SISTEMA MI PROGRESO v2
+// Calcula XP, nivel, racha, misiones y logros con progreso real
 // ═══════════════════════════════════════════════════════════
-const LOGROS = [
-  { emoji:'🌱', name:'Primer paso', desc:'Te registraste en el rancho', earned:true },
-  { emoji:'🎯', name:'Misión cumplida', desc:'Completa 1 misión diaria', earned:true },
-  { emoji:'🔥', name:'Racha de 3', desc:'3 días seguidos activo', earned:true },
-  { emoji:'📚', name:'Estudiante', desc:'Completa 1 curso', earned:false },
-  { emoji:'🐄', name:'Ganadero', desc:'Registra 5 animales', earned:true },
-  { emoji:'💰', name:'Mercader', desc:'Revisa precios 10 días', earned:false },
-  { emoji:'🏆', name:'Capataz', desc:'Llega al nivel 3', earned:false },
-  { emoji:'👑', name:'Patrón', desc:'Hazte Élite Pecuario', earned:false },
-  { emoji:'🤝', name:'Comunidad', desc:'Únete al grupo VIP', earned:false },
-  { emoji:'🐂', name:'Hato grande', desc:'10+ animales registrados', earned:false },
-  { emoji:'⭐', name:'Maestro', desc:'Completa 5 cursos', earned:false },
-  { emoji:'💎', name:'Leyenda', desc:'Llega al nivel 10', earned:false }
+
+// Niveles definidos por XP acumulado
+const MP_NIVELES = [
+  { nivel:1, nombre:'Aprendiz', icono:'🌱', xpMin:0,    xpMax:100  },
+  { nivel:2, nombre:'Aprendiz', icono:'🌱', xpMin:100,  xpMax:300  },
+  { nivel:3, nombre:'Capataz',  icono:'🤠', xpMin:300,  xpMax:600  },
+  { nivel:4, nombre:'Capataz',  icono:'🤠', xpMin:600,  xpMax:1000 },
+  { nivel:5, nombre:'Mayoral',  icono:'🐂', xpMin:1000, xpMax:1500 },
+  { nivel:6, nombre:'Mayoral',  icono:'🐂', xpMin:1500, xpMax:2200 },
+  { nivel:7, nombre:'Patrón',   icono:'👑', xpMin:2200, xpMax:3000 },
+  { nivel:8, nombre:'Patrón',   icono:'👑', xpMin:3000, xpMax:4000 },
+  { nivel:9, nombre:'Hacendado',icono:'🏛️', xpMin:4000, xpMax:5500 },
+  { nivel:10,nombre:'Hacendado',icono:'🏛️', xpMin:5500, xpMax:99999}
 ];
-function pintarLogros() {
-  document.getElementById('logrosGrid').innerHTML = LOGROS.map(l => `
-    <div class="logro ${l.earned?'':'locked'}">
-      <span class="logro-emoji">${l.emoji}</span>
-      <div class="logro-name">${l.name}</div>
-      <div class="logro-desc">${l.desc}</div>
-    </div>
-  `).join('');
+
+// Etapas mostradas en el roadmap (visual)
+const MP_ETAPAS = [
+  { nombre:'Aprendiz',  icono:'🌱', nivelMin:1,  nivelMax:2 },
+  { nombre:'Capataz',   icono:'🤠', nivelMin:3,  nivelMax:4 },
+  { nombre:'Mayoral',   icono:'🐂', nivelMin:5,  nivelMax:6 },
+  { nombre:'Patrón',    icono:'👑', nivelMin:7,  nivelMax:8 },
+  { nombre:'Hacendado', icono:'🏛️', nivelMin:9,  nivelMax:10 }
+];
+
+// Calcula XP total del usuario (heurística simple, sin Fase 2)
+function mpCalcularXP() {
+  const animales = (window.__rancho?.animales || []).length;
+  const certs = window.__rancho?.certificadosCount || 0;
+  const racha = mpGetRacha();
+  const diasActivo = mpGetDiasActivo();
+  // Fórmula: 30 XP por animal + 80 XP por certificado + 5 XP por día activo + 10 XP por día de racha
+  return (animales * 30) + (certs * 80) + (diasActivo * 5) + (racha * 10);
 }
+
+// Lee racha desde localStorage (mejor que Firestore para Fase 1)
+function mpGetRacha() {
+  try {
+    const raw = localStorage.getItem('vp_racha');
+    if (!raw) return 0;
+    const d = JSON.parse(raw);
+    return d.dias || 0;
+  } catch(e) { return 0; }
+}
+
+function mpGetDiasActivo() {
+  try {
+    const raw = localStorage.getItem('vp_dias_activo');
+    if (!raw) return 1;
+    return parseInt(raw, 10) || 1;
+  } catch(e) { return 1; }
+}
+
+// Actualiza racha al cargar la app
+function mpActualizarRacha() {
+  try {
+    const HOY = new Date().toISOString().slice(0,10);
+    const AYER = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    const raw = localStorage.getItem('vp_racha');
+    let data = raw ? JSON.parse(raw) : { dias:0, ultimo:null };
+    if (data.ultimo === HOY) {
+      // Ya contado hoy
+    } else if (data.ultimo === AYER) {
+      data.dias = (data.dias || 0) + 1;
+      data.ultimo = HOY;
+    } else {
+      data.dias = 1;
+      data.ultimo = HOY;
+    }
+    localStorage.setItem('vp_racha', JSON.stringify(data));
+
+    // Días activos totales
+    const diasActRaw = localStorage.getItem('vp_dias_activo_lista');
+    let lista = diasActRaw ? JSON.parse(diasActRaw) : [];
+    if (!lista.includes(HOY)) {
+      lista.push(HOY);
+      localStorage.setItem('vp_dias_activo_lista', JSON.stringify(lista));
+      localStorage.setItem('vp_dias_activo', String(lista.length));
+    }
+  } catch(e) { console.warn('Error actualizando racha:', e); }
+}
+
+// Calcula nivel actual basado en XP
+function mpGetNivel(xp) {
+  for (let i = MP_NIVELES.length - 1; i >= 0; i--) {
+    if (xp >= MP_NIVELES[i].xpMin) return MP_NIVELES[i];
+  }
+  return MP_NIVELES[0];
+}
+
+// MISIONES del día (3 fijas, se completan visualmente)
+function mpGetMisiones() {
+  const HOY = new Date().toISOString().slice(0,10);
+  let estado = {};
+  try {
+    const raw = localStorage.getItem('vp_misiones_' + HOY);
+    if (raw) estado = JSON.parse(raw);
+  } catch(e) {}
+
+  // Auto-completar misión 1 si tiene animal registrado HOY
+  const animales = window.__rancho?.animales || [];
+  const tieneAnimalHoy = animales.some(a => {
+    const t = a.creado || 0;
+    return (Date.now() - t) < 86400000;
+  });
+  if (tieneAnimalHoy) estado.registrar_animal = true;
+
+  return [
+    { id:'registrar_animal', texto:'Registra 1 animal en Mi Hato', xp:50, completa: !!estado.registrar_animal },
+    { id:'revisar_mercado',  texto:'Revisa el precio del becerro en Mercado', xp:20, completa: !!estado.revisar_mercado },
+    { id:'ver_leccion',      texto:'Mira 1 lección de un curso', xp:30, completa: !!estado.ver_leccion }
+  ];
+}
+
+// Marcar misión como completa
+window.mpCompletarMision = function(id) {
+  const HOY = new Date().toISOString().slice(0,10);
+  let estado = {};
+  try {
+    const raw = localStorage.getItem('vp_misiones_' + HOY);
+    if (raw) estado = JSON.parse(raw);
+  } catch(e) {}
+  estado[id] = true;
+  localStorage.setItem('vp_misiones_' + HOY, JSON.stringify(estado));
+  pintarMiProgreso();
+};
+
+// Pintar TODA la sección Mi Progreso
+window.pintarMiProgreso = function() {
+  const xp = mpCalcularXP();
+  const nivelInfo = mpGetNivel(xp);
+  const animales = (window.__rancho?.animales || []).length;
+  const certs = window.__rancho?.certificadosCount || 0;
+  const racha = mpGetRacha();
+  const diasActivo = mpGetDiasActivo();
+
+  // Stats card
+  const elRacha = document.getElementById('mpStatRacha');
+  if (elRacha) elRacha.innerHTML = '🔥 ' + racha;
+  const elAn = document.getElementById('mpStatAnimales');
+  if (elAn) elAn.textContent = animales;
+  const elCu = document.getElementById('mpStatCursos');
+  if (elCu) elCu.textContent = certs;
+  const elDa = document.getElementById('mpStatActivo');
+  if (elDa) elDa.textContent = diasActivo;
+  const elMR = document.getElementById('mpMisionesRacha');
+  if (elMR) elMR.textContent = 'Racha ' + racha + (racha === 1 ? ' día' : ' días');
+
+  // Nombre del rancho
+  const ranchoNombre = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?.nombreRancho)
+    ? MIEMBRO_ACTUAL.nombreRancho
+    : 'Mi Rancho';
+  const elRN = document.getElementById('mpRanchoName');
+  if (elRN) elRN.textContent = ranchoNombre;
+
+  // Ranking (heurística simple basada en XP, sin query global)
+  const elRank = document.getElementById('mpRankText');
+  if (elRank) {
+    if (xp < 100) elRank.textContent = 'Empezando tu camino';
+    else if (xp < 500) elRank.textContent = 'En el top 40% de ganaderos';
+    else if (xp < 1500) elRank.textContent = 'En el top 20% de ganaderos';
+    else elRank.textContent = 'En el top 10% de ganaderos';
+  }
+
+  // Badge de nivel
+  const elBN = document.getElementById('mpRankBadgeNivel');
+  if (elBN) elBN.innerHTML = nivelInfo.icono + ' ' + nivelInfo.nombre + ' · Nivel ' + nivelInfo.nivel;
+
+  // Barra XP
+  const xpEnNivel = xp - nivelInfo.xpMin;
+  const xpMetaNivel = nivelInfo.xpMax - nivelInfo.xpMin;
+  const pct = Math.min(100, Math.round((xpEnNivel / xpMetaNivel) * 100));
+  const proximoNivel = MP_NIVELES.find(n => n.nivel === nivelInfo.nivel + 1);
+  const xpFalta = nivelInfo.xpMax - xp;
+
+  const elXa = document.getElementById('mpXpActual');
+  if (elXa) elXa.textContent = xp;
+  const elXm = document.getElementById('mpXpMeta');
+  if (elXm) elXm.textContent = nivelInfo.xpMax;
+  const elXf = document.getElementById('mpXpFalta');
+  if (elXf) {
+    if (proximoNivel) {
+      const cambiaNombre = proximoNivel.nombre !== nivelInfo.nombre;
+      elXf.textContent = 'Faltan ' + xpFalta + ' XP para ' + (cambiaNombre ? proximoNivel.nombre : 'subir');
+    } else {
+      elXf.textContent = '¡Nivel máximo alcanzado!';
+    }
+  }
+  const elFill = document.getElementById('bitaXpFill');
+  if (elFill) elFill.style.width = pct + '%';
+
+  // Roadmap
+  const roadmap = document.getElementById('mpRoadmap');
+  if (roadmap) {
+    roadmap.innerHTML = MP_ETAPAS.map(et => {
+      let estado = 'locked';
+      let sub = 'Nivel ' + et.nivelMin;
+      if (nivelInfo.nivel > et.nivelMax) {
+        estado = 'completo';
+        sub = 'Completado';
+      } else if (nivelInfo.nivel >= et.nivelMin && nivelInfo.nivel <= et.nivelMax) {
+        estado = 'actual';
+        sub = 'Estás aquí';
+      }
+      const icono = estado === 'completo' ? '✓' : (estado === 'locked' ? '🔒' : et.icono);
+      return '<div class="mp-nivel ' + estado + '">' +
+        '<div class="mp-nivel-icon">' + icono + '</div>' +
+        '<div class="mp-nivel-name">' + et.nombre + '</div>' +
+        '<div class="mp-nivel-sub">' + sub + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Misiones del día
+  const misiones = mpGetMisiones();
+  const elML = document.getElementById('mpMisionesList');
+  if (elML) {
+    elML.innerHTML = misiones.map(m => {
+      const onclick = m.completa ? '' : 'onclick="mpCompletarMision(\'' + m.id + '\')"';
+      return '<div class="mp-mision ' + (m.completa ? 'completa' : '') + '" ' + onclick + ' style="cursor:' + (m.completa ? 'default' : 'pointer') + '">' +
+        '<div class="mp-mision-check">' + (m.completa ? '✓' : '') + '</div>' +
+        '<div class="mp-mision-text">' + m.texto + '</div>' +
+        '<div class="mp-mision-xp">+' + m.xp + ' XP</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Recompensas
+  const RECOMPENSAS = [
+    { icono:'💸', titulo:'5% descuento', sub:'próxima renovación', nivel:3 },
+    { icono:'📡', titulo:'Webinar VIP',   sub:'acceso prioritario', nivel:5 },
+    { icono:'🩺', titulo:'Consulta MVZ',  sub:'30 min 1-on-1',      nivel:7 }
+  ];
+  const elRG = document.getElementById('mpRecompensasGrid');
+  if (elRG) {
+    elRG.innerHTML = RECOMPENSAS.map(r => {
+      const desbloqueado = nivelInfo.nivel >= r.nivel;
+      const proximo = nivelInfo.nivel === r.nivel - 1;
+      return '<div class="mp-recompensa ' + (desbloqueado ? '' : 'locked') + '">' +
+        '<div class="mp-recompensa-icon">' + r.icono + '</div>' +
+        '<div class="mp-recompensa-title">' + r.titulo + '</div>' +
+        '<div class="mp-recompensa-sub">' + r.sub + '</div>' +
+        '<div class="mp-recompensa-nivel">' + (desbloqueado ? '✓ Desbloqueado' : 'Nivel ' + r.nivel) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Logros con progreso real
+  const LOGROS = [
+    { id:'primer_paso', emoji:'🌱', name:'Primer paso', desc:'Te registraste en el rancho', actual:1, meta:1 },
+    { id:'racha_3',     emoji:'🔥', name:'Racha de 3',  desc:'3 días seguidos activo',      actual:racha, meta:3 },
+    { id:'ganadero',    emoji:'🐄', name:'Ganadero',    desc:'Registra 5 animales',         actual:animales, meta:5 },
+    { id:'estudiante',  emoji:'📚', name:'Estudiante',  desc:'Completa 1 curso',            actual:certs, meta:1 },
+    { id:'mision_dia',  emoji:'🎯', name:'Misión cumplida', desc:'Completa 1 misión diaria', actual:misiones.filter(m=>m.completa).length, meta:1 },
+    { id:'mercader',    emoji:'💰', name:'Mercader',    desc:'Revisa precios 10 días',      actual:Math.min(diasActivo, 10), meta:10 },
+    { id:'hato_grande', emoji:'🐂', name:'Hato grande', desc:'10+ animales registrados',    actual:animales, meta:10 },
+    { id:'maestro',     emoji:'⭐', name:'Maestro',     desc:'Completa 5 cursos',           actual:certs, meta:5 },
+    { id:'capataz_nv',  emoji:'🏆', name:'Capataz',     desc:'Llega al nivel 3',            actual:nivelInfo.nivel, meta:3 },
+    { id:'patron_nv',   emoji:'👑', name:'Patrón',      desc:'Llega al nivel 7',            actual:nivelInfo.nivel, meta:7, deep:true },
+    { id:'leyenda',     emoji:'💎', name:'Leyenda',     desc:'Llega al nivel 10',           actual:nivelInfo.nivel, meta:10, deep:true },
+    { id:'vip',         emoji:'🤝', name:'Comunidad',   desc:'Únete al grupo VIP',          actual:(window.__rancho?.userPlan && window.__rancho.userPlan()==='vip') ? 1 : 0, meta:1 }
+  ];
+
+  const ganados = LOGROS.filter(l => l.actual >= l.meta).length;
+  const elLC = document.getElementById('mpLogrosCount');
+  if (elLC) elLC.textContent = ganados + ' de ' + LOGROS.length + ' desbloqueados';
+
+  const elLG = document.getElementById('logrosGrid');
+  if (elLG) {
+    elLG.innerHTML = LOGROS.map(l => {
+      const earned = l.actual >= l.meta;
+      const pct = Math.min(100, Math.round((l.actual / l.meta) * 100));
+      let claseLogro = 'logro';
+      if (earned) claseLogro += ' earned';
+      else if (l.deep) claseLogro += ' locked-deep';
+
+      let cuerpo = '';
+      if (earned) {
+        cuerpo = '<div class="logro-desc">' + l.desc + ' · ✓ Completo</div>';
+      } else if (l.deep) {
+        cuerpo = '<div class="logro-desc">🔒 ' + l.desc + '</div>';
+      } else {
+        cuerpo = '<div class="logro-desc">' + l.desc + '</div>' +
+          '<div class="logro-progress-bar"><div class="logro-progress-fill" style="width:' + pct + '%"></div></div>' +
+          '<div class="logro-progress-text">' + l.actual + ' / ' + l.meta + ' · ' + pct + '%</div>';
+      }
+
+      return '<div class="' + claseLogro + '">' +
+        '<div class="logro-head">' +
+          '<span class="logro-emoji">' + l.emoji + '</span>' +
+          '<div class="logro-name">' + l.name + '</div>' +
+        '</div>' +
+        cuerpo +
+      '</div>';
+    }).join('');
+  }
+};
+
+// Editar nombre del rancho (modal simple con prompt nativo OK porque NO es destructivo)
+window.editarNombreRancho = async function() {
+  const actual = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL?.nombreRancho) || '';
+  const nuevo = prompt('Nombre de tu rancho:', actual || 'El Coyote');
+  if (!nuevo || nuevo.trim() === '' || nuevo === actual) return;
+  const nombre = nuevo.trim().slice(0, 40);
+
+  // Pintar inmediato (optimista)
+  const elRN = document.getElementById('mpRanchoName');
+  if (elRN) elRN.textContent = nombre;
+
+  // Guardar en Firestore si hay miembro
+  try {
+    if (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL && MIEMBRO_ACTUAL._docId) {
+      const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+      const db = window.__rancho.db;
+      const coleccion = MIEMBRO_ACTUAL._tipo === 'free' ? 'usuarios_free' : 'miembros';
+      await updateDoc(doc(db, coleccion, MIEMBRO_ACTUAL._docId), { nombreRancho: nombre });
+      MIEMBRO_ACTUAL.nombreRancho = nombre;
+    } else {
+      // Fallback localStorage para usuarios sin doc
+      localStorage.setItem('vp_nombre_rancho', nombre);
+    }
+  } catch(e) {
+    console.warn('No se pudo guardar nombre del rancho:', e);
+    localStorage.setItem('vp_nombre_rancho', nombre);
+  }
+};
+
+// Función legacy mantenida por compatibilidad
+function pintarLogros() {
+  if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
+}
+
+// Inicializar racha al cargar
+try { mpActualizarRacha(); } catch(e) {}
 
 // ═══════════════════════════════════════════════════════════
 // 📚 BIBLIOTECA — PDFs (colección 'pdfs' de Firestore)
@@ -13370,6 +14071,7 @@ window.addEventListener('DOMContentLoaded', () => {
   pintarHatoCasco();
   pintarTools();
   pintarLogros();
+  if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
   pintarCertificados();
   pintarNoticias();
   refrescarTermometro();
