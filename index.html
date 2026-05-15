@@ -8597,32 +8597,6 @@ button { font-family: inherit; }
           <div class="mp-roadmap" id="mpRoadmap"></div>
         </div>
 
-        <!-- Misiones del día -->
-        <div class="mp-misiones">
-          <div class="mp-misiones-head">
-            <div class="mp-misiones-title">
-              <span class="mp-misiones-title-icon">🎯</span>
-              <div>
-                <h3>Misiones de hoy</h3>
-                <p>Termina las 3 y suma <strong style="color:var(--gold)">+100 XP</strong> bonus</p>
-              </div>
-            </div>
-            <div class="mp-racha-badge">
-              🔥 <span id="mpMisionesRacha">Racha 0 días</span>
-            </div>
-          </div>
-          <div id="mpMisionesList"></div>
-        </div>
-
-        <!-- Recompensas -->
-        <div class="mp-recompensas">
-          <div class="mp-recompensas-head">
-            <span style="font-size:22px;">🎁</span>
-            <h3>Te falta poco para desbloquear</h3>
-          </div>
-          <div class="mp-recompensas-grid" id="mpRecompensasGrid"></div>
-        </div>
-
         <!-- Logros con progreso real -->
         <div class="mp-logros-head">
           <h3>🏆 Logros</h3>
@@ -13468,29 +13442,25 @@ function mpCalcularProgreso() {
   const certs    = window.__rancho?.certificadosCount || 0;
   const racha    = mpGetRacha();
   const dias     = mpGetDiasActivo();
-  const misionesHoy = mpGetMisiones().filter(m => m.completa).length;
 
   // Pesos (suman 100):
-  // - Cursos completados: 35% (lo más valioso)
-  // - Animales en hato:   25%
+  // - Cursos completados: 40% (lo más valioso)
+  // - Animales en hato:   30%
   // - Días activo:        15%
   // - Racha consecutiva:  15%
-  // - Misiones del día:   10%
-  const pctCursos   = Math.min(1, certs / t.totalCursos)        * 35;
-  const pctAnimales = Math.min(1, animales / t.metaAnimales)    * 25;
+  const pctCursos   = Math.min(1, certs / t.totalCursos)        * 40;
+  const pctAnimales = Math.min(1, animales / t.metaAnimales)    * 30;
   const pctDias     = Math.min(1, dias / t.metaDias)            * 15;
   const pctRacha    = Math.min(1, racha / t.metaRacha)          * 15;
-  const pctMisiones = Math.min(1, misionesHoy / 3)              * 10;
 
-  const total = pctCursos + pctAnimales + pctDias + pctRacha + pctMisiones;
+  const total = pctCursos + pctAnimales + pctDias + pctRacha;
   return {
     total: Math.min(100, Math.round(total * 10) / 10),
     desglose: {
-      cursos:   { actual:certs,        meta:t.totalCursos,  pct:Math.round(pctCursos*10)/10,   peso:35 },
-      animales: { actual:animales,     meta:t.metaAnimales, pct:Math.round(pctAnimales*10)/10, peso:25 },
+      cursos:   { actual:certs,        meta:t.totalCursos,  pct:Math.round(pctCursos*10)/10,   peso:40 },
+      animales: { actual:animales,     meta:t.metaAnimales, pct:Math.round(pctAnimales*10)/10, peso:30 },
       dias:     { actual:dias,         meta:t.metaDias,     pct:Math.round(pctDias*10)/10,     peso:15 },
-      racha:    { actual:racha,        meta:t.metaRacha,    pct:Math.round(pctRacha*10)/10,    peso:15 },
-      misiones: { actual:misionesHoy,  meta:3,              pct:Math.round(pctMisiones*10)/10, peso:10 }
+      racha:    { actual:racha,        meta:t.metaRacha,    pct:Math.round(pctRacha*10)/10,    peso:15 }
     }
   };
 }
@@ -13676,8 +13646,7 @@ window.pintarMiProgreso = function() {
       '📚 Cursos: ' + d.cursos.actual + '/' + d.cursos.meta + ' (+' + d.cursos.pct + '%)\n' +
       '🐄 Animales: ' + d.animales.actual + '/' + d.animales.meta + ' (+' + d.animales.pct + '%)\n' +
       '📅 Días activo: ' + d.dias.actual + '/' + d.dias.meta + ' (+' + d.dias.pct + '%)\n' +
-      '🔥 Racha: ' + d.racha.actual + '/' + d.racha.meta + ' (+' + d.racha.pct + '%)\n' +
-      '🎯 Misiones hoy: ' + d.misiones.actual + '/3 (+' + d.misiones.pct + '%)';
+      '🔥 Racha: ' + d.racha.actual + '/' + d.racha.meta + ' (+' + d.racha.pct + '%)';
   }
 
   // Roadmap basado en % de etapa
@@ -13702,39 +13671,6 @@ window.pintarMiProgreso = function() {
     }).join('');
   }
 
-  // Misiones del día
-  const misiones = mpGetMisiones();
-  const elML = document.getElementById('mpMisionesList');
-  if (elML) {
-    elML.innerHTML = misiones.map(m => {
-      const onclick = m.completa ? '' : 'onclick="mpCompletarMision(\'' + m.id + '\')"';
-      return '<div class="mp-mision ' + (m.completa ? 'completa' : '') + '" ' + onclick + ' style="cursor:' + (m.completa ? 'default' : 'pointer') + '">' +
-        '<div class="mp-mision-check">' + (m.completa ? '✓' : '') + '</div>' +
-        '<div class="mp-mision-text">' + m.texto + '</div>' +
-        '<div class="mp-mision-xp">+' + m.xp + ' XP</div>' +
-      '</div>';
-    }).join('');
-  }
-
-  // Recompensas — desbloquean al alcanzar % del rancho
-  const RECOMPENSAS = [
-    { icono:'💸', titulo:'5% descuento', sub:'próxima renovación', metaPct:20 },
-    { icono:'📡', titulo:'Webinar VIP',   sub:'acceso prioritario', metaPct:40 },
-    { icono:'🩺', titulo:'Consulta MVZ',  sub:'30 min 1-on-1',      metaPct:60 }
-  ];
-  const elRG = document.getElementById('mpRecompensasGrid');
-  if (elRG) {
-    elRG.innerHTML = RECOMPENSAS.map(r => {
-      const desbloqueado = pctGlobal >= r.metaPct;
-      return '<div class="mp-recompensa ' + (desbloqueado ? '' : 'locked') + '">' +
-        '<div class="mp-recompensa-icon">' + r.icono + '</div>' +
-        '<div class="mp-recompensa-title">' + r.titulo + '</div>' +
-        '<div class="mp-recompensa-sub">' + r.sub + '</div>' +
-        '<div class="mp-recompensa-nivel">' + (desbloqueado ? '✓ Desbloqueado' : 'Al ' + r.metaPct + '% del rancho') + '</div>' +
-      '</div>';
-    }).join('');
-  }
-
   // Logros DINÁMICOS — las metas crecen junto con el rancho
   const totalCursos = totales.totalCursos;
   // Hitos de cursos: 25%, 50%, 100% del total disponible
@@ -13750,7 +13686,6 @@ window.pintarMiProgreso = function() {
     { id:'racha_3',     emoji:'🔥', name:'Racha de 3',  desc:'3 días seguidos activo',      actual:racha, meta:3 },
     { id:'ganadero',    emoji:'🐄', name:'Ganadero',    desc:'Registra ' + metaAnHito1 + ' animales', actual:animales, meta:metaAnHito1 },
     { id:'estudiante',  emoji:'📚', name:'Estudiante',  desc:'Completa ' + metaCursos25 + ' curso(s)',    actual:certs, meta:metaCursos25 },
-    { id:'mision_dia',  emoji:'🎯', name:'Misión cumplida', desc:'Completa 1 misión diaria', actual:misiones.filter(m=>m.completa).length, meta:1 },
     { id:'mercader',    emoji:'💰', name:'Mercader',    desc:'Activo 10 días',              actual:Math.min(diasActivo, 10), meta:10 },
     { id:'hato_grande', emoji:'🐂', name:'Hato grande', desc:metaAnHito2 + '+ animales registrados',    actual:animales, meta:metaAnHito2 },
     { id:'maestro',     emoji:'⭐', name:'Maestro',     desc:'Completa ' + metaCursos50 + ' cursos',     actual:certs, meta:metaCursos50 },
