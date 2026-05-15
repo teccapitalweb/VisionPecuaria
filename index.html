@@ -10578,7 +10578,8 @@ button { font-family: inherit; }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword,
-  setPersistence, browserLocalPersistence
+  setPersistence, browserLocalPersistence,
+  GoogleAuthProvider, signInWithCredential
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp
@@ -10604,27 +10605,59 @@ window.__rancho = Object.assign(window.__rancho || {}, { auth, db });
 
 // ═══════════════════════════════════════════════════════════
 // AUTOLOGIN POR HASH (cross-domain desde la landing)
+// Soporta 3 modos:
+//   #a=...  → email+password (login normal en landing)
+//   #g=...  → Google credential (id_token de Google OAuth)
+//   #f=...  → Firebase idToken (informativo, ya hay sesión)
 // ═══════════════════════════════════════════════════════════
 async function procesarHashAutologin() {
   const hash = window.location.hash;
-  if (!hash || !hash.includes('a=')) return false;
-  const m = hash.match(/a=([^&]+)/);
-  if (!m) return false;
-  try {
-    // Landing codifica: btoa(encodeURIComponent(JSON.stringify(data)))
-    // Portal decodifica orden INVERSO: JSON.parse(decodeURIComponent(atob(...)))
-    const decoded = decodeURIComponent(atob(m[1]));
-    const data = JSON.parse(decoded);
-    if (!data.e || !data.p || !data.t) return false;
-    if (Date.now() - data.t > 5 * 60 * 1000) return false; // expira 5 min
-    setBootStatus('Reconociendo tu sesión...');
-    await signInWithEmailAndPassword(auth, data.e, data.p);
-    history.replaceState(null, '', window.location.pathname);
-    return true;
-  } catch (e) {
-    console.warn('Hash autologin failed:', e);
-    return false;
+  if (!hash) return false;
+
+  // ── Modo 1: Google credential (#g=)
+  const mG = hash.match(/g=([^&]+)/);
+  if (mG) {
+    try {
+      const decoded = decodeURIComponent(atob(mG[1]));
+      const data = JSON.parse(decoded);
+      if (!data.g || !data.t) return false;
+      if (Date.now() - data.t > 5 * 60 * 1000) return false; // expira 5 min
+      setBootStatus('Reconociendo tu sesión de Google...');
+      const credential = GoogleAuthProvider.credential(data.g);
+      await signInWithCredential(auth, credential);
+      history.replaceState(null, '', window.location.pathname);
+      return true;
+    } catch (e) {
+      console.warn('Hash Google autologin failed:', e);
+      // No retornamos false — caemos al modo #a si existe
+    }
   }
+
+  // ── Modo 2: email+password (#a=)
+  if (hash.includes('a=')) {
+    const m = hash.match(/a=([^&]+)/);
+    if (m) {
+      try {
+        const decoded = decodeURIComponent(atob(m[1]));
+        const data = JSON.parse(decoded);
+        if (!data.e || !data.p || !data.t) return false;
+        if (Date.now() - data.t > 5 * 60 * 1000) return false;
+        setBootStatus('Reconociendo tu sesión...');
+        await signInWithEmailAndPassword(auth, data.e, data.p);
+        history.replaceState(null, '', window.location.pathname);
+        return true;
+      } catch (e) {
+        console.warn('Hash autologin failed:', e);
+      }
+    }
+  }
+
+  // ── Modo 3: idToken informativo (#f=) — solo limpiamos URL, Firebase ya tiene sesión
+  if (hash.includes('f=')) {
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  return false;
 }
 
 // ═══════════════════════════════════════════════════════════
