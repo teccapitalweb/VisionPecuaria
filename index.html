@@ -10723,6 +10723,9 @@ onAuthStateChanged(auth, async (user) => {
     pintarUsuario(user);
     hideBoot();
 
+    // 🔒 Pintar candados en el sidebar según plan
+    setTimeout(() => { try { pintarCandadosSidebar(); } catch(e){} }, 100);
+
     // 🛡️ Iniciar suscripciones con polling: las funciones están en otro <script>
     // que puede ejecutarse después de este module. Esperamos hasta 6s.
     let intentos = 0;
@@ -10805,6 +10808,11 @@ function pintarUsuario(user) {
     document.querySelectorAll('[data-vip]').forEach(b => b.removeAttribute('data-vip'));
   }
 
+  // 🔒 Re-pintar candados según plan actual
+  if (typeof pintarCandadosSidebar === 'function') {
+    setTimeout(() => { try { pintarCandadosSidebar(); } catch(e){} }, 50);
+  }
+
   // Saludo según hora
   const h = new Date().getHours();
   let saludo = 'Buenos días';
@@ -10837,9 +10845,43 @@ window.__rancho = window.__rancho || {};
 // ═══════════════════════════════════════════════════════════
 // NAVEGACIÓN
 // ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// 🔐 SECCIONES BLOQUEADAS PARA FREE
+// Solo Casco, Soporte (caseta) y Configuración son libres.
+// Todo lo demás requiere Élite Pecuario.
+// ═══════════════════════════════════════════════════════════
+const SECCIONES_LIBRES_FREE = ['casco', 'caseta', 'config'];
+
+const MENSAJES_BLOQUEO = {
+  hato:             'Para registrar y gestionar tu hato necesitas ser Élite Pecuario.',
+  botiquin:         'El Diagnóstico Veterinario con 22 enfermedades es exclusivo de Élite Pecuario.',
+  calculadora:      'La Calculadora Pecuaria (rentabilidad, forraje, nutrición) es exclusiva de Élite Pecuario.',
+  bitacora:         'La Bitácora digital de eventos es exclusiva de Élite Pecuario.',
+  mercado:          'Los precios SIAP-SADER en tiempo real son exclusivos de Élite Pecuario.',
+  apoyos:           'Los apoyos del gobierno verificados son exclusivos de Élite Pecuario.',
+  establo:          'La Biblioteca de cursos completa es exclusiva de Élite Pecuario.',
+  biblioteca:       'El Material de apoyo (PDFs descargables) es exclusivo de Élite Pecuario.',
+  vivo:             'Los Webinars exclusivos son solo para Élite Pecuario.',
+  'bitacora-capataz': 'Mi Progreso, logros y ranking son exclusivos de Élite Pecuario.',
+  certificados:     'Los Certificados oficiales son exclusivos de Élite Pecuario.',
+  radar:            'La Comunidad de ranchos es exclusiva de Élite Pecuario.',
+  curso:            'Acceder a este curso requiere ser Élite Pecuario.'
+};
+
 window.navigateTo = function(section) {
-  // Permitimos entrar a todas las secciones para que vean el contenido
-  // El bloqueo se hace por contenido (videos individuales, descargas, etc)
+  // 🔒 Bloqueo para usuarios FREE
+  const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
+  if (plan !== 'vip' && plan !== 'elite' && !SECCIONES_LIBRES_FREE.includes(section)) {
+    const msg = MENSAJES_BLOQUEO[section] || 'Esta función es exclusiva de Élite Pecuario.';
+    if (typeof abrirModalVIP === 'function') {
+      abrirModalVIP(msg);
+    } else {
+      alert(msg);
+    }
+    return;
+  }
+
+  // Permitimos entrar — usuario VIP o sección libre
   document.querySelectorAll('.sb-nav-item').forEach(b => {
     b.classList.toggle('active', b.dataset.section === section);
   });
@@ -10861,6 +10903,29 @@ window.navigateTo = function(section) {
       mpCompletarMision('ver_leccion');
     }
   } catch(e) {}
+};
+
+// Pintar candados 🔒 en el sidebar para usuarios FREE
+window.pintarCandadosSidebar = function() {
+  const plan = (window.__rancho?.userPlan && window.__rancho.userPlan()) || 'free';
+  document.querySelectorAll('.sb-nav-item').forEach(btn => {
+    const section = btn.dataset.section;
+    if (!section) return;
+
+    // Quitar candado anterior si existe
+    const old = btn.querySelector('.sb-lock');
+    if (old) old.remove();
+
+    if (plan === 'vip' || plan === 'elite') return;
+    if (SECCIONES_LIBRES_FREE.includes(section)) return;
+
+    // Agregar candado dorado al final
+    const lock = document.createElement('span');
+    lock.className = 'sb-lock';
+    lock.textContent = '🔒';
+    lock.style.cssText = 'margin-left:auto;font-size:.8rem;opacity:.7;';
+    btn.appendChild(lock);
+  });
 };
 
 document.querySelectorAll('.sb-nav-item').forEach(btn => {
