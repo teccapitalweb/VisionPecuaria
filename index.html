@@ -10732,6 +10732,7 @@ window.__rancho.iniciarEstablo = async function() {
       window.__rancho.cursos = CURSOS_FIRESTORE;
       pintarEstablo();
       refrescarTermometro();
+      if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
     }, (err) => {
       clearTimeout(safetyTimer);
       console.error('Error suscribiéndose a cursos:', err);
@@ -13414,41 +13415,90 @@ setTimeout(() => {
 // Cuando llegan animales actualizar bitácora
 const _originalSetAnimales = window.__rancho?.setAnimales;
 // ═══════════════════════════════════════════════════════════
-// 🏆 SISTEMA MI PROGRESO v2
-// Calcula XP, nivel, racha, misiones y logros con progreso real
+// 🏆 SISTEMA MI PROGRESO v3 — DINÁMICO Y RELATIVO AL RANCHO
+// Niveles calculados como % del CONTENIDO TOTAL disponible.
+// Si suben más cursos/webinars, se recalcula en vivo.
 // ═══════════════════════════════════════════════════════════
 
-// Niveles definidos por XP acumulado
-const MP_NIVELES = [
-  { nivel:1, nombre:'Aprendiz', icono:'🌱', xpMin:0,    xpMax:100  },
-  { nivel:2, nombre:'Aprendiz', icono:'🌱', xpMin:100,  xpMax:300  },
-  { nivel:3, nombre:'Capataz',  icono:'🤠', xpMin:300,  xpMax:600  },
-  { nivel:4, nombre:'Capataz',  icono:'🤠', xpMin:600,  xpMax:1000 },
-  { nivel:5, nombre:'Mayoral',  icono:'🐂', xpMin:1000, xpMax:1500 },
-  { nivel:6, nombre:'Mayoral',  icono:'🐂', xpMin:1500, xpMax:2200 },
-  { nivel:7, nombre:'Patrón',   icono:'👑', xpMin:2200, xpMax:3000 },
-  { nivel:8, nombre:'Patrón',   icono:'👑', xpMin:3000, xpMax:4000 },
-  { nivel:9, nombre:'Hacendado',icono:'🏛️', xpMin:4000, xpMax:5500 },
-  { nivel:10,nombre:'Hacendado',icono:'🏛️', xpMin:5500, xpMax:99999}
-];
-
-// Etapas mostradas en el roadmap (visual)
+// 5 etapas distribuidas en 100% del rancho
 const MP_ETAPAS = [
-  { nombre:'Aprendiz',  icono:'🌱', nivelMin:1,  nivelMax:2 },
-  { nombre:'Capataz',   icono:'🤠', nivelMin:3,  nivelMax:4 },
-  { nombre:'Mayoral',   icono:'🐂', nivelMin:5,  nivelMax:6 },
-  { nombre:'Patrón',    icono:'👑', nivelMin:7,  nivelMax:8 },
-  { nombre:'Hacendado', icono:'🏛️', nivelMin:9,  nivelMax:10 }
+  { nombre:'Aprendiz',  icono:'🌱', pctMin:0,   pctMax:20  },
+  { nombre:'Capataz',   icono:'🤠', pctMin:20,  pctMax:40  },
+  { nombre:'Mayoral',   icono:'🐂', pctMin:40,  pctMax:60  },
+  { nombre:'Patrón',    icono:'👑', pctMin:60,  pctMax:85  },
+  { nombre:'Hacendado', icono:'🏛️', pctMin:85,  pctMax:100 }
 ];
 
-// Calcula XP total del usuario (heurística simple, sin Fase 2)
-function mpCalcularXP() {
+// 10 niveles = 2 por etapa, cada uno cubre 10% del rancho
+function mpNivelPorPct(pct) {
+  if (pct >= 100) return { nivel:10, nombre:'Hacendado', icono:'🏛️', pctMin:90, pctMax:100 };
+  const nivel = Math.min(10, Math.floor(pct / 10) + 1);
+  const etapa = MP_ETAPAS.find(e => pct >= e.pctMin && pct < e.pctMax) || MP_ETAPAS[0];
+  return {
+    nivel,
+    nombre: etapa.nombre,
+    icono:  etapa.icono,
+    pctMin: (nivel - 1) * 10,
+    pctMax: nivel * 10
+  };
+}
+
+// Calcula los TOTALES disponibles del rancho (lo que existe en Firestore)
+function mpTotalesRancho() {
+  const totalCursos    = (typeof CURSOS_FIRESTORE !== 'undefined' ? CURSOS_FIRESTORE.length : 0) || 1;
+  const totalWebinars  = (window.SESIONES_FIRESTORE || []).length || 1;
+  // Meta dinámica de animales: piso 5, sube si el usuario ya tiene muchos
+  const tieneAnimales  = (window.__rancho?.animales || []).length;
+  const metaAnimales   = Math.max(5, Math.ceil(tieneAnimales / 5) * 5 + 5);
+  // Meta dinámica de días activos: 60 días primer ciclo, luego se duplica
+  const diasActivo     = mpGetDiasActivo();
+  const metaDias       = diasActivo < 60 ? 60 : 180;
+  // Meta dinámica de racha: meta inicial 30 días
+  const racha          = mpGetRacha();
+  const metaRacha      = racha < 30 ? 30 : 90;
+
+  return { totalCursos, totalWebinars, metaAnimales, metaDias, metaRacha };
+}
+
+// Calcula el % de progreso global del rancho (0-100)
+// Cada componente pesa diferente según su importancia
+function mpCalcularProgreso() {
+  const t = mpTotalesRancho();
   const animales = (window.__rancho?.animales || []).length;
-  const certs = window.__rancho?.certificadosCount || 0;
-  const racha = mpGetRacha();
-  const diasActivo = mpGetDiasActivo();
-  // Fórmula: 30 XP por animal + 80 XP por certificado + 5 XP por día activo + 10 XP por día de racha
-  return (animales * 30) + (certs * 80) + (diasActivo * 5) + (racha * 10);
+  const certs    = window.__rancho?.certificadosCount || 0;
+  const racha    = mpGetRacha();
+  const dias     = mpGetDiasActivo();
+  const misionesHoy = mpGetMisiones().filter(m => m.completa).length;
+
+  // Pesos (suman 100):
+  // - Cursos completados: 35% (lo más valioso)
+  // - Animales en hato:   25%
+  // - Días activo:        15%
+  // - Racha consecutiva:  15%
+  // - Misiones del día:   10%
+  const pctCursos   = Math.min(1, certs / t.totalCursos)        * 35;
+  const pctAnimales = Math.min(1, animales / t.metaAnimales)    * 25;
+  const pctDias     = Math.min(1, dias / t.metaDias)            * 15;
+  const pctRacha    = Math.min(1, racha / t.metaRacha)          * 15;
+  const pctMisiones = Math.min(1, misionesHoy / 3)              * 10;
+
+  const total = pctCursos + pctAnimales + pctDias + pctRacha + pctMisiones;
+  return {
+    total: Math.min(100, Math.round(total * 10) / 10),
+    desglose: {
+      cursos:   { actual:certs,        meta:t.totalCursos,  pct:Math.round(pctCursos*10)/10,   peso:35 },
+      animales: { actual:animales,     meta:t.metaAnimales, pct:Math.round(pctAnimales*10)/10, peso:25 },
+      dias:     { actual:dias,         meta:t.metaDias,     pct:Math.round(pctDias*10)/10,     peso:15 },
+      racha:    { actual:racha,        meta:t.metaRacha,    pct:Math.round(pctRacha*10)/10,    peso:15 },
+      misiones: { actual:misionesHoy,  meta:3,              pct:Math.round(pctMisiones*10)/10, peso:10 }
+    }
+  };
+}
+
+// Wrapper que devuelve nivel completo basado en progreso
+function mpCalcularXP() {
+  // Mantengo el nombre por compat, pero ahora devuelve el progreso %
+  return mpCalcularProgreso().total;
 }
 
 // Lee racha desde localStorage (mejor que Firestore para Fase 1)
@@ -13498,14 +13548,6 @@ function mpActualizarRacha() {
   } catch(e) { console.warn('Error actualizando racha:', e); }
 }
 
-// Calcula nivel actual basado en XP
-function mpGetNivel(xp) {
-  for (let i = MP_NIVELES.length - 1; i >= 0; i--) {
-    if (xp >= MP_NIVELES[i].xpMin) return MP_NIVELES[i];
-  }
-  return MP_NIVELES[0];
-}
-
 // MISIONES del día (3 fijas, se completan visualmente)
 function mpGetMisiones() {
   const HOY = new Date().toISOString().slice(0,10);
@@ -13545,20 +13587,23 @@ window.mpCompletarMision = function(id) {
 
 // Pintar TODA la sección Mi Progreso
 window.pintarMiProgreso = function() {
-  const xp = mpCalcularXP();
-  const nivelInfo = mpGetNivel(xp);
+  const progreso = mpCalcularProgreso();
+  const pctGlobal = progreso.total;
+  const nivelInfo = mpNivelPorPct(pctGlobal);
+  const totales = mpTotalesRancho();
+
   const animales = (window.__rancho?.animales || []).length;
   const certs = window.__rancho?.certificadosCount || 0;
   const racha = mpGetRacha();
   const diasActivo = mpGetDiasActivo();
 
-  // Stats card
+  // Stats card (siempre mostramos lo real del usuario)
   const elRacha = document.getElementById('mpStatRacha');
   if (elRacha) elRacha.innerHTML = '🔥 ' + racha;
   const elAn = document.getElementById('mpStatAnimales');
   if (elAn) elAn.textContent = animales;
   const elCu = document.getElementById('mpStatCursos');
-  if (elCu) elCu.textContent = certs;
+  if (elCu) elCu.textContent = certs + (totales.totalCursos > 1 ? '/' + totales.totalCursos : '');
   const elDa = document.getElementById('mpStatActivo');
   if (elDa) elDa.textContent = diasActivo;
   const elMR = document.getElementById('mpMisionesRacha');
@@ -13588,52 +13633,63 @@ window.pintarMiProgreso = function() {
     elSub.innerHTML = partes.length ? partes.join(' · ') : '<span style="opacity:.5">Toca el lápiz para personalizar tu rancho</span>';
   }
 
-  // Ranking (heurística simple basada en XP, sin query global)
+  // Ranking según % de progreso real
   const elRank = document.getElementById('mpRankText');
   if (elRank) {
-    if (xp < 100) elRank.textContent = 'Empezando tu camino';
-    else if (xp < 500) elRank.textContent = 'En el top 40% de ganaderos';
-    else if (xp < 1500) elRank.textContent = 'En el top 20% de ganaderos';
-    else elRank.textContent = 'En el top 10% de ganaderos';
+    if (pctGlobal < 10) elRank.textContent = 'Empezando tu camino';
+    else if (pctGlobal < 30) elRank.textContent = 'En el top 50% de ganaderos';
+    else if (pctGlobal < 50) elRank.textContent = 'En el top 30% de ganaderos';
+    else if (pctGlobal < 75) elRank.textContent = 'En el top 15% de ganaderos';
+    else elRank.textContent = '🌟 En el top 5% de ganaderos';
   }
 
   // Badge de nivel
   const elBN = document.getElementById('mpRankBadgeNivel');
   if (elBN) elBN.innerHTML = nivelInfo.icono + ' ' + nivelInfo.nombre + ' · Nivel ' + nivelInfo.nivel;
 
-  // Barra XP
-  const xpEnNivel = xp - nivelInfo.xpMin;
-  const xpMetaNivel = nivelInfo.xpMax - nivelInfo.xpMin;
-  const pct = Math.min(100, Math.round((xpEnNivel / xpMetaNivel) * 100));
-  const proximoNivel = MP_NIVELES.find(n => n.nivel === nivelInfo.nivel + 1);
-  const xpFalta = nivelInfo.xpMax - xp;
+  // Barra de progreso del nivel actual (% dentro de los 10% del nivel)
+  const pctEnNivel = ((pctGlobal - nivelInfo.pctMin) / (nivelInfo.pctMax - nivelInfo.pctMin)) * 100;
+  const pctBarra = Math.min(100, Math.max(0, Math.round(pctEnNivel)));
+  const faltaPct = Math.max(0, Math.round((nivelInfo.pctMax - pctGlobal) * 10) / 10);
 
   const elXa = document.getElementById('mpXpActual');
-  if (elXa) elXa.textContent = xp;
+  if (elXa) elXa.innerHTML = pctGlobal + '<span style="font-size:.75rem;color:rgba(255,255,255,.5);">%</span>';
   const elXm = document.getElementById('mpXpMeta');
-  if (elXm) elXm.textContent = nivelInfo.xpMax;
+  if (elXm) elXm.textContent = '100% del rancho';
   const elXf = document.getElementById('mpXpFalta');
   if (elXf) {
-    if (proximoNivel) {
-      const cambiaNombre = proximoNivel.nombre !== nivelInfo.nombre;
-      elXf.textContent = 'Faltan ' + xpFalta + ' XP para ' + (cambiaNombre ? proximoNivel.nombre : 'subir');
+    if (nivelInfo.nivel >= 10) {
+      elXf.innerHTML = '🏆 ¡Has dominado el rancho!';
     } else {
-      elXf.textContent = '¡Nivel máximo alcanzado!';
+      const proximaEtapa = MP_ETAPAS.find(e => pctGlobal < e.pctMin);
+      const meta = proximaEtapa ? proximaEtapa.nombre : 'subir';
+      elXf.textContent = 'Faltan ' + faltaPct + '% para ' + meta;
     }
   }
   const elFill = document.getElementById('bitaXpFill');
-  if (elFill) elFill.style.width = pct + '%';
+  if (elFill) elFill.style.width = pctBarra + '%';
 
-  // Roadmap
+  // Tooltip con desglose (data-attribute para hover futuro)
+  if (elFill) {
+    const d = progreso.desglose;
+    elFill.title =
+      '📚 Cursos: ' + d.cursos.actual + '/' + d.cursos.meta + ' (+' + d.cursos.pct + '%)\n' +
+      '🐄 Animales: ' + d.animales.actual + '/' + d.animales.meta + ' (+' + d.animales.pct + '%)\n' +
+      '📅 Días activo: ' + d.dias.actual + '/' + d.dias.meta + ' (+' + d.dias.pct + '%)\n' +
+      '🔥 Racha: ' + d.racha.actual + '/' + d.racha.meta + ' (+' + d.racha.pct + '%)\n' +
+      '🎯 Misiones hoy: ' + d.misiones.actual + '/3 (+' + d.misiones.pct + '%)';
+  }
+
+  // Roadmap basado en % de etapa
   const roadmap = document.getElementById('mpRoadmap');
   if (roadmap) {
     roadmap.innerHTML = MP_ETAPAS.map(et => {
       let estado = 'locked';
-      let sub = 'Nivel ' + et.nivelMin;
-      if (nivelInfo.nivel > et.nivelMax) {
+      let sub = et.pctMin + '%-' + et.pctMax + '%';
+      if (pctGlobal >= et.pctMax) {
         estado = 'completo';
         sub = 'Completado';
-      } else if (nivelInfo.nivel >= et.nivelMin && nivelInfo.nivel <= et.nivelMax) {
+      } else if (pctGlobal >= et.pctMin && pctGlobal < et.pctMax) {
         estado = 'actual';
         sub = 'Estás aquí';
       }
@@ -13660,40 +13716,48 @@ window.pintarMiProgreso = function() {
     }).join('');
   }
 
-  // Recompensas
+  // Recompensas — desbloquean al alcanzar % del rancho
   const RECOMPENSAS = [
-    { icono:'💸', titulo:'5% descuento', sub:'próxima renovación', nivel:3 },
-    { icono:'📡', titulo:'Webinar VIP',   sub:'acceso prioritario', nivel:5 },
-    { icono:'🩺', titulo:'Consulta MVZ',  sub:'30 min 1-on-1',      nivel:7 }
+    { icono:'💸', titulo:'5% descuento', sub:'próxima renovación', metaPct:20 },
+    { icono:'📡', titulo:'Webinar VIP',   sub:'acceso prioritario', metaPct:40 },
+    { icono:'🩺', titulo:'Consulta MVZ',  sub:'30 min 1-on-1',      metaPct:60 }
   ];
   const elRG = document.getElementById('mpRecompensasGrid');
   if (elRG) {
     elRG.innerHTML = RECOMPENSAS.map(r => {
-      const desbloqueado = nivelInfo.nivel >= r.nivel;
-      const proximo = nivelInfo.nivel === r.nivel - 1;
+      const desbloqueado = pctGlobal >= r.metaPct;
       return '<div class="mp-recompensa ' + (desbloqueado ? '' : 'locked') + '">' +
         '<div class="mp-recompensa-icon">' + r.icono + '</div>' +
         '<div class="mp-recompensa-title">' + r.titulo + '</div>' +
         '<div class="mp-recompensa-sub">' + r.sub + '</div>' +
-        '<div class="mp-recompensa-nivel">' + (desbloqueado ? '✓ Desbloqueado' : 'Nivel ' + r.nivel) + '</div>' +
+        '<div class="mp-recompensa-nivel">' + (desbloqueado ? '✓ Desbloqueado' : 'Al ' + r.metaPct + '% del rancho') + '</div>' +
       '</div>';
     }).join('');
   }
 
-  // Logros con progreso real
+  // Logros DINÁMICOS — las metas crecen junto con el rancho
+  const totalCursos = totales.totalCursos;
+  // Hitos de cursos: 25%, 50%, 100% del total disponible
+  const metaCursos25  = Math.max(1, Math.ceil(totalCursos * 0.25));
+  const metaCursos50  = Math.max(2, Math.ceil(totalCursos * 0.50));
+  const metaCursos100 = totalCursos;
+  // Hitos de animales: meta base 5, luego progresiva
+  const metaAnHito1 = 5;
+  const metaAnHito2 = Math.max(10, Math.ceil(animales / 10) * 10);
+
   const LOGROS = [
     { id:'primer_paso', emoji:'🌱', name:'Primer paso', desc:'Te registraste en el rancho', actual:1, meta:1 },
     { id:'racha_3',     emoji:'🔥', name:'Racha de 3',  desc:'3 días seguidos activo',      actual:racha, meta:3 },
-    { id:'ganadero',    emoji:'🐄', name:'Ganadero',    desc:'Registra 5 animales',         actual:animales, meta:5 },
-    { id:'estudiante',  emoji:'📚', name:'Estudiante',  desc:'Completa 1 curso',            actual:certs, meta:1 },
+    { id:'ganadero',    emoji:'🐄', name:'Ganadero',    desc:'Registra ' + metaAnHito1 + ' animales', actual:animales, meta:metaAnHito1 },
+    { id:'estudiante',  emoji:'📚', name:'Estudiante',  desc:'Completa ' + metaCursos25 + ' curso(s)',    actual:certs, meta:metaCursos25 },
     { id:'mision_dia',  emoji:'🎯', name:'Misión cumplida', desc:'Completa 1 misión diaria', actual:misiones.filter(m=>m.completa).length, meta:1 },
-    { id:'mercader',    emoji:'💰', name:'Mercader',    desc:'Revisa precios 10 días',      actual:Math.min(diasActivo, 10), meta:10 },
-    { id:'hato_grande', emoji:'🐂', name:'Hato grande', desc:'10+ animales registrados',    actual:animales, meta:10 },
-    { id:'maestro',     emoji:'⭐', name:'Maestro',     desc:'Completa 5 cursos',           actual:certs, meta:5 },
-    { id:'capataz_nv',  emoji:'🏆', name:'Capataz',     desc:'Llega al nivel 3',            actual:nivelInfo.nivel, meta:3 },
-    { id:'patron_nv',   emoji:'👑', name:'Patrón',      desc:'Llega al nivel 7',            actual:nivelInfo.nivel, meta:7, deep:true },
-    { id:'leyenda',     emoji:'💎', name:'Leyenda',     desc:'Llega al nivel 10',           actual:nivelInfo.nivel, meta:10, deep:true },
-    { id:'vip',         emoji:'🤝', name:'Comunidad',   desc:'Únete al grupo VIP',          actual:(window.__rancho?.userPlan && window.__rancho.userPlan()==='vip') ? 1 : 0, meta:1 }
+    { id:'mercader',    emoji:'💰', name:'Mercader',    desc:'Activo 10 días',              actual:Math.min(diasActivo, 10), meta:10 },
+    { id:'hato_grande', emoji:'🐂', name:'Hato grande', desc:metaAnHito2 + '+ animales registrados',    actual:animales, meta:metaAnHito2 },
+    { id:'maestro',     emoji:'⭐', name:'Maestro',     desc:'Completa ' + metaCursos50 + ' cursos',     actual:certs, meta:metaCursos50 },
+    { id:'capataz_nv',  emoji:'🏆', name:'Capataz',     desc:'Llega al 20% del rancho',     actual:Math.round(pctGlobal), meta:20 },
+    { id:'patron_nv',   emoji:'👑', name:'Patrón',      desc:'Llega al 60% del rancho',     actual:Math.round(pctGlobal), meta:60, deep:pctGlobal<40 },
+    { id:'leyenda',     emoji:'💎', name:'Leyenda',     desc:'Domina el 100% del rancho',   actual:Math.round(pctGlobal), meta:100, deep:pctGlobal<60 },
+    { id:'enciclopedia', emoji:'📖', name:'Enciclopedia', desc:'Completa TODOS los ' + metaCursos100 + ' cursos', actual:certs, meta:metaCursos100, deep:certs < metaCursos50 }
   ];
 
   const ganados = LOGROS.filter(l => l.actual >= l.meta).length;
@@ -14158,6 +14222,7 @@ window.__rancho.iniciarContenido = async function() {
       window.SESIONES_FIRESTORE = SESIONES_FIRESTORE;
       pintarSesiones();
       try { pintarProxWebinar(); } catch(e) {}
+      if (typeof pintarMiProgreso === 'function') pintarMiProgreso();
     }, (err) => {
       clearTimeout(tSes);
       console.warn('Sin permisos para sesiones:', err.message);
