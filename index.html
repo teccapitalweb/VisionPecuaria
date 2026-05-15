@@ -425,6 +425,185 @@ button { font-family: inherit; }
   box-shadow: 0 0 8px rgba(239,68,68,.6);
 }
 
+/* ═══════════════════════════════════════════════════════════ */
+/* SISTEMA DE ALERTAS / NOTIFICACIONES                          */
+/* ═══════════════════════════════════════════════════════════ */
+.alert-badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  background: #ef4444;
+  border: 2px solid #0a1f12;
+  border-radius: 100px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 12px rgba(239,68,68,.6);
+  animation: alertPulse 2s ease-in-out infinite;
+}
+@keyframes alertPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.alertas-panel-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.alertas-panel-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.alertas-panel {
+  position: fixed;
+  top: 78px;
+  right: 28px;
+  width: 380px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 100px);
+  background: linear-gradient(180deg, #103527, #0a1f12);
+  border: 1px solid rgba(212,160,23,.25);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 80px rgba(212,160,23,.1);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(-12px) scale(.97);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.alertas-panel.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.alertas-panel-head {
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.alertas-panel-head h3 {
+  font: 800 .98rem 'Montserrat', sans-serif;
+  color: #fff;
+  margin: 0;
+}
+.alertas-marcar-leidas {
+  background: none;
+  border: none;
+  color: #d4a017;
+  font-size: .72rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background .2s;
+}
+.alertas-marcar-leidas:hover {
+  background: rgba(212,160,23,.1);
+}
+
+.alertas-list {
+  overflow-y: auto;
+  padding: 8px;
+  flex: 1;
+}
+.alertas-list::-webkit-scrollbar { width: 6px; }
+.alertas-list::-webkit-scrollbar-thumb {
+  background: rgba(212,160,23,.3);
+  border-radius: 3px;
+}
+
+.alerta-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.04);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+.alerta-item:hover {
+  background: rgba(212,160,23,.06);
+  border-color: rgba(212,160,23,.2);
+  transform: translateX(2px);
+}
+.alerta-item.unread {
+  background: rgba(212,160,23,.08);
+  border-color: rgba(212,160,23,.25);
+}
+.alerta-item.unread::before {
+  content: '';
+  position: absolute;
+  top: 14px; left: -2px;
+  width: 4px; height: 30px;
+  background: #d4a017;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 8px rgba(212,160,23,.5);
+}
+
+.alerta-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.alerta-icon--urgent { background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.3); }
+.alerta-icon--warning { background: rgba(251,191,36,.15); border: 1px solid rgba(251,191,36,.3); }
+.alerta-icon--info { background: rgba(59,130,246,.15); border: 1px solid rgba(59,130,246,.3); }
+.alerta-icon--success { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.3); }
+.alerta-icon--money { background: rgba(212,160,23,.15); border: 1px solid rgba(212,160,23,.3); }
+
+.alerta-body { flex: 1; min-width: 0; }
+.alerta-titulo {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+.alerta-desc {
+  font-size: .75rem;
+  color: rgba(255,255,255,.65);
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.alerta-tiempo {
+  font-size: .68rem;
+  color: rgba(255,255,255,.4);
+  font-weight: 600;
+}
+
+.alertas-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255,255,255,.4);
+}
+.alertas-empty-icon { font-size: 42px; margin-bottom: 8px; }
+.alertas-empty-text { font-size: .85rem; }
+
+@media (max-width: 600px) {
+  .alertas-panel {
+    right: 10px;
+    left: 10px;
+    width: auto;
+    top: 70px;
+  }
+}
+
 .content { padding: 24px 28px 80px; }
 
 /* ═══════════════════════════════════════════════════════════ */
@@ -8570,12 +8749,24 @@ button { font-family: inherit; }
         <p id="greetingSub">Hoy es un buen día para revisar el hato</p>
       </div>
       <div class="topbar-actions">
-        <button class="topbar-action-btn" title="Notificaciones">
+        <button class="topbar-action-btn" id="btnNotif" title="Notificaciones" onclick="toggleAlertasPanel(event)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="dot"></span>
+          <span class="alert-badge" id="alertBadge" style="display:none;">0</span>
         </button>
       </div>
     </div>
+
+    <!-- Panel desplegable de alertas -->
+    <div id="alertasPanel" class="alertas-panel">
+      <div class="alertas-panel-head">
+        <h3>🔔 Alertas del rancho</h3>
+        <button class="alertas-marcar-leidas" onclick="marcarTodasLeidas()">Marcar todas leídas</button>
+      </div>
+      <div id="alertasList" class="alertas-list">
+        <!-- Se llena por JS -->
+      </div>
+    </div>
+    <div id="alertasPanelOverlay" class="alertas-panel-overlay" onclick="cerrarAlertasPanel()"></div>
 
     <div class="content">
 
@@ -16445,6 +16636,320 @@ function iniciarFuegosArtificiales() {
   window.addEventListener('resize', onResize);
   setTimeout(() => window.removeEventListener('resize', onResize), 10000);
 }
+
+// ═══════════════════════════════════════════════════════════
+// 🔔 SISTEMA DE ALERTAS INTELIGENTES
+// Genera alertas automáticas basadas en datos del rancho
+// ═══════════════════════════════════════════════════════════
+
+window.__alertas = [];
+window.__alertasLeidas = new Set(JSON.parse(localStorage.getItem('vp_alertas_leidas') || '[]'));
+
+// Generar todas las alertas en base a los datos actuales
+window.generarAlertas = function() {
+  const alertas = [];
+  const ahora = Date.now();
+  const DIA = 86400000;
+
+  const animales = window.__rancho?.animales || [];
+  const miembro = (typeof MIEMBRO_ACTUAL !== 'undefined' && MIEMBRO_ACTUAL) || {};
+  const cursos = window.__rancho?.cursos || (typeof CURSOS_FIRESTORE !== 'undefined' ? CURSOS_FIRESTORE : []);
+  const mercado = window.__rancho?.preciosMercado || [];
+  const progreso = (typeof progresoCursos !== 'undefined' && progresoCursos) || {};
+
+  // ───────────────────────────────────────────────────────────
+  // 🟥 1. ANIMAL SIN REVISIÓN SANITARIA > 90 DÍAS
+  // ───────────────────────────────────────────────────────────
+  animales.forEach(a => {
+    const ultimaRevision = (a.eventos || [])
+      .filter(e => ['revision', 'sanidad', 'desparasitacion', 'vacuna'].includes(e.tipo))
+      .map(e => new Date(e.fecha || e.creado).getTime())
+      .sort((x, y) => y - x)[0];
+
+    const referencia = ultimaRevision || (a.fechaRegistro ? new Date(a.fechaRegistro).getTime() : null);
+    if (!referencia) return;
+
+    const dias = Math.floor((ahora - referencia) / DIA);
+    if (dias >= 90) {
+      alertas.push({
+        id: 'sanidad-' + a.id,
+        tipo: 'urgent',
+        icon: '🩺',
+        titulo: 'Revisión sanitaria pendiente',
+        desc: `${a.nombre || a.arete || 'Un animal'} sin revisión hace ${dias} días`,
+        tiempo: 'Acción requerida',
+        action: () => navigateTo('hato')
+      });
+    }
+  });
+
+  // ───────────────────────────────────────────────────────────
+  // 💉 2. VACUNAS PRÓXIMAS A VENCER (1 año desde última)
+  // ───────────────────────────────────────────────────────────
+  animales.forEach(a => {
+    const ultimaVacuna = (a.eventos || [])
+      .filter(e => e.tipo === 'vacuna')
+      .map(e => new Date(e.fecha || e.creado).getTime())
+      .sort((x, y) => y - x)[0];
+
+    if (!ultimaVacuna) return;
+    const diasDesde = Math.floor((ahora - ultimaVacuna) / DIA);
+    // Aviso si pasaron 11-12 meses (vacuna anual próxima a expirar)
+    if (diasDesde >= 335 && diasDesde < 365) {
+      alertas.push({
+        id: 'vacuna-' + a.id,
+        tipo: 'warning',
+        icon: '💉',
+        titulo: 'Vacuna anual próxima a vencer',
+        desc: `${a.nombre || a.arete} necesita refuerzo en ${365 - diasDesde} días`,
+        tiempo: 'Pronto',
+        action: () => navigateTo('hato')
+      });
+    } else if (diasDesde >= 365) {
+      alertas.push({
+        id: 'vacuna-vencida-' + a.id,
+        tipo: 'urgent',
+        icon: '⚠️',
+        titulo: '¡Vacuna vencida!',
+        desc: `${a.nombre || a.arete} debió revacunarse hace ${diasDesde - 365} días`,
+        tiempo: 'Urgente',
+        action: () => navigateTo('hato')
+      });
+    }
+  });
+
+  // ───────────────────────────────────────────────────────────
+  // 💰 3. PRECIOS SIAP SUBIERON/BAJARON > 5%
+  // ───────────────────────────────────────────────────────────
+  if (mercado && mercado.length) {
+    mercado.forEach(p => {
+      const variacion = parseFloat(p.variacion || p.cambio || 0);
+      if (Math.abs(variacion) >= 5) {
+        const subio = variacion > 0;
+        alertas.push({
+          id: 'mercado-' + (p.id || p.producto || p.nombre),
+          tipo: 'money',
+          icon: subio ? '📈' : '📉',
+          titulo: `${p.producto || p.nombre || 'Precio'} ${subio ? 'subió' : 'bajó'} ${Math.abs(variacion).toFixed(1)}%`,
+          desc: subio ? '💡 Buen momento para vender' : '⚠️ Cuida tus márgenes',
+          tiempo: 'Hoy',
+          action: () => navigateTo('mercado')
+        });
+      }
+    });
+  }
+
+  // ───────────────────────────────────────────────────────────
+  // 🎓 4. CURSO PRÓXIMO A DESBLOQUEARSE (drip content)
+  // ───────────────────────────────────────────────────────────
+  if (miembro.fechaUltimaActivacion && cursos.length > 0) {
+    const fechaAct = new Date(miembro.fechaUltimaActivacion);
+    const diasMembresia = Math.floor((ahora - fechaAct.getTime()) / DIA);
+
+    // Curso drip se desbloquea cada 30 días — si faltan 1-3 días, alerta
+    const cursoActualOrden = Math.floor(diasMembresia / 30) + 1;
+    const diasParaSiguiente = 30 - (diasMembresia % 30);
+
+    if (diasParaSiguiente <= 3 && diasParaSiguiente > 0) {
+      const siguienteCurso = cursos.find(c => (c.ordenDrip || 999) === cursoActualOrden + 1);
+      if (siguienteCurso) {
+        alertas.push({
+          id: 'drip-' + siguienteCurso.id,
+          tipo: 'success',
+          icon: '🎁',
+          titulo: 'Nuevo curso casi listo',
+          desc: `"${siguienteCurso.titulo}" se desbloquea en ${diasParaSiguiente} día${diasParaSiguiente > 1 ? 's' : ''}`,
+          tiempo: 'Pronto',
+          action: () => navigateTo('establo')
+        });
+      }
+    }
+  }
+
+  // ───────────────────────────────────────────────────────────
+  // ⚠️ 5. CURSO SIN VER HACE 7+ DÍAS
+  // ───────────────────────────────────────────────────────────
+  Object.keys(progreso).forEach(cursoId => {
+    const clasesVistas = progreso[cursoId] || [];
+    if (clasesVistas.length === 0) return;
+    const curso = cursos.find(c => c.id === cursoId);
+    if (!curso || !curso.clases) return;
+    if (clasesVistas.length >= curso.clases.length) return; // ya está completo
+
+    const ultimaActividad = parseInt(localStorage.getItem('vp_ult_clase_' + cursoId) || '0');
+    if (!ultimaActividad) return;
+    const diasInactivo = Math.floor((ahora - ultimaActividad) / DIA);
+    if (diasInactivo >= 7) {
+      const restantes = curso.clases.length - clasesVistas.length;
+      alertas.push({
+        id: 'curso-inactivo-' + cursoId,
+        tipo: 'info',
+        icon: '📚',
+        titulo: 'Continúa tu curso',
+        desc: `Te faltan ${restantes} clase${restantes>1?'s':''} de "${curso.titulo}". Llevas ${diasInactivo} días sin avanzar.`,
+        tiempo: diasInactivo + ' días sin ver',
+        action: () => navigateTo('establo')
+      });
+    }
+  });
+
+  // ───────────────────────────────────────────────────────────
+  // 📈 6. ANIMAL LISTO PARA VENTA (peso óptimo)
+  // ───────────────────────────────────────────────────────────
+  // Bovino engorda óptimo: 450-520kg
+  animales.forEach(a => {
+    const peso = parseFloat(a.peso) || 0;
+    if (peso >= 450 && peso <= 520) {
+      alertas.push({
+        id: 'venta-' + a.id,
+        tipo: 'money',
+        icon: '🐄💰',
+        titulo: 'Animal listo para venta',
+        desc: `${a.nombre || a.arete} alcanzó peso óptimo (${peso}kg). Considera venderlo.`,
+        tiempo: 'Oportunidad',
+        action: () => navigateTo('hato')
+      });
+    }
+  });
+
+  // ───────────────────────────────────────────────────────────
+  // 🔥 7. COMUNIDAD: ALGUIEN PUBLICÓ ALGO CERCA (mismo estado)
+  // ───────────────────────────────────────────────────────────
+  const avisos = window.__rancho?.avisosRadar || [];
+  const miUbicacion = (miembro.ubicacionRancho || '').toLowerCase();
+  if (avisos.length > 0 && miUbicacion) {
+    const avisosCerca = avisos
+      .filter(av => {
+        const tiempo = av.fecha?.toDate ? av.fecha.toDate().getTime() : new Date(av.fecha || 0).getTime();
+        return (ahora - tiempo) < 7 * DIA && // últimos 7 días
+               av.ranchoUid !== miembro._uid &&
+               (av.ranchoUbicacion || '').toLowerCase().split(/[,\s]+/).some(palabra =>
+                 palabra.length > 3 && miUbicacion.includes(palabra)
+               );
+      })
+      .slice(0, 3);
+
+    avisosCerca.forEach(av => {
+      alertas.push({
+        id: 'comunidad-' + av.id,
+        tipo: 'info',
+        icon: '🌐',
+        titulo: 'Nuevo aviso cerca de ti',
+        desc: `${av.ranchoEmoji || '🐄'} ${av.ranchoNombre || 'Un rancho'}: ${av.titulo}`,
+        tiempo: 'Reciente',
+        action: () => navigateTo('radar')
+      });
+    });
+  }
+
+  window.__alertas = alertas;
+  pintarAlertas();
+};
+
+// Pintar el panel y el badge
+window.pintarAlertas = function() {
+  const lista = document.getElementById('alertasList');
+  const badge = document.getElementById('alertBadge');
+  if (!lista || !badge) return;
+
+  const alertas = window.__alertas || [];
+  const noLeidas = alertas.filter(a => !window.__alertasLeidas.has(a.id));
+
+  // Badge
+  if (noLeidas.length > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = noLeidas.length > 9 ? '9+' : noLeidas.length;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Lista
+  if (alertas.length === 0) {
+    lista.innerHTML = `
+      <div class="alertas-empty">
+        <div class="alertas-empty-icon">✨</div>
+        <div class="alertas-empty-text">Todo en orden carnal</div>
+        <div style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:6px;">Tu rancho no requiere atención inmediata.</div>
+      </div>
+    `;
+    return;
+  }
+
+  // Ordenar: urgentes primero, luego warning, money, info, success
+  const orden = { urgent: 0, warning: 1, money: 2, info: 3, success: 4 };
+  alertas.sort((a, b) => (orden[a.tipo] || 9) - (orden[b.tipo] || 9));
+
+  lista.innerHTML = alertas.map(a => {
+    const noLeida = !window.__alertasLeidas.has(a.id);
+    return `
+      <div class="alerta-item ${noLeida ? 'unread' : ''}" onclick="ejecutarAlerta('${a.id}')">
+        <div class="alerta-icon alerta-icon--${a.tipo}">${a.icon}</div>
+        <div class="alerta-body">
+          <div class="alerta-titulo">${a.titulo}</div>
+          <div class="alerta-desc">${a.desc}</div>
+          <div class="alerta-tiempo">${a.tiempo}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+};
+
+// Click en una alerta: marcarla leída y ejecutar acción
+window.ejecutarAlerta = function(id) {
+  const alerta = window.__alertas.find(a => a.id === id);
+  if (!alerta) return;
+  window.__alertasLeidas.add(id);
+  try { localStorage.setItem('vp_alertas_leidas', JSON.stringify([...window.__alertasLeidas])); } catch(e) {}
+  cerrarAlertasPanel();
+  if (typeof alerta.action === 'function') alerta.action();
+  pintarAlertas();
+};
+
+window.marcarTodasLeidas = function() {
+  (window.__alertas || []).forEach(a => window.__alertasLeidas.add(a.id));
+  try { localStorage.setItem('vp_alertas_leidas', JSON.stringify([...window.__alertasLeidas])); } catch(e) {}
+  pintarAlertas();
+};
+
+window.toggleAlertasPanel = function(event) {
+  event?.stopPropagation();
+  const panel = document.getElementById('alertasPanel');
+  const overlay = document.getElementById('alertasPanelOverlay');
+  if (!panel || !overlay) return;
+  if (panel.classList.contains('active')) {
+    cerrarAlertasPanel();
+  } else {
+    // Regenerar alertas al abrir (datos pueden haber cambiado)
+    generarAlertas();
+    panel.classList.add('active');
+    overlay.classList.add('active');
+  }
+};
+
+window.cerrarAlertasPanel = function() {
+  const panel = document.getElementById('alertasPanel');
+  const overlay = document.getElementById('alertasPanelOverlay');
+  if (panel) panel.classList.remove('active');
+  if (overlay) overlay.classList.remove('active');
+};
+
+// Generar alertas al cargar la app (espera a que haya datos)
+setTimeout(() => {
+  try { generarAlertas(); } catch(e) { console.warn('No se pudieron generar alertas:', e); }
+}, 3000);
+
+// Regenerar cada 5 minutos
+setInterval(() => {
+  try { generarAlertas(); } catch(e) {}
+}, 5 * 60 * 1000);
+
+// Cerrar con ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const panel = document.getElementById('alertasPanel');
+    if (panel && panel.classList.contains('active')) cerrarAlertasPanel();
+  }
+});
 
 // Cerrar modales con ESC
 document.addEventListener('keydown', e => {
