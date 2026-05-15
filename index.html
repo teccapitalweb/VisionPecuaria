@@ -8586,10 +8586,10 @@ button { font-family: inherit; }
             </div>
           </div>
 
-          <!-- Barra XP -->
+          <!-- Barra de progreso del rancho -->
           <div class="mp-xp-row">
-            <span><strong id="mpXpActual">0</strong> / <span id="mpXpMeta">100</span> XP</span>
-            <span class="xp-falta" id="mpXpFalta">Faltan 100 XP para Capataz</span>
+            <span><strong id="mpXpActual">0%</strong> <span style="color:rgba(255,255,255,.4);">de</span> <span id="mpXpMeta">100%</span></span>
+            <span class="xp-falta" id="mpXpFalta">Calculando…</span>
           </div>
           <div class="bita-xp-bar"><div class="bita-xp-fill" id="bitaXpFill" style="width:0%"></div></div>
 
@@ -13617,10 +13617,9 @@ window.pintarMiProgreso = function() {
   const elBN = document.getElementById('mpRankBadgeNivel');
   if (elBN) elBN.innerHTML = nivelInfo.icono + ' ' + nivelInfo.nombre + ' · Nivel ' + nivelInfo.nivel;
 
-  // Barra de progreso del nivel actual (% dentro de los 10% del nivel)
-  const pctEnNivel = ((pctGlobal - nivelInfo.pctMin) / (nivelInfo.pctMax - nivelInfo.pctMin)) * 100;
-  const pctBarra = Math.min(100, Math.max(0, Math.round(pctEnNivel)));
-  const faltaPct = Math.max(0, Math.round((nivelInfo.pctMax - pctGlobal) * 10) / 10);
+  // Barra: muestra el % GLOBAL real del rancho (0-100)
+  const pctBarra = Math.min(100, Math.max(0, pctGlobal));
+  const faltaPct = Math.max(0, Math.round((100 - pctGlobal) * 10) / 10);
 
   const elXa = document.getElementById('mpXpActual');
   if (elXa) elXa.innerHTML = pctGlobal + '<span style="font-size:.75rem;color:rgba(255,255,255,.5);">%</span>';
@@ -13628,16 +13627,26 @@ window.pintarMiProgreso = function() {
   if (elXm) elXm.textContent = '100% del rancho';
   const elXf = document.getElementById('mpXpFalta');
   if (elXf) {
-    if (nivelInfo.nivel >= 10) {
+    if (pctGlobal >= 100) {
       elXf.innerHTML = '🏆 ¡Has dominado el rancho!';
     } else {
+      // Buscar próxima etapa
       const proximaEtapa = MP_ETAPAS.find(e => pctGlobal < e.pctMin);
-      const meta = proximaEtapa ? proximaEtapa.nombre : 'subir';
-      elXf.textContent = 'Faltan ' + faltaPct + '% para ' + meta;
+      if (proximaEtapa) {
+        const faltaEtapa = Math.round((proximaEtapa.pctMin - pctGlobal) * 10) / 10;
+        elXf.textContent = 'Faltan ' + faltaEtapa + '% para ' + proximaEtapa.nombre;
+      } else {
+        elXf.textContent = 'Faltan ' + faltaPct + '% para completar el rancho';
+      }
     }
   }
   const elFill = document.getElementById('bitaXpFill');
-  if (elFill) elFill.style.width = pctBarra + '%';
+  if (elFill) {
+    // FIX: forzar setProperty con !important para vencer cualquier CSS
+    elFill.style.setProperty('width', pctBarra + '%', 'important');
+    elFill.setAttribute('data-pct', pctBarra);
+    console.log('[MiProgreso] Barra:', pctBarra + '%', '| Global:', pctGlobal + '%', '| Nivel:', nivelInfo.nivel);
+  }
 
   // Tooltip con desglose (data-attribute para hover futuro)
   if (elFill) {
