@@ -10612,29 +10612,40 @@ window.__rancho = Object.assign(window.__rancho || {}, { auth, db });
 // ═══════════════════════════════════════════════════════════
 async function procesarHashAutologin() {
   const hash = window.location.hash;
+  console.log('[AutoLogin] Hash recibido:', hash ? hash.substring(0, 30) + '...' : '(vacío)');
   if (!hash) return false;
 
   // ── Modo 1: Google credential (#g=)
   const mG = hash.match(/g=([^&]+)/);
   if (mG) {
+    console.log('[AutoLogin] Detectado #g= (Google)');
     try {
       const decoded = decodeURIComponent(atob(mG[1]));
       const data = JSON.parse(decoded);
-      if (!data.g || !data.t) return false;
-      if (Date.now() - data.t > 5 * 60 * 1000) return false; // expira 5 min
+      if (!data.g || !data.t) {
+        console.warn('[AutoLogin] Google payload inválido:', Object.keys(data));
+        return false;
+      }
+      const edadMs = Date.now() - data.t;
+      console.log('[AutoLogin] Token edad:', Math.round(edadMs/1000), 's');
+      if (edadMs > 5 * 60 * 1000) {
+        console.warn('[AutoLogin] Token expiró (>5 min)');
+        return false;
+      }
       setBootStatus('Reconociendo tu sesión de Google...');
       const credential = GoogleAuthProvider.credential(data.g);
       await signInWithCredential(auth, credential);
+      console.log('[AutoLogin] ✅ signInWithCredential exitoso');
       history.replaceState(null, '', window.location.pathname);
       return true;
     } catch (e) {
-      console.warn('Hash Google autologin failed:', e);
-      // No retornamos false — caemos al modo #a si existe
+      console.error('[AutoLogin] ❌ Hash Google falló:', e.code || e.message, e);
     }
   }
 
   // ── Modo 2: email+password (#a=)
   if (hash.includes('a=')) {
+    console.log('[AutoLogin] Detectado #a= (email+pass)');
     const m = hash.match(/a=([^&]+)/);
     if (m) {
       try {
@@ -10644,16 +10655,18 @@ async function procesarHashAutologin() {
         if (Date.now() - data.t > 5 * 60 * 1000) return false;
         setBootStatus('Reconociendo tu sesión...');
         await signInWithEmailAndPassword(auth, data.e, data.p);
+        console.log('[AutoLogin] ✅ Email/pass exitoso');
         history.replaceState(null, '', window.location.pathname);
         return true;
       } catch (e) {
-        console.warn('Hash autologin failed:', e);
+        console.error('[AutoLogin] ❌ Email/pass falló:', e.code || e.message);
       }
     }
   }
 
-  // ── Modo 3: idToken informativo (#f=) — solo limpiamos URL, Firebase ya tiene sesión
+  // ── Modo 3: idToken informativo (#f=) — solo limpiamos URL
   if (hash.includes('f=')) {
+    console.log('[AutoLogin] Detectado #f= (informativo)');
     history.replaceState(null, '', window.location.pathname);
   }
 
@@ -10741,13 +10754,17 @@ onAuthStateChanged(auth, async (user) => {
   // user es null. Si ya hubo un autologin por hash, no redirigir
   if (hashOk) return;
 
-  // Esperar 4 segundos a que Firebase termine de hidratar.
-  // Si después de eso el authProcessed sigue false, redirigimos.
+  // Si llegó un hash de autologin (aunque haya fallado el signIn),
+  // dale más tiempo (8s) antes de redirigir, por si Firebase está procesando.
+  const hashLlego = window.location.hash && (window.location.hash.includes('g=') || window.location.hash.includes('a=') || window.location.hash.includes('f='));
+  const tiempoEspera = hashLlego ? 8000 : 4000;
+
   setTimeout(() => {
     if (!authProcessed && !auth.currentUser) {
+      console.warn('[AutoLogin] Timeout sin sesión, redirigiendo a login. hashLlego=', hashLlego);
       window.location.href = 'login.html?logout=1';
     }
-  }, 4000);
+  }, tiempoEspera);
 });
 
 window.__rancho.cerrarSesion = async function() {
