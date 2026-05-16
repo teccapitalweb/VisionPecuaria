@@ -11488,15 +11488,25 @@ onAuthStateChanged(auth, async (user) => {
       const snapM = await getDoc(refM);
       if (snapM.exists()) {
         const m = snapM.data();
-        const vence = m.vence ? new Date(m.vence) : null;
-        const activoNormal = m.estado === 'activo' && (vence ? vence > new Date() : true);
 
-        // CANCELADO pero válido hasta fechaFin
+        // 🐂 DETECCIÓN VIP A PRUEBA DE BALAS:
+        // Si el documento existe en /miembros y estado === 'activo',
+        // ES VIP. Punto. Sin importar el formato de vence.
+        // (El webhook ya validó la suscripción de Stripe antes de crear el doc)
+        const activoNormal = m.estado === 'activo';
+
+        // CANCELADO pero válido hasta fechaFin (lee cualquier formato)
         let activoCancelado = false;
         if (m.cancelado === true && m.fechaFin) {
-          const ff = m.fechaFin?.toDate ? m.fechaFin.toDate() : new Date(m.fechaFin);
-          activoCancelado = ff > new Date();
+          let ff;
+          if (m.fechaFin?.toDate) ff = m.fechaFin.toDate();
+          else if (typeof m.fechaFin === 'string') ff = new Date(m.fechaFin);
+          else if (m.fechaFin?.seconds) ff = new Date(m.fechaFin.seconds * 1000);
+          else ff = new Date(m.fechaFin);
+          activoCancelado = ff && !isNaN(ff.getTime()) && ff > new Date();
         }
+
+        console.log('[AUTH] Detección VIP:', { estado: m.estado, plan: m.plan, activoNormal, activoCancelado });
 
         if (activoNormal || activoCancelado) userPlan = 'vip';
       }
