@@ -13219,16 +13219,27 @@ window.__rancho.cargarMiembro = async function() {
 
         // 🎉 DETECTAR UPGRADE FREE → VIP en tiempo real
         const datos = snap.data();
-        const vence = datos.vence ? new Date(datos.vence) : null;
-        const activoNormal = datos.estado === 'activo' && (vence ? vence > new Date() : true);
+
+        // 🐂 Misma lógica robusta: si estado === 'activo', es VIP
+        const activoNormal = datos.estado === 'activo';
         let activoCancelado = false;
         if (datos.cancelado === true && datos.fechaFin) {
-          const ff = datos.fechaFin?.toDate ? datos.fechaFin.toDate() : new Date(datos.fechaFin);
-          activoCancelado = ff > new Date();
+          let ff;
+          if (datos.fechaFin?.toDate) ff = datos.fechaFin.toDate();
+          else if (typeof datos.fechaFin === 'string') ff = new Date(datos.fechaFin);
+          else if (datos.fechaFin?.seconds) ff = new Date(datos.fechaFin.seconds * 1000);
+          else ff = new Date(datos.fechaFin);
+          activoCancelado = ff && !isNaN(ff.getTime()) && ff > new Date();
         }
         const ahoraEsVIP = activoNormal || activoCancelado;
 
-        if (ahoraEsVIP && (erasFreeAntes || planAntes === 'free')) {
+        // Dispara animación si:
+        // - Era FREE y ahora es VIP (upgrade en tiempo real), O
+        // - Es VIP y NUNCA se le mostró la bienvenida (primera vez en el portal)
+        const yaSeMostroBienvenida = localStorage.getItem('vp_bienvenida_vip_mostrada') === '1';
+        const debeMostrarBienvenida = ahoraEsVIP && (erasFreeAntes || planAntes === 'free' || !yaSeMostroBienvenida);
+
+        if (debeMostrarBienvenida) {
           // Actualizar el estado global de userPlan
           userPlan = 'vip';
           // Disparar animación de bienvenida
