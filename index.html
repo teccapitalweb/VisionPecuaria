@@ -12747,6 +12747,34 @@ function calcularEstadoCurso(curso) {
     return { desbloqueado: true, fechaDesbloqueo: null, diasRestantes: 0, esLibre: true, requierePago: false };
   }
 
+  // MODIFICADO: Si el usuario YA es VIP pero su doc en Firestore aún no tiene
+  // fechaUltimaActivacion (caso típico tras pago Stripe), inferirla y persistirla.
+  const esEliteActivo = (typeof esVIP === 'function') ? esVIP() : false;
+  if (MIEMBRO_ACTUAL && esEliteActivo && !MIEMBRO_ACTUAL.fechaUltimaActivacion) {
+    const candidatos = [
+      MIEMBRO_ACTUAL.fechaInicio,
+      MIEMBRO_ACTUAL.fechaActivacion,
+      MIEMBRO_ACTUAL.fechaPago,
+      MIEMBRO_ACTUAL.fechaRegistro,
+      MIEMBRO_ACTUAL.createdAt
+    ];
+    let fechaInferida = null;
+    for (const v of candidatos) {
+      if (!v) continue;
+      let d = null;
+      try {
+        if (v?.toDate) d = v.toDate();
+        else if (typeof v?.seconds === 'number') d = new Date(v.seconds * 1000);
+        else d = new Date(v);
+      } catch(e) {}
+      if (d && !isNaN(d.getTime())) { fechaInferida = d; break; }
+    }
+    if (!fechaInferida) fechaInferida = new Date(); // último recurso: AHORA
+    MIEMBRO_ACTUAL.fechaUltimaActivacion = fechaInferida.toISOString();
+    // Persistir en Firestore para próximas cargas
+    persistirFechaActivacion(fechaInferida.toISOString());
+  }
+
   // Si NO hay miembro o no hay membresía activa
   if (!MIEMBRO_ACTUAL || !MIEMBRO_ACTUAL.fechaUltimaActivacion) {
     // Pero si ya estaba en cursosDesbloqueados (membresía vencida pero ya lo había desbloqueado), permitir
@@ -12795,6 +12823,21 @@ async function registrarDesbloqueo(cursoId) {
     if (!MIEMBRO_ACTUAL.cursosDesbloqueados) MIEMBRO_ACTUAL.cursosDesbloqueados = [];
     MIEMBRO_ACTUAL.cursosDesbloqueados.push(cursoId);
   } catch(e) { console.warn('No se pudo registrar desbloqueo:', e); }
+}
+
+// AGREGADO: persistir fechaUltimaActivacion inferida (idempotente, solo escribe 1 vez)
+let __yaPersistioFechaAct = false;
+async function persistirFechaActivacion(isoString) {
+  if (__yaPersistioFechaAct) return;
+  __yaPersistioFechaAct = true;
+  try {
+    const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
+    const db = window.__rancho.db;
+    if (!db || !MIEMBRO_ACTUAL?._docId || MIEMBRO_ACTUAL._tipo !== 'miembro') return;
+    await updateDoc(doc(db, 'miembros', MIEMBRO_ACTUAL._docId), {
+      fechaUltimaActivacion: isoString
+    });
+  } catch(e) { console.warn('No se pudo persistir fechaUltimaActivacion:', e); }
 }
 
 // Mantener backward compat
@@ -13242,6 +13285,15 @@ window.__rancho.cargarMiembro = async function() {
         if (debeMostrarBienvenida) {
           // Actualizar el estado global de userPlan
           userPlan = 'vip';
+          // MODIFICADO: cerrar el modal de Stripe si aún está abierto (el webhook confirmó el pago)
+          try {
+            if (window.__stripeCheckoutInstance) {
+              try { window.__stripeCheckoutInstance.destroy(); } catch(e) {}
+              window.__stripeCheckoutInstance = null;
+            }
+            const stripeOverlay = document.getElementById('stripeCheckoutOverlay');
+            if (stripeOverlay) stripeOverlay.remove();
+          } catch(e) {}
           // Disparar animación de bienvenida
           setTimeout(() => {
             if (typeof mostrarBienvenidaVIP === 'function') mostrarBienvenidaVIP();
@@ -17036,6 +17088,29 @@ window.addEventListener('DOMContentLoaded', () => {
   pintarCertificados();
   pintarNoticias();
   refrescarTermometro();
+
+  // AGREGADO: si el usuario regresa de Stripe (redirect a landing externa con ?pago_exitoso=1),
+  // forzar la animación de bienvenida y limpiar la URL.
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('pago_exitoso') === '1') {
+      // Resetear flags para garantizar que la animación se muestre
+      try { localStorage.removeItem('vp_bienvenida_vip_mostrada'); } catch(e) {}
+      window.__yaSeMostroBienvenidaVIP = false;
+      // Limpiar query params de la URL sin recargar
+      const limpia = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, limpia);
+      // Disparar la animación cuando ya esté cargado el módulo
+      const tryShow = (intentos) => {
+        if (typeof mostrarBienvenidaVIP === 'function') {
+          mostrarBienvenidaVIP();
+        } else if (intentos > 0) {
+          setTimeout(() => tryShow(intentos - 1), 300);
+        }
+      };
+      setTimeout(() => tryShow(20), 800);
+    }
+  } catch(e) { console.warn('Hook pago_exitoso falló:', e); }
 });
 
 // ═══════════════════════════════════════════════════════════
