@@ -11816,7 +11816,7 @@ window.suscribirElite = async function(plan) {
 
 // Monta el Stripe Embedded Checkout en overlay
 async function montarStripeEmbeddedPortal(clientSecret) {
-  const STRIPE_PK = 'pk_test_51TMAchPBgqsOPfUYtBbalhoOLnnGz6LymFleli7OxTDbiK4FNYX0K82ispYDb39zKJQXevyMtIPetxVAvq9hhb5P005VGgxu99';
+  const STRIPE_PK = 'pk_live_51TMAcSA7If2CqXs9NuKsM1cVT9n5agProkMR8HFiT6QTXzS0g9PtiokZ4cpT1Qo3rk9bbsrZHx9sOUbE9UEOjgGs00n1OM3Y9b';
 
   // 🧹 Limpiar checkout previo si existe (Stripe NO permite múltiples Embedded)
   if (window.__stripeCheckoutInstance) {
