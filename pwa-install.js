@@ -53,7 +53,7 @@
     if(shown||!canShow()||document.getElementById('vp-pwa-ov'))return; shown=true; injectStyles();
     var o=document.createElement('div');o.id='vp-pwa-ov';
     o.innerHTML='<div id="vp-pwa-card" role="dialog" aria-label="Instalar app">'+
-      '<div class="vp-pwa-top"><img class="vp-pwa-ic" src="img/pwa-192.png" alt="Visión Pecuaria">'+
+      '<div class="vp-pwa-top"><img class="vp-pwa-ic" src="pwa-192.png" alt="Visión Pecuaria">'+
       '<div><div class="vp-pwa-tt">Instala Visión Pecuaria</div>'+
       '<div class="vp-pwa-sub">Tu rancho digital, directo en tu pantalla</div></div></div>'+
       '<div id="vp-pwa-content"></div></div>';
