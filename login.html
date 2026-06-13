@@ -481,6 +481,9 @@ body {
   .bg-orb--3 { width: 240px; height: 240px; }
 }
 </style>
+<meta name="theme-color" content="#0f3d27">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/pwa-192.png">
 </head>
 <body>
 
@@ -863,5 +866,7 @@ const qp = new URLSearchParams(window.location.search);
 if (qp.get('tab') === 'registro') setTab('registro');
 </script>
 
+<!-- PWA instalable + popup -->
+<script src="pwa-install.js" defer></script>
 </body>
 </html>

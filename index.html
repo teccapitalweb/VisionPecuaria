@@ -9092,6 +9092,9 @@ button { font-family: inherit; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<meta name="theme-color" content="#0f3d27">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/pwa-192.png">
 </head>
 <body>
 
@@ -19636,5 +19639,9 @@ document.addEventListener('keydown', e => {
 });
 </script>
 
+<!-- PWA instalable + popup -->
+<script src="pwa-install.js" defer></script>
+<!-- Efecto carrusel automático -->
+<script src="carrusel-auto.js" defer></script>
 </body>
 </html>

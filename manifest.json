@@ -1,0 +1,17 @@
+{
+  "name": "Visión Pecuaria · El Rancho Digital",
+  "short_name": "Visión Pecuaria",
+  "description": "Tu rancho digital: hato, mercado, cursos, certificados y herramientas pecuarias.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a1f12",
+  "theme_color": "#0f3d27",
+  "lang": "es",
+  "icons": [
+    { "src": "img/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "img/pwa-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
