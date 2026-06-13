@@ -1,31 +1,49 @@
 /* Efecto carrusel · Visión Pecuaria
-   Desplaza automáticamente los carruseles de cursos (.row-cine-scroll)
-   de forma suave (ida y vuelta). Se pausa al tocar/pasar el mouse,
-   y se reanuda al soltar. No interfiere con el scroll manual. */
+   Avanza automáticamente los carruseles de cursos (.row-cine-scroll)
+   de tarjeta en tarjeta. Compatible con scroll-snap. Se pausa al
+   interactuar y se reanuda solo. Vuelve al inicio al llegar al final. */
 (function () {
   'use strict';
+
   function initAuto(el) {
-    if (!el || el.__autoCarousel) return;
-    el.__autoCarousel = true;
-    var dir = 1, paused = false, idleTicks = 0;
-    var SPEED = 0.45; // px por frame (suave)
-    function step() {
-      if (!paused && el.scrollWidth > el.clientWidth + 4) {
-        el.scrollLeft += SPEED * dir;
-        if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) dir = -1;
-        else if (el.scrollLeft <= 0) dir = 1;
+    if (!el || el.__autoCar) return;
+    // aún no hay tarjetas suficientes para desplazar: reintentar en el próximo escaneo
+    if (el.scrollWidth <= el.clientWidth + 8) return;
+    el.__autoCar = true;
+
+    var paused = false;
+
+    function stepPx() {
+      var card = el.querySelector('.curso-card');
+      if (card) {
+        var w = card.getBoundingClientRect().width;
+        return w + 16; // ancho de tarjeta + gap
       }
-      requestAnimationFrame(step);
+      return Math.min(300, Math.round(el.clientWidth * 0.85));
     }
-    function pause() { paused = true; idleTicks = 0; }
-    function resumeSoon() { idleTicks = 0; clearTimeout(el.__rt); el.__rt = setTimeout(function () { paused = false; }, 2500); }
+
+    function tick() {
+      if (paused) return;
+      var max = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= max - 6) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });   // volver al inicio
+      } else {
+        el.scrollBy({ left: stepPx(), behavior: 'smooth' }); // siguiente tarjeta
+      }
+    }
+
+    el.__timer = setInterval(tick, 3200);
+
+    function pause() { paused = true; clearTimeout(el.__rt); }
+    function resume() { clearTimeout(el.__rt); el.__rt = setTimeout(function () { paused = false; }, 4000); }
     ['mouseenter', 'touchstart', 'pointerdown', 'wheel'].forEach(function (ev) { el.addEventListener(ev, pause, { passive: true }); });
-    ['mouseleave', 'touchend', 'pointerup'].forEach(function (ev) { el.addEventListener(ev, resumeSoon, { passive: true }); });
-    requestAnimationFrame(step);
+    ['mouseleave', 'touchend', 'pointerup'].forEach(function (ev) { el.addEventListener(ev, resume, { passive: true }); });
   }
+
   function scan() { document.querySelectorAll('.row-cine-scroll').forEach(initAuto); }
+
   window.addEventListener('load', function () {
-    setTimeout(scan, 1800);      // primer escaneo cuando ya cargó el contenido
-    setInterval(scan, 3000);     // re-escanea (los carruseles se llenan al navegar entre vistas)
+    setTimeout(scan, 1500);
+    setInterval(scan, 2500); // re-escanea: los carruseles se llenan al navegar entre vistas
   });
 })();
