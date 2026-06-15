@@ -504,11 +504,11 @@ body {
 
 .card.card--wide{max-width:600px}
 .vpsell{margin:4px 0 16px;border-bottom:1px solid rgba(212,160,23,.18);padding-bottom:18px}
-.vpsell-cine{position:relative;margin:0 -6px 14px}
-.vpsell-track{display:flex;gap:12px;overflow-x:auto;padding:4px 6px 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.vpsell-track::-webkit-scrollbar{height:5px}
-.vpsell-track::-webkit-scrollbar-thumb{background:rgba(212,160,23,.4);border-radius:3px}
-.vpsell-flyer{flex:0 0 auto;width:152px;scroll-snap-align:center;border-radius:12px;overflow:hidden;border:1px solid rgba(212,160,23,.18);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.vpsell-cine{position:relative;margin:0 0 16px;overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%)}
+.vpsell-track{display:flex;gap:12px;width:max-content;animation:vpscroll 38s linear infinite}
+.vpsell-track:hover{animation-play-state:paused}
+@keyframes vpscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.vpsell-flyer{flex:0 0 auto;width:152px;border-radius:12px;overflow:hidden;border:1px solid rgba(212,160,23,.18);box-shadow:0 6px 18px rgba(0,0,0,.4)}
 .vpsell-flyer img{width:100%;height:100%;display:block;aspect-ratio:1/1;object-fit:cover}
 .vpsell-h{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.12rem;margin:14px 0 9px;color:var(--cream)}
 .vpsell-h span{color:var(--gold-light)}
@@ -922,30 +922,17 @@ setTab(qp.get('tab') === 'login' ? 'login' : 'registro');
 
 <!-- PWA instalable + popup -->
 <script src="pwa-install.js" defer></script>
-<!-- Carrusel de flyers en el registro -->
+<!-- Carrusel de flyers (cinta continua) -->
 <script>
 (function(){
   var track=document.getElementById('vpsellTrack');
   if(!track) return;
-  var frag=document.createDocumentFragment();
+  var html='';
   for(var i=1;i<=16;i++){
     var n=(i<10?'0':'')+i;
-    var d=document.createElement('div'); d.className='vpsell-flyer';
-    var img=document.createElement('img'); img.src='cursos/curso-'+n+'.jpg'; img.alt='Curso '+i; img.loading='lazy';
-    d.appendChild(img); frag.appendChild(d);
+    html+='<div class="vpsell-flyer"><img src="cursos/curso-'+n+'.jpg" alt="Curso '+i+'" loading="lazy"></div>';
   }
-  track.appendChild(frag);
-  var paused=false;
-  function step(){
-    var c=track.querySelector('.vpsell-flyer');
-    var w=c?c.getBoundingClientRect().width+12:164;
-    var max=track.scrollWidth-track.clientWidth;
-    if(track.scrollLeft>=max-6) track.scrollTo({left:0,behavior:'smooth'});
-    else track.scrollBy({left:w,behavior:'smooth'});
-  }
-  setInterval(function(){if(!paused)step();},3000);
-  ['mouseenter','touchstart','pointerdown','wheel'].forEach(function(e){track.addEventListener(e,function(){paused=true;clearTimeout(track.__rt);},{passive:true});});
-  ['mouseleave','touchend','pointerup'].forEach(function(e){track.addEventListener(e,function(){clearTimeout(track.__rt);track.__rt=setTimeout(function(){paused=false;},4000);},{passive:true});});
+  track.innerHTML=html+html;  // duplicado = loop continuo sin cortes
 })();
 </script>
 </body>
