@@ -484,6 +484,56 @@ body {
 <meta name="theme-color" content="#0f3d27">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="pwa-192.png">
+<style>
+/* ===== Bloque de venta en REGISTRO (Visión Pecuaria) ===== */
+/* Layout 2 columnas tipo ICADEM */
+.card .brand{display:none}
+.auth-layout{display:grid;grid-template-columns:1fr;gap:28px;width:100%;max-width:1160px;margin:0 auto;align-items:start}
+.auth-sell{min-width:0}
+.sell-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sell-logo{width:46px;height:46px;border-radius:12px}
+.sell-brand span{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:1.5px;color:var(--gold-light);text-transform:uppercase;line-height:1.3}
+.sell-title{font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(1.85rem,4.5vw,3rem);line-height:1.06;color:var(--cream);margin-bottom:13px;letter-spacing:-.02em}
+.sell-title span{color:var(--gold-light)}
+.sell-sub{font-size:.98rem;color:#9fb4a3;line-height:1.5;margin-bottom:22px;max-width:520px}
+@media(min-width:980px){
+  .wrap{align-items:flex-start;padding-top:44px;padding-bottom:44px}
+  .auth-layout{grid-template-columns:1.05fr .95fr;gap:46px}
+  .card{position:sticky;top:32px;max-width:430px;justify-self:end}
+}
+
+.card.card--wide{max-width:600px}
+.vpsell{margin:4px 0 16px;border-bottom:1px solid rgba(212,160,23,.18);padding-bottom:18px}
+.vpsell-cine{position:relative;margin:0 -6px 14px}
+.vpsell-track{display:flex;gap:12px;overflow-x:auto;padding:4px 6px 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.vpsell-track::-webkit-scrollbar{height:5px}
+.vpsell-track::-webkit-scrollbar-thumb{background:rgba(212,160,23,.4);border-radius:3px}
+.vpsell-flyer{flex:0 0 auto;width:152px;scroll-snap-align:center;border-radius:12px;overflow:hidden;border:1px solid rgba(212,160,23,.18);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.vpsell-flyer img{width:100%;height:100%;display:block;aspect-ratio:1/1;object-fit:cover}
+.vpsell-h{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.12rem;margin:14px 0 9px;color:var(--cream)}
+.vpsell-h span{color:var(--gold-light)}
+.vpsell-benes{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0;padding:0}
+.vpsell-bene{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:#dbe7dc;line-height:1.4}
+.vpsell-bene .ck{width:22px;height:22px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--g600),var(--g700));display:flex;align-items:center;justify-content:center;margin-top:1px}
+.vpsell-bene b{color:var(--gold-light)}
+.vpsell-planes{display:flex;flex-direction:column;gap:10px;margin:4px 0}
+.vpsell-plan{position:relative;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px 16px}
+.vpsell-plan--year{background:linear-gradient(135deg,rgba(212,160,23,.12),rgba(45,122,74,.1));border-color:rgba(212,160,23,.42)}
+.vpsell-price{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5rem;line-height:1;white-space:nowrap;color:var(--cream)}
+.vpsell-meta{font-size:.8rem;color:#9fb4a3;line-height:1.35}
+.vpsell-meta b{color:var(--cream)}
+.vpsell-badge{position:absolute;top:-9px;right:14px;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#1a1200;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.5px;padding:3px 10px;border-radius:100px}
+.vpsell-strike{text-decoration:line-through;opacity:.6}
+.vpsell-refs{display:flex;flex-direction:column;gap:11px}
+.vpsell-ref{display:flex;gap:10px;align-items:flex-start}
+.vpsell-av{width:38px;height:38px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.8rem;color:#1a1200;background:linear-gradient(135deg,var(--gold-light),var(--gold))}
+.vpsell-bub{background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.14);border-radius:5px 13px 13px 13px;padding:10px 13px;flex:1}
+.vpsell-bub .nm{font-weight:700;font-size:.85rem;color:var(--cream)}
+.vpsell-bub .rl{font-size:.72rem;color:var(--gold-light);margin-left:3px}
+.vpsell-bub p{font-size:.82rem;color:#dbe7dc;line-height:1.45;margin-top:3px}
+.vpsell-bub .act{font-size:.68rem;color:#9fb4a3;margin-top:6px}
+.vpsell-note{text-align:center;font-size:.85rem;color:var(--gold-light);font-weight:600;margin-top:14px}
+</style>
 </head>
 <body>
 
@@ -503,6 +553,8 @@ body {
 </div>
 
 <div class="wrap">
+  <div class="auth-layout">
+  <div class="auth-sell"><div class="sell-hero"><div class="sell-brand"><img src="pwa-192.png" class="sell-logo" alt="Visión Pecuaria"><span>Visión Pecuaria · Portal Élite Pecuario</span></div><h1 class="sell-title">Domina el manejo que tu <span>rancho te está pidiendo</span>.</h1><p class="sell-sub">Cursos con especialistas del gremio, certificados con folio oficial y herramientas listas para tu negocio ganadero, porcícola, avícola y acuícola.</p></div><div class="vpsell"><div class="vpsell-cine"><div class="vpsell-track" id="vpsellTrack"></div></div><div class="vpsell-h">Todo esto por <span>menos de $7 al día</span>:</div><ul class="vpsell-benes"><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Biblioteca completa</b> de cursos: bovinos, porcinos, aves, ovinos, acuícola y más</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Clases en vivo</b> con especialistas del gremio pecuario</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Material descargable premium</b> listo para aplicar en tu rancho</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Certificados con folio oficial</b> verificables</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Asesoría personalizada</b> y canal VIP · sin permanencia</span></li></ul><div class="vpsell-planes"><div class="vpsell-plan"><div class="vpsell-price">$200</div><div class="vpsell-meta"><b>MXN al mes</b> · menos de $7 al día<br>Cancela cuando quieras</div></div><div class="vpsell-plan vpsell-plan--year"><span class="vpsell-badge">AHORRAS $480</span><div class="vpsell-price">$1,920</div><div class="vpsell-meta"><b>MXN al año</b> · <span class="vpsell-strike">$200</span> <b>$160/mes</b><br>Acceso completo los 365 días</div></div></div><div class="vpsell-h">Referencias</div><div class="vpsell-refs"><div class="vpsell-ref"><div class="vpsell-av">RC</div><div class="vpsell-bub"><span class="nm">MVZ. Roberto Cano</span><span class="rl">· Médico Veterinario</span><p>Los cursos de nutrición de ganado bovino me ayudaron a subir el peso de mi hato. El certificado con folio lo presenté en mi colegio sin problema.</p><div class="act">👍 14 · Me gusta · Responder · 2 sem</div></div></div><div class="vpsell-ref"><div class="vpsell-av">LM</div><div class="vpsell-bub"><span class="nm">Lucía Mendoza</span><span class="rl">· Productora avícola</span><p>Con el curso de gallinas de postura ordené la producción de huevo y subió el rendimiento. Las clases en vivo valen oro para mi granja.</p><div class="act">👍 9 · Me gusta · Responder · 1 mes</div></div></div><div class="vpsell-ref"><div class="vpsell-av">MT</div><div class="vpsell-bub"><span class="nm">Ing. Marco Tovar</span><span class="rl">· Engorda de ganado</span><p>El material descargable y la asesoría personalizada me ordenaron el rancho completo. Recomendado para todo productor que va en serio.</p><div class="act">👍 11 · Me gusta · Responder · 3 sem</div></div></div></div></div></div>
   <div class="card">
     <!-- Brand -->
     <div class="brand">
@@ -567,6 +619,7 @@ body {
       <h2 class="form-title">Únete al rancho digital</h2>
       <p class="form-subtitle">Crea tu cuenta gratis. Después podrás convertirte en Élite Pecuario.</p>
 
+
       <button type="button" class="btn-google" onclick="loginGoogle()" id="btnGoogleReg">
         <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
           <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
@@ -614,6 +667,7 @@ body {
     <div class="card-footer">
       <p>¿Necesitas ayuda? <a href="https://wa.me/522361049715" target="_blank">Escríbenos por WhatsApp</a></p>
     </div>
+  </div>
   </div>
 </div>
 
@@ -863,10 +917,36 @@ window.togglePass = function(inputId, btn) {
 
 // Si vienes con ?tab=registro abre directamente el registro
 const qp = new URLSearchParams(window.location.search);
-if (qp.get('tab') === 'registro') setTab('registro');
+setTab(qp.get('tab') === 'login' ? 'login' : 'registro');
 </script>
 
 <!-- PWA instalable + popup -->
 <script src="pwa-install.js" defer></script>
+<!-- Carrusel de flyers en el registro -->
+<script>
+(function(){
+  var track=document.getElementById('vpsellTrack');
+  if(!track) return;
+  var frag=document.createDocumentFragment();
+  for(var i=1;i<=16;i++){
+    var n=(i<10?'0':'')+i;
+    var d=document.createElement('div'); d.className='vpsell-flyer';
+    var img=document.createElement('img'); img.src='cursos/curso-'+n+'.jpg'; img.alt='Curso '+i; img.loading='lazy';
+    d.appendChild(img); frag.appendChild(d);
+  }
+  track.appendChild(frag);
+  var paused=false;
+  function step(){
+    var c=track.querySelector('.vpsell-flyer');
+    var w=c?c.getBoundingClientRect().width+12:164;
+    var max=track.scrollWidth-track.clientWidth;
+    if(track.scrollLeft>=max-6) track.scrollTo({left:0,behavior:'smooth'});
+    else track.scrollBy({left:w,behavior:'smooth'});
+  }
+  setInterval(function(){if(!paused)step();},3000);
+  ['mouseenter','touchstart','pointerdown','wheel'].forEach(function(e){track.addEventListener(e,function(){paused=true;clearTimeout(track.__rt);},{passive:true});});
+  ['mouseleave','touchend','pointerup'].forEach(function(e){track.addEventListener(e,function(){clearTimeout(track.__rt);track.__rt=setTimeout(function(){paused=false;},4000);},{passive:true});});
+})();
+</script>
 </body>
 </html>
