@@ -1,6 +1,6 @@
 /* Service Worker · Visión Pecuaria — El Rancho Digital (PWA) */
 const CACHE = 'vision-pecuaria-v1';
-const ASSETS = ['./', 'index.html', 'login.html', 'manifest.json', 'pwa-192.png', 'pwa-512.png'];
+const ASSETS = ['./', 'index.html', 'login.html', 'vip.html', 'manifest.json', 'pwa-192.png', 'pwa-512.png'];
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS).catch(() => {})).then(() => self.skipWaiting()));
 });
