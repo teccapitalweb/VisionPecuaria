@@ -146,6 +146,48 @@ button{font-family:var(--font-body)}
 .tc--teal{background:var(--teal-bg)}   .tc--teal h4{color:var(--teal-fg)}   .tc--teal p{color:#32584C}
 .tc--lila{background:var(--lila-bg)}   .tc--lila h4{color:var(--lila-fg)}   .tc--lila p{color:#5C4658}
 
+/* ═══ ENCABEZADO DE SECCIÓN (la tira con el paisaje) ═══ */
+.sec-hero{position:relative;overflow:hidden;border-radius:var(--r-lg);margin-bottom:22px;min-height:132px;display:flex;align-items:center;background:var(--crema-2)}
+.sec-hero svg{position:absolute;inset:0;width:100%;height:100%}
+.sec-hero .greet{position:relative;padding:24px 28px;margin:0}
+.sec-hero .greet h1{font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:800}
+.sec-hero .greet p{color:var(--tinta-2);font-size:.95rem;margin-top:3px}
+
+/* ═══ APOYOS DE GOBIERNO ═══ */
+.apoyos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
+
+.apoyo-card{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:22px;display:flex;flex-direction:column;gap:14px;border-top:4px solid var(--ap-color,var(--verde))}
+.ap-head{display:flex;align-items:flex-start;gap:13px}
+.ap-ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;background:color-mix(in srgb,var(--ap-color,var(--verde)) 14%,#fff)}
+.ap-id{min-width:0}
+.ap-id h3{font-size:1.05rem;line-height:1.25}
+.ap-inst{display:block;font-size:.78rem;font-weight:600;color:var(--tinta-3);margin-top:3px}
+
+.ap-monto{background:var(--crema);border-radius:var(--r-md);padding:12px 14px}
+.ap-monto-lbl{display:block;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--tinta-3);margin-bottom:3px}
+.ap-monto strong{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--verde-hondo);line-height:1.3}
+
+.ap-desc{font-size:.89rem;color:var(--tinta-2);line-height:1.5}
+
+.ap-req-lbl{display:block;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--tinta-3);margin-bottom:6px}
+.ap-req ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.ap-req li{position:relative;padding-left:16px;font-size:.85rem;color:var(--tinta-2);line-height:1.45}
+.ap-req li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--ap-color,var(--verde))}
+
+.ap-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(51,53,45,.08);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ap-fecha{font-size:.76rem;font-weight:600;color:var(--tinta-3);background:var(--crema);padding:5px 10px;border-radius:99px;cursor:default}
+.ap-fecha--sin{color:var(--naranja)}
+.ap-cta{background:var(--verde);color:#fff;font-weight:700;font-size:.85rem;padding:9px 16px;border-radius:99px;text-decoration:none;white-space:nowrap;transition:background .15s,transform .15s}
+.ap-cta:hover{background:var(--verde-hi);transform:translateY(-1px)}
+
+/* Estados: cargando / sin sesión / error / vacío — nunca datos viejos */
+.ap-estado{grid-column:1/-1;background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:48px 30px;text-align:center;max-width:520px;margin:20px auto}
+.ap-estado-emoji{font-size:2.4rem;display:block;margin-bottom:12px}
+.ap-estado h3{font-size:1.2rem;margin-bottom:6px}
+.ap-estado p{color:var(--tinta-2);font-size:.93rem}
+.ap-estado button{margin-top:16px;background:var(--verde);color:#fff;border:none;font-weight:700;font-size:.88rem;padding:10px 20px;border-radius:99px;cursor:pointer}
+.ap-estado button:hover{background:var(--verde-hi)}
+
 /* ═══ EN CONSTRUCCIÓN ═══ */
 .wip{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:56px 30px;text-align:center;max-width:560px;margin:40px auto}
 .wip .w-emoji{font-size:2.6rem;display:block;margin-bottom:14px}
@@ -197,4 +239,12 @@ button{font-family:var(--font-body)}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .ia-banner{flex-direction:column;align-items:flex-start;gap:14px}
   .ia-cta{width:100%;text-align:center}
+  .sec-hero{min-height:112px}
+  .sec-hero .greet{padding:18px 20px}
+  .apoyos-grid{grid-template-columns:1fr;gap:14px}
+  .apoyo-card{padding:18px}
+  .ap-foot{flex-direction:column;align-items:stretch}
+  .ap-fecha{text-align:center}
+  .ap-cta{text-align:center}
+  .ap-estado{padding:36px 22px}
 }

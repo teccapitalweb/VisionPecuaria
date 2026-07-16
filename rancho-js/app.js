@@ -3,6 +3,10 @@
 // ═══════════════════════════════════════════════════════════
 import { auth, initAuth, cerrarSesion } from './firebase.js';
 import { pintarSaludo, pintarStats } from './casco.js';
+import { iniciarApoyos } from './apoyos.js';
+
+// Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
+const SECCIONES_LISTAS = new Set(['casco', 'apoyos']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -15,7 +19,7 @@ const TOOLS = [
   { id:'bitacora',     emoji:'📓', nombre:'Bitácora',             grupo:'Tu rancho',    color:'teal',   desc:'Vacunas, pesos y eventos con fecha.' },
   { id:'mercado',      emoji:'💰', nombre:'Mercado',              grupo:'Tu rancho',    color:'lila',   desc:'Precios en tiempo real (SIAP-SADER).' },
   { id:'prediccion',   emoji:'📊', nombre:'Predicción',           grupo:'Tu rancho',    color:'miel',   desc:'Anticípate a los precios.' },
-  { id:'apoyos',       emoji:'🏛️', nombre:'Apoyos Gob',           grupo:'Tu rancho',    color:'salvia', desc:'PROGAN, FIRA y SINIIGA al día.' },
+  { id:'apoyos',       emoji:'🏛️', nombre:'Apoyos Gob',           grupo:'Tu rancho',    color:'salvia', desc:'FIRA, SINIIGA, Bienestar y más.' },
   { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Aprendizaje',  color:'cielo',  desc:'Los 26 cursos completos, a tu ritmo.', vip:true },
   { id:'material',     emoji:'📚', nombre:'Material de apoyo',    grupo:'Aprendizaje',  color:'coral',  desc:'Guías y manuales descargables.', vip:true },
   { id:'webinars',     emoji:'📡', nombre:'Webinars exclusivos',  grupo:'Aprendizaje',  color:'lila',   desc:'Sesiones en vivo con expertos.', vip:true },
@@ -63,9 +67,9 @@ function renderShell() {
     ).join('')
   ).join('');
 
-  // Secciones "en construcción" (todas menos el Casco, que es estático)
+  // Secciones "en construcción" (las que aún no se migran)
   const cont = document.getElementById('sections');
-  cont.insertAdjacentHTML('beforeend', TOOLS.filter(t => !t.href && t.id !== 'casco').map(t => `
+  cont.insertAdjacentHTML('beforeend', TOOLS.filter(t => !t.href && !SECCIONES_LISTAS.has(t.id)).map(t => `
     <section class="section" id="section-${t.id}" aria-label="${t.nombre}">
       <div class="wip">
         <span class="w-emoji">${t.emoji}</span>
@@ -268,6 +272,9 @@ initAuth({
     pintarUsuario(user, plan, miembro);
     pintarSaludo(user);
     pintarStats(user);
+    // Apoyos: las reglas piden autenticado(), así que se cablea ya con sesión.
+    // Lo ven free y Élite por igual — sin banner de vitrina.
+    iniciarApoyos(user);
     navigateTo(location.hash.slice(1) || 'casco', false);
     setTimeout(() => document.getElementById('boot').classList.add('hide'), 400);
   }
