@@ -79,8 +79,12 @@ a{color:var(--verde)}
 
 /* ═══════════════ HERO ═══════════════ */
 .hero{position:relative;overflow:hidden;padding:72px 0 0}
-.hero-landscape{position:absolute;inset:0;z-index:0}
-.hero-landscape svg{width:100%;height:100%;display:block}
+.hero-landscape{position:absolute;inset:0;z-index:0;background:var(--crema-2)}
+.hero-landscape img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.hero-landscape::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg, rgba(245,239,228,.94) 10%, rgba(245,239,228,.72) 48%, rgba(245,239,228,.16) 82%)}
+@media(max-width:960px){
+  .hero-landscape::after{background:linear-gradient(180deg, rgba(245,239,228,.94) 0%, rgba(245,239,228,.78) 55%, rgba(245,239,228,.38) 100%)}
+}
 .hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 24px 110px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;background:var(--panel);border:1px solid rgba(51,53,45,.08);padding:9px 18px;border-radius:999px;font-weight:700;font-size:.88rem;color:var(--verde-hondo);box-shadow:0 4px 14px -8px rgba(51,53,45,.25);margin-bottom:24px}
 .hero-eyebrow .dot{width:9px;height:9px;border-radius:50%;background:var(--naranja);flex-shrink:0}
@@ -234,7 +238,8 @@ a{color:var(--verde)}
 /* ═══════════════ CTA FINAL ═══════════════ */
 .cta-final{position:relative;overflow:hidden;background:var(--verde-hondo);padding:120px 0}
 .cta-landscape{position:absolute;inset:0;z-index:0}
-.cta-landscape svg{width:100%;height:100%}
+.cta-landscape img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.cta-landscape::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(46,74,42,.84) 0%, rgba(46,74,42,.74) 55%, rgba(46,74,42,.86) 100%)}
 .cta-final .container{position:relative;z-index:1;text-align:center;max-width:720px}
 .cta-final h2{color:var(--crema);font-size:clamp(2rem,4.6vw,3.1rem);font-weight:800;margin-bottom:18px}
 .cta-final p{color:rgba(245,239,228,.82);font-size:1.12rem;margin-bottom:36px}
@@ -290,43 +295,7 @@ a{color:var(--verde)}
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
   <div class="hero-landscape" aria-hidden="true">
-    <svg viewBox="0 0 1440 760" preserveAspectRatio="xMidYMax slice" role="presentation">
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#F6E7C0"/>
-          <stop offset=".5" stop-color="#F7DDC8"/>
-          <stop offset="1" stop-color="#F5EFE4"/>
-        </linearGradient>
-      </defs>
-      <rect width="1440" height="760" fill="url(#sky)"/>
-      <!-- sol amanecer -->
-      <circle cx="1085" cy="330" r="170" fill="#D49A2E" opacity=".16"/>
-      <circle cx="1085" cy="330" r="95" fill="#E8C465" opacity=".75"/>
-      <circle cx="1085" cy="330" r="60" fill="#F6E7C0"/>
-      <!-- nubes suaves -->
-      <ellipse cx="300" cy="180" rx="150" ry="26" fill="#FCFAF4" opacity=".65"/>
-      <ellipse cx="420" cy="205" rx="100" ry="18" fill="#FCFAF4" opacity=".5"/>
-      <ellipse cx="900" cy="130" rx="120" ry="20" fill="#FCFAF4" opacity=".55"/>
-      <!-- aves -->
-      <path d="M840 150 q10 -10 20 0 q10 -10 20 0" stroke="#6E6759" stroke-width="2.5" fill="none" opacity=".5" stroke-linecap="round"/>
-      <path d="M910 120 q8 -8 16 0 q8 -8 16 0" stroke="#6E6759" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
-      <!-- lomas lejanas -->
-      <path d="M0 520 Q 240 440 520 500 T 1020 480 T 1440 500 V760 H0 Z" fill="#DEE8CF"/>
-      <!-- lomas medias -->
-      <path d="M0 590 Q 300 500 640 570 T 1160 560 T 1440 580 V760 H0 Z" fill="#C9DCB2"/>
-      <!-- campo cercano -->
-      <path d="M0 670 Q 360 600 780 656 T 1440 650 V760 H0 Z" fill="#AFC996"/>
-      <!-- cerca de rancho -->
-      <g stroke="#2E4A2A" stroke-width="4" opacity=".45" stroke-linecap="round">
-        <line x1="90" y1="692" x2="90" y2="728"/><line x1="140" y1="688" x2="140" y2="726"/><line x1="190" y1="686" x2="190" y2="724"/>
-        <line x1="82" y1="700" x2="198" y2="694"/><line x1="82" y1="716" x2="198" y2="710"/>
-      </g>
-      <!-- ganado pastando (siluetas) -->
-      <g fill="#2E4A2A" opacity=".5">
-        <path d="M980 606 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
-        <path d="M1060 626 q3 -9 13 -9 h19 q9 0 11 7 l2 6 h-5 l-3 9 h-4 l2 -8 h-17 l-2 8 h-4 l1 -9 q-10 2 -13 -4 Z" opacity=".8"/>
-      </g>
-    </svg>
+    <img src="club-assets/hero-rancho.jpg" alt="" fetchpriority="high">
   </div>
 
   <div class="hero-inner">
@@ -709,17 +678,7 @@ a{color:var(--verde)}
 <!-- ═══════════════ CTA FINAL ═══════════════ -->
 <section class="cta-final">
   <div class="cta-landscape" aria-hidden="true">
-    <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax slice" role="presentation">
-      <rect width="1440" height="620" fill="#2E4A2A"/>
-      <circle cx="1120" cy="250" r="150" fill="#F5EFE4" opacity=".07"/>
-      <circle cx="1120" cy="250" r="85" fill="#D49A2E" opacity=".22"/>
-      <path d="M0 400 Q 240 330 520 385 T 1020 370 T 1440 385 V620 H0 Z" fill="#355630" opacity=".9"/>
-      <path d="M0 470 Q 300 390 640 455 T 1160 445 T 1440 465 V620 H0 Z" fill="#3E6337" opacity=".55"/>
-      <path d="M0 540 Q 360 480 780 528 T 1440 522 V620 H0 Z" fill="#4E7A34" opacity=".35"/>
-      <g fill="#F5EFE4" opacity=".18">
-        <path d="M950 480 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
-      </g>
-    </svg>
+    <img src="club-assets/cta-rancho.jpg" alt="" loading="lazy">
   </div>
   <div class="container">
     <h2>El rancho ya amaneció.<br>Solo falta que entres tú.</h2>
