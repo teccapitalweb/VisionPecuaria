@@ -12,10 +12,12 @@ import { iniciarBiblioteca, montarBiblioteca } from './biblioteca.js';
 import { iniciarWebinars } from './webinars.js';
 import { iniciarProgreso, refrescarProgreso } from './progreso.js';
 import { iniciarMaterial } from './material.js';
+import { iniciarDiagnostico, montarDiagnostico } from './diagnostico.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
 const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
-  'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados']);
+  'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados',
+  'diagnostico']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -287,6 +289,7 @@ montarPrediccion();
 montarCertificados();
 montarCalculadora();
 montarBiblioteca();
+montarDiagnostico();
 initAuth({
   setBootStatus: (t) => { const el = document.getElementById('bootStatus'); if (el) el.textContent = t; },
   onUser: (user, plan, miembro) => {
@@ -308,6 +311,7 @@ initAuth({
     iniciarWebinars(plan);
     iniciarProgreso(user, plan);
     iniciarMaterial(plan);
+    iniciarDiagnostico(plan);
     navigateTo(location.hash.slice(1) || 'casco', false);
     setTimeout(() => document.getElementById('boot').classList.add('hide'), 400);
   }

@@ -249,6 +249,40 @@
         </div>
       </section>
 
+      <!-- ═══ DIAGNÓSTICO VETERINARIO ═══ -->
+      <section class="section" id="section-diagnostico" aria-label="Diagnóstico veterinario">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#F7DDC8"/>
+            <circle cx="1225" cy="60" r="68" fill="#C15E28" opacity=".1"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Diagnóstico veterinario 🩺</h1>
+            <p>Orientación por síntomas, con base SENASICA/INIFAP. No sustituye a tu MVZ.</p>
+          </div>
+        </div>
+
+        <div class="diag-form">
+          <h3 class="pr-h">1 · ¿Qué animal es?</h3>
+          <div class="diag-especies" id="diagEspecies" role="group" aria-label="Especie"></div>
+
+          <h3 class="pr-h">2 · ¿Qué le ves?</h3>
+          <p class="pr-sub">Marca todos los síntomas que notes. <span class="diag-cont" id="diagContador">Ningún síntoma marcado</span></p>
+          <div class="h-alert" id="diagAlert" role="alert" aria-live="assertive"></div>
+          <div class="diag-sintomas" id="diagSintomas"></div>
+
+          <div class="diag-acciones">
+            <button class="h-btn" id="diagLimpiar" type="button">Limpiar</button>
+            <button class="btn-verde" id="btnDiagnosticar" type="button">🔬 Ver cuadros que coinciden</button>
+          </div>
+        </div>
+
+        <div class="diag-resultados" id="diagResultados" style="display:none" aria-live="polite"></div>
+      </section>
+
       <!-- ═══ CALCULADORA DE RENTABILIDAD ═══ -->
       <section class="section" id="section-calculadora" aria-label="Calculadora de rentabilidad">
         <div class="sec-hero">
