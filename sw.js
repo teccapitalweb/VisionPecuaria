@@ -12,6 +12,12 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;                  // no tocar POST (Firebase/Stripe)
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;        // dejar pasar Firebase/Google/Stripe
+  // El Rancho Digital (rancho.html) se sirve en módulos .js + .css sueltos, y el
+  // caché-primero de abajo los congelaría en el navegador del socio: una corrección
+  // (una dosis del diagnóstico, por ejemplo) no le llegaría nunca. Se dejan fuera del
+  // SW para que vayan siempre a la red. El portal actual no pide estas rutas.
+  // Nota: rancho.html NO entra aquí — es HTML y sigue por red-primero, abajo.
+  if (url.pathname.includes('/rancho-js/') || url.pathname.endsWith('/rancho.css')) return;
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     e.respondWith(fetch(req).then((res) => { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); return res; }).catch(() => caches.match(req).then((r) => r || caches.match('index.html'))));
     return;
