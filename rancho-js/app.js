@@ -6,9 +6,16 @@ import { pintarSaludo, pintarStats } from './casco.js';
 import { iniciarApoyos } from './apoyos.js';
 import { iniciarHato, montarHato } from './hato.js';
 import { iniciarPrediccion, montarPrediccion, pintarAnimalesPrediccion } from './prediccion.js';
+import { iniciarCertificados, montarCertificados } from './certificados.js';
+import { iniciarCalculadora, montarCalculadora } from './calculadora.js';
+import { iniciarBiblioteca, montarBiblioteca } from './biblioteca.js';
+import { iniciarWebinars } from './webinars.js';
+import { iniciarProgreso, refrescarProgreso } from './progreso.js';
+import { iniciarMaterial } from './material.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
-const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion']);
+const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
+  'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -25,7 +32,8 @@ const TOOLS = [
   { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Aprendizaje',  color:'cielo',  desc:'Los 26 cursos completos, a tu ritmo.', vip:true },
   { id:'material',     emoji:'📚', nombre:'Material de apoyo',    grupo:'Aprendizaje',  color:'coral',  desc:'Guías y manuales descargables.', vip:true },
   { id:'webinars',     emoji:'📡', nombre:'Webinars exclusivos',  grupo:'Aprendizaje',  color:'lila',   desc:'Sesiones en vivo con expertos.', vip:true },
-  { id:'progreso',     emoji:'🏆', nombre:'Mi progreso',          grupo:'Tu carrera',   color:'teal',   desc:'Logros y rankings mientras aprendes.' },
+  // Sin "rankings": no existen. Ver progreso.js — es un contador local.
+  { id:'progreso',     emoji:'🏆', nombre:'Mi progreso',          grupo:'Tu carrera',   color:'teal',   desc:'Tu avance y logros en los cursos.' },
   { id:'certificados', emoji:'🎖️', nombre:'Certificados',         grupo:'Tu carrera',   color:'miel',   desc:'Folio oficial y QR verificable.' },
   { id:'comunidad',    emoji:'🌐', nombre:'Comunidad',            grupo:'Tu carrera',   color:'salvia', desc:'Foro privado + grupo VIP.', vip:true },
   { id:'soporte',      emoji:'📞', nombre:'Soporte técnico',      grupo:'Tu carrera',   color:'cielo',  desc:'Te acompañamos cuando lo necesites.' },
@@ -37,7 +45,10 @@ const TOOLS = [
 const VITRINA = {
   hato:        { icon:'🐄', desc:'Puedes recorrer la sección. Para registrar y gestionar tu ganado, hazte Élite Pecuario.' },
   prediccion:  { icon:'📊', desc:'Ves la calculadora. Para correr el análisis de venta óptima, hazte Élite Pecuario.' },
+  calculadora: { icon:'🧮', desc:'Ves la calculadora. Para correr el análisis de rentabilidad, hazte Élite Pecuario.' },
   cursos:      { icon:'🎓', desc:'Mira la primera clase gratis. Para acceder a los cursos completos, hazte Élite Pecuario.' },
+  progreso:    { icon:'🏆', desc:'Tu avance en los cursos. Para tomarlos completos, hazte Élite Pecuario.' },
+  certificados:{ icon:'🎖️', desc:'Aquí aparecen tus certificados con folio y QR. Para ganarlos, hazte Élite Pecuario.' },
   material:    { icon:'📚', desc:'Ves los títulos. Para descargar el material completo, hazte Élite Pecuario.' },
   webinars:    { icon:'📡', desc:'Ves la programación. Para unirte a las sesiones en vivo, hazte Élite Pecuario.' },
   diagnostico: { icon:'⚕️', desc:'Función exclusiva. Solicítalo siendo Élite Pecuario.' },
@@ -110,6 +121,7 @@ function navigateTo(section, pushHash = true) {
   if (pushHash && ('#' + section) !== location.hash) location.hash = section;
   // El hato llega por onSnapshot: al entrar, repintar con lo ya cargado.
   if (section === 'prediccion') pintarAnimalesPrediccion();
+  if (section === 'progreso') refrescarProgreso();
   actualizarVitrina(section);
 }
 window.addEventListener('hashchange', () => navigateTo(location.hash.slice(1) || 'casco', false));
@@ -272,6 +284,9 @@ document.getElementById('iaCta').addEventListener('click', () => navigateTo('dia
 renderShell();
 montarHato();
 montarPrediccion();
+montarCertificados();
+montarCalculadora();
+montarBiblioteca();
 initAuth({
   setBootStatus: (t) => { const el = document.getElementById('bootStatus'); if (el) el.textContent = t; },
   onUser: (user, plan, miembro) => {
@@ -287,6 +302,12 @@ initAuth({
     // autenticado()), igual que en el portal actual. Ver BL01.
     iniciarHato(user, plan);
     iniciarPrediccion(plan);
+    iniciarCalculadora(plan);
+    iniciarCertificados(user, plan);
+    iniciarBiblioteca(plan, miembro);
+    iniciarWebinars(plan);
+    iniciarProgreso(user, plan);
+    iniciarMaterial(plan);
     navigateTo(location.hash.slice(1) || 'casco', false);
     setTimeout(() => document.getElementById('boot').classList.add('hide'), 400);
   }

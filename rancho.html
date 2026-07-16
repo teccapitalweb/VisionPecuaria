@@ -249,6 +249,162 @@
         </div>
       </section>
 
+      <!-- ═══ CALCULADORA DE RENTABILIDAD ═══ -->
+      <section class="section" id="section-calculadora" aria-label="Calculadora de rentabilidad">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#D3E1E8"/>
+            <path d="M0 140 Q 250 104 550 134 T 1030 126 T 1440 138 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Calculadora de Rentabilidad 🧮</h1>
+            <p>Cuánto te deja de verdad cada engorda, con tus números.</p>
+          </div>
+        </div>
+
+        <div class="pr-grid">
+          <div class="pr-col">
+            <div class="pr-form">
+              <h3 class="pr-h">Tus números</h3>
+              <div class="h-alert" id="calcAlert" role="alert" aria-live="assertive"></div>
+              <div class="h-campo">
+                <label for="calcTipo">Tipo de animal</label>
+                <select id="calcTipo"></select>
+              </div>
+              <div class="h-fila">
+                <div class="h-campo">
+                  <label for="calcPeso">Peso de venta (kg)</label>
+                  <input type="number" id="calcPeso" min="0" step="0.1" inputmode="decimal">
+                </div>
+                <div class="h-campo">
+                  <label for="calcPrecio">Precio de venta ($/kg)</label>
+                  <input type="number" id="calcPrecio" min="0" step="0.5" inputmode="decimal">
+                </div>
+              </div>
+              <p class="pr-hint" id="calcPrecioHint"></p>
+              <div class="h-campo">
+                <label for="calcDias">Días de engorda</label>
+                <input type="number" id="calcDias" min="1" step="1" inputmode="numeric">
+              </div>
+              <h4 class="calc-sub">Costos</h4>
+              <div class="h-fila">
+                <div class="h-campo">
+                  <label for="calcCompra">Compra del animal ($)</label>
+                  <input type="number" id="calcCompra" min="0" step="1" inputmode="decimal" placeholder="0">
+                </div>
+                <div class="h-campo">
+                  <label for="calcCostoDia">Alimento por día ($)</label>
+                  <input type="number" id="calcCostoDia" min="0" step="0.5" inputmode="decimal" placeholder="0">
+                </div>
+              </div>
+              <div class="h-fila">
+                <div class="h-campo">
+                  <label for="calcSanidad">Sanidad ($)</label>
+                  <input type="number" id="calcSanidad" min="0" step="1" inputmode="decimal" placeholder="0">
+                </div>
+                <div class="h-campo">
+                  <label for="calcOtros">Otros ($)</label>
+                  <input type="number" id="calcOtros" min="0" step="1" inputmode="decimal" placeholder="0">
+                </div>
+              </div>
+              <button class="btn-verde h-full" id="btnCalcular" type="button">Calcular rentabilidad</button>
+            </div>
+          </div>
+          <div class="pr-col">
+            <div class="pr-resultado" id="calcResultado" style="display:none" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ BIBLIOTECA DE CURSOS ═══ -->
+      <section class="section" id="section-cursos" aria-label="Biblioteca de cursos">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#F6E7C0"/>
+            <circle cx="1220" cy="62" r="66" fill="#D49A2E" opacity=".14"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Biblioteca de cursos 🎓</h1>
+            <p>Los cursos del club, a tu ritmo.</p>
+          </div>
+        </div>
+        <div class="bib-grid" id="bibGrid" aria-live="polite"></div>
+      </section>
+
+      <!-- ═══ MATERIAL DE APOYO ═══ -->
+      <section class="section" id="section-material" aria-label="Material de apoyo">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#F7DDC8"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Material de apoyo 📚</h1>
+            <p>Guías y manuales para llevarte al potrero.</p>
+          </div>
+        </div>
+        <div class="mat-lista" id="matLista" aria-live="polite"></div>
+      </section>
+
+      <!-- ═══ WEBINARS ═══ -->
+      <section class="section" id="section-webinars" aria-label="Webinars exclusivos">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#E7D9E2"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Webinars exclusivos 📡</h1>
+            <p>Sesiones en vivo con expertos, y sus grabaciones.</p>
+          </div>
+        </div>
+        <div class="web-lista" id="webLista" aria-live="polite"></div>
+      </section>
+
+      <!-- ═══ MI PROGRESO ═══ -->
+      <section class="section" id="section-progreso" aria-label="Mi progreso">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#CFE6DD"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Mi progreso 🏆</h1>
+            <p>Tu avance en los cursos y los logros que llevas.</p>
+          </div>
+        </div>
+        <div id="progContenido" aria-live="polite"></div>
+      </section>
+
+      <!-- ═══ CERTIFICADOS ═══ -->
+      <section class="section" id="section-certificados" aria-label="Certificados">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <rect width="1440" height="220" fill="#F6E7C0"/>
+            <circle cx="1230" cy="58" r="60" fill="#D49A2E" opacity=".16"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Certificados 🎖️</h1>
+            <p>Con folio y QR verificable por cualquiera.</p>
+          </div>
+        </div>
+        <div class="cert-lista" id="certLista" aria-live="polite"></div>
+      </section>
+
       <!-- ═══ APOYOS DE GOBIERNO ═══ -->
       <section class="section" id="section-apoyos" aria-label="Apoyos de gobierno">
         <div class="sec-hero">
@@ -299,6 +455,55 @@
       <span class="mv-precio">$200/mes</span>
     </button>
     <p class="mv-mini">Pago seguro con Stripe · garantía 7 días · cancela cuando quieras</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CURSO (reproductor + clases) ═══ -->
+<div class="h-modal" id="modalCurso" role="dialog" aria-modal="true" aria-labelledby="bibTitulo">
+  <div class="h-box h-box--lg">
+    <button class="h-close" id="bibCerrar" aria-label="Cerrar">✕</button>
+    <h3 id="bibTitulo">Curso</h3>
+    <p class="bib-inst" id="bibInstructor"></p>
+    <!-- ⚠️ El iframe carga un enlace PÚBLICO de Drive — ver biblioteca.js -->
+    <div class="bib-player" id="bibPlayer"></div>
+    <button class="btn-verde" id="bibMarcar" type="button" style="display:none">✓ Marcar clase como vista</button>
+    <p class="bib-desc" id="bibDesc"></p>
+    <h4 class="calc-sub">Clases</h4>
+    <div class="bib-clases" id="bibClases"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CERTIFICADO (plantilla + PDF) ═══ -->
+<div class="h-modal" id="modalCert" role="dialog" aria-modal="true" aria-labelledby="certTplCurso">
+  <div class="h-box h-box--lg">
+    <button class="h-close" id="certCerrar" aria-label="Cerrar">✕</button>
+    <div class="cert-tpl" id="certTpl">
+      <div class="ct-marco">
+        <div class="ct-head">
+          <img src="club-assets/logo-vp.png" alt="Visión Pecuaria" class="ct-logo">
+          <span class="ct-club">Élite Pecuario</span>
+        </div>
+        <p class="ct-otorga">Se otorga el presente certificado a</p>
+        <h2 class="ct-nombre" id="certTplNombre">—</h2>
+        <p class="ct-por">por concluir satisfactoriamente el curso</p>
+        <h3 class="ct-curso" id="certTplCurso">—</h3>
+        <span class="ct-categoria" id="certTplCategoria">—</span>
+        <div class="ct-pie">
+          <div class="ct-firma">
+            <span class="ct-f-linea"></span>
+            <b id="certTplInstructor">—</b>
+            <small>Instructor</small>
+          </div>
+          <div class="ct-qr" id="certTplQr" aria-label="QR de verificación"></div>
+          <div class="ct-datos">
+            <small>Folio</small>
+            <b id="certTplFolio">—</b>
+            <small id="certTplFecha">—</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-verde h-full" id="certBtnPdf" type="button">⬇️ Descargar PDF</button>
   </div>
 </div>
 
