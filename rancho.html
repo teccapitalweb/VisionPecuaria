@@ -185,6 +185,70 @@
         <div class="h-tabla-wrap" id="hatoTabla" aria-live="polite"></div>
       </section>
 
+      <!-- ═══ PREDICCIÓN DE VENTA ÓPTIMA ═══ -->
+      <section class="section" id="section-prediccion" aria-label="Predicción de venta óptima">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="skyPred" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#D3E1E8"/>
+                <stop offset=".6" stop-color="#EFE8DA"/>
+                <stop offset="1" stop-color="#F5EFE4"/>
+              </linearGradient>
+            </defs>
+            <rect width="1440" height="220" fill="url(#skyPred)"/>
+            <circle cx="1230" cy="66" r="72" fill="#4E7488" opacity=".1"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Predicción de Venta Óptima 📊</h1>
+            <p>Estimación basada en peso y ganancia diaria por especie.</p>
+          </div>
+        </div>
+
+        <div class="pr-grid">
+          <!-- Columna: tu hato -->
+          <div class="pr-col">
+            <h3 class="pr-h">Elige un animal de tu hato</h3>
+            <p class="pr-sub">O captura los datos a mano en el formulario.</p>
+            <div class="pr-animales" id="predAnimales"></div>
+          </div>
+
+          <!-- Columna: datos + resultado -->
+          <div class="pr-col">
+            <div class="pr-form">
+              <h3 class="pr-h">Datos del animal</h3>
+              <div class="h-alert" id="predAlert" role="alert" aria-live="assertive"></div>
+              <div class="h-campo">
+                <label for="predEspecie">Especie</label>
+                <select id="predEspecie"></select>
+                <p class="pr-hint" id="predRangoHint"></p>
+              </div>
+              <div class="h-fila">
+                <div class="h-campo">
+                  <label for="predPeso">Peso actual</label>
+                  <input type="number" id="predPeso" min="0" step="0.1" inputmode="decimal">
+                </div>
+                <div class="h-campo">
+                  <label for="predEdad">Edad (meses)</label>
+                  <input type="number" id="predEdad" min="0" step="1" inputmode="numeric" placeholder="opcional">
+                </div>
+              </div>
+              <div class="h-campo">
+                <label for="predCosto">Costo de alimento por día (MXN)</label>
+                <input type="number" id="predCosto" min="0" step="0.5" inputmode="decimal" placeholder="Ej. 45">
+              </div>
+              <button class="btn-verde h-full" id="btnAnalizar" type="button">Analizar venta óptima</button>
+              <p class="pr-nota" id="predNotaPrecio"></p>
+            </div>
+
+            <div class="pr-resultado" id="predResultado" style="display:none" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- ═══ APOYOS DE GOBIERNO ═══ -->
       <section class="section" id="section-apoyos" aria-label="Apoyos de gobierno">
         <div class="sec-hero">

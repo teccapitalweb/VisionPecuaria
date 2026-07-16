@@ -5,9 +5,10 @@ import { auth, initAuth, cerrarSesion } from './firebase.js';
 import { pintarSaludo, pintarStats } from './casco.js';
 import { iniciarApoyos } from './apoyos.js';
 import { iniciarHato, montarHato } from './hato.js';
+import { iniciarPrediccion, montarPrediccion, pintarAnimalesPrediccion } from './prediccion.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
-const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato']);
+const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -35,6 +36,7 @@ const TOOLS = [
 // Textos del banner vitrina por sección exclusiva (réplica del portal)
 const VITRINA = {
   hato:        { icon:'🐄', desc:'Puedes recorrer la sección. Para registrar y gestionar tu ganado, hazte Élite Pecuario.' },
+  prediccion:  { icon:'📊', desc:'Ves la calculadora. Para correr el análisis de venta óptima, hazte Élite Pecuario.' },
   cursos:      { icon:'🎓', desc:'Mira la primera clase gratis. Para acceder a los cursos completos, hazte Élite Pecuario.' },
   material:    { icon:'📚', desc:'Ves los títulos. Para descargar el material completo, hazte Élite Pecuario.' },
   webinars:    { icon:'📡', desc:'Ves la programación. Para unirte a las sesiones en vivo, hazte Élite Pecuario.' },
@@ -106,6 +108,8 @@ function navigateTo(section, pushHash = true) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (window.innerWidth <= 880) toggleSidebar(false);
   if (pushHash && ('#' + section) !== location.hash) location.hash = section;
+  // El hato llega por onSnapshot: al entrar, repintar con lo ya cargado.
+  if (section === 'prediccion') pintarAnimalesPrediccion();
   actualizarVitrina(section);
 }
 window.addEventListener('hashchange', () => navigateTo(location.hash.slice(1) || 'casco', false));
@@ -267,6 +271,7 @@ document.getElementById('iaCta').addEventListener('click', () => navigateTo('dia
 // ── Arranque ──
 renderShell();
 montarHato();
+montarPrediccion();
 initAuth({
   setBootStatus: (t) => { const el = document.getElementById('bootStatus'); if (el) el.textContent = t; },
   onUser: (user, plan, miembro) => {
@@ -281,6 +286,7 @@ initAuth({
     // Hato: el gate Élite es del cliente (las reglas solo piden
     // autenticado()), igual que en el portal actual. Ver BL01.
     iniciarHato(user, plan);
+    iniciarPrediccion(plan);
     navigateTo(location.hash.slice(1) || 'casco', false);
     setTimeout(() => document.getElementById('boot').classList.add('hide'), 400);
   }

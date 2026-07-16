@@ -246,6 +246,57 @@ button{font-family:var(--font-body)}
 .h-prog-bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--verde);transition:width .25s}
 .h-prog-cnt{display:block;text-align:center;font-size:.8rem;font-weight:700;color:var(--tinta-2);margin-top:6px}
 
+/* ═══ PREDICCIÓN DE VENTA ÓPTIMA ═══ */
+.pr-grid{display:grid;grid-template-columns:minmax(240px,320px) 1fr;gap:18px;align-items:start}
+.pr-col{min-width:0}
+.pr-h{font-size:1.05rem;margin-bottom:3px}
+.pr-sub{font-size:.83rem;color:var(--tinta-2);margin-bottom:12px}
+.pr-hint{font-size:.75rem;color:var(--tinta-3);margin-top:5px;line-height:1.4}
+.pr-nota{font-size:.75rem;color:var(--tinta-3);margin-top:10px;line-height:1.4}
+
+.pr-animales{display:flex;flex-direction:column;gap:8px;max-height:520px;overflow-y:auto;padding-right:4px}
+.pr-animal{display:flex;align-items:center;gap:11px;width:100%;background:var(--panel);border:1.5px solid var(--crema-2);border-radius:var(--r-md);padding:11px 13px;cursor:pointer;text-align:left;font-family:var(--font-body);transition:border-color .15s,transform .15s}
+.pr-animal:hover{border-color:var(--verde);transform:translateX(2px)}
+.pr-animal.active{border-color:var(--verde);background:var(--salvia-bg)}
+.pr-a-emoji{width:36px;height:36px;border-radius:10px;background:var(--crema);display:grid;place-items:center;font-size:1.1rem;flex-shrink:0}
+.pr-animal.active .pr-a-emoji{background:var(--panel)}
+.pr-a-txt{min-width:0}
+.pr-a-txt strong{display:block;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pr-a-txt small{display:block;font-size:.75rem;color:var(--tinta-3)}
+.pr-vacio{background:var(--panel);border-radius:var(--r-md);padding:20px;font-size:.88rem;color:var(--tinta-2);text-align:center}
+
+.pr-form{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:22px}
+.pr-resultado{margin-top:16px}
+
+.pr-veredicto{border-radius:var(--r-lg);padding:22px 24px;margin-bottom:14px}
+.pr-veredicto h2{font-size:1.3rem;margin-bottom:6px}
+.pr-veredicto p{font-size:.92rem;line-height:1.5}
+.pr-tag{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.07em;padding:4px 11px;border-radius:99px;margin-bottom:8px;background:rgba(255,255,255,.6)}
+.pr-veredicto--vender{background:var(--salvia-bg)}
+.pr-veredicto--vender h2{color:var(--salvia-fg)} .pr-veredicto--vender p{color:#42552F}
+.pr-veredicto--esperar{background:var(--cielo-bg)}
+.pr-veredicto--esperar h2{color:var(--cielo-fg)} .pr-veredicto--esperar p{color:#3C596B}
+.pr-veredicto--alerta{background:var(--coral-bg)}
+.pr-veredicto--alerta h2{color:var(--coral-fg)} .pr-veredicto--alerta p{color:#7A4522}
+
+.pr-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.pr-stat{background:var(--panel);border-radius:var(--r-md);box-shadow:var(--shadow-card);padding:14px}
+.pr-s-ico{font-size:1.1rem}
+.pr-s-lbl{display:block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-3);margin:5px 0 2px}
+.pr-stat b{font-family:var(--font-display);font-size:1.25rem;font-weight:800}
+.pr-stat b small{font-size:.7rem;font-weight:600;color:var(--tinta-3)}
+
+.pr-fuente{background:var(--crema-2);border-radius:12px;padding:11px 13px;font-size:.78rem;color:var(--tinta-2);line-height:1.45}
+.pr-tip{font-size:.82rem;color:var(--tinta-2);margin-top:10px;line-height:1.45}
+
+@media(max-width:880px){
+  .pr-grid{grid-template-columns:1fr}
+  .pr-animales{max-height:none;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .pr-animal{flex-shrink:0;min-width:190px}
+  .pr-animal:hover{transform:none}
+  .pr-form{padding:18px}
+}
+
 /* ═══ APOYOS DE GOBIERNO ═══ */
 .apoyos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;align-items:start}
 
