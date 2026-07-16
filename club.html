@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Élite Pecuario · El club de productores de Visión Pecuaria</title>
+<meta name="description" content="Élite Pecuario: el club de Visión Pecuaria para productores pecuarios. 17 herramientas digitales, diagnóstico veterinario por IA, 26 cursos especializados y comunidad. Desde $200 MXN al mes.">
+<meta name="theme-color" content="#F5EFE4">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐂%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ TOKENS ═══════════════ */
+:root{
+  --crema:#F5EFE4; --crema-2:#EFE8DA; --panel:#FCFAF4;
+  --tinta:#33352D; --tinta-2:#6E6759; --tinta-3:#9C9484;
+  --verde:#4E8B3E; --verde-hi:#5B9E49; --verde-bg:rgba(78,139,62,.12);
+  --verde-hondo:#2E4A2A;
+  --naranja:#D06E2C; --naranja-bg:rgba(208,110,44,.12);
+  --miel:#D49A2E;
+  --salvia-bg:#DEE8CF; --salvia-fg:#4E7A34;
+  --miel-bg:#F6E7C0;  --miel-fg:#A67A1F;
+  --coral-bg:#F7DDC8; --coral-fg:#C15E28;
+  --cielo-bg:#D3E1E8; --cielo-fg:#4E7488;
+  --teal-bg:#CFE6DD;  --teal-fg:#3E7B6A;
+  --lila-bg:#E7D9E2;  --lila-fg:#74586E;
+  --r-lg:24px; --r-md:18px;
+  --font-display:"Bricolage Grotesque", system-ui, sans-serif;
+  --font-body:"Hanken Grotesk", system-ui, sans-serif;
+  --maxw:1160px;
+  --shadow-card:0 2px 6px rgba(51,53,45,.05), 0 16px 40px -18px rgba(51,53,45,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *,*::before,*::after{animation:none!important;transition:none!important} }
+body{font-family:var(--font-body);background:var(--crema);color:var(--tinta);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;letter-spacing:-.01em;color:var(--tinta)}
+img{max-width:100%;display:block}
+a{color:var(--verde)}
+:focus-visible{outline:3px solid var(--naranja);outline-offset:3px;border-radius:6px}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.section{padding:96px 0;position:relative;overflow:hidden}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--verde);background:var(--verde-bg);padding:8px 16px;border-radius:999px;margin-bottom:18px}
+.section-head{max-width:640px;margin-bottom:52px}
+.section-head h2{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;margin-bottom:14px}
+.section-head p{color:var(--tinta-2);font-size:1.08rem}
+.section-head--center{margin-left:auto;margin-right:auto;text-align:center}
+
+/* círculos grandes de fondo (De Chaumes) */
+.bg-circle{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+.section > .container{position:relative;z-index:1}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1;transform:none} }
+
+/* ═══════════════ NAV ═══════════════ */
+.nav{position:sticky;top:0;z-index:100;background:rgba(245,239,228,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow .25s ease}
+.nav.scrolled{box-shadow:0 1px 0 rgba(51,53,45,.08),0 8px 24px -14px rgba(51,53,45,.25)}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:28px}
+.nav-logo{display:flex;align-items:center;flex-shrink:0}
+.nav-logo img{height:42px;width:auto}
+.nav-links{display:flex;gap:26px;margin-left:auto}
+.nav-links a{color:var(--tinta-2);text-decoration:none;font-weight:600;font-size:.95rem;transition:color .2s}
+.nav-links a:hover{color:var(--tinta)}
+.nav-cta{flex-shrink:0;background:var(--verde);color:#fff;border:none;font-family:var(--font-body);font-weight:700;font-size:.95rem;padding:12px 24px;border-radius:999px;cursor:pointer;text-decoration:none;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--verde-hi);transform:translateY(-1px)}
+.nav-burger{display:none;margin-left:auto;background:none;border:none;cursor:pointer;padding:8px}
+.nav-burger span{display:block;width:24px;height:2.5px;background:var(--tinta);margin:5px 0;border-radius:2px;transition:.25s}
+@media(max-width:860px){
+  .nav-links{position:fixed;inset:69px 0 auto 0;background:var(--panel);flex-direction:column;gap:0;padding:12px 24px 20px;box-shadow:0 24px 40px -20px rgba(51,53,45,.3);transform:translateY(-130%);transition:transform .3s ease;z-index:99}
+  .nav-links.open{transform:none}
+  .nav-links a{padding:13px 4px;border-bottom:1px solid var(--crema-2);font-size:1.05rem}
+  .nav-burger{display:block}
+  .nav-cta--desktop{display:none}
+}
+
+/* ═══════════════ HERO ═══════════════ */
+.hero{position:relative;overflow:hidden;padding:72px 0 0}
+.hero-landscape{position:absolute;inset:0;z-index:0}
+.hero-landscape svg{width:100%;height:100%;display:block}
+.hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 24px 110px;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;background:var(--panel);border:1px solid rgba(51,53,45,.08);padding:9px 18px;border-radius:999px;font-weight:700;font-size:.88rem;color:var(--verde-hondo);box-shadow:0 4px 14px -8px rgba(51,53,45,.25);margin-bottom:24px}
+.hero-eyebrow .dot{width:9px;height:9px;border-radius:50%;background:var(--naranja);flex-shrink:0}
+.hero h1{font-size:clamp(2.4rem,5.4vw,3.9rem);font-weight:800;margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--verde);position:relative;white-space:nowrap}
+.hero-sub{font-size:1.15rem;color:var(--tinta-2);max-width:520px;margin-bottom:32px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-body);font-weight:700;font-size:1.02rem;padding:16px 30px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;transition:transform .15s,background .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--verde);color:#fff;box-shadow:0 12px 26px -12px rgba(78,139,62,.6)}
+.btn-primary:hover{background:var(--verde-hi)}
+.btn-ghost{background:transparent;color:var(--tinta);border:2px solid rgba(51,53,45,.22)}
+.btn-ghost:hover{border-color:var(--tinta);background:var(--panel)}
+.hero-trust{font-size:.92rem;color:var(--tinta-2)}
+.hero-trust strong{color:var(--tinta)}
+
+/* tarjeta flotante */
+.hero-card-wrap{position:relative;display:flex;justify-content:center}
+.hero-card{background:var(--panel);border-radius:var(--r-lg);box-shadow:0 4px 10px rgba(51,53,45,.06),0 34px 70px -28px rgba(46,74,42,.45);padding:26px;width:min(380px,100%);border:1px solid rgba(51,53,45,.06);transform:rotate(1.5deg)}
+.hero-card-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px dashed var(--crema-2);margin-bottom:16px}
+.hero-card-head .hc-ico{width:44px;height:44px;border-radius:14px;background:var(--verde-hondo);display:grid;place-items:center;font-size:1.3rem;flex-shrink:0}
+.hero-card-head strong{font-family:var(--font-display);font-size:1.05rem;display:block;line-height:1.2}
+.hero-card-head small{color:var(--tinta-3);font-size:.82rem}
+.hc-row{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:14px;margin-bottom:8px}
+.hc-row .hc-emoji{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:1.1rem;flex-shrink:0}
+.hc-row strong{font-size:.95rem;display:block;line-height:1.25}
+.hc-row small{color:var(--tinta-2);font-size:.82rem;line-height:1.3;display:block}
+.hc-row--salvia{background:var(--salvia-bg)} .hc-row--salvia .hc-emoji{background:#fff}
+.hc-row--coral{background:var(--coral-bg)}   .hc-row--coral .hc-emoji{background:#fff}
+.hc-row--cielo{background:var(--cielo-bg)}   .hc-row--cielo .hc-emoji{background:#fff}
+.hc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:.85rem;color:var(--tinta-2)}
+.hc-badge{background:var(--miel-bg);color:var(--miel-fg);font-weight:700;padding:5px 12px;border-radius:999px;font-size:.78rem}
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr;padding-bottom:90px}
+  .hero-card{transform:none;margin-top:8px}
+}
+
+/* ═══════════════ STATS ═══════════════ */
+.stats{background:var(--verde-hondo);color:var(--crema);padding:34px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat b{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;display:block;color:#fff}
+.stat span{font-size:.92rem;color:rgba(245,239,228,.75)}
+@media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,1fr);gap:20px 12px}}
+
+/* ═══════════════ BENEFICIOS ═══════════════ */
+.benef-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.benef{border-radius:var(--r-lg);padding:34px 30px;position:relative;overflow:hidden}
+.benef .b-ico{width:54px;height:54px;border-radius:16px;background:#fff;display:grid;place-items:center;font-size:1.5rem;margin-bottom:18px;box-shadow:0 6px 16px -8px rgba(51,53,45,.25)}
+.benef h3{font-size:1.35rem;font-weight:700;margin-bottom:10px}
+.benef p{font-size:.99rem;line-height:1.55}
+.benef--salvia{background:var(--salvia-bg)} .benef--salvia h3{color:var(--salvia-fg)} .benef--salvia p{color:#42552F}
+.benef--coral{background:var(--coral-bg)}   .benef--coral h3{color:var(--coral-fg)}   .benef--coral p{color:#7A4522}
+.benef--miel{background:var(--miel-bg)}     .benef--miel h3{color:var(--miel-fg)}     .benef--miel p{color:#6E5320}
+.benef--teal{background:var(--teal-bg)}     .benef--teal h3{color:var(--teal-fg)}     .benef--teal p{color:#32584C}
+.benef-star{position:absolute;top:20px;right:20px;background:var(--naranja);color:#fff;font-weight:700;font-size:.75rem;letter-spacing:.06em;padding:6px 13px;border-radius:999px}
+.benef-note{font-size:.82rem;margin-top:12px;opacity:.75}
+@media(max-width:760px){.benef-grid{grid-template-columns:1fr}}
+
+/* ═══════════════ HERRAMIENTAS ═══════════════ */
+.tools{background:var(--crema-2)}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:16px}
+.tool{border-radius:var(--r-md);padding:22px 20px;transition:transform .2s ease}
+.tool:hover{transform:translateY(-4px)}
+.tool .t-emoji{font-size:1.6rem;display:block;margin-bottom:12px}
+.tool h4{font-size:1.02rem;font-weight:700;margin-bottom:5px}
+.tool p{font-size:.86rem;line-height:1.45}
+.tool--salvia{background:var(--salvia-bg)} .tool--salvia h4{color:var(--salvia-fg)} .tool--salvia p{color:#42552F}
+.tool--miel{background:var(--miel-bg)}     .tool--miel h4{color:var(--miel-fg)}     .tool--miel p{color:#6E5320}
+.tool--coral{background:var(--coral-bg)}   .tool--coral h4{color:var(--coral-fg)}   .tool--coral p{color:#7A4522}
+.tool--cielo{background:var(--cielo-bg)}   .tool--cielo h4{color:var(--cielo-fg)}   .tool--cielo p{color:#3C596B}
+.tool--teal{background:var(--teal-bg)}     .tool--teal h4{color:var(--teal-fg)}     .tool--teal p{color:#32584C}
+.tool--lila{background:var(--lila-bg)}     .tool--lila h4{color:var(--lila-fg)}     .tool--lila p{color:#5C4658}
+
+/* ═══════════════ CÓMO FUNCIONA ═══════════════ */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.step{background:var(--panel);border-radius:var(--r-lg);padding:36px 30px;box-shadow:var(--shadow-card);position:relative}
+.step .s-num{font-family:var(--font-display);font-size:3.4rem;font-weight:800;line-height:1;color:var(--verde-bg);-webkit-text-stroke:2px var(--verde);margin-bottom:16px;display:block}
+.step h3{font-size:1.25rem;font-weight:700;margin-bottom:10px}
+.step p{color:var(--tinta-2);font-size:.97rem}
+@media(max-width:860px){.steps-grid{grid-template-columns:1fr}}
+
+/* ═══════════════ CURSOS ═══════════════ */
+.cursos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.curso-card{background:var(--panel);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-card);display:flex;flex-direction:column;transition:transform .2s ease}
+.curso-card:hover{transform:translateY(-5px)}
+.curso-img{position:relative;aspect-ratio:16/9;overflow:hidden}
+.curso-img img{width:100%;height:100%;object-fit:cover}
+.curso-count{position:absolute;top:14px;left:14px;background:rgba(252,250,244,.94);color:var(--verde-hondo);font-weight:700;font-size:.8rem;padding:6px 13px;border-radius:999px}
+.curso-body{padding:22px 24px 26px;flex:1}
+.curso-body h3{font-size:1.2rem;font-weight:700;margin-bottom:12px}
+.curso-body ul{list-style:none}
+.curso-body li{font-size:.9rem;color:var(--tinta-2);padding:5px 0 5px 22px;position:relative;line-height:1.4}
+.curso-body li::before{content:"";position:absolute;left:2px;top:12px;width:7px;height:7px;border-radius:50%;background:var(--verde)}
+.cursos-extra{margin-top:28px;text-align:center;color:var(--tinta-2);font-size:.98rem}
+.cursos-extra .chip{display:inline-block;background:var(--lila-bg);color:var(--lila-fg);font-weight:600;font-size:.86rem;padding:6px 14px;border-radius:999px;margin:4px 3px}
+@media(max-width:960px){.cursos-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cursos-grid{grid-template-columns:1fr}}
+
+/* ═══════════════ TESTIMONIOS ═══════════════ */
+.testi{background:var(--crema-2)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.testi-card{background:var(--panel);border-radius:var(--r-lg);padding:30px 28px;box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.testi-card .quote-mark{font-family:var(--font-display);font-size:3rem;line-height:1;color:var(--naranja);margin-bottom:8px}
+.testi-card blockquote{font-size:.99rem;color:var(--tinta-2);flex:1;line-height:1.6}
+.testi-card figcaption{margin-top:20px;display:flex;align-items:center;gap:12px}
+.testi-avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;color:#fff;flex-shrink:0}
+.testi-card figcaption strong{display:block;font-size:.95rem}
+.testi-card figcaption small{color:var(--tinta-3);font-size:.82rem}
+.testi-note{text-align:center;margin-top:26px;font-size:.88rem;color:var(--tinta-3)}
+@media(max-width:860px){.testi-grid{grid-template-columns:1fr}}
+
+/* ═══════════════ PRECIOS ═══════════════ */
+.precios-grid{display:grid;grid-template-columns:repeat(2,minmax(0,440px));gap:28px;justify-content:center;align-items:stretch}
+.plan{background:var(--panel);border-radius:var(--r-lg);padding:38px 34px;box-shadow:var(--shadow-card);position:relative;display:flex;flex-direction:column;border:2px solid transparent}
+.plan--featured{border-color:var(--miel);box-shadow:0 4px 10px rgba(51,53,45,.06),0 36px 80px -30px rgba(212,154,46,.55)}
+.plan-pop{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--miel);color:#fff;font-weight:700;font-size:.8rem;letter-spacing:.08em;padding:8px 20px;border-radius:999px;white-space:nowrap}
+.plan-badge{display:inline-block;font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border-radius:999px;margin-bottom:18px;align-self:flex-start}
+.plan--mensual .plan-badge{background:var(--verde-bg);color:var(--verde)}
+.plan--featured .plan-badge{background:var(--miel-bg);color:var(--miel-fg)}
+.plan h3{font-size:1.5rem;font-weight:800;margin-bottom:8px}
+.plan-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.plan-price .old{color:var(--tinta-3);text-decoration:line-through;font-size:1.05rem}
+.plan-price .amount{font-family:var(--font-display);font-size:3.1rem;font-weight:800;line-height:1}
+.plan-price .period{color:var(--tinta-2);font-weight:600}
+.plan-save{color:var(--verde);font-weight:700;font-size:.95rem;margin-bottom:6px}
+.plan-tag{color:var(--tinta-2);font-size:.95rem;margin-bottom:22px}
+.plan ul{list-style:none;margin-bottom:28px;flex:1}
+.plan li{padding:7px 0 7px 30px;position:relative;font-size:.95rem;color:var(--tinta-2)}
+.plan li::before{content:"✓";position:absolute;left:2px;top:6px;font-weight:800;color:var(--verde)}
+.plan li.bonus::before{content:"★";color:var(--miel)}
+.plan li.bonus{color:var(--miel-fg);font-weight:600}
+.plan-cta{width:100%;justify-content:center}
+.plan-cta--gold{background:var(--miel);color:#fff;box-shadow:0 12px 26px -12px rgba(212,154,46,.7)}
+.plan-cta--gold:hover{background:#C08A24}
+.plan-mini{text-align:center;font-size:.84rem;color:var(--tinta-3);margin-top:12px}
+.precios-free{text-align:center;margin-top:34px;color:var(--tinta-2);font-size:.98rem}
+.precios-free a{font-weight:700}
+.trust-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 34px;margin-top:38px;font-size:.9rem;color:var(--tinta-2)}
+.trust-row span{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+@media(max-width:860px){.precios-grid{grid-template-columns:minmax(0,440px)}}
+
+/* ═══════════════ FAQ ═══════════════ */
+.faq-list{max-width:760px;margin:0 auto;display:grid;gap:14px}
+.faq-item{background:var(--panel);border-radius:var(--r-md);box-shadow:var(--shadow-card);overflow:hidden}
+.faq-item summary{list-style:none;cursor:pointer;padding:22px 26px;font-family:var(--font-display);font-weight:700;font-size:1.06rem;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:"+";font-size:1.5rem;color:var(--verde);font-weight:600;transition:transform .25s;flex-shrink:0}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item .faq-body{padding:0 26px 24px;color:var(--tinta-2);font-size:.98rem}
+
+/* ═══════════════ CTA FINAL ═══════════════ */
+.cta-final{position:relative;overflow:hidden;background:var(--verde-hondo);padding:120px 0}
+.cta-landscape{position:absolute;inset:0;z-index:0}
+.cta-landscape svg{width:100%;height:100%}
+.cta-final .container{position:relative;z-index:1;text-align:center;max-width:720px}
+.cta-final h2{color:var(--crema);font-size:clamp(2rem,4.6vw,3.1rem);font-weight:800;margin-bottom:18px}
+.cta-final p{color:rgba(245,239,228,.82);font-size:1.12rem;margin-bottom:36px}
+.cta-final .btn-primary{background:var(--miel);box-shadow:0 14px 30px -12px rgba(0,0,0,.5)}
+.cta-final .btn-primary:hover{background:#E0A93C}
+.cta-final .btn-ghost{color:var(--crema);border-color:rgba(245,239,228,.4)}
+.cta-final .btn-ghost:hover{border-color:var(--crema);background:rgba(245,239,228,.08)}
+
+/* ═══════════════ FOOTER ═══════════════ */
+.footer{background:var(--verde-hondo);color:rgba(245,239,228,.8);padding:64px 0 36px;border-top:1px solid rgba(245,239,228,.12)}
+.footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:44px;margin-bottom:44px}
+.footer-logo{background:var(--panel);border-radius:14px;padding:10px 16px;display:inline-block;margin-bottom:18px}
+.footer-logo img{height:38px}
+.footer p{font-size:.95rem;line-height:1.6}
+.footer h4{color:var(--crema);font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.footer ul{list-style:none}
+.footer li{margin-bottom:10px}
+.footer a{color:rgba(245,239,228,.85);text-decoration:none;font-size:.95rem}
+.footer a:hover{color:#fff;text-decoration:underline}
+.footer-wa{display:inline-flex;align-items:center;gap:10px;background:var(--verde);color:#fff!important;font-weight:700;padding:12px 22px;border-radius:999px;margin-top:6px;text-decoration:none!important}
+.footer-wa:hover{background:var(--verde-hi)}
+.footer-bottom{border-top:1px solid rgba(245,239,228,.14);padding-top:26px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:.85rem;color:rgba(245,239,228,.55)}
+@media(max-width:820px){.footer-grid{grid-template-columns:1fr;gap:32px}}
+
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--tinta);color:var(--crema);padding:14px 26px;border-radius:14px;font-weight:600;font-size:.95rem;z-index:9999;transition:transform .3s ease;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" aria-label="Visión Pecuaria — inicio">
+      <img src="club-assets/logo-vp.png" alt="Visión Pecuaria">
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Navegación principal">
+      <a href="#beneficios">El club</a>
+      <a href="#herramientas">Herramientas</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#testimonios">Opiniones</a>
+      <a href="#precios">Precios</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="nav-cta nav-cta--desktop" href="#precios">Hazte Élite</a>
+    <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-landscape" aria-hidden="true">
+    <svg viewBox="0 0 1440 760" preserveAspectRatio="xMidYMax slice" role="presentation">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#F6E7C0"/>
+          <stop offset=".5" stop-color="#F7DDC8"/>
+          <stop offset="1" stop-color="#F5EFE4"/>
+        </linearGradient>
+      </defs>
+      <rect width="1440" height="760" fill="url(#sky)"/>
+      <!-- sol amanecer -->
+      <circle cx="1085" cy="330" r="170" fill="#D49A2E" opacity=".16"/>
+      <circle cx="1085" cy="330" r="95" fill="#E8C465" opacity=".75"/>
+      <circle cx="1085" cy="330" r="60" fill="#F6E7C0"/>
+      <!-- nubes suaves -->
+      <ellipse cx="300" cy="180" rx="150" ry="26" fill="#FCFAF4" opacity=".65"/>
+      <ellipse cx="420" cy="205" rx="100" ry="18" fill="#FCFAF4" opacity=".5"/>
+      <ellipse cx="900" cy="130" rx="120" ry="20" fill="#FCFAF4" opacity=".55"/>
+      <!-- aves -->
+      <path d="M840 150 q10 -10 20 0 q10 -10 20 0" stroke="#6E6759" stroke-width="2.5" fill="none" opacity=".5" stroke-linecap="round"/>
+      <path d="M910 120 q8 -8 16 0 q8 -8 16 0" stroke="#6E6759" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
+      <!-- lomas lejanas -->
+      <path d="M0 520 Q 240 440 520 500 T 1020 480 T 1440 500 V760 H0 Z" fill="#DEE8CF"/>
+      <!-- lomas medias -->
+      <path d="M0 590 Q 300 500 640 570 T 1160 560 T 1440 580 V760 H0 Z" fill="#C9DCB2"/>
+      <!-- campo cercano -->
+      <path d="M0 670 Q 360 600 780 656 T 1440 650 V760 H0 Z" fill="#AFC996"/>
+      <!-- cerca de rancho -->
+      <g stroke="#2E4A2A" stroke-width="4" opacity=".45" stroke-linecap="round">
+        <line x1="90" y1="692" x2="90" y2="728"/><line x1="140" y1="688" x2="140" y2="726"/><line x1="190" y1="686" x2="190" y2="724"/>
+        <line x1="82" y1="700" x2="198" y2="694"/><line x1="82" y1="716" x2="198" y2="710"/>
+      </g>
+      <!-- ganado pastando (siluetas) -->
+      <g fill="#2E4A2A" opacity=".5">
+        <path d="M980 606 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
+        <path d="M1060 626 q3 -9 13 -9 h19 q9 0 11 7 l2 6 h-5 l-3 9 h-4 l2 -8 h-17 l-2 8 h-4 l1 -9 q-10 2 -13 -4 Z" opacity=".8"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div>
+      <span class="hero-eyebrow"><span class="dot"></span> Élite Pecuario · el club de Visión Pecuaria</span>
+      <h1>Lleva tu producción <em>con datos,</em> no de memoria.</h1>
+      <p class="hero-sub">Únete al club de productores pecuarios de México: 17 herramientas digitales, diagnóstico veterinario por IA y 26 cursos especializados — para bovino, porcino, avícola, acuícola, apícola, ovino y equino.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#precios">Hazte Élite — desde $200/mes</a>
+        <a class="btn btn-ghost" href="#herramientas">Recorre el rancho ↓</a>
+      </div>
+      <p class="hero-trust"><strong>Garantía de 7 días</strong> · cancela cuando quieras · pago seguro con Stripe</p>
+    </div>
+
+    <div class="hero-card-wrap">
+      <div class="hero-card" role="img" aria-label="Vista previa del portal El Rancho Digital">
+        <div class="hero-card-head">
+          <span class="hc-ico">🐂</span>
+          <div>
+            <strong>El Rancho Digital</strong>
+            <small>Tu portal de miembro Élite</small>
+          </div>
+        </div>
+        <div class="hc-row hc-row--salvia">
+          <span class="hc-emoji">🐄</span>
+          <div><strong>Mi Hato</strong><small>Registros, pesos y vacunas de cada animal</small></div>
+        </div>
+        <div class="hc-row hc-row--coral">
+          <span class="hc-emoji">🩺</span>
+          <div><strong>Diagnóstico IA</strong><small>Describe los síntomas, orienta en segundos</small></div>
+        </div>
+        <div class="hc-row hc-row--cielo">
+          <span class="hc-emoji">💰</span>
+          <div><strong>Mercado</strong><small>Precios pecuarios en tiempo real (SIAP)</small></div>
+        </div>
+        <div class="hc-foot">
+          <span>+ 14 herramientas más</span>
+          <span class="hc-badge">👑 Élite</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<section class="stats" aria-label="Visión Pecuaria en números">
+  <div class="container stats-grid">
+    <div class="stat"><b>+2,000</b><span>alumnos graduados</span></div>
+    <div class="stat"><b>26</b><span>cursos especializados</span></div>
+    <div class="stat"><b>17</b><span>herramientas digitales</span></div>
+    <div class="stat"><b>7</b><span>especies productivas</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════ BENEFICIOS ═══════════════ -->
+<section class="section" id="beneficios">
+  <div class="bg-circle" style="width:520px;height:520px;background:var(--verde-bg);top:-140px;right:-180px"></div>
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">¿Por qué unirte?</span>
+      <h2>Deja de administrar tu rancho de memoria</h2>
+      <p>Élite Pecuario junta en un solo lugar lo que un productor necesita para decidir mejor: sus datos, su mercado, su aprendizaje y su comunidad.</p>
+    </div>
+    <div class="benef-grid">
+      <div class="benef benef--salvia reveal">
+        <span class="b-ico">🐄</span>
+        <h3>Tu producción en orden</h3>
+        <p>Mi Hato y la bitácora digital guardan registros, pesos, vacunas y partos de cada animal o lote. Se acabaron las libretas que se mojan y los datos que se olvidan.</p>
+      </div>
+      <div class="benef benef--coral reveal">
+        <span class="benef-star">⭐ La estrella del club</span>
+        <span class="b-ico">🩺</span>
+        <h3>Diagnóstico veterinario por IA</h3>
+        <p>Describe los síntomas de tu animal y recibe orientación al instante, basada en información oficial de SENASICA, INIFAP y SADER. A cualquier hora, desde el potrero.</p>
+        <p class="benef-note">Es orientativo: no sustituye a tu Médico Veterinario Zootecnista.</p>
+      </div>
+      <div class="benef benef--miel reveal">
+        <span class="b-ico">🎓</span>
+        <h3>Aprende el oficio</h3>
+        <p>26 cursos especializados, webinars en vivo con expertos y certificados con folio oficial y QR verificable. Los cursos nuevos entran a tu membresía sin costo extra.</p>
+      </div>
+      <div class="benef benef--teal reveal">
+        <span class="b-ico">🏛️</span>
+        <h3>Apoyos de gobierno</h3>
+        <p>PROGAN, FIRA, SINIIGA y más: entérate a tiempo de los programas, sus montos y requisitos, y prepara tu solicitud sin dar vueltas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HERRAMIENTAS ═══════════════ -->
+<section class="section tools" id="herramientas">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <span class="section-tag">17 herramientas</span>
+      <h2>Recorre tu rancho digital</h2>
+      <p>Todo lo que abre tu membresía Élite Pecuario dentro de El Rancho Digital.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool tool--salvia reveal"><span class="t-emoji">🏠</span><h4>Casco</h4><p>Tu punto de partida: el resumen del día en el rancho.</p></div>
+      <div class="tool tool--miel reveal"><span class="t-emoji">🐄</span><h4>Mi Hato</h4><p>Registro individual y por lotes de tus animales.</p></div>
+      <div class="tool tool--coral reveal"><span class="t-emoji">🩺</span><h4>Diagnóstico IA</h4><p>Orientación veterinaria en segundos, base SENASICA.</p></div>
+      <div class="tool tool--cielo reveal"><span class="t-emoji">🧮</span><h4>Calculadora</h4><p>Rentabilidad real: sabe cuánto te deja cada engorda.</p></div>
+      <div class="tool tool--teal reveal"><span class="t-emoji">📓</span><h4>Bitácora digital</h4><p>Vacunas, pesos y eventos, todo con fecha y sin papel.</p></div>
+      <div class="tool tool--lila reveal"><span class="t-emoji">💰</span><h4>Mercado</h4><p>Precios pecuarios en tiempo real (SIAP-SADER).</p></div>
+      <div class="tool tool--miel reveal"><span class="t-emoji">📊</span><h4>Predicción</h4><p>Anticípate al comportamiento de los precios.</p></div>
+      <div class="tool tool--salvia reveal"><span class="t-emoji">🏛️</span><h4>Apoyos Gob</h4><p>PROGAN, FIRA y SINIIGA explicados y al día.</p></div>
+      <div class="tool tool--cielo reveal"><span class="t-emoji">🎓</span><h4>Biblioteca de cursos</h4><p>Los 26 cursos completos, a tu ritmo y en HD.</p></div>
+      <div class="tool tool--coral reveal"><span class="t-emoji">📚</span><h4>Material de apoyo</h4><p>Guías y manuales pecuarios descargables.</p></div>
+      <div class="tool tool--lila reveal"><span class="t-emoji">📡</span><h4>Webinars exclusivos</h4><p>Sesiones en vivo con expertos del sector.</p></div>
+      <div class="tool tool--teal reveal"><span class="t-emoji">🏆</span><h4>Mi progreso</h4><p>Logros y rankings mientras aprendes.</p></div>
+      <div class="tool tool--miel reveal"><span class="t-emoji">🎖️</span><h4>Certificados</h4><p>Con folio oficial y QR verificable en línea.</p></div>
+      <div class="tool tool--salvia reveal"><span class="t-emoji">🌐</span><h4>Comunidad</h4><p>Foro privado de productores + grupo VIP de WhatsApp.</p></div>
+      <div class="tool tool--cielo reveal"><span class="t-emoji">🔗</span><h4>Trazabilidad</h4><p>Certificados QR de trazabilidad por animal.</p></div>
+      <div class="tool tool--coral reveal"><span class="t-emoji">✅</span><h4>Verificador</h4><p>Valida cualquier certificado al instante.</p></div>
+      <div class="tool tool--lila reveal"><span class="t-emoji">📞</span><h4>Soporte técnico</h4><p>Te acompañamos cuando lo necesites.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CÓMO FUNCIONA ═══════════════ -->
+<section class="section" id="como-funciona">
+  <div class="bg-circle" style="width:460px;height:460px;background:var(--naranja-bg);bottom:-160px;left:-160px"></div>
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Cómo funciona</span>
+      <h2>En tres pasos estás dentro</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <span class="s-num">1</span>
+        <h3>Crea tu cuenta gratis</h3>
+        <p>La cuenta Explorador no pide tarjeta: asómate al Rancho Digital, mira el panel y toma el primer módulo de un curso.</p>
+      </div>
+      <div class="step reveal">
+        <span class="s-num">2</span>
+        <h3>Elige tu plan Élite</h3>
+        <p>Mensual o anual, como te acomode. El pago es seguro con Stripe y tienes garantía de 7 días sin preguntas.</p>
+      </div>
+      <div class="step reveal">
+        <span class="s-num">3</span>
+        <h3>Recorre tu rancho</h3>
+        <p>Todo se desbloquea al instante: cursos, herramientas, certificados y el grupo VIP de WhatsApp con otros productores.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CURSOS ═══════════════ -->
+<section class="section" id="cursos" style="padding-top:0">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">26 cursos incluidos</span>
+      <h2>Capacitación para tu especie, no en general</h2>
+      <p>Todos los cursos de Visión Pecuaria entran en tu membresía — impartidos por médicos veterinarios y especialistas, con certificado al terminar.</p>
+    </div>
+    <div class="cursos-grid">
+      <article class="curso-card reveal">
+        <div class="curso-img"><img src="club-assets/esp-bovinos.jpg" alt="Vaca con su becerro recién nacido en el potrero" loading="lazy"><span class="curso-count">5 cursos</span></div>
+        <div class="curso-body">
+          <h3>Bovinos</h3>
+          <ul>
+            <li>Nutrición y Manejo de Ganado Bovino (Sistema Intensivo)</li>
+            <li>Inseminación Artificial en Bovinos</li>
+            <li>Manejo Reproductivo y Sanidad en Bovinos</li>
+            <li>Manejo Estratégico de Becerros</li>
+            <li>Rentabilidad en Producción de Carne</li>
+          </ul>
+        </div>
+      </article>
+      <article class="curso-card reveal">
+        <div class="curso-img"><img src="club-assets/esp-porcicultura.jpg" alt="Cerdos en granja porcina" loading="lazy"><span class="curso-count">3 cursos</span></div>
+        <div class="curso-body">
+          <h3>Porcinos</h3>
+          <ul>
+            <li>Inseminación Artificial en Porcino</li>
+            <li>Formulación de Dietas para Porcinos</li>
+            <li>Engorda y Reproducción Porcina</li>
+          </ul>
+        </div>
+      </article>
+      <article class="curso-card reveal">
+        <div class="curso-img"><img src="club-assets/esp-avicultura.jpg" alt="Gallinas en producción avícola" loading="lazy"><span class="curso-count">4 cursos</span></div>
+        <div class="curso-body">
+          <h3>Avicultura</h3>
+          <ul>
+            <li>Gallinas de Postura</li>
+            <li>Formulación de Dietas para Gallinas y Pollos</li>
+            <li>Codorniz Rentable</li>
+            <li>Medicina Clínica de Aves Silvestres y de Exhibición</li>
+          </ul>
+        </div>
+      </article>
+      <article class="curso-card reveal">
+        <div class="curso-img"><img src="club-assets/esp-acuicultura.jpg" alt="Producción acuícola" loading="lazy"><span class="curso-count">5 cursos</span></div>
+        <div class="curso-body">
+          <h3>Acuacultura</h3>
+          <ul>
+            <li>Producción de Tilapia</li>
+            <li>Manejo y Reproducción de Camarón Blanco</li>
+            <li>Producción Sostenible (Jaiba, Ostión y Almeja)</li>
+            <li>Acuaponia con Peces de Ornato</li>
+            <li>Peces de Ornato: Cuidado y Manejo</li>
+          </ul>
+        </div>
+      </article>
+      <article class="curso-card reveal">
+        <div class="curso-img"><img src="club-assets/esp-ovinos-caprinos.jpg" alt="Ovinos en pastoreo" loading="lazy"><span class="curso-count">3 cursos</span></div>
+        <div class="curso-body">
+          <h3>Ovinos y caprinos</h3>
+          <ul>
+            <li>Manejo Integral de Ovinos y Caprinos</li>
+            <li>Problemas Metabólicos y Desparasitación</li>
+            <li>Genética y Engorda de Alta Rentabilidad “Pelifolk”</li>
+          </ul>
+        </div>
+      </article>
+      <article class="curso-card reveal">
+        <div class="curso-img"><img src="club-assets/esp-equinos.jpg" alt="Caballo en manejo ecuestre" loading="lazy"><span class="curso-count">3 cursos</span></div>
+        <div class="curso-body">
+          <h3>Equinos</h3>
+          <ul>
+            <li>Medicina Deportiva Equina</li>
+            <li>Manejo Reproductivo en Equinos</li>
+            <li>Mi Primer Caballo: Guía Práctica</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+    <p class="cursos-extra reveal">Y además:
+      <span class="chip">🐝 Meliponicultura Práctica</span>
+      <span class="chip">👑 Abeja Reina: Manejo de Colmenas</span>
+      <span class="chip">⚖️ Derecho Agrario</span>
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIOS ═══════════════ -->
+<section class="section testi" id="testimonios">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <span class="section-tag">Opiniones</span>
+      <h2>Productores que ya están dentro</h2>
+    </div>
+    <div class="testi-grid">
+      <figure class="testi-card reveal">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote>He tomado varios cursos con Visión Pecuaria y, a pesar de que tengo más de 20 años de apicultor, proporcionan información nueva y actualizada. Vale más de lo que se invierte.</blockquote>
+        <figcaption>
+          <span class="testi-avatar" style="background:var(--verde)">AD</span>
+          <div><strong>Alfonso Díaz</strong><small>Presidente de asociación ganadera de apicultores · Guadalajara</small></div>
+        </figcaption>
+      </figure>
+      <figure class="testi-card reveal">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote>Excelente curso de reproducción de tilapia: explicaron muy bien los conceptos, los parámetros clave y hasta vimos una corrida financiera. Totalmente recomendado para quien quiera iniciar en la acuacultura.</blockquote>
+        <figcaption>
+          <span class="testi-avatar" style="background:var(--naranja)">ES</span>
+          <div><strong>Edgar Omar Sosa</strong><small>Alumno · curso de Producción de Tilapia</small></div>
+        </figcaption>
+      </figure>
+      <figure class="testi-card reveal">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote>El curso de meliponia fue muy interesante, con información clara y dinámica. Despertó mi curiosidad por conocer más del tema.</blockquote>
+        <figcaption>
+          <span class="testi-avatar" style="background:var(--miel)">EL</span>
+          <div><strong>Emmanuel López</strong><small>Alumno · curso de Meliponicultura</small></div>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="testi-note">Reseñas reales publicadas en la página de Facebook de Visión Pecuaria.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ PRECIOS ═══════════════ -->
+<section class="section" id="precios">
+  <div class="bg-circle" style="width:560px;height:560px;background:var(--miel-bg);opacity:.5;top:-120px;left:-220px"></div>
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <span class="section-tag">Membresía</span>
+      <h2>Un plan, todo el rancho</h2>
+      <p>Los dos planes abren exactamente lo mismo: todo el club. Solo cambia cómo prefieres pagar.</p>
+    </div>
+    <div class="precios-grid">
+      <div class="plan plan--featured reveal">
+        <span class="plan-pop">⭐ MÁS POPULAR · AHORRA 20%</span>
+        <span class="plan-badge">Élite Pecuario · Anual</span>
+        <h3>Patrón del Año</h3>
+        <div class="plan-price">
+          <span class="old">$2,400</span>
+          <span class="amount">$1,920</span>
+          <span class="period">MXN / año</span>
+        </div>
+        <p class="plan-save">Equivale a $160 al mes · ahorras $480 al año</p>
+        <p class="plan-tag">Para el productor serio que quiere dominar su negocio todo el año.</p>
+        <ul>
+          <li>Los 26 cursos completos + los que vengan, sin costo extra</li>
+          <li>Diagnóstico veterinario por IA ilimitado</li>
+          <li>Las 17 herramientas de El Rancho Digital</li>
+          <li>Webinars en vivo y certificados con QR</li>
+          <li>Comunidad privada + grupo VIP de WhatsApp</li>
+          <li class="bonus">BONO ANUAL: asesoría 1 a 1 con MVZ certificado</li>
+        </ul>
+        <button class="btn plan-cta plan-cta--gold" onclick="suscribirElite('anual')"><span>👑 Ser Patrón del Año</span></button>
+        <p class="plan-mini">Garantía 7 días · cancela cuando quieras</p>
+      </div>
+
+      <div class="plan plan--mensual reveal">
+        <span class="plan-badge">Élite Pecuario · Mensual</span>
+        <h3>Capataz Pro</h3>
+        <div class="plan-price">
+          <span class="amount">$200</span>
+          <span class="period">MXN / mes</span>
+        </div>
+        <p class="plan-save">Menos de $7 al día</p>
+        <p class="plan-tag">Mes a mes, sin compromiso. Ideal si estás probando.</p>
+        <ul>
+          <li>Los 26 cursos completos + los que vengan</li>
+          <li>Diagnóstico veterinario por IA ilimitado</li>
+          <li>Las 17 herramientas de El Rancho Digital</li>
+          <li>Webinars en vivo y certificados con QR</li>
+          <li>Comunidad privada + grupo VIP de WhatsApp</li>
+        </ul>
+        <button class="btn btn-primary plan-cta" onclick="suscribirElite('mensual')"><span>Ser Capataz Pro</span></button>
+        <p class="plan-mini">Garantía 7 días · cancela cuando quieras</p>
+      </div>
+    </div>
+
+    <p class="precios-free reveal">¿Primero quieres asomarte? <a href="login.html">Crea tu cuenta Explorador gratis</a> — sin tarjeta, sin compromiso.</p>
+
+    <div class="trust-row reveal">
+      <span>🔒 Pago seguro con Stripe</span>
+      <span>↩️ Garantía de 7 días</span>
+      <span>⚡ Acceso inmediato</span>
+      <span>📱 Cancela cuando quieras</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="section" id="faq" style="padding-top:0">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <span class="section-tag">Preguntas frecuentes</span>
+      <h2>Lo que todo productor pregunta</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item">
+        <summary>¿Qué incluye exactamente mi membresía Élite Pecuario?</summary>
+        <div class="faq-body">Todo el club: las 17 herramientas de El Rancho Digital, los 26 cursos especializados completos, los webinars en vivo, los certificados con folio y QR, el diagnóstico veterinario por IA, la comunidad privada y el grupo VIP de WhatsApp. Los cursos que se agreguen en el futuro entran a tu membresía sin costo extra.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Me sirve si no me dedico al ganado bovino?</summary>
+        <div class="faq-body">Sí. El club cubre 7 áreas productivas: bovinos, porcinos, avicultura, acuacultura, apicultura, ovinos/caprinos y equinos — con cursos y herramientas útiles para cada una.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cómo pago y qué pasa después del pago?</summary>
+        <div class="faq-body">El pago se procesa con Stripe (tarjeta de débito o crédito), la misma plataforma que usan miles de negocios en México. Al confirmarse, entras de inmediato a El Rancho Digital con todo desbloqueado. Si algo falla, te atendemos por WhatsApp.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Puedo cancelar cuando quiera?</summary>
+        <div class="faq-body">Sí, sin penalizaciones ni letras chiquitas. Además tienes garantía de 7 días: si el club no es para ti, te devolvemos tu dinero sin preguntas.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Los certificados tienen validez?</summary>
+        <div class="faq-body">Cada certificado lleva folio oficial y un código QR que cualquier persona puede verificar en línea al instante — ideal para tu currículum o para acreditar capacitación ante terceros.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿El diagnóstico por IA sustituye a mi veterinario?</summary>
+        <div class="faq-body">No. Es una herramienta de orientación basada en información oficial de SENASICA, INIFAP y SADER que te ayuda a reaccionar a tiempo. Ante cualquier sospecha de enfermedad, acude con un Médico Veterinario Zootecnista certificado.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Necesito saber mucho de tecnología?</summary>
+        <div class="faq-body">No. El Rancho Digital está hecho para usarse desde el celular, en el rancho, con pocos toques. Y si te atoras, el soporte técnico te acompaña.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA FINAL ═══════════════ -->
+<section class="cta-final">
+  <div class="cta-landscape" aria-hidden="true">
+    <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMax slice" role="presentation">
+      <rect width="1440" height="620" fill="#2E4A2A"/>
+      <circle cx="1120" cy="250" r="150" fill="#F5EFE4" opacity=".07"/>
+      <circle cx="1120" cy="250" r="85" fill="#D49A2E" opacity=".22"/>
+      <path d="M0 400 Q 240 330 520 385 T 1020 370 T 1440 385 V620 H0 Z" fill="#355630" opacity=".9"/>
+      <path d="M0 470 Q 300 390 640 455 T 1160 445 T 1440 465 V620 H0 Z" fill="#3E6337" opacity=".55"/>
+      <path d="M0 540 Q 360 480 780 528 T 1440 522 V620 H0 Z" fill="#4E7A34" opacity=".35"/>
+      <g fill="#F5EFE4" opacity=".18">
+        <path d="M950 480 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
+      </g>
+    </svg>
+  </div>
+  <div class="container">
+    <h2>El rancho ya amaneció.<br>Solo falta que entres tú.</h2>
+    <p>Únete hoy a Élite Pecuario y empieza a llevar tu producción con datos — con garantía de 7 días.</p>
+    <div class="hero-ctas" style="justify-content:center">
+      <a class="btn btn-primary" href="#precios">👑 Hazte Élite ahora</a>
+      <a class="btn btn-ghost" href="https://wa.me/522361049715?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20club%20%C3%89lite%20Pecuario." target="_blank" rel="noopener noreferrer">Pregúntanos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <span class="footer-logo"><img src="club-assets/logo-vp.png" alt="Visión Pecuaria"></span>
+        <p>Visión Pecuaria — líderes en México en capacitación pecuaria. Élite Pecuario es nuestro club de productores: herramientas, cursos y comunidad en El Rancho Digital.</p>
+      </div>
+      <div>
+        <h4>El club</h4>
+        <ul>
+          <li><a href="#beneficios">Beneficios</a></li>
+          <li><a href="#herramientas">Herramientas</a></li>
+          <li><a href="#cursos">Cursos</a></li>
+          <li><a href="#precios">Precios</a></li>
+          <li><a href="login.html">Entrar a El Rancho Digital</a></li>
+          <li><a href="https://www.visionpecuariamx.com" target="_blank" rel="noopener noreferrer">Sitio de cursos en vivo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="mailto:visionpecuaria12@gmail.com">visionpecuaria12@gmail.com</a></li>
+          <li><a href="verificar.html">Verificar un certificado</a></li>
+        </ul>
+        <a class="footer-wa" href="https://wa.me/522361049715?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20el%20club%20%C3%89lite%20Pecuario." target="_blank" rel="noopener noreferrer">💬 WhatsApp +52 1 236 104 9715</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Visión Pecuaria. Todos los derechos reservados.</span>
+      <span>Hecho para el campo mexicano 🇲🇽</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ── Nav: sombra al scroll + menú móvil ──
+const nav = document.getElementById('nav');
+const burger = document.getElementById('navBurger');
+const links = document.getElementById('navLinks');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), {passive:true});
+burger.addEventListener('click', () => {
+  const open = links.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open);
+});
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  links.classList.remove('open');
+  burger.setAttribute('aria-expanded', 'false');
+}));
+
+// ── Reveal on scroll ──
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── Toast ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.remove('show'), 3500);
+}
+window.toast = toast;
+
+// Placeholder hasta que el módulo Firebase reasigne la versión real:
+// si algo falla al cargar, el CTA manda a crear cuenta y guarda la intención.
+window.suscribirElite = function(plan) {
+  sessionStorage.setItem('intencion_pago', plan);
+  window.location.href = 'login.html';
+};
+</script>
+
+<script type="module">
+// ═══ CHECKOUT — mismo funnel que el portal (webhook Railway + Stripe) ═══
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const WEBHOOK = 'https://visionpecuaria-webhook-production.up.railway.app/crear-checkout';
+const STRIPE_PK = 'pk_live_51TMAcSA7If2CqXs9NuKsM1cVT9n5agProkMR8HFiT6QTXzS0g9PtiokZ4cpT1Qo3rk9bbsrZHx9sOUbE9UEOjgGs00n1OM3Y9b';
+
+let authReady = false;
+onAuthStateChanged(auth, (user) => {
+  authReady = true;
+  // Si venía con intención de pago y ya hay sesión, retomar el checkout
+  const plan = sessionStorage.getItem('intencion_pago');
+  if (user && plan) {
+    sessionStorage.removeItem('intencion_pago');
+    suscribirElite(plan);
+  }
+});
+
+window.suscribirElite = async function(plan) {
+  if (!['mensual','anual'].includes(plan)) return;
+
+  // Esperar brevemente a que Firebase resuelva la sesión
+  if (!authReady) { await new Promise(r => setTimeout(r, 900)); }
+
+  const user = auth.currentUser;
+  if (!user) {
+    // Sin sesión → guardar intención y mandar a crear cuenta / entrar
+    sessionStorage.setItem('intencion_pago', plan);
+    toast('Primero crea tu cuenta o inicia sesión — te llevamos al pago enseguida.');
+    setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+    return;
+  }
+
+  toast('🚀 Conectando con Stripe...');
+  try {
+    const res = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan, email: user.email, uid: user.uid, nombre: user.displayName || '' })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' del servidor de pagos');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    if (data.url) { window.location.href = data.url; return; }
+    if (data.clientSecret) {
+      if (typeof Stripe === 'undefined') {
+        const s = document.createElement('script');
+        s.src = 'https://js.stripe.com/v3/';
+        s.onload = () => montarStripeEmbedded(data.clientSecret);
+        document.head.appendChild(s);
+      } else {
+        montarStripeEmbedded(data.clientSecret);
+      }
+      return;
+    }
+    throw new Error('Respuesta inesperada del servidor');
+  } catch (e) {
+    console.error('Error suscribiendo:', e);
+    const numero = '5212361100649';
+    const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + (user.email || '') + ' Plan: ' + plan);
+    toast('Error: ' + e.message + ' — abriendo WhatsApp...');
+    setTimeout(() => { window.open('https://wa.me/' + numero + '?text=' + msg, '_blank'); }, 1500);
+  }
+};
+
+// Stripe Embedded Checkout en overlay (mismo patrón que el portal)
+async function montarStripeEmbedded(clientSecret) {
+  if (window.__stripeCheckoutInstance) {
+    try { window.__stripeCheckoutInstance.destroy(); } catch(e) {}
+    window.__stripeCheckoutInstance = null;
+  }
+  const prev = document.getElementById('stripeCheckoutOverlay');
+  if (prev) prev.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'stripeCheckoutOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,25,15,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto';
+
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:20px;max-width:520px;width:100%;padding:14px;position:relative;margin-top:20px';
+  const close = document.createElement('button');
+  close.textContent = '✕';
+  close.setAttribute('aria-label', 'Cerrar pago');
+  close.style.cssText = 'position:absolute;top:-14px;right:-6px;background:#F5EFE4;color:#33352D;border:none;width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3)';
+  close.onclick = () => {
+    try { window.__stripeCheckoutInstance?.destroy(); } catch(e) {}
+    window.__stripeCheckoutInstance = null;
+    overlay.remove();
+  };
+  const mount = document.createElement('div');
+  mount.id = 'stripeCheckoutMount';
+  box.appendChild(close); box.appendChild(mount);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  const stripe = Stripe(STRIPE_PK);
+  const checkout = await stripe.initEmbeddedCheckout({ clientSecret });
+  window.__stripeCheckoutInstance = checkout;
+  checkout.mount('#stripeCheckoutMount');
+}
+</script>
+
+</body>
+</html>
