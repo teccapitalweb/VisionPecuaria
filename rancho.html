@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>El Rancho Digital · Visión Pecuaria</title>
+<meta name="description" content="Tu rancho digital de Élite Pecuario: hato, mercado, diagnóstico IA, cursos y más.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2E4A2A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐂%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rancho.css">
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div class="boot" id="boot">
+  <div class="boot-logo"><img src="club-assets/logo-vp.png" alt="Visión Pecuaria"></div>
+  <div class="boot-bar" role="progressbar" aria-label="Cargando"></div>
+  <div class="boot-status" id="bootStatus">Preparando el rancho...</div>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" aria-label="Navegación del rancho">
+    <div class="sb-brand">
+      <span class="sb-brand-chip"><img src="club-assets/logo-vp.png" alt="Visión Pecuaria"></span>
+      <small>El Rancho<br>Digital</small>
+    </div>
+
+    <div class="sb-user">
+      <div class="sb-avatar" id="sbAvatar">··</div>
+      <div class="sb-user-info">
+        <strong id="sbUserName">Cargando…</strong>
+        <small id="sbUserEmail"></small>
+      </div>
+      <span class="sb-badge sb-badge--free" id="sbBadge">…</span>
+    </div>
+
+    <nav class="sb-nav" id="sbNav"><!-- herramientas: las pinta app.js --></nav>
+
+    <div class="sb-cta" id="sbCta">
+      <h4>👑 Élite Pecuario</h4>
+      <p>Desbloquea todo el rancho y conviértete en Patrón del Año.</p>
+      <button id="sbCtaBtn">Hazte Élite</button>
+    </div>
+
+    <div class="sb-foot">
+      <a class="sb-item" href="index.html"><span class="ico">↩️</span>Ir al portal actual</a>
+    </div>
+  </aside>
+  <div class="sb-overlay" id="sbOverlay"></div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <button class="tb-burger" id="tbBurger" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="tb-search">
+        <span class="lupa" aria-hidden="true">🔍</span>
+        <input type="search" id="tbSearch" placeholder="Busca una herramienta… (Enter para ir)" aria-label="Buscar herramienta">
+      </div>
+      <div class="tb-actions">
+        <a class="tb-vip" href="https://wa.me/5212361100649?text=Hola%2C%20soy%20miembro%20%C3%89lite%20Pecuario%20y%20quiero%20unirme%20al%20Grupo%20VIP%20de%20WhatsApp."
+           target="_blank" rel="noopener noreferrer">💬 <span>Grupo VIP</span></a>
+        <button class="tb-out" id="tbOut">Salir</button>
+      </div>
+    </header>
+
+    <main class="content" id="sections">
+      <!-- ═══ EL CASCO ═══ -->
+      <section class="section active" id="section-casco" aria-label="Casco — inicio">
+
+        <!-- Banner Diagnóstico IA (la estrella) -->
+        <div class="ia-banner">
+          <div class="ia-ico">🩺</div>
+          <div class="ia-txt">
+            <span class="star">⭐ LA ESTRELLA DEL CLUB</span>
+            <h2>Diagnóstico veterinario por IA</h2>
+            <p>Describe los síntomas de tu animal y recibe orientación al instante — base SENASICA/INIFAP. No sustituye a tu MVZ.</p>
+          </div>
+          <button class="ia-cta" id="iaCta">Probar el diagnóstico →</button>
+        </div>
+
+        <!-- Saludo sobre el paisaje amanecer -->
+        <div class="casco-hero">
+          <svg viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#F6E7C0"/>
+                <stop offset=".55" stop-color="#F7DDC8"/>
+                <stop offset="1" stop-color="#F5EFE4"/>
+              </linearGradient>
+            </defs>
+            <rect width="1440" height="300" fill="url(#sky)"/>
+            <circle cx="1150" cy="120" r="120" fill="#D49A2E" opacity=".16"/>
+            <circle cx="1150" cy="120" r="66" fill="#E8C465" opacity=".75"/>
+            <circle cx="1150" cy="120" r="42" fill="#F6E7C0"/>
+            <ellipse cx="300" cy="70" rx="130" ry="20" fill="#FCFAF4" opacity=".6"/>
+            <path d="M980 70 q9 -9 18 0 q9 -9 18 0" stroke="#6E6759" stroke-width="2.2" fill="none" opacity=".45" stroke-linecap="round"/>
+            <path d="M0 200 Q 240 150 520 190 T 1020 178 T 1440 190 V300 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 240 Q 300 185 640 228 T 1160 222 T 1440 235 V300 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 278 Q 360 240 780 268 T 1440 264 V300 H0 Z" fill="#AFC996"/>
+            <g fill="#2E4A2A" opacity=".5">
+              <path d="M1010 236 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
+            </g>
+          </svg>
+          <div class="greet">
+            <h1 id="greeting">Buenos días 👋</h1>
+            <p id="greetingSub">Cargando tu rancho…</p>
+          </div>
+        </div>
+
+        <!-- Stats: reales de Firestore + placeholder marcado -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="s-emoji">🐄</span>
+            <b id="statHato">…</b>
+            <span>animales en tu hato</span>
+          </div>
+          <div class="stat-card is-demo">
+            <span class="chip-demo">DATO DE EJEMPLO</span>
+            <span class="s-emoji">💰</span>
+            <b>$48.50</b>
+            <span>kg en pie · se cablea con Mercado</span>
+          </div>
+          <div class="stat-card">
+            <span class="s-emoji">🎓</span>
+            <b id="statCursos">…</b>
+            <span>cursos en la Biblioteca</span>
+          </div>
+          <div class="stat-card">
+            <span class="s-emoji">🎖️</span>
+            <b id="statCerts">…</b>
+            <span>certificados tuyos</span>
+          </div>
+        </div>
+
+        <h3 class="casco-sub">Recorre tu rancho</h3>
+        <div class="tools-grid" id="cascoTools"><!-- tarjetas: las pinta app.js --></div>
+      </section>
+      <!-- Las demás secciones (en construcción) las genera app.js -->
+    </main>
+  </div>
+</div>
+
+<!-- MODAL VIP (mismo funnel de pago del portal) -->
+<div class="modal-vip" id="modalVip" role="dialog" aria-modal="true" aria-labelledby="mvTitle">
+  <div class="mv-box">
+    <button class="mv-close" id="mvClose" aria-label="Cerrar">✕</button>
+    <h3 id="mvTitle">👑 Hazte Élite Pecuario</h3>
+    <p class="mv-sub" id="mvSub">Desbloquea las 17 herramientas, los 26 cursos y la comunidad.</p>
+    <button class="mv-plan mv-plan--anual" data-plan="anual">
+      <span><strong>Patrón del Año · Anual</strong><small>Equivale a $160/mes · ahorras $480</small></span>
+      <span class="mv-precio">$1,920/año</span>
+    </button>
+    <button class="mv-plan" data-plan="mensual">
+      <span><strong>Capataz Pro · Mensual</strong><small>Menos de $7 al día</small></span>
+      <span class="mv-precio">$200/mes</span>
+    </button>
+    <p class="mv-mini">Pago seguro con Stripe · garantía 7 días · cancela cuando quieras</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="rancho-js/app.js"></script>
+</body>
+</html>
