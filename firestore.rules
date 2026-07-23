@@ -107,7 +107,7 @@ service cloud.firestore {
         && request.resource.data.ranchoUid == request.auth.uid;
       allow update: if esAdmin()
         || (autenticado() && resource.data.ranchoUid == request.auth.uid)
-        || (autenticado() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['vistas']));
+        || (autenticado() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['vistas','reportes']));
       allow delete: if esAdmin()
         || (autenticado() && resource.data.ranchoUid == request.auth.uid);
     }
