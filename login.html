@@ -1,680 +1,323 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<title>Visión Pecuaria — Acceso al Portal Élite Pecuario</title>
-<meta name="description" content="Inicia sesión en el portal Élite Pecuario de Visión Pecuaria — Líderes en México en capacitación pecuaria." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Entrar · Visión Pecuaria</title>
+<meta name="description" content="Entra a tu rancho digital de Élite Pecuario.">
+<meta name="theme-color" content="#2E4A2A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐂%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --g900: #0a1f12;
-  --g800: #0f3d27;
-  --g700: #1a5d3a;
-  --g600: #2d7a4a;
-  --gold: #d4a017;
-  --gold-light: #e8c465;
-  --gold-deep: #a67c00;
-  --cream: #f7f3ea;
-  --error: #ef4444;
-  --success: #22c55e;
+/* ═══════════════════════════════════════════════════════════
+   LOGIN · design system del rediseño (mismos tokens que club.html
+   y rancho.css). Sin Montserrat/Inter.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --crema:#F5EFE4; --crema-2:#EFE8DA; --panel:#FCFAF4;
+  --tinta:#33352D; --tinta-2:#6E6759; --tinta-3:#9C9484;
+  --verde:#4E8B3E; --verde-hi:#5B9E49;
+  --verde-hondo:#2E4A2A;
+  --naranja:#D06E2C;
+  --miel:#D49A2E; --miel-bg:#F6E7C0; --miel-fg:#A67A1F;
+  --rojo:#C0392B; --rojo-bg:#F7DEDA;
+  --verde-ok-bg:#DEE8CF; --verde-ok-fg:#3F6B31;
+  --r-lg:24px; --r-md:18px;
+  --font-display:"Bricolage Grotesque", system-ui, sans-serif;
+  --font-body:"Hanken Grotesk", system-ui, sans-serif;
+  --shadow-card:0 2px 6px rgba(51,53,45,.05), 0 24px 60px -24px rgba(51,53,45,.28);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow-x: hidden; }
-body {
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  background: var(--g900);
-  color: #fff;
-  min-height: 100vh;
-  position: relative;
-  overflow-y: auto;
+*{margin:0;padding:0;box-sizing:border-box}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none!important;transition:none!important} }
+body{font-family:var(--font-body);background:var(--crema);color:var(--tinta);line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;letter-spacing:-.01em}
+img{max-width:100%;display:block}
+button,input{font-family:var(--font-body)}
+:focus-visible{outline:3px solid var(--naranja);outline-offset:2px;border-radius:6px}
+
+/* ═══ LAYOUT DIVIDIDO: marca+paisaje / tarjeta ═══ */
+.wrap{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:1fr;}
+@media(min-width:960px){ .wrap{grid-template-columns:1.05fr .95fr} }
+
+/* ── Lado marca (verde hondo + paisaje amanecer) ── */
+.marca{position:relative;overflow:hidden;background:var(--verde-hondo);color:var(--crema);display:flex;flex-direction:column;justify-content:center;padding:34px 30px;min-height:210px}
+.marca-svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:58%;pointer-events:none}
+.marca-in{position:relative;z-index:1;max-width:440px;margin:0 auto;width:100%}
+.marca-logo{background:var(--panel);border-radius:16px;padding:9px 14px;display:inline-block;margin-bottom:18px}
+.marca-logo img{height:46px;display:block}
+.marca-logo-fallback{display:none;font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--verde-hondo);white-space:nowrap}
+.marca h1{font-size:clamp(1.5rem,3.4vw,2.3rem);font-weight:800;margin-bottom:10px}
+.marca h1 em{font-style:normal;color:var(--miel)}
+.marca p{color:rgba(245,239,228,.72);font-size:1rem;max-width:38ch}
+.marca-puntos{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:9px}
+.marca-puntos li{display:flex;align-items:center;gap:10px;font-size:.92rem;color:rgba(245,239,228,.85)}
+.marca-puntos .p-ico{width:26px;height:26px;border-radius:8px;background:rgba(245,239,228,.12);display:grid;place-items:center;font-size:.85rem;flex-shrink:0}
+@media(max-width:959px){
+  .marca{min-height:auto;padding:22px 20px 26px}
+  .marca-svg{height:52%;opacity:.5}
+  .marca-logo{margin-bottom:12px}
+  .marca-logo img{height:30px}
+  .marca p,.marca-puntos{display:none}
 }
 
-/* ═══════════════════════════════════════════════════════════ */
-/* FONDO ANIMADO PREMIUM                                         */
-/* ═══════════════════════════════════════════════════════════ */
-.bg-wrap {
-  position: fixed; inset: 0;
-  background: radial-gradient(ellipse at top left, #112e1c 0%, var(--g900) 50%, #050d08 100%);
-  z-index: -2;
-  overflow: hidden;
-}
-.bg-orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(100px); opacity: .35;
-  animation: orbFloat 18s ease-in-out infinite;
-}
-.bg-orb--1 {
-  width: 500px; height: 500px;
-  background: var(--g600);
-  top: -150px; left: -150px;
-}
-.bg-orb--2 {
-  width: 600px; height: 600px;
-  background: var(--gold);
-  bottom: -200px; right: -200px;
-  animation-delay: -9s;
-  opacity: .25;
-}
-.bg-orb--3 {
-  width: 350px; height: 350px;
-  background: var(--g700);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: -4s;
-}
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(40px, -30px) scale(1.1); }
-  66% { transform: translate(-30px, 40px) scale(.95); }
-}
-.bg-grid {
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(212,160,23,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212,160,23,.04) 1px, transparent 1px);
-  background-size: 50px 50px;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
-  z-index: -1; pointer-events: none;
-}
+/* ── Lado tarjeta ── */
+.lado-card{display:flex;align-items:center;justify-content:center;padding:32px 20px}
+.card{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);width:100%;max-width:430px;padding:30px 28px}
+@media(max-width:959px){ .lado-card{padding:20px 16px 34px} .card{padding:24px 20px;margin-top:-30px;position:relative;z-index:2} }
+.card-h{margin-bottom:20px}
+.card-h h2{font-size:1.45rem;margin-bottom:4px}
+.card-h p{color:var(--tinta-2);font-size:.93rem}
 
-/* Partículas doradas flotando */
-.particles {
-  position: fixed; inset: 0; pointer-events: none; z-index: -1;
-  overflow: hidden;
-}
-.particle {
-  position: absolute;
-  width: 3px; height: 3px;
-  background: var(--gold);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--gold);
-  opacity: 0;
-  animation: particleRise 12s linear infinite;
-}
-@keyframes particleRise {
-  0% { transform: translateY(110vh) scale(.5); opacity: 0; }
-  10% { opacity: .8; }
-  90% { opacity: .8; }
-  100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-}
+/* ── Pestañas ── */
+.tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--crema);border-radius:99px;padding:4px;margin-bottom:20px}
+.tab-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--panel);border-radius:99px;box-shadow:0 2px 8px rgba(51,53,45,.12);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.tab-ind.right{transform:translateX(100%)}
+.tab{position:relative;z-index:1;background:none;border:none;font-weight:700;font-size:.9rem;color:var(--tinta-3);padding:9px 8px;border-radius:99px;cursor:pointer;transition:color .2s}
+.tab[aria-selected="true"]{color:var(--verde-hondo)}
 
-/* ═══════════════════════════════════════════════════════════ */
-/* LAYOUT PRINCIPAL                                              */
-/* ═══════════════════════════════════════════════════════════ */
-.wrap {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 20px;
-}
+/* ── Formularios ── */
+.vista{display:none}
+.vista.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.campo{margin-bottom:14px}
+.campo label{display:block;font-size:.8rem;font-weight:700;color:var(--tinta-2);margin-bottom:5px}
+.campo-in{position:relative}
+.campo input{width:100%;border:1.5px solid var(--crema-2);background:var(--crema);border-radius:14px;padding:12px 14px;font-size:.95rem;color:var(--tinta);transition:border-color .15s,background .15s}
+.campo input::placeholder{color:var(--tinta-3)}
+.campo input:focus{border-color:var(--verde);background:var(--panel);outline:none}
+.campo input:focus-visible{outline:3px solid var(--naranja);outline-offset:1px}
+.campo--pass input{padding-right:46px}
+.ojo{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:1rem;padding:7px 9px;cursor:pointer;border-radius:8px;opacity:.6}
+.ojo:hover{opacity:1}
 
-.card {
-  width: 100%; max-width: 460px;
-  background: rgba(8, 20, 12, .92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 24px;
-  padding: 36px 32px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 80px rgba(212,160,23,.08);
-  position: relative;
-  animation: cardEntrance .9s cubic-bezier(.2,.8,.3,1.1) backwards;
-}
-@keyframes cardEntrance {
-  from { opacity: 0; transform: translateY(30px) scale(.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
+.btn{width:100%;border:none;border-radius:99px;font-weight:700;font-size:.97rem;padding:13px 18px;cursor:pointer;transition:background .15s,transform .15s;display:flex;align-items:center;justify-content:center;gap:9px}
+.btn:disabled{opacity:.65;cursor:not-allowed}
+.btn--verde{background:var(--verde);color:#fff}
+.btn--verde:hover:not(:disabled){background:var(--verde-hi);transform:translateY(-1px)}
+.btn--miel{background:var(--miel);color:#fff}
+.btn--miel:hover:not(:disabled){background:#C08A24;transform:translateY(-1px)}
+.spinner{display:none;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;flex-shrink:0;animation:spin .7s linear infinite}
+.btn:disabled .spinner{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* Glow animado del border */
-.card::before {
-  content: '';
-  position: absolute; inset: -1px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, transparent 30%, rgba(212,160,23,.4) 50%, transparent 70%);
-  background-size: 200% 200%;
-  animation: borderShine 5s linear infinite;
-  z-index: -1;
-}
-@keyframes borderShine {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+.sep{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--tinta-3);font-size:.78rem}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--crema-2)}
 
-/* ═══════════════════════════════════════════════════════════ */
-/* HEADER DEL CARD                                               */
-/* ═══════════════════════════════════════════════════════════ */
-.brand {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 28px;
-  animation: fadeUp .7s .15s ease backwards;
-}
-.brand-logo {
-  width: 52px; height: 52px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--g700) 0%, var(--g800) 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px;
-  border: 1.5px solid rgba(212,160,23,.4);
-  box-shadow: 0 8px 24px rgba(15,61,39,.4);
-}
-.brand-text h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -.3px;
-  line-height: 1.2;
-}
-.brand-text p {
-  font-size: .78rem;
-  color: rgba(255,255,255,.55);
-  margin-top: 2px;
-  font-weight: 500;
-}
+.btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--panel);border:1.5px solid var(--crema-2);border-radius:99px;font-weight:600;font-size:.93rem;color:var(--tinta);padding:12px 18px;cursor:pointer;transition:border-color .15s,background .15s}
+.btn-google:hover:not(:disabled){border-color:var(--tinta-3);background:#fff}
+.btn-google:disabled{opacity:.65;cursor:not-allowed}
+.btn-google svg{width:18px;height:18px;flex-shrink:0}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.link-fila{display:flex;justify-content:center;margin-top:14px}
+.link{background:none;border:none;color:var(--verde);font-weight:600;font-size:.86rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:4px}
+.link:hover{color:var(--verde-hi)}
 
-/* ═══════════════════════════════════════════════════════════ */
-/* TABS                                                          */
-/* ═══════════════════════════════════════════════════════════ */
-.tabs {
-  display: grid; grid-template-columns: 1fr 1fr;
-  background: rgba(255,255,255,.05);
-  border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 24px;
-  position: relative;
-  border: 1px solid rgba(255,255,255,.06);
-  animation: fadeUp .7s .25s ease backwards;
-}
-.tab {
-  position: relative; z-index: 2;
-  padding: 11px 0;
-  background: transparent;
-  border: none;
-  font: 600 .88rem/1 'Inter', sans-serif;
-  color: rgba(255,255,255,.55);
-  cursor: pointer;
-  border-radius: 10px;
-  transition: color .25s;
-}
-.tab.active { color: #fff; }
-.tab-indicator {
-  position: absolute;
-  top: 4px; left: 4px;
-  width: calc(50% - 4px); height: calc(100% - 8px);
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-  border-radius: 10px;
-  z-index: 1;
-  transition: transform .35s cubic-bezier(.2,.8,.3,1.4);
-  box-shadow: 0 4px 12px rgba(212,160,23,.35);
-}
-.tab-indicator.right { transform: translateX(100%); }
-.tab.active { color: var(--g900); font-weight: 700; }
+/* ── Avisos ── */
+.alert{display:none;border-radius:12px;padding:10px 13px;font-size:.86rem;font-weight:600;margin-bottom:12px;line-height:1.4}
+.alert.show{display:block;animation:fade .25s ease}
+.alert--error{background:var(--rojo-bg);color:var(--rojo)}
+.alert--success{background:var(--verde-ok-bg);color:var(--verde-ok-fg)}
+.alert--info{background:var(--miel-bg);color:var(--miel-fg)}
 
-/* ═══════════════════════════════════════════════════════════ */
-/* FORMS                                                         */
-/* ═══════════════════════════════════════════════════════════ */
-.form { display: none; flex-direction: column; gap: 14px; animation: fadeUp .4s ease; }
-.form.active { display: flex; }
+.pie{text-align:center;font-size:.78rem;color:var(--tinta-3);margin-top:18px}
+.pie a{color:var(--tinta-2)}
 
-.form-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.55rem;
-  font-weight: 800;
-  margin-bottom: 4px;
-  background: linear-gradient(135deg, #fff 0%, var(--gold-light) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.form-subtitle {
-  font-size: .88rem;
-  color: rgba(255,255,255,.6);
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
+.top-link{display:block;text-align:center;font-size:.82rem;color:var(--tinta-2);text-decoration:none;margin-bottom:16px;font-weight:600}
+.top-link:hover{color:var(--verde-hondo);text-decoration:underline}
 
-/* GOOGLE BUTTON */
-.btn-google {
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px;
-  width: 100%; padding: 13px;
-  background: #fff; color: #1a1a1a;
-  border: none; border-radius: 12px;
-  font: 600 .92rem/1 'Inter', sans-serif;
-  cursor: pointer;
-  transition: transform .2s, box-shadow .25s;
-}
-.btn-google:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(255,255,255,.15);
-}
-.btn-google:active { transform: translateY(0); }
-.btn-google svg { flex-shrink: 0; }
-.btn-google:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.conexion-segura{display:flex;align-items:center;justify-content:center;gap:5px;text-align:center;font-size:.74rem;color:var(--tinta-3);margin-top:10px}
 
-/* SEPARADOR */
-.sep {
-  display: flex; align-items: center; gap: 10px;
-  margin: 6px 0;
-  color: rgba(255,255,255,.35);
-  font-size: .72rem;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.sep::before, .sep::after {
-  content: ''; flex: 1; height: 1px;
-  background: rgba(255,255,255,.1);
-}
-
-/* INPUTS */
-.field { position: relative; }
-.field label {
-  display: block;
-  font-size: .76rem;
-  font-weight: 600;
-  color: rgba(255,255,255,.65);
-  margin-bottom: 6px;
-  letter-spacing: .3px;
-  text-transform: uppercase;
-}
-.field input {
-  width: 100%;
-  padding: 13px 14px 13px 42px;
-  background: rgba(20, 50, 32, 0.85);
-  border: 1.5px solid rgba(255,255,255,.15);
-  border-radius: 12px;
-  color: #fff;
-  font: 400 .95rem/1 'Inter', sans-serif;
-  font-family: inherit;
-  transition: border-color .25s, background .25s, box-shadow .25s;
-}
-.field input::placeholder { color: rgba(255,255,255,.45); }
-.field input:focus {
-  outline: none;
-  border-color: var(--gold);
-  background: rgba(30, 60, 40, 0.95);
-  box-shadow: 0 0 0 4px rgba(212,160,23,.15);
-}
-.field input:-webkit-autofill,
-.field input:-webkit-autofill:hover,
-.field input:-webkit-autofill:focus,
-.field input:-webkit-autofill:active {
-  -webkit-text-fill-color: #fff !important;
-  -webkit-box-shadow: 0 0 0 1000px rgba(20, 50, 32, 0.85) inset !important;
-  caret-color: #fff !important;
-  transition: background-color 99999s ease-in-out 0s;
-}
-.field-icon {
-  position: absolute;
-  left: 14px; top: 38px;
-  width: 18px; height: 18px;
-  color: rgba(255,255,255,.4);
-  pointer-events: none;
-}
-
-/* TOGGLE PASSWORD */
-.toggle-pass {
-  position: absolute;
-  right: 12px; top: 33px;
-  width: 28px; height: 28px;
-  background: transparent;
-  border: none;
-  color: rgba(255,255,255,.5);
-  cursor: pointer;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  transition: color .2s, background .2s;
-}
-.toggle-pass:hover { color: var(--gold-light); background: rgba(255,255,255,.05); }
-
-/* SUBMIT */
-.btn-submit {
-  width: 100%; padding: 14px;
-  margin-top: 8px;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-  color: var(--g900);
-  border: none; border-radius: 12px;
-  font: 800 .98rem/1 'Montserrat', sans-serif;
-  cursor: pointer;
-  transition: transform .2s, box-shadow .25s, filter .2s;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  box-shadow: 0 10px 28px rgba(212,160,23,.35);
-  position: relative;
-  overflow: hidden;
-}
-.btn-submit::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 50%; height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,.4), transparent);
-  animation: btnShine 3.5s ease-in-out infinite;
-}
-@keyframes btnShine {
-  0%, 100% { left: -50%; }
-  60% { left: 110%; }
-}
-.btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(212,160,23,.5);
-}
-.btn-submit:active { transform: translateY(0); }
-.btn-submit:disabled {
-  opacity: .7; cursor: not-allowed; transform: none;
-  filter: grayscale(.5);
-}
-.btn-submit svg { transition: transform .2s; position: relative; z-index: 2; }
-.btn-submit:hover svg { transform: translateX(4px); }
-.btn-submit span { position: relative; z-index: 2; }
-
-/* ERROR / SUCCESS */
-.alert {
-  display: none;
-  align-items: center; gap: 8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: .85rem;
-  line-height: 1.4;
-  margin-top: 4px;
-  animation: alertIn .35s ease;
-}
-.alert.show { display: flex; }
-.alert--error {
-  background: rgba(239,68,68,.12);
-  border: 1px solid rgba(239,68,68,.4);
-  color: #fca5a5;
-}
-.alert--success {
-  background: rgba(34,197,94,.12);
-  border: 1px solid rgba(34,197,94,.4);
-  color: #86efac;
-}
-@keyframes alertIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* MINI links */
-.mini {
-  font-size: .8rem;
-  color: rgba(255,255,255,.5);
-  text-align: center;
-  margin-top: 10px;
-}
-.mini a {
-  color: var(--gold-light);
-  text-decoration: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color .2s;
-}
-.mini a:hover { color: var(--gold); text-decoration: underline; }
-
-/* FOOTER del card */
-.card-footer {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  text-align: center;
-}
-.card-footer p {
-  font-size: .8rem;
-  color: rgba(255,255,255,.5);
-  line-height: 1.5;
-}
-.card-footer a {
-  color: var(--gold-light);
-  text-decoration: none;
-  font-weight: 600;
-}
-.card-footer a:hover { text-decoration: underline; }
-
-/* TOAST de carga / sesión activa */
-.session-toast {
-  position: fixed;
-  top: 20px; right: 20px;
-  padding: 12px 18px;
-  background: rgba(15,61,39,.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(212,160,23,.4);
-  border-radius: 12px;
-  color: #fff;
-  font-size: .85rem;
-  z-index: 1000;
-  display: flex; align-items: center; gap: 10px;
-  transform: translateX(120%);
-  transition: transform .4s cubic-bezier(.2,.8,.3,1.2);
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
-}
-.session-toast.show { transform: translateX(0); }
-.spinner {
-  width: 16px; height: 16px;
-  border: 2px solid rgba(212,160,23,.3);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ═══════════════════════════════════════════════════════════ */
-/* MOBILE                                                        */
-/* ═══════════════════════════════════════════════════════════ */
-@media (max-width: 480px) {
-  .wrap { padding: 16px; }
-  .card { padding: 28px 22px; border-radius: 20px; }
-  .brand-logo { width: 46px; height: 46px; font-size: 22px; }
-  .brand-text h1 { font-size: 1.1rem; }
-  .form-title { font-size: 1.35rem; }
-  .bg-orb--1, .bg-orb--2 { width: 320px; height: 320px; }
-  .bg-orb--3 { width: 240px; height: 240px; }
-}
-</style>
-<meta name="theme-color" content="#0f3d27">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="pwa-192.png">
-<style>
-/* ===== Bloque de venta en REGISTRO (Visión Pecuaria) ===== */
-/* Layout 2 columnas tipo ICADEM */
-.card .brand{display:none}
-.auth-layout{display:grid;grid-template-columns:1fr;gap:28px;width:100%;max-width:1160px;margin:0 auto;align-items:start}
-.auth-sell{min-width:0}
-.sell-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.sell-logo{width:46px;height:46px;border-radius:12px}
-.sell-brand span{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:1.5px;color:var(--gold-light);text-transform:uppercase;line-height:1.3}
-.sell-title{font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(1.85rem,4.5vw,3rem);line-height:1.06;color:var(--cream);margin-bottom:13px;letter-spacing:-.02em}
-.sell-title span{color:var(--gold-light)}
-.sell-sub{font-size:.98rem;color:#9fb4a3;line-height:1.5;margin-bottom:22px;max-width:520px}
-@media(min-width:980px){
-  .wrap{align-items:flex-start;padding-top:44px;padding-bottom:44px}
-  .auth-layout{grid-template-columns:1.05fr .95fr;gap:46px}
-  .card{position:sticky;top:32px;max-width:430px;justify-self:end}
-}
-
-.card.card--wide{max-width:600px}
-.vpsell{margin:4px 0 16px;border-bottom:1px solid rgba(212,160,23,.18);padding-bottom:18px}
-.vpsell-cine{position:relative;margin:0 0 16px;overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%)}
-.vpsell-track{display:flex;gap:12px;width:max-content;animation:vpscroll 38s linear infinite}
-.vpsell-track:hover{animation-play-state:paused}
-@keyframes vpscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.vpsell-flyer{flex:0 0 auto;width:152px;border-radius:12px;overflow:hidden;border:1px solid rgba(212,160,23,.18);box-shadow:0 6px 18px rgba(0,0,0,.4)}
-.vpsell-flyer img{width:100%;height:100%;display:block;aspect-ratio:1/1;object-fit:cover}
-.vpsell-h{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.12rem;margin:14px 0 9px;color:var(--cream)}
-.vpsell-h span{color:var(--gold-light)}
-.vpsell-benes{list-style:none;display:flex;flex-direction:column;gap:9px;margin:0;padding:0}
-.vpsell-bene{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:#dbe7dc;line-height:1.4}
-.vpsell-bene .ck{width:22px;height:22px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--g600),var(--g700));display:flex;align-items:center;justify-content:center;margin-top:1px}
-.vpsell-bene b{color:var(--gold-light)}
-.vpsell-planes{display:flex;flex-direction:column;gap:10px;margin:4px 0}
-.vpsell-plan{position:relative;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.18);border-radius:14px;padding:14px 16px}
-.vpsell-plan--year{background:linear-gradient(135deg,rgba(212,160,23,.12),rgba(45,122,74,.1));border-color:rgba(212,160,23,.42)}
-.vpsell-price{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5rem;line-height:1;white-space:nowrap;color:var(--cream)}
-.vpsell-meta{font-size:.8rem;color:#9fb4a3;line-height:1.35}
-.vpsell-meta b{color:var(--cream)}
-.vpsell-badge{position:absolute;top:-9px;right:14px;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#1a1200;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.5px;padding:3px 10px;border-radius:100px}
-.vpsell-strike{text-decoration:line-through;opacity:.6}
-.vpsell-refs{display:flex;flex-direction:column;gap:11px}
-.vpsell-ref{display:flex;gap:10px;align-items:flex-start}
-.vpsell-av{width:38px;height:38px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.8rem;color:#1a1200;background:linear-gradient(135deg,var(--gold-light),var(--gold))}
-.vpsell-bub{background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.14);border-radius:5px 13px 13px 13px;padding:10px 13px;flex:1}
-.vpsell-bub .nm{font-weight:700;font-size:.85rem;color:var(--cream)}
-.vpsell-bub .rl{font-size:.72rem;color:var(--gold-light);margin-left:3px}
-.vpsell-bub p{font-size:.82rem;color:#dbe7dc;line-height:1.45;margin-top:3px}
-.vpsell-bub .act{font-size:.68rem;color:#9fb4a3;margin-top:6px}
-.vpsell-note{text-align:center;font-size:.85rem;color:var(--gold-light);font-weight:600;margin-top:14px}
+/* ── Toast de sesión ── */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(140%);background:var(--verde-hondo);color:var(--crema);padding:13px 22px;border-radius:14px;font-weight:600;font-size:.9rem;z-index:99;transition:transform .3s ease;max-width:92vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- Fondo animado -->
-<div class="bg-wrap">
-  <div class="bg-orb bg-orb--1"></div>
-  <div class="bg-orb bg-orb--2"></div>
-  <div class="bg-orb bg-orb--3"></div>
-</div>
-<div class="bg-grid"></div>
-<div class="particles" id="particles"></div>
-
-<!-- Toast de sesión cargando -->
-<div class="session-toast" id="sessionToast">
-  <div class="spinner"></div>
-  <span>Verificando sesión...</span>
-</div>
-
 <div class="wrap">
-  <div class="auth-layout">
-  <div class="auth-sell"><div class="sell-hero"><div class="sell-brand"><img src="pwa-192.png" class="sell-logo" alt="Visión Pecuaria"><span>Visión Pecuaria · Portal Élite Pecuario</span></div><h1 class="sell-title">Domina el manejo que tu <span>rancho te está pidiendo</span>.</h1><p class="sell-sub">Cursos con especialistas del gremio, certificados con folio oficial y herramientas listas para tu negocio ganadero, porcícola, avícola y acuícola.</p></div><div class="vpsell"><div class="vpsell-cine"><div class="vpsell-track" id="vpsellTrack"></div></div><div class="vpsell-h">Todo esto por <span>menos de $7 al día</span>:</div><ul class="vpsell-benes"><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Biblioteca completa</b> de cursos: bovinos, porcinos, aves, ovinos, acuícola y más</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Clases en vivo</b> con especialistas del gremio pecuario</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Material descargable premium</b> listo para aplicar en tu rancho</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Certificados con folio oficial</b> verificables</span></li><li class="vpsell-bene"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span><b>Asesoría personalizada</b> y canal VIP · sin permanencia</span></li></ul><div class="vpsell-planes"><div class="vpsell-plan"><div class="vpsell-price">$200</div><div class="vpsell-meta"><b>MXN al mes</b> · menos de $7 al día<br>Cancela cuando quieras</div></div><div class="vpsell-plan vpsell-plan--year"><span class="vpsell-badge">AHORRAS $480</span><div class="vpsell-price">$1,920</div><div class="vpsell-meta"><b>MXN al año</b> · <span class="vpsell-strike">$200</span> <b>$160/mes</b><br>Acceso completo los 365 días</div></div></div><div class="vpsell-h">Referencias</div><div class="vpsell-refs"><div class="vpsell-ref"><div class="vpsell-av">RC</div><div class="vpsell-bub"><span class="nm">MVZ. Roberto Cano</span><span class="rl">· Médico Veterinario</span><p>Los cursos de nutrición de ganado bovino me ayudaron a subir el peso de mi hato. El certificado con folio lo presenté en mi colegio sin problema.</p><div class="act">👍 14 · Me gusta · Responder · 2 sem</div></div></div><div class="vpsell-ref"><div class="vpsell-av">LM</div><div class="vpsell-bub"><span class="nm">Lucía Mendoza</span><span class="rl">· Productora avícola</span><p>Con el curso de gallinas de postura ordené la producción de huevo y subió el rendimiento. Las clases en vivo valen oro para mi granja.</p><div class="act">👍 9 · Me gusta · Responder · 1 mes</div></div></div><div class="vpsell-ref"><div class="vpsell-av">MT</div><div class="vpsell-bub"><span class="nm">Ing. Marco Tovar</span><span class="rl">· Engorda de ganado</span><p>El material descargable y la asesoría personalizada me ordenaron el rancho completo. Recomendado para todo productor que va en serio.</p><div class="act">👍 11 · Me gusta · Responder · 3 sem</div></div></div></div></div></div>
-  <div class="card">
-    <!-- Brand -->
-    <div class="brand">
-      <div class="brand-logo">🐂</div>
-      <div class="brand-text">
-        <h1>Visión Pecuaria</h1>
-        <p>Portal Élite Pecuario</p>
-      </div>
+  <!-- ═══ LADO MARCA + PAISAJE AMANECER ═══ -->
+  <section class="marca" aria-label="Visión Pecuaria">
+    <svg class="marca-svg" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="amanecer" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2E4A2A" stop-opacity="0"/>
+          <stop offset="1" stop-color="#1F3319" stop-opacity=".55"/>
+        </linearGradient>
+      </defs>
+      <rect width="1440" height="300" fill="url(#amanecer)"/>
+      <circle cx="1160" cy="96" r="118" fill="#D49A2E" opacity=".14"/>
+      <circle cx="1160" cy="96" r="62" fill="#E8C465" opacity=".38"/>
+      <circle cx="1160" cy="96" r="38" fill="#F6E7C0" opacity=".5"/>
+      <path d="M980 84 q9 -9 18 0 q9 -9 18 0" stroke="#F5EFE4" stroke-width="2.2" fill="none" opacity=".25" stroke-linecap="round"/>
+      <path d="M0 196 Q 240 148 520 188 T 1020 176 T 1440 188 V300 H0 Z" fill="#3C5E35" opacity=".55"/>
+      <path d="M0 238 Q 300 184 640 226 T 1160 220 T 1440 233 V300 H0 Z" fill="#466B3C" opacity=".5"/>
+      <path d="M0 276 Q 360 238 780 266 T 1440 262 V300 H0 Z" fill="#527A44" opacity=".45"/>
+      <g fill="#1F3319" opacity=".45">
+        <path d="M1010 234 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
+      </g>
+    </svg>
+
+    <div class="marca-in">
+      <span class="marca-logo"><img src="club-assets/logo-vp.png" alt="Visión Pecuaria" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><strong class="marca-logo-fallback">Visión Pecuaria</strong></span>
+      <h1>Entra a tu <em>rancho digital</em></h1>
+      <p>El club de los ganaderos que deciden con datos, no con corazonadas.</p>
+      <ul class="marca-puntos">
+        <li><span class="p-ico" aria-hidden="true">🩺</span> Diagnóstico veterinario por IA</li>
+        <li><span class="p-ico" aria-hidden="true">🎓</span> Cursos con certificado verificable</li>
+        <li><span class="p-ico" aria-hidden="true">🏛️</span> Apoyos de gobierno al día</li>
+      </ul>
     </div>
+  </section>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <div class="tab-indicator" id="tabIndicator"></div>
-      <button class="tab active" data-tab="login" onclick="setTab('login')">Iniciar sesión</button>
-      <button class="tab" data-tab="registro" onclick="setTab('registro')">Crear cuenta</button>
-    </div>
+  <!-- ═══ LADO TARJETA DE ACCESO ═══ -->
+  <section class="lado-card">
+    <div class="card">
 
-    <!-- LOGIN form -->
-    <form class="form active" id="formLogin" onsubmit="submitLogin(event)">
-      <h2 class="form-title">Bienvenido de vuelta</h2>
-      <p class="form-subtitle">Accede a tu portal y sigue construyendo tu negocio pecuario.</p>
+      <a class="top-link" href="club.html">← Conoce el club</a>
 
-      <button type="button" class="btn-google" onclick="loginGoogle()" id="btnGoogleLogin">
-        <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
-          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
-          <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
-          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-        </svg>
-        <span>Continuar con Google</span>
-      </button>
-
-      <div class="sep">o con tu correo</div>
-
-      <div class="field">
-        <label>Correo electrónico</label>
-        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input type="email" id="loginEmail" placeholder="tu@correo.com" autocomplete="email" required>
+      <!-- ── Pestañas: login / registro ── -->
+      <div class="tabs" id="tabs" role="tablist" aria-label="Entrar o crear cuenta">
+        <span class="tab-ind" id="tabIndicator" aria-hidden="true"></span>
+        <button class="tab" id="tabLogin" role="tab" aria-selected="true"
+                aria-controls="vistaLogin" data-tab="login" type="button">Iniciar sesión</button>
+        <button class="tab" id="tabRegistro" role="tab" aria-selected="false"
+                aria-controls="vistaRegistro" data-tab="registro" type="button">Crear cuenta</button>
       </div>
 
-      <div class="field">
-        <label>Contraseña</label>
-        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input type="password" id="loginPass" placeholder="Tu contraseña" autocomplete="current-password" required>
-        <button type="button" class="toggle-pass" onclick="togglePass('loginPass', this)" tabindex="-1">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      <!-- ── VISTA: LOGIN ── -->
+      <div class="vista active" id="vistaLogin" role="tabpanel" aria-labelledby="tabLogin">
+        <div class="card-h">
+          <h2>Qué bueno verte 🐂</h2>
+          <p>Entra con tu correo o con Google.</p>
+        </div>
+
+        <div class="alert" id="loginAlert" role="alert" aria-live="assertive"></div>
+
+        <form id="formLogin" novalidate>
+          <div class="campo">
+            <label for="loginEmail">Correo</label>
+            <div class="campo-in">
+              <input type="email" id="loginEmail" placeholder="tu@correo.com"
+                     autocomplete="email" required>
+            </div>
+          </div>
+          <div class="campo campo--pass">
+            <label for="loginPass">Contraseña</label>
+            <div class="campo-in">
+              <input type="password" id="loginPass" placeholder="Tu contraseña"
+                     autocomplete="current-password" required>
+              <button class="ojo" type="button" data-ojo="loginPass"
+                      aria-label="Mostrar contraseña">👁️</button>
+            </div>
+          </div>
+          <button class="btn btn--verde" id="btnLoginSubmit" type="submit">
+            <span class="spinner" aria-hidden="true"></span><span class="btn-text">Entrar al portal</span>
+          </button>
+        </form>
+        <p class="conexion-segura">🔒 Conexión segura</p>
+
+        <div class="link-fila">
+          <button class="link" type="button" id="linkOlvide">¿Olvidaste tu contraseña?</button>
+        </div>
+
+        <div class="sep">o</div>
+        <button class="btn-google" id="btnGoogleLogin" type="button">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.1z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2.1 20.4 2.1 24s.9 6.9 2.4 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 9.9c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 3.4 29.9 1.4 24 1.4 15.4 1.4 8.1 6.3 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>
+          <span>Continuar con Google</span>
         </button>
       </div>
 
-      <div class="alert alert--error" id="loginAlert"></div>
+      <!-- ── VISTA: REGISTRO ── -->
+      <div class="vista" id="vistaRegistro" role="tabpanel" aria-labelledby="tabRegistro">
+        <div class="card-h">
+          <h2>Crea tu cuenta gratis</h2>
+          <p>Empieza como Explorador. Sin tarjeta.</p>
+        </div>
 
-      <button type="submit" class="btn-submit" id="btnLoginSubmit">
-        <span>Entrar al portal</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
+        <div class="alert" id="regAlert" role="alert" aria-live="assertive"></div>
 
-      <p class="mini"><a onclick="recuperarPass()">¿Olvidaste tu contraseña?</a></p>
-    </form>
+        <form id="formRegistro" novalidate>
+          <div class="campo">
+            <label for="regNombre">Tu nombre</label>
+            <div class="campo-in">
+              <input type="text" id="regNombre" placeholder="Como te conocen en el rancho"
+                     autocomplete="name" required>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="regEmail">Correo</label>
+            <div class="campo-in">
+              <input type="email" id="regEmail" placeholder="tu@correo.com"
+                     autocomplete="email" required>
+            </div>
+          </div>
+          <div class="campo campo--pass">
+            <label for="regPass">Contraseña</label>
+            <div class="campo-in">
+              <input type="password" id="regPass" placeholder="Mínimo 6 caracteres"
+                     autocomplete="new-password" minlength="6" required>
+              <button class="ojo" type="button" data-ojo="regPass"
+                      aria-label="Mostrar contraseña">👁️</button>
+            </div>
+          </div>
+          <button class="btn btn--miel" id="btnRegSubmit" type="submit">
+            <span class="spinner" aria-hidden="true"></span><span class="btn-text">Crear cuenta gratis</span>
+          </button>
+        </form>
+        <p class="conexion-segura">🔒 Conexión segura</p>
 
-    <!-- REGISTRO form -->
-    <form class="form" id="formRegistro" onsubmit="submitRegistro(event)">
-      <h2 class="form-title">Únete al rancho digital</h2>
-      <p class="form-subtitle">Crea tu cuenta gratis. Después podrás convertirte en Élite Pecuario.</p>
-
-
-      <button type="button" class="btn-google" onclick="loginGoogle()" id="btnGoogleReg">
-        <svg width="20" height="20" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
-          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
-          <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
-          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-        </svg>
-        <span>Continuar con Google</span>
-      </button>
-
-      <div class="sep">o con tu correo</div>
-
-      <div class="field">
-        <label>Nombre completo</label>
-        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <input type="text" id="regNombre" placeholder="Juan Pérez" autocomplete="name" required>
-      </div>
-
-      <div class="field">
-        <label>Correo electrónico</label>
-        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input type="email" id="regEmail" placeholder="tu@correo.com" autocomplete="email" required>
-      </div>
-
-      <div class="field">
-        <label>Contraseña</label>
-        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required minlength="6">
-        <button type="button" class="toggle-pass" onclick="togglePass('regPass', this)" tabindex="-1">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <div class="sep">o</div>
+        <button class="btn-google" id="btnGoogleReg" type="button">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.1z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2.1 20.4 2.1 24s.9 6.9 2.4 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 9.9c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 3.4 29.9 1.4 24 1.4 15.4 1.4 8.1 6.3 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>
+          <span>Continuar con Google</span>
         </button>
       </div>
 
-      <div class="alert alert--error" id="regAlert"></div>
+      <!-- ── VISTA: RECUPERAR CONTRASEÑA ── -->
+      <div class="vista" id="vistaReset" role="region" aria-label="Recuperar contraseña">
+        <div class="card-h">
+          <h2>Recuperar contraseña</h2>
+          <p>Te mandamos un enlace para que pongas una nueva.</p>
+        </div>
 
-      <button type="submit" class="btn-submit" id="btnRegSubmit">
-        <span>Crear cuenta gratis</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
+        <div class="alert" id="resetAlert" role="alert" aria-live="assertive"></div>
 
-      <p class="mini">Al crear cuenta aceptas nuestros términos y política de privacidad.</p>
-    </form>
+        <form id="formReset" novalidate>
+          <div class="campo">
+            <label for="resetEmail">Correo de tu cuenta</label>
+            <div class="campo-in">
+              <input type="email" id="resetEmail" placeholder="tu@correo.com"
+                     autocomplete="email" required>
+            </div>
+          </div>
+          <button class="btn btn--verde" id="btnResetSubmit" type="submit">
+            <span class="spinner" aria-hidden="true"></span><span class="btn-text">Enviar enlace</span>
+          </button>
+        </form>
+        <p class="conexion-segura">🔒 Conexión segura</p>
 
-    <!-- Footer card -->
-    <div class="card-footer">
-      <p>¿Necesitas ayuda? <a href="https://wa.me/522361049715" target="_blank">Escríbenos por WhatsApp</a></p>
+        <div class="link-fila">
+          <button class="link" type="button" id="linkVolver">← Volver a iniciar sesión</button>
+        </div>
+      </div>
+
+      <p class="pie">Al continuar aceptas los términos del club ·
+        <a href="index.html">Ir al portal</a></p>
     </div>
-  </div>
-  </div>
+  </section>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- 🔥 FIREBASE — Auth + Firestore                                -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="toast" id="sessionToast"><span>Ya tienes sesión, entrando…</span></div>
+
 <script type="module">
+// ═══════════════════════════════════════════════════════════
+// AUTH — réplica exacta de login.html (mismo proyecto, mismos
+// flujos, mismo anti-bucle). Único cambio de comportamiento a
+// propósito: el destino tras login respeta la intención de pago
+// (ver `destinoTrasLogin`, marcado abajo).
+// ═══════════════════════════════════════════════════════════
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
@@ -695,61 +338,79 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // Persistencia LOCAL para que la sesión sobreviva refrescos del browser
 await setPersistence(auth, browserLocalPersistence);
 
-// Detectar si ya hay sesión → ir al portal automático (con UX bonita)
+// ═══════════════════════════════════════════════════════════
+// 🔶 ÚNICO CAMBIO DE COMPORTAMIENTO vs login.html — REVISAR
+//
+// El viejo mandaba SIEMPRE a index.html. Quien venía de club.html
+// a pagar dejaba su `intencion_pago` en sessionStorage y acababa
+// en el portal: la intención quedaba huérfana (index.html no la lee).
+//
+// Aquí, si hay una intención válida, devolvemos al usuario a
+// club.html — que en su onAuthStateChanged (club.html:789-797) la
+// detecta, la borra y retoma el checkout solo.
+//
+// OJO: NO borramos la clave aquí. Borrarla rompería el arreglo,
+// porque club.html es quien la consume.
+// Solo aceptamos 'mensual'/'anual' (los valores que valida
+// club.html:800); cualquier otra cosa va al portal como siempre.
+// ═══════════════════════════════════════════════════════════
+const PLANES_VALIDOS = ['mensual', 'anual'];
+
+function destinoTrasLogin() {
+  let plan = null;
+  try { plan = sessionStorage.getItem('intencion_pago'); } catch (e) {}
+  return PLANES_VALIDOS.includes(plan) ? 'club.html' : 'index.html';
+}
+
+// ═══════════════════════════════════════════════════════════
+// SESIÓN Y REDIRECCIÓN (anti-bucle idéntico al viejo)
+// ═══════════════════════════════════════════════════════════
 const toast = document.getElementById('sessionToast');
 
-// Si la URL trae ?logout=1, NO auto-redirigir AL CARGAR la página (evita bucle)
-// PERO si el usuario hace login manual, sí redirigir
+// Si la URL trae ?logout=1, NO auto-redirigir AL CARGAR (evita bucle).
+// PERO si el usuario hace login manual, sí redirigir.
 const params = new URLSearchParams(window.location.search);
 const skipInitialAutoRedirect = params.has('logout') || params.has('force');
 
-if (!skipInitialAutoRedirect) {
-  toast.classList.add('show');
-}
+if (!skipInitialAutoRedirect) toast.classList.add('show');
 
-// Flag: ¿el primer disparo de onAuthStateChanged ya pasó?
-// Si trae user en el primer disparo + skipInitialAutoRedirect=true,
-// significa que tenía sesión guardada Y vino de un logout, NO redirigir.
-// Pero si user viene en disparos posteriores (después de un login manual),
-// SÍ redirigir.
 let firstAuthFired = false;
 
 onAuthStateChanged(auth, (user) => {
   const wasFirst = !firstAuthFired;
   firstAuthFired = true;
 
-  if (!user) {
-    toast.classList.remove('show');
-    return;
-  }
+  if (!user) { toast.classList.remove('show'); return; }
 
-  // Si es el primer disparo Y vino con ?logout=1 → no redirigir (evita bucle)
-  if (wasFirst && skipInitialAutoRedirect) {
-    toast.classList.remove('show');
-    return;
-  }
+  // Primer disparo + ?logout=1 → tenía sesión guardada y viene de
+  // cerrarla: no redirigir o lo reexpulsaríamos al portal.
+  if (wasFirst && skipInitialAutoRedirect) { toast.classList.remove('show'); return; }
 
-  // En cualquier otro caso (login manual nuevo, o auto-redirect normal), ir al portal
+  const destino = destinoTrasLogin();
   toast.classList.add('show');
-  toast.querySelector('span').textContent = `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
-  setTimeout(() => { window.location.href = 'index.html'; }, 600);
+  toast.querySelector('span').textContent = destino === 'club.html'
+    ? 'Listo — te llevamos al pago 🐂'
+    : `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
+  setTimeout(() => { window.location.href = destino; }, 600);
 });
 
 // ═══════════════════════════════════════════════════════════
-// HELPER: crear o actualizar doc free
+// HELPER: crear o actualizar doc free (idempotente)
+// Escribe solo `usuarios_free`; nunca `miembros` (eso es del webhook).
 // ═══════════════════════════════════════════════════════════
 async function asegurarDocFree(user, nombreExtra = '') {
   const refMiembro = doc(db, "miembros", user.uid);
   const refFree = doc(db, "usuarios_free", user.uid);
   const [snapMiembro, snapFree] = await Promise.all([getDoc(refMiembro), getDoc(refFree)]);
   if (snapMiembro.exists()) return; // Ya VIP
-  if (snapFree.exists()) return; // Ya tiene doc free
+  if (snapFree.exists()) return;    // Ya tiene doc free
   await setDoc(refFree, {
     uid: user.uid,
     email: user.email,
@@ -779,11 +440,16 @@ const ERR_MSG = {
   'auth/account-exists-with-different-credential': 'Ya existe una cuenta con ese correo usando otro método. Intenta con email/password.'
 };
 
-function mostrarAlert(idCampo, codigo, tipo = 'error') {
+// Aviso con texto literal (para mensajes nuestros, no de Firebase).
+function pintarAlert(idCampo, texto, tipo = 'error') {
   const el = document.getElementById(idCampo);
   if (!el) return;
-  el.textContent = ERR_MSG[codigo] || ('Error: ' + codigo);
+  el.textContent = texto;
   el.className = `alert alert--${tipo} show`;
+}
+// Aviso a partir de un código de Firebase.
+function mostrarError(idCampo, codigo) {
+  pintarAlert(idCampo, ERR_MSG[codigo] || ('Error: ' + codigo), 'error');
 }
 function ocultarAlerts() {
   document.querySelectorAll('.alert').forEach(a => a.classList.remove('show'));
@@ -792,59 +458,64 @@ function ocultarAlerts() {
 // ═══════════════════════════════════════════════════════════
 // LOGIN CON EMAIL
 // ═══════════════════════════════════════════════════════════
-window.submitLogin = async function(ev) {
+document.getElementById('formLogin').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   ocultarAlerts();
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPass').value;
+  if (!email || !pass) {
+    pintarAlert('loginAlert', 'Completa tu correo y contraseña.', 'error');
+    return;
+  }
   const btn = document.getElementById('btnLoginSubmit');
   btn.disabled = true;
-  btn.querySelector('span').textContent = 'Entrando...';
+  btn.querySelector('.btn-text').textContent = 'Entrando…';
   try {
     const cred = await signInWithEmailAndPassword(auth, email, pass);
     await asegurarDocFree(cred.user);
-    btn.querySelector('span').textContent = '✅ ¡Bienvenido!';
+    btn.querySelector('.btn-text').textContent = '✅ ¡Bienvenido!';
     // onAuthStateChanged hará el redirect automático
   } catch (e) {
-    mostrarAlert('loginAlert', e.code, 'error');
+    mostrarError('loginAlert', e.code);
     btn.disabled = false;
-    btn.querySelector('span').textContent = 'Entrar al portal';
+    btn.querySelector('.btn-text').textContent = 'Entrar al portal';
   }
-};
+});
 
 // ═══════════════════════════════════════════════════════════
 // REGISTRO CON EMAIL
 // ═══════════════════════════════════════════════════════════
-window.submitRegistro = async function(ev) {
+document.getElementById('formRegistro').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   ocultarAlerts();
   const nombre = document.getElementById('regNombre').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pass = document.getElementById('regPass').value;
-  if (pass.length < 6) {
-    mostrarAlert('regAlert', 'auth/weak-password');
+  if (!nombre || !email || !pass) {
+    pintarAlert('regAlert', 'Completa todos los campos.', 'error');
     return;
   }
+  if (pass.length < 6) { mostrarError('regAlert', 'auth/weak-password'); return; }
   const btn = document.getElementById('btnRegSubmit');
   btn.disabled = true;
-  btn.querySelector('span').textContent = 'Creando cuenta...';
+  btn.querySelector('.btn-text').textContent = 'Creando…';
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: nombre });
     await asegurarDocFree(cred.user, nombre);
-    btn.querySelector('span').textContent = '✅ ¡Cuenta creada!';
+    btn.querySelector('.btn-text').textContent = '✅ ¡Cuenta creada!';
     // onAuthStateChanged hará el redirect automático
   } catch (e) {
-    mostrarAlert('regAlert', e.code, 'error');
+    mostrarError('regAlert', e.code);
     btn.disabled = false;
-    btn.querySelector('span').textContent = 'Crear cuenta gratis';
+    btn.querySelector('.btn-text').textContent = 'Crear cuenta gratis';
   }
-};
+});
 
 // ═══════════════════════════════════════════════════════════
-// LOGIN CON GOOGLE
+// LOGIN CON GOOGLE (mismo handler en las dos pestañas)
 // ═══════════════════════════════════════════════════════════
-window.loginGoogle = async function() {
+async function loginGoogle() {
   ocultarAlerts();
   const btnL = document.getElementById('btnGoogleLogin');
   const btnR = document.getElementById('btnGoogleReg');
@@ -855,85 +526,103 @@ window.loginGoogle = async function() {
     await asegurarDocFree(cred.user);
     // onAuthStateChanged hará el redirect automático
   } catch (e) {
-    const idAlert = document.getElementById('formRegistro').classList.contains('active') ? 'regAlert' : 'loginAlert';
-    mostrarAlert(idAlert, e.code, 'error');
+    const idAlert = document.getElementById('vistaRegistro').classList.contains('active')
+      ? 'regAlert' : 'loginAlert';
+    mostrarError(idAlert, e.code);
     if (btnL) btnL.disabled = false;
     if (btnR) btnR.disabled = false;
   }
-};
+}
+document.getElementById('btnGoogleLogin').addEventListener('click', loginGoogle);
+document.getElementById('btnGoogleReg').addEventListener('click', loginGoogle);
 
 // ═══════════════════════════════════════════════════════════
 // RECUPERAR CONTRASEÑA
+// El viejo pasaba el texto donde va el código y salía
+// "Error: Escribe tu correo…". Aquí el aviso sale limpio.
 // ═══════════════════════════════════════════════════════════
-window.recuperarPass = async function() {
-  const email = document.getElementById('loginEmail').value.trim();
+document.getElementById('formReset').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  ocultarAlerts();
+  const email = document.getElementById('resetEmail').value.trim();
   if (!email) {
-    mostrarAlert('loginAlert', 'Escribe tu correo arriba primero.');
+    pintarAlert('resetAlert', 'Escribe tu correo primero.', 'info');
     return;
   }
+  const btn = document.getElementById('btnResetSubmit');
+  btn.disabled = true;
+  btn.querySelector('.btn-text').textContent = 'Enviando…';
   try {
     await sendPasswordResetEmail(auth, email);
-    const el = document.getElementById('loginAlert');
-    el.textContent = '✅ Te enviamos un correo para recuperar tu contraseña.';
-    el.className = 'alert alert--success show';
+    pintarAlert('resetAlert', '✅ Te enviamos un correo para recuperar tu contraseña.', 'success');
   } catch (e) {
-    mostrarAlert('loginAlert', e.code);
+    mostrarError('resetAlert', e.code);
   }
-};
+  btn.disabled = false;
+  btn.querySelector('.btn-text').textContent = 'Enviar enlace';
+});
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════ -->
-<!-- UTILIDADES — tabs, partículas, password toggle                -->
+<!-- UTILIDADES — pestañas, vista de reset, ver contraseña        -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <script>
-window.setTab = function(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-  document.getElementById('formLogin').classList.toggle('active', name === 'login');
-  document.getElementById('formRegistro').classList.toggle('active', name === 'registro');
-  const ind = document.getElementById('tabIndicator');
-  ind.classList.toggle('right', name === 'registro');
+function setTab(name) {
+  const esRegistro = name === 'registro';
+  document.getElementById('tabLogin').setAttribute('aria-selected', String(!esRegistro));
+  document.getElementById('tabRegistro').setAttribute('aria-selected', String(esRegistro));
+  document.getElementById('vistaLogin').classList.toggle('active', !esRegistro);
+  document.getElementById('vistaRegistro').classList.toggle('active', esRegistro);
+  document.getElementById('vistaReset').classList.remove('active');
+  document.getElementById('tabs').style.display = '';
+  document.getElementById('tabIndicator').classList.toggle('right', esRegistro);
   document.querySelectorAll('.alert').forEach(a => a.classList.remove('show'));
-};
+}
+window.setTab = setTab;
 
-window.togglePass = function(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  if (!inp) return;
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-};
-
-// Partículas doradas flotantes
-(function() {
-  const container = document.getElementById('particles');
-  const total = 18;
-  for (let i = 0; i < total; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = (Math.random() * 100) + 'vw';
-    p.style.animationDelay = (Math.random() * 12) + 's';
-    p.style.animationDuration = (10 + Math.random() * 8) + 's';
-    container.appendChild(p);
+function verReset(ver) {
+  document.getElementById('vistaLogin').classList.toggle('active', !ver);
+  document.getElementById('vistaRegistro').classList.remove('active');
+  document.getElementById('vistaReset').classList.toggle('active', ver);
+  // Las pestañas no aplican en la vista de recuperar.
+  document.getElementById('tabs').style.display = ver ? 'none' : '';
+  document.querySelectorAll('.alert').forEach(a => a.classList.remove('show'));
+  if (ver) {
+    const origen = document.getElementById('loginEmail').value.trim();
+    if (origen) document.getElementById('resetEmail').value = origen;
+    document.getElementById('resetEmail').focus();
   }
-})();
+}
 
-// Si vienes con ?tab=registro abre directamente el registro
+document.querySelectorAll('.tab').forEach(t =>
+  t.addEventListener('click', () => setTab(t.dataset.tab)));
+document.getElementById('linkOlvide').addEventListener('click', () => verReset(true));
+document.getElementById('linkVolver').addEventListener('click', () => { verReset(false); setTab('login'); });
+
+document.querySelectorAll('[data-ojo]').forEach(btn =>
+  btn.addEventListener('click', () => {
+    const inp = document.getElementById(btn.dataset.ojo);
+    if (!inp) return;
+    const vaAMostrar = inp.type === 'password';
+    inp.type = vaAMostrar ? 'text' : 'password';
+    btn.textContent = vaAMostrar ? '🙈' : '👁️';
+    btn.setAttribute('aria-label', vaAMostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+  }));
+
+// Pestaña por defecto: INICIAR SESIÓN.
+// (El viejo abría en Crear cuenta salvo ?tab=login — se invierte a propósito.)
 const qp = new URLSearchParams(window.location.search);
-setTab(qp.get('tab') === 'login' ? 'login' : 'registro');
+const tabInicial = qp.get('tab') === 'registro' ? 'registro' : 'login';
+setTab(tabInicial);
+
+// Autofoco en el campo de correo, solo en escritorio (en móvil abriría el teclado sin que el usuario lo pida).
+if (window.matchMedia('(min-width: 960px)').matches) {
+  const campoFoco = tabInicial === 'registro' ? 'regEmail' : 'loginEmail';
+  document.getElementById(campoFoco)?.focus();
+}
 </script>
 
-<!-- PWA instalable + popup -->
+<!-- PWA instalable + popup (igual que el login vivo) -->
 <script src="pwa-install.js" defer></script>
-<!-- Carrusel de flyers (cinta continua) -->
-<script>
-(function(){
-  var track=document.getElementById('vpsellTrack');
-  if(!track) return;
-  var html='';
-  for(var i=1;i<=16;i++){
-    var n=(i<10?'0':'')+i;
-    html+='<div class="vpsell-flyer"><img src="cursos/curso-'+n+'.jpg" alt="Curso '+i+'" loading="lazy"></div>';
-  }
-  track.innerHTML=html+html;  // duplicado = loop continuo sin cortes
-})();
-</script>
 </body>
 </html>
