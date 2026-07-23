@@ -1,0 +1,162 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function esAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function autenticado() {
+      return request.auth != null;
+    }
+    function esMiPropioDoc(uid) {
+      return autenticado() && request.auth.uid == uid;
+    }
+    function esVip() {
+      return autenticado()
+        && exists(/databases/$(database)/documents/miembros/$(request.auth.uid))
+        && vipVigente(get(/databases/$(database)/documents/miembros/$(request.auth.uid)).data);
+    }
+    function vipVigente(m) {
+      return m.get('estado', '') == 'activo'
+        || (m.get('cancelado', false) == true && fechaFinVigente(m.get('fechaFin', null)));
+    }
+    function fechaFinVigente(ff) {
+      return (ff is timestamp && ff > request.time)
+        || (ff is map && ff.get('seconds', null) != null && request.time.toMillis() < ff.get('seconds', 0) * 1000);
+    }
+    match /admins/{adminId} {
+      allow read: if request.auth != null && request.auth.uid == adminId;
+      allow write: if false;
+    }
+    match /cursos/{id} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /videos/{id} {
+      allow read, list, write: if false;
+    }
+    match /pdfs/{id} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /sesiones/{id} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /notificaciones/{id} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /examenes/{id} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /config/{id} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /miembros/{uid} {
+      // Permitir lectura a cualquier autenticado para trazabilidad QR
+      // (solo expone info pública del rancho: nombre, ubicación, emoji)
+      allow get: if autenticado();
+      allow list: if esAdmin();
+      allow create, delete: if esAdmin();
+      allow update: if esAdmin() || (esMiPropioDoc(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cursosDesbloqueados','nombreRancho','emojiRancho','ubicacionRancho','especialidadRancho','hectareasRancho','whatsappRancho']));
+    }
+    match /usuarios_free/{uid} {
+      allow get: if esAdmin() || esMiPropioDoc(uid);
+      allow list: if esAdmin();
+      allow create, update, delete: if esAdmin() || esMiPropioDoc(uid);
+    }
+    match /pagos/{pagoId} {
+      allow read, list, write: if esAdmin();
+    }
+    match /pagos_pendientes/{ppId} {
+      allow create: if autenticado();
+      allow read, list, update, delete: if esAdmin();
+    }
+    match /certificados/{certId} {
+      allow get, list: if true;
+      allow create: if autenticado() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if esAdmin();
+    }
+    match /animales/{animalId} {
+      // Cualquier autenticado puede LEER (para trazabilidad QR pública)
+      allow read: if autenticado();
+      allow create: if autenticado() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if autenticado() && resource.data.userId == request.auth.uid;
+    }
+    match /mercado/{productoId} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /noticias/{noticiaId} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    match /apoyos/{apoyoId} {
+      allow read, list: if autenticado();
+      allow write: if esAdmin();
+    }
+    // ═════════════════════════════════════════════════════════
+    // RADAR DE COMUNIDAD — Marketplace de avisos
+    // ═════════════════════════════════════════════════════════
+    match /avisos/{avisoId} {
+      allow read, list: if autenticado();
+      allow create: if esVip()
+        && request.resource.data.ranchoUid == request.auth.uid;
+      allow update: if esAdmin()
+        || (autenticado() && resource.data.ranchoUid == request.auth.uid)
+        || (autenticado() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['vistas']));
+      allow delete: if esAdmin()
+        || (autenticado() && resource.data.ranchoUid == request.auth.uid);
+    }
+    // ═════════════════════════════════════════════════════════
+    // 🆕 VENTA DE CURSOS — Catálogo público + entitlement de acceso
+    // (Sistema paralelo al de "cursos" del Establo — no colisiona)
+    // ═════════════════════════════════════════════════════════
+    // Catálogo público de cursos en venta.
+    // • Lectura: TODO EL MUNDO (incluso sin login) — la landing la lee.
+    // • Escritura: solo admins, PERO no pueden tocar el contador de cupo
+    //   `cupoLanzamientoTomados` — ese solo lo mueve el webhook con Admin SDK.
+    match /cursosVenta/{slug} {
+      allow read, list: if true;
+      allow create: if esAdmin();
+      allow update: if esAdmin()
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['cupoLanzamientoTomados']);
+      allow delete: if esAdmin();
+    }
+    // Instructores (perfil público visible en la landing).
+    match /instructores/{instructorId} {
+      allow read, list: if true;
+      allow write: if esAdmin();
+    }
+    // Registro de compras de curso + clave de idempotencia (ID = stripeSessionId).
+    // CAMBIO: se permite LEER por sessionId específico para que curso-acceso.html
+    // pueda validar el pago post-checkout (flujo IPCIL sin Google Sign-In).
+    // El sessionId es un secreto que solo conoce el comprador (llega en la URL de Stripe).
+    // Escritura sigue bloqueada — solo el webhook con Admin SDK puede modificar.
+    match /comprasCurso/{sessionId} {
+      allow get: if true;
+      allow list: if esAdmin();
+      allow write: if false;
+    }
+    // Entitlement de acceso al contenido pagado.
+    // El alumno lee SOLO su propio acceso; nadie escribe desde el cliente
+    // (así ningún usuario puede auto-otorgarse acceso a un curso que no compró).
+    match /accesosCurso/{uid} {
+      allow read: if esMiPropioDoc(uid) || esAdmin();
+      allow write: if false;
+      match /cursos/{slug} {
+        allow read, list: if esMiPropioDoc(uid) || esAdmin();
+        allow write: if false;
+      }
+    }
+    // Certificados pendientes de emisión por IPCIL (creados por el webhook).
+    // Lectura solo para admins (Britney descarga desde el panel para subir a IPCIL).
+    match /certificadosPendientes/{docId} {
+      allow read, list: if esAdmin();
+      allow write: if false;
+    }
+  }
+}
