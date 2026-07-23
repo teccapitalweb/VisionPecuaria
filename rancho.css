@@ -246,6 +246,23 @@ button{font-family:var(--font-body)}
 .h-prog-bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--verde);transition:width .25s}
 .h-prog-cnt{display:block;text-align:center;font-size:.8rem;font-weight:700;color:var(--tinta-2);margin-top:6px}
 
+/* ═══ BITÁCORA ═══ */
+.bita-filtros{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.bita-lista{display:flex;flex-direction:column;gap:20px}
+.bita-grupo-fecha{font-size:.76rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-3);margin-bottom:9px}
+.bita-grupo-eventos{display:flex;flex-direction:column;gap:10px}
+.bita-evento{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border-radius:var(--r-md);box-shadow:var(--shadow-card);padding:14px 16px;border-left:4px solid var(--ev-color,var(--verde))}
+.bita-ev-ico{width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--ev-color,var(--verde)) 16%,#fff);display:grid;place-items:center;font-size:1.05rem;flex-shrink:0}
+.bita-ev-body{flex:1;min-width:0}
+.bita-ev-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:3px}
+.bita-ev-tipo{font-size:.86rem;font-weight:700;color:var(--tinta)}
+.bita-ev-animal{font-size:.8rem;color:var(--tinta-2)}
+.bita-ev-nota{font-size:.87rem;color:var(--tinta-2);line-height:1.45}
+.bita-ev-nota em{color:var(--tinta-3);font-style:normal}
+.bita-ev-costo{display:inline-block;margin-top:5px;font-family:var(--font-display);font-weight:700;font-size:.82rem;color:var(--verde-hondo);background:var(--salvia-bg);padding:2px 9px;border-radius:99px}
+.bita-ev-del{background:none;border:none;color:var(--tinta-3);font-size:1.15rem;line-height:1;cursor:pointer;padding:4px 7px;border-radius:8px;flex-shrink:0;font-family:var(--font-body)}
+.bita-ev-del:hover{background:#F7DEDA;color:#C0392B}
+
 /* ═══ PREDICCIÓN DE VENTA ÓPTIMA ═══ */
 .pr-grid{display:grid;grid-template-columns:minmax(240px,320px) 1fr;gap:18px;align-items:start}
 .pr-col{min-width:0}
@@ -613,4 +630,7 @@ button{font-family:var(--font-body)}
   .ap-fecha{text-align:center}
   .ap-cta{text-align:center}
   .ap-estado{padding:36px 22px}
+
+  .bita-evento{padding:12px 13px}
+  .bita-ev-head{flex-direction:column;align-items:flex-start;gap:2px}
 }

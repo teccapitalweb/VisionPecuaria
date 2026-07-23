@@ -185,6 +185,45 @@
         <div class="h-tabla-wrap" id="hatoTabla" aria-live="polite"></div>
       </section>
 
+      <!-- ═══ BITÁCORA ═══ -->
+      <section class="section" id="section-bitacora" aria-label="Bitácora">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="skyBita" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#CFE6DD"/>
+                <stop offset=".6" stop-color="#EFE8DA"/>
+                <stop offset="1" stop-color="#F5EFE4"/>
+              </linearGradient>
+            </defs>
+            <rect width="1440" height="220" fill="url(#skyBita)"/>
+            <circle cx="1230" cy="62" r="70" fill="#3E7B6A" opacity=".1"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Bitácora 📓</h1>
+            <p>El historial de eventos de todo tu hato, en un solo lugar.</p>
+          </div>
+        </div>
+
+        <div class="stats-row" id="bitaStats"></div>
+
+        <div class="bita-filtros">
+          <div class="h-chips" id="bitaChipsTipo" role="group" aria-label="Filtrar por tipo de evento"></div>
+          <div class="h-chips" id="bitaChipsPeriodo" role="group" aria-label="Filtrar por periodo">
+            <button class="h-chip active" type="button" data-periodo="todos">Todo</button>
+            <button class="h-chip" type="button" data-periodo="hoy">Hoy</button>
+            <button class="h-chip" type="button" data-periodo="semana">Última semana</button>
+            <button class="h-chip" type="button" data-periodo="mes">Último mes</button>
+            <button class="h-chip" type="button" data-periodo="3meses">Últimos 3 meses</button>
+          </div>
+        </div>
+
+        <div class="bita-lista" id="bitaTimeline" aria-live="polite"></div>
+      </section>
+
       <!-- ═══ PREDICCIÓN DE VENTA ÓPTIMA ═══ -->
       <section class="section" id="section-prediccion" aria-label="Predicción de venta óptima">
         <div class="sec-hero">
@@ -689,6 +728,19 @@
     <div class="h-confirm-btns">
       <button class="h-btn-sec" id="cbBtnCancel" type="button">Cancelar</button>
       <button class="h-btn-del" id="cbBtnDel" type="button">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CONFIRMAR BORRADO DE EVENTO (Bitácora) ═══ -->
+<div class="h-modal" id="modalBorrarEvento" role="dialog" aria-modal="true" aria-labelledby="bbTitle">
+  <div class="h-box h-box--sm">
+    <h3 id="bbTitle">🗑️ Eliminar evento</h3>
+    <p class="h-confirm-txt" id="bbEvento"></p>
+    <p class="h-peligro">Se elimina este evento del historial del animal. <b>No hay papelera: esto no se puede deshacer.</b></p>
+    <div class="h-confirm-btns">
+      <button class="h-btn-sec" id="bbBtnCancel" type="button">Cancelar</button>
+      <button class="h-btn-del" id="bbBtnDel" type="button">Sí, eliminar</button>
     </div>
   </div>
 </div>

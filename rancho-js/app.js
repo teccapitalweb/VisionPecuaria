@@ -13,11 +13,12 @@ import { iniciarWebinars } from './webinars.js';
 import { iniciarProgreso, refrescarProgreso } from './progreso.js';
 import { iniciarMaterial } from './material.js';
 import { iniciarDiagnostico, montarDiagnostico } from './diagnostico.js';
+import { iniciarBitacora, montarBitacora, pintarBitacora } from './bitacora.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
 const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
   'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados',
-  'diagnostico']);
+  'diagnostico', 'bitacora']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -46,6 +47,7 @@ const TOOLS = [
 // Textos del banner vitrina por sección exclusiva (réplica del portal)
 const VITRINA = {
   hato:        { icon:'🐄', desc:'Puedes recorrer la sección. Para registrar y gestionar tu ganado, hazte Élite Pecuario.' },
+  bitacora:    { icon:'📓', desc:'Puedes ver el historial de tu hato. Para borrar eventos necesitas ser Élite Pecuario.' },
   prediccion:  { icon:'📊', desc:'Ves la calculadora. Para correr el análisis de venta óptima, hazte Élite Pecuario.' },
   calculadora: { icon:'🧮', desc:'Ves la calculadora. Para correr el análisis de rentabilidad, hazte Élite Pecuario.' },
   cursos:      { icon:'🎓', desc:'Mira la primera clase gratis. Para acceder a los cursos completos, hazte Élite Pecuario.' },
@@ -124,6 +126,7 @@ function navigateTo(section, pushHash = true) {
   // El hato llega por onSnapshot: al entrar, repintar con lo ya cargado.
   if (section === 'prediccion') pintarAnimalesPrediccion();
   if (section === 'progreso') refrescarProgreso();
+  if (section === 'bitacora') pintarBitacora();
   actualizarVitrina(section);
 }
 window.addEventListener('hashchange', () => navigateTo(location.hash.slice(1) || 'casco', false));
@@ -285,6 +288,7 @@ document.getElementById('iaCta').addEventListener('click', () => navigateTo('dia
 // ── Arranque ──
 renderShell();
 montarHato();
+montarBitacora();
 montarPrediccion();
 montarCertificados();
 montarCalculadora();
@@ -304,6 +308,7 @@ initAuth({
     // Hato: el gate Élite es del cliente (las reglas solo piden
     // autenticado()), igual que en el portal actual. Ver BL01.
     iniciarHato(user, plan);
+    iniciarBitacora(plan);
     iniciarPrediccion(plan);
     iniciarCalculadora(plan);
     iniciarCertificados(user, plan);

@@ -74,6 +74,12 @@ function bloqueadoPorFree(razon) {
   return true;
 }
 const hoyISO = () => new Date().toISOString().slice(0, 10);
+// Id estable por evento (Bitácora lo usa para borrar sin ambigüedad).
+// El portal viejo no lo escribe ni lo necesita, pero lo ignora sin problema.
+function generarIdEvento() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+  return 'ev-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+}
 
 // ═══════════════════════════════════════════════════════════
 // STATS HONESTOS — solo sobre pesos realmente capturados
@@ -523,8 +529,11 @@ async function guardarPeso() {
   try {
     const { doc, updateDoc, arrayUnion } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js");
     // La pesada queda registrada con la misma forma de evento que usa
-    // el portal actual: {tipo, nota, fecha, costo, creado}
+    // el portal actual: {tipo, nota, fecha, costo, creado} + un `id`
+    // propio (el viejo no lo escribe ni lo necesita, pero lo ignora sin
+    // problema — Bitácora lo usa para borrar sin ambigüedad).
     const evento = {
+      id: generarIdEvento(),
       tipo: 'peso',
       nota: anterior > 0
         ? `Peso actualizado: ${anterior} kg → ${nuevo} kg`
