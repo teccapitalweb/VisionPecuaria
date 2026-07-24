@@ -9,7 +9,7 @@ import {
   signInWithEmailAndPassword, signInWithCredential, GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, collection, query, where, getDocs, onSnapshot
+  getFirestore, doc, getDoc, collection, query, where, orderBy, getDocs, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -24,7 +24,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export { doc, getDoc, collection, query, where, getDocs, onSnapshot };
+export { doc, getDoc, collection, query, where, orderBy, getDocs, onSnapshot };
 
 export async function cerrarSesion() {
   await signOut(auth);

@@ -263,6 +263,54 @@ button{font-family:var(--font-body)}
 .bita-ev-del{background:none;border:none;color:var(--tinta-3);font-size:1.15rem;line-height:1;cursor:pointer;padding:4px 7px;border-radius:8px;flex-shrink:0;font-family:var(--font-body)}
 .bita-ev-del:hover{background:#F7DEDA;color:#C0392B}
 
+/* ═══ COMUNIDAD (Radar de avisos) ═══ */
+.com-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.com-card{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);overflow:hidden;display:flex;flex-direction:column}
+.com-foto{position:relative;aspect-ratio:4/3;background:var(--crema-2);display:grid;place-items:center;overflow:hidden;cursor:pointer;background-size:cover;background-position:center}
+.com-foto-emoji{font-size:2.2rem;opacity:.4}
+.com-tipo-badge{position:absolute;top:9px;left:9px;font-size:.66rem;font-weight:800;padding:3px 9px;border-radius:99px;background:rgba(252,250,244,.94);color:var(--tinta-2)}
+.com-tipo-badge.venta{color:var(--salvia-fg)}
+.com-tipo-badge.compra{color:var(--cielo-fg)}
+.com-tipo-badge.ofrezco{color:var(--miel-fg)}
+.com-tipo-badge.busco{color:var(--lila-fg)}
+.com-fotos-count{position:absolute;top:9px;right:9px;font-size:.64rem;font-weight:700;padding:3px 8px;border-radius:99px;background:rgba(31,51,25,.7);color:var(--crema)}
+.com-body{padding:14px;flex:1;display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.com-categoria{font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--miel-fg)}
+.com-titulo{font-size:.96rem;font-weight:700;color:var(--tinta);line-height:1.3}
+.com-precio{font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--verde-hondo)}
+.com-precio .sin-precio{font-size:.82rem;font-weight:600;color:var(--tinta-3);font-family:var(--font-body)}
+.com-desc{font-size:.82rem;color:var(--tinta-2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.com-rancho{display:flex;align-items:center;gap:9px;margin-top:5px;padding-top:9px;border-top:1px solid var(--crema-2)}
+.com-rancho-emoji{width:30px;height:30px;border-radius:50%;background:var(--crema);display:grid;place-items:center;font-size:.95rem;flex-shrink:0}
+.com-rancho-info{min-width:0;flex:1;display:flex;flex-direction:column}
+.com-rancho-nombre{font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.com-rancho-meta{font-size:.72rem;color:var(--tinta-3)}
+.com-fecha{padding:0 14px;font-size:.7rem;color:var(--tinta-3)}
+.com-acciones{display:flex;gap:8px;padding:12px 14px;margin-top:8px}
+.com-btn-wa{flex:1;text-align:center;background:#25D366;color:#fff;font-weight:700;font-size:.83rem;padding:9px;border-radius:99px;text-decoration:none;font-family:var(--font-body)}
+.com-btn-wa:hover{background:#1ebe5a}
+.com-btn-del,.com-btn-reportar{background:var(--crema);border:1px solid var(--crema-2);border-radius:99px;padding:9px 12px;font-size:.85rem;cursor:pointer;color:var(--tinta-2);font-family:var(--font-body)}
+.com-btn-del:hover{border-color:#C0392B;color:#C0392B}
+.com-btn-reportar:hover:not(:disabled){border-color:var(--naranja);color:var(--naranja)}
+.com-btn-reportar:disabled{opacity:.55;cursor:default}
+
+/* Publicar / Detalle */
+.com-tipos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.com-tipo-btn{background:var(--crema);border:1.5px solid var(--crema-2);border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;font-family:var(--font-body);font-size:.72rem;font-weight:700;color:var(--tinta-2)}
+.com-tipo-btn span{display:block;font-size:1.1rem;margin-bottom:3px}
+.com-tipo-btn.sel{background:var(--verde-hondo);border-color:var(--verde-hondo);color:var(--crema)}
+.com-fotos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.com-foto-slot{position:relative;aspect-ratio:1/1;border-radius:12px;background:var(--crema);border:1.5px dashed var(--crema-2);display:grid;place-items:center;cursor:pointer;background-size:cover;background-position:center;overflow:hidden}
+.com-foto-slot.lleno{border-style:solid}
+.com-foto-placeholder{font-size:1.4rem;color:var(--tinta-3)}
+.com-foto-input{display:none}
+.com-foto-quitar{position:absolute;top:4px;right:4px;background:rgba(31,51,25,.7);color:#fff;border:none;width:22px;height:22px;border-radius:50%;font-size:.8rem;cursor:pointer;line-height:1;font-family:var(--font-body)}
+
+.com-det-foto{width:100%;aspect-ratio:16/9;border-radius:var(--r-md);background:var(--crema-2);background-size:cover;background-position:center;margin-bottom:10px}
+.com-det-thumbs{display:flex;gap:8px;margin-bottom:14px}
+.com-det-thumb{width:56px;height:56px;border-radius:10px;background-size:cover;background-position:center;cursor:pointer;border:2px solid transparent}
+.com-det-thumb.activa{border-color:var(--verde)}
+
 /* ═══ PREDICCIÓN DE VENTA ÓPTIMA ═══ */
 .pr-grid{display:grid;grid-template-columns:minmax(240px,320px) 1fr;gap:18px;align-items:start}
 .pr-col{min-width:0}
@@ -633,4 +681,11 @@ button{font-family:var(--font-body)}
 
   .bita-evento{padding:12px 13px}
   .bita-ev-head{flex-direction:column;align-items:flex-start;gap:2px}
+
+  .com-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .com-tipos-grid{grid-template-columns:repeat(3,1fr)}
+  .com-acciones{flex-direction:column}
+}
+@media(max-width:520px){
+  .com-grid{grid-template-columns:1fr}
 }

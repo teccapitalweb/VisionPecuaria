@@ -14,11 +14,12 @@ import { iniciarProgreso, refrescarProgreso } from './progreso.js';
 import { iniciarMaterial } from './material.js';
 import { iniciarDiagnostico, montarDiagnostico } from './diagnostico.js';
 import { iniciarBitacora, montarBitacora, pintarBitacora } from './bitacora.js';
+import { iniciarComunidad, montarComunidad } from './comunidad.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
 const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
   'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados',
-  'diagnostico', 'bitacora']);
+  'diagnostico', 'bitacora', 'comunidad']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -38,7 +39,7 @@ const TOOLS = [
   // Sin "rankings": no existen. Ver progreso.js — es un contador local.
   { id:'progreso',     emoji:'🏆', nombre:'Mi progreso',          grupo:'Tu carrera',   color:'teal',   desc:'Tu avance y logros en los cursos.' },
   { id:'certificados', emoji:'🎖️', nombre:'Certificados',         grupo:'Tu carrera',   color:'miel',   desc:'Folio oficial y QR verificable.' },
-  { id:'comunidad',    emoji:'🌐', nombre:'Comunidad',            grupo:'Tu carrera',   color:'salvia', desc:'Foro privado + grupo VIP.', vip:true },
+  { id:'comunidad',    emoji:'🌐', nombre:'Comunidad',            grupo:'Tu carrera',   color:'salvia', desc:'Compra, vende y conecta con otros ranchos.' },
   { id:'soporte',      emoji:'📞', nombre:'Soporte técnico',      grupo:'Tu carrera',   color:'cielo',  desc:'Te acompañamos cuando lo necesites.' },
   { id:'trazabilidad', emoji:'🔗', nombre:'Trazabilidad',         grupo:'Más',          color:'coral',  desc:'Certificados QR por animal.', href:'trazabilidad.html' },
   { id:'verificador',  emoji:'✅', nombre:'Verificador',          grupo:'Más',          color:'teal',   desc:'Valida cualquier certificado.', href:'verificar.html' },
@@ -56,7 +57,7 @@ const VITRINA = {
   material:    { icon:'📚', desc:'Ves los títulos. Para descargar el material completo, hazte Élite Pecuario.' },
   webinars:    { icon:'📡', desc:'Ves la programación. Para unirte a las sesiones en vivo, hazte Élite Pecuario.' },
   diagnostico: { icon:'⚕️', desc:'Función exclusiva. Solicítalo siendo Élite Pecuario.' },
-  comunidad:   { icon:'🌐', desc:'Conecta con productores de toda la república. Exclusivo Élite Pecuario.' },
+  comunidad:   { icon:'🌐', desc:'Puedes ver todos los avisos. Para publicar el tuyo, hazte Élite Pecuario.' },
 };
 
 const WEBHOOK = 'https://visionpecuaria-webhook-production.up.railway.app/crear-checkout';
@@ -289,6 +290,7 @@ document.getElementById('iaCta').addEventListener('click', () => navigateTo('dia
 renderShell();
 montarHato();
 montarBitacora();
+montarComunidad();
 montarPrediccion();
 montarCertificados();
 montarCalculadora();
@@ -309,6 +311,10 @@ initAuth({
     // autenticado()), igual que en el portal actual. Ver BL01.
     iniciarHato(user, plan);
     iniciarBitacora(plan);
+    // Comunidad: la regla de `avisos` exige esVip() solo para crear —
+    // leer el radar es para cualquier autenticado. El gate de publicar
+    // en la UI es del cliente (bloqueadoPorFree), la regla ya lo exige de verdad.
+    iniciarComunidad(user, plan, miembro);
     iniciarPrediccion(plan);
     iniciarCalculadora(plan);
     iniciarCertificados(user, plan);

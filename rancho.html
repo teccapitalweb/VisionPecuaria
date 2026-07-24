@@ -478,6 +478,49 @@
         <div class="cert-lista" id="certLista" aria-live="polite"></div>
       </section>
 
+      <!-- ═══ COMUNIDAD ═══ -->
+      <section class="section" id="section-comunidad" aria-label="Comunidad">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="skyCom" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#E7D9E2"/>
+                <stop offset=".6" stop-color="#EFE8DA"/>
+                <stop offset="1" stop-color="#F5EFE4"/>
+              </linearGradient>
+            </defs>
+            <rect width="1440" height="220" fill="url(#skyCom)"/>
+            <circle cx="1220" cy="64" r="70" fill="#74586E" opacity=".1"/>
+            <path d="M0 142 Q 250 106 550 136 T 1030 128 T 1440 140 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 176 Q 320 134 680 168 T 1180 162 T 1440 174 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 206 Q 380 178 800 198 T 1440 194 V220 H0 Z" fill="#AFC996"/>
+          </svg>
+          <div class="greet">
+            <h1>Comunidad 🌐</h1>
+            <p>Compra · Vende · Conecta con otros ranchos en México</p>
+          </div>
+        </div>
+
+        <div class="h-barra">
+          <div class="h-chips" id="comChipsTipo" role="group" aria-label="Filtrar por tipo"></div>
+          <div class="h-campo" style="margin-bottom:0;min-width:210px;">
+            <select id="comFiltroCategoria" aria-label="Filtrar por categoría">
+              <option value="todas">Todas las categorías</option>
+              <option value="ganado">🐄 Ganado</option>
+              <option value="forraje">🌾 Forraje</option>
+              <option value="insumos">💊 Insumos / Medicamentos</option>
+              <option value="servicios">🩺 Servicios (MVZ, transporte)</option>
+              <option value="tierra">🏞️ Tierras / Renta</option>
+              <option value="equipo">🚜 Equipo / Maquinaria</option>
+              <option value="otro">📋 Otro</option>
+            </select>
+          </div>
+          <button class="btn-verde" id="btnPublicarAviso" type="button">＋ Publicar aviso</button>
+        </div>
+
+        <div class="com-grid" id="comGrid" aria-live="polite"></div>
+      </section>
+
       <!-- ═══ APOYOS DE GOBIERNO ═══ -->
       <section class="section" id="section-apoyos" aria-label="Apoyos de gobierno">
         <div class="sec-hero">
@@ -741,6 +784,117 @@
     <div class="h-confirm-btns">
       <button class="h-btn-sec" id="bbBtnCancel" type="button">Cancelar</button>
       <button class="h-btn-del" id="bbBtnDel" type="button">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PUBLICAR AVISO (Comunidad) ═══ -->
+<div class="h-modal" id="modalComPublicar" role="dialog" aria-modal="true" aria-labelledby="comPubTitle">
+  <div class="h-box h-box--lg">
+    <button class="h-close" id="comCerrarPublicar" type="button" aria-label="Cerrar">✕</button>
+    <h3 id="comPubTitle">📡 Publicar aviso</h3>
+
+    <div class="com-tipos-grid" role="group" aria-label="Tipo de aviso">
+      <button class="com-tipo-btn sel" type="button" data-tipo="venta"><span>🟢</span>Vendo</button>
+      <button class="com-tipo-btn" type="button" data-tipo="compra"><span>🔵</span>Compro</button>
+      <button class="com-tipo-btn" type="button" data-tipo="ofrezco"><span>🟡</span>Ofrezco</button>
+      <button class="com-tipo-btn" type="button" data-tipo="busco"><span>🟣</span>Busco</button>
+      <button class="com-tipo-btn" type="button" data-tipo="aviso"><span>⚪</span>Aviso</button>
+    </div>
+
+    <div class="h-alert" id="comError" role="alert" aria-live="assertive"></div>
+
+    <div class="h-campo">
+      <label for="comCategoria">Categoría</label>
+      <select id="comCategoria">
+        <option value="ganado">🐄 Ganado</option>
+        <option value="forraje">🌾 Forraje</option>
+        <option value="insumos">💊 Insumos / Medicamentos</option>
+        <option value="servicios">🩺 Servicios (MVZ, transporte)</option>
+        <option value="tierra">🏞️ Tierras / Renta</option>
+        <option value="equipo">🚜 Equipo / Maquinaria</option>
+        <option value="otro">📋 Otro</option>
+      </select>
+    </div>
+
+    <div class="h-campo">
+      <label for="comTitulo">Título</label>
+      <input type="text" id="comTitulo" placeholder="Ej. 5 becerros holstein de 6 meses" maxlength="80">
+    </div>
+
+    <div class="h-fila">
+      <div class="h-campo">
+        <label for="comPrecio">Precio MXN (opcional)</label>
+        <input type="number" id="comPrecio" min="0" step="1" inputmode="decimal" placeholder="Opcional">
+      </div>
+      <div class="h-campo">
+        <label for="comCantidad">Cantidad</label>
+        <input type="text" id="comCantidad" placeholder="Ej. 5 cabezas" maxlength="30">
+      </div>
+    </div>
+
+    <div class="h-campo">
+      <label for="comDescripcion">Descripción</label>
+      <textarea id="comDescripcion" rows="4" maxlength="500" placeholder="Describe lo que ofreces/buscas: raza, edad, condiciones, ubicación exacta..."></textarea>
+    </div>
+
+    <div class="h-campo">
+      <label for="comWhatsapp">WhatsApp de contacto (10 dígitos)</label>
+      <input type="tel" id="comWhatsapp" maxlength="15" placeholder="Ej. 2361049715">
+    </div>
+
+    <div class="h-campo">
+      <label>Fotos (hasta 3, opcional)</label>
+      <div class="com-fotos-grid">
+        <label class="com-foto-slot" id="comFotoSlot0">
+          <span class="com-foto-placeholder">📷</span>
+          <input type="file" class="com-foto-input" id="comFotoInput0" accept="image/*">
+        </label>
+        <label class="com-foto-slot" id="comFotoSlot1">
+          <span class="com-foto-placeholder">📷</span>
+          <input type="file" class="com-foto-input" id="comFotoInput1" accept="image/*">
+        </label>
+        <label class="com-foto-slot" id="comFotoSlot2">
+          <span class="com-foto-placeholder">📷</span>
+          <input type="file" class="com-foto-input" id="comFotoInput2" accept="image/*">
+        </label>
+      </div>
+    </div>
+
+    <button class="btn-verde h-full" id="comBtnPublicar" type="button">Publicar aviso</button>
+  </div>
+</div>
+
+<!-- ═══ MODAL: DETALLE DE AVISO (Comunidad) ═══ -->
+<div class="h-modal" id="modalComDetalle" role="dialog" aria-modal="true" aria-label="Detalle del aviso">
+  <div class="h-box h-box--lg">
+    <button class="h-close" id="comDetCerrar" type="button" aria-label="Cerrar">✕</button>
+    <div id="comDetBody"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CONFIRMAR BORRADO DE AVISO (Comunidad) ═══ -->
+<div class="h-modal" id="modalComBorrar" role="dialog" aria-modal="true" aria-labelledby="cbaTitle">
+  <div class="h-box h-box--sm">
+    <h3 id="cbaTitle">🗑️ Eliminar aviso</h3>
+    <p class="h-confirm-txt">"<span id="cbaTitulo"></span>"</p>
+    <p class="h-peligro">Se elimina permanentemente. <b>No hay papelera: esto no se puede deshacer.</b></p>
+    <div class="h-confirm-btns">
+      <button class="h-btn-sec" id="cbaBtnCancel" type="button">Cancelar</button>
+      <button class="h-btn-del" id="cbaBtnDel" type="button">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: CONFIRMAR REPORTE DE AVISO (Comunidad) ═══ -->
+<div class="h-modal" id="modalComReportar" role="dialog" aria-modal="true" aria-labelledby="rpaTitle">
+  <div class="h-box h-box--sm">
+    <h3 id="rpaTitle">🚩 Reportar aviso</h3>
+    <p class="h-confirm-txt">"<span id="rpaTitulo"></span>"</p>
+    <p class="h-hint">Lo marcaremos para revisión del equipo. Solo puedes reportar cada aviso una vez.</p>
+    <div class="h-confirm-btns">
+      <button class="h-btn-sec" id="rpaBtnCancel" type="button">Cancelar</button>
+      <button class="h-btn-del" id="rpaBtnConfirmar" type="button">Sí, reportar</button>
     </div>
   </div>
 </div>
