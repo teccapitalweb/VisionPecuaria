@@ -15,11 +15,12 @@ import { iniciarMaterial } from './material.js';
 import { iniciarDiagnostico, montarDiagnostico } from './diagnostico.js';
 import { iniciarBitacora, montarBitacora, pintarBitacora } from './bitacora.js';
 import { iniciarComunidad, montarComunidad } from './comunidad.js';
+import { iniciarSoporte, montarSoporte } from './soporte.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
 const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
   'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados',
-  'diagnostico', 'bitacora', 'comunidad']);
+  'diagnostico', 'bitacora', 'comunidad', 'soporte']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -296,6 +297,9 @@ montarCertificados();
 montarCalculadora();
 montarBiblioteca();
 montarDiagnostico();
+montarSoporte();
+// Soporte no depende de sesión ni de plan: es contenido estático.
+iniciarSoporte();
 initAuth({
   setBootStatus: (t) => { const el = document.getElementById('bootStatus'); if (el) el.textContent = t; },
   onUser: (user, plan, miembro) => {
