@@ -16,11 +16,13 @@ import { iniciarDiagnostico, montarDiagnostico } from './diagnostico.js';
 import { iniciarBitacora, montarBitacora, pintarBitacora } from './bitacora.js';
 import { iniciarComunidad, montarComunidad } from './comunidad.js';
 import { iniciarSoporte, montarSoporte } from './soporte.js';
+import { iniciarMercado, montarMercado } from './mercado.js';
 
 // Secciones ya migradas: viven en rancho.html, no llevan cartel de obra.
+// Con Mercado dentro, ya no queda ninguna en construcción.
 const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
   'calculadora', 'cursos', 'material', 'webinars', 'progreso', 'certificados',
-  'diagnostico', 'bitacora', 'comunidad', 'soporte']);
+  'diagnostico', 'bitacora', 'comunidad', 'soporte', 'mercado']);
 
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
@@ -31,7 +33,7 @@ const TOOLS = [
   { id:'diagnostico',  emoji:'🩺', nombre:'Diagnóstico IA',       grupo:'Tu rancho',    color:'coral',  desc:'Orientación veterinaria en segundos.', vip:true },
   { id:'calculadora',  emoji:'🧮', nombre:'Calculadora',          grupo:'Tu rancho',    color:'cielo',  desc:'Cuánto te deja cada engorda.' },
   { id:'bitacora',     emoji:'📓', nombre:'Bitácora',             grupo:'Tu rancho',    color:'teal',   desc:'Vacunas, pesos y eventos con fecha.' },
-  { id:'mercado',      emoji:'💰', nombre:'Mercado',              grupo:'Tu rancho',    color:'lila',   desc:'Precios en tiempo real (SIAP-SADER).' },
+  { id:'mercado',      emoji:'💰', nombre:'Mercado',              grupo:'Tu rancho',    color:'lila',   desc:'Precios estimados de referencia, actualizados cada 12 h.' },
   { id:'prediccion',   emoji:'📊', nombre:'Predicción',           grupo:'Tu rancho',    color:'miel',   desc:'Anticípate a los precios.' },
   { id:'apoyos',       emoji:'🏛️', nombre:'Apoyos Gob',           grupo:'Tu rancho',    color:'salvia', desc:'FIRA, SINIIGA, Bienestar y más.' },
   { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Aprendizaje',  color:'cielo',  desc:'Los 26 cursos completos, a tu ritmo.', vip:true },
@@ -298,6 +300,7 @@ montarCalculadora();
 montarBiblioteca();
 montarDiagnostico();
 montarSoporte();
+montarMercado();
 // Soporte no depende de sesión ni de plan: es contenido estático.
 iniciarSoporte();
 initAuth({
@@ -311,6 +314,9 @@ initAuth({
     // Apoyos: las reglas piden autenticado(), así que se cablea ya con sesión.
     // Lo ven free y Élite por igual — sin banner de vitrina.
     iniciarApoyos(user);
+    // Mercado: mismo caso que Apoyos — las reglas solo piden autenticado()
+    // y no hay gate de plan. El Explorador ve los mismos precios que el Élite.
+    iniciarMercado(user);
     // Hato: el gate Élite es del cliente (las reglas solo piden
     // autenticado()), igual que en el portal actual. Ver BL01.
     iniciarHato(user, plan);

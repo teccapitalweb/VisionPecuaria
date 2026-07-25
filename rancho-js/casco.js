@@ -1,8 +1,8 @@
 // ═══════════════════════════════════════════════════════════
 // EL CASCO · pantalla de inicio
 // Datos reales: conteo del hato, certificados y cursos (Firestore).
-// Placeholder marcado: precio de mercado (se cablea con la
-// herramienta Mercado en su propia entrega).
+// El precio de referencia (#statPrecioRef) ya no es placeholder:
+// lo llena rancho-js/mercado.js con el estimado del becerro engorda.
 // ═══════════════════════════════════════════════════════════
 import { db, collection, query, where, getDocs } from './firebase.js';
 
@@ -52,5 +52,5 @@ export async function pintarStats(user) {
   set('statHato', hato);
   set('statCerts', certs);
   set('statCursos', cursos);
-  // El precio de mercado queda como placeholder marcado (tarjeta .is-demo)
+  // #statPrecioRef lo pinta mercado.js cuando llega el snapshot de `mercado`.
 }

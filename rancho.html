@@ -121,11 +121,10 @@
             <b id="statHato">…</b>
             <span>animales en tu hato</span>
           </div>
-          <div class="stat-card is-demo">
-            <span class="chip-demo">DATO DE EJEMPLO</span>
+          <div class="stat-card">
             <span class="s-emoji">💰</span>
-            <b>$48.50</b>
-            <span>kg en pie · se cablea con Mercado</span>
+            <b id="statPrecioRef">…</b>
+            <span>becerro engorda · estimado /kg</span>
           </div>
           <div class="stat-card">
             <span class="s-emoji">🎓</span>
@@ -222,6 +221,53 @@
         </div>
 
         <div class="bita-lista" id="bitaTimeline" aria-live="polite"></div>
+      </section>
+
+      <!-- ═══ MERCADO PECUARIO ═══ -->
+      <section class="section" id="section-mercado" aria-label="Mercado pecuario">
+        <div class="sec-hero">
+          <svg viewBox="0 0 1440 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="skyMerc" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#E7D9E2"/>
+                <stop offset=".6" stop-color="#F5EFE4"/>
+                <stop offset="1" stop-color="#EFE8DA"/>
+              </linearGradient>
+            </defs>
+            <rect width="1440" height="220" fill="url(#skyMerc)"/>
+            <circle cx="1215" cy="66" r="78" fill="#74586E" opacity=".09"/>
+            <circle cx="1215" cy="66" r="40" fill="#E7D9E2"/>
+            <ellipse cx="270" cy="48" rx="118" ry="17" fill="#FCFAF4" opacity=".5"/>
+            <path d="M0 140 Q 250 104 550 134 T 1030 126 T 1440 138 V220 H0 Z" fill="#DEE8CF"/>
+            <path d="M0 174 Q 320 132 680 166 T 1180 160 T 1440 172 V220 H0 Z" fill="#C9DCB2"/>
+            <path d="M0 204 Q 380 176 800 196 T 1440 192 V220 H0 Z" fill="#AFC996"/>
+            <g fill="#2E4A2A" opacity=".45">
+              <path d="M240 170 q4 -12 18 -12 h26 q12 0 14 10 l3 8 h-6 l-4 12 h-5 l2 -11 h-24 l-3 11 h-5 l2 -12 q-14 2 -18 -6 Z"/>
+            </g>
+          </svg>
+          <div class="greet">
+            <h1>Mercado pecuario 💰</h1>
+            <p>Precios estimados de referencia para orientar tu venta.</p>
+          </div>
+        </div>
+
+        <!-- La nota va ARRIBA de los precios: se lee antes que cualquier cifra.
+             El texto lo pone rancho-js/mercado.js (una sola fuente de verdad). -->
+        <p class="mk-nota" id="mercadoNota"></p>
+
+        <div class="h-barra">
+          <div class="h-buscar">
+            <span class="lupa" aria-hidden="true">🔍</span>
+            <input type="search" id="mercadoBuscar" placeholder="Busca becerro, huevo, leche…"
+                   aria-label="Buscar producto en el mercado">
+          </div>
+          <span class="mk-sello" id="mercadoSello"></span>
+        </div>
+        <div class="h-chips" id="mercadoChips" role="group" aria-label="Filtrar por categoría"></div>
+
+        <div class="mk-grid" id="mercadoGrid" aria-live="polite">
+          <!-- tarjetas / estados: los pinta rancho-js/mercado.js -->
+        </div>
       </section>
 
       <!-- ═══ PREDICCIÓN DE VENTA ÓPTIMA ═══ -->
