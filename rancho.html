@@ -5,13 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>El Rancho Digital · Visión Pecuaria</title>
 <meta name="description" content="Tu rancho digital de Élite Pecuario: hato, mercado, diagnóstico IA, cursos y más.">
-<meta name="robots" content="noindex">
 <meta name="theme-color" content="#2E4A2A">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐂%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="rancho.css">
+<!-- Capa PWA: rancho.html es ahora el portal real, así que es quien debe
+     ofrecer la instalación y —vía pwa-install.js, al final del body— quien
+     registra y actualiza el service worker. -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="pwa-192.png">
 </head>
 <body>
 
@@ -47,9 +51,6 @@
       <button id="sbCtaBtn">Hazte Élite</button>
     </div>
 
-    <div class="sb-foot">
-      <a class="sb-item" href="index.html"><span class="ico">↩️</span>Ir al portal actual</a>
-    </div>
   </aside>
   <div class="sb-overlay" id="sbOverlay"></div>
 
@@ -992,5 +993,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script type="module" src="rancho-js/app.js"></script>
+<!-- PWA instalable + registro del service worker -->
+<script src="pwa-install.js" defer></script>
 </body>
 </html>

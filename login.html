@@ -304,7 +304,7 @@ button,input{font-family:var(--font-body)}
       </div>
 
       <p class="pie">Al continuar aceptas los términos del club ·
-        <a href="index.html">Ir al portal</a></p>
+        <a href="rancho.html">Ir al portal</a></p>
     </div>
   </section>
 </div>
@@ -366,7 +366,9 @@ const PLANES_VALIDOS = ['mensual', 'anual'];
 function destinoTrasLogin() {
   let plan = null;
   try { plan = sessionStorage.getItem('intencion_pago'); } catch (e) {}
-  return PLANES_VALIDOS.includes(plan) ? 'club.html' : 'index.html';
+  // El portal es ahora rancho.html (El Rancho Digital). Se manda directo,
+  // sin rebotar por index.html, que quedó solo como puente de redirección.
+  return PLANES_VALIDOS.includes(plan) ? 'club.html' : 'rancho.html';
 }
 
 // ═══════════════════════════════════════════════════════════

@@ -2,7 +2,7 @@
   "name": "Visión Pecuaria · El Rancho Digital",
   "short_name": "Visión Pecuaria",
   "description": "Tu rancho digital: hato, mercado, cursos, certificados y herramientas pecuarias.",
-  "start_url": "index.html",
+  "start_url": "rancho.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
