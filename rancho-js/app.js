@@ -250,6 +250,7 @@ function pintarUsuario(user, plan, miembro) {
 const MENSAJE_VIP_BASE = 'Desbloquea las 17 herramientas, los 26 cursos y la comunidad.';
 window.abrirModalVIP = function(razon) {
   document.getElementById('mvSub').textContent = razon || MENSAJE_VIP_BASE;
+  limpiarErrorPago();
   document.getElementById('modalVip').classList.add('active');
 };
 document.getElementById('mvClose').addEventListener('click', () =>
@@ -260,8 +261,66 @@ document.getElementById('modalVip').addEventListener('click', (e) => {
 document.querySelectorAll('[data-plan]').forEach(b =>
   b.addEventListener('click', () => suscribirElite(b.dataset.plan)));
 
+function limpiarErrorPago() {
+  const error = document.getElementById('mvPaymentError');
+  if (!error) return;
+  error.hidden = true;
+  error.replaceChildren();
+}
+
+function bloquearPlanesPago(bloqueados) {
+  document.querySelectorAll('[data-plan]').forEach(boton => {
+    boton.disabled = bloqueados;
+    boton.setAttribute('aria-busy', String(bloqueados));
+  });
+}
+
+function mostrarErrorPago(error, plan) {
+  const contenedor = document.getElementById('mvPaymentError');
+  if (!contenedor) return;
+
+  const titulo = document.createElement('strong');
+  titulo.textContent = 'No pudimos abrir el pago.';
+  const detalle = document.createElement('span');
+  detalle.textContent = `${error.message || 'Error de conexión'}. Revisa tu conexión e inténtalo nuevamente.`;
+  const ayuda = document.createElement('a');
+  const mensaje = encodeURIComponent(
+    'Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' +
+    (auth.currentUser?.email || '') + ' Plan: ' + plan
+  );
+  ayuda.href = `https://wa.me/522361049715?text=${mensaje}`;
+  ayuda.target = '_blank';
+  ayuda.rel = 'noopener';
+  ayuda.textContent = 'Necesito ayuda por WhatsApp';
+
+  contenedor.replaceChildren(titulo, detalle, ayuda);
+  contenedor.hidden = false;
+}
+
+async function cargarStripe() {
+  if (typeof Stripe !== 'undefined') return;
+
+  await new Promise((resolve, reject) => {
+    let script = document.querySelector('script[data-stripe-sdk]');
+    if (script) {
+      script.addEventListener('load', resolve, { once: true });
+      script.addEventListener('error', () => reject(new Error('No se pudo cargar Stripe')), { once: true });
+      return;
+    }
+
+    script = document.createElement('script');
+    script.src = 'https://js.stripe.com/v3/';
+    script.dataset.stripeSdk = 'true';
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('No se pudo cargar Stripe'));
+    document.head.appendChild(script);
+  });
+}
+
 async function suscribirElite(plan) {
   toast('🚀 Conectando con Stripe...');
+  limpiarErrorPago();
+  bloquearPlanesPago(true);
   try {
     const user = auth.currentUser;
     if (!user) throw new Error('Inicia sesión primero');
@@ -278,23 +337,17 @@ async function suscribirElite(plan) {
     if (data.error) throw new Error(data.error);
     if (data.url) { window.location.href = data.url; return; }
     if (data.clientSecret) {
-      if (typeof Stripe === 'undefined') {
-        const s = document.createElement('script');
-        s.src = 'https://js.stripe.com/v3/';
-        s.onload = () => montarStripeEmbedded(data.clientSecret);
-        document.head.appendChild(s);
-      } else {
-        montarStripeEmbedded(data.clientSecret);
-      }
+      await cargarStripe();
+      await montarStripeEmbedded(data.clientSecret);
       return;
     }
     throw new Error('Respuesta inesperada del servidor');
   } catch (e) {
     console.error('Error suscribiendo:', e);
-    const numero = '522361049715';
-    const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + (auth.currentUser?.email || '') + ' Plan: ' + plan);
-    toast('Error: ' + e.message + ' — abriendo WhatsApp...');
-    setTimeout(() => window.open('https://wa.me/' + numero + '?text=' + msg, '_blank'), 1500);
+    mostrarErrorPago(e, plan);
+    toast('No pudimos abrir el pago. Puedes intentarlo nuevamente.');
+  } finally {
+    bloquearPlanesPago(false);
   }
 }
 

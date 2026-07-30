@@ -738,6 +738,11 @@ button{font-family:var(--font-body)}
 .mv-plan--anual{border-color:var(--miel);background:var(--miel-bg)}
 .mv-plan--anual:hover{border-color:#C08A24}
 .mv-plan--anual .mv-precio{color:var(--miel-fg)}
+.mv-plan:disabled{opacity:.62;cursor:wait;pointer-events:none}
+.mv-payment-error{display:flex;flex-direction:column;gap:7px;margin:12px 0 4px;padding:12px 14px;border:1px solid rgba(166,71,48,.2);border-radius:14px;background:#FFF2ED;color:#743522;font-size:.84rem;line-height:1.45}
+.mv-payment-error[hidden]{display:none}
+.mv-payment-error strong{font-size:.9rem}
+.mv-payment-error a{align-self:flex-start;color:#743522;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 .mv-mini{text-align:center;font-size:.78rem;color:var(--tinta-3);margin-top:8px}
 
 /* Avisos temporales. La opacidad/visibilidad evita que el contenedor vacío
@@ -1065,6 +1070,7 @@ button{font-family:var(--font-body)}
   .mat-card{padding:14px}
   .sop-seccion-head{align-items:flex-start}
   .mv-plan{min-height:64px}
+  .mv-payment-error a{display:flex;align-items:center;min-height:44px}
 }
 
 @media(max-width:380px){
