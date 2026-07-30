@@ -161,6 +161,9 @@ function renderShell() {
   nav.querySelectorAll('[data-section]').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.section)));
   document.querySelectorAll('#section-casco [data-goto]').forEach(b =>
     b.addEventListener('click', () => navigateTo(b.dataset.goto)));
+  document.querySelectorAll('[data-mobile-section]').forEach(b =>
+    b.addEventListener('click', () => navigateTo(b.dataset.mobileSection)));
+  document.querySelector('[data-mobile-menu]')?.addEventListener('click', () => toggleSidebar(true));
 }
 
 // ── Navegación show/hide + hash deep-links ──
@@ -170,6 +173,12 @@ function navigateTo(section, pushHash = true) {
     b.classList.toggle('active', b.dataset.section === section));
   document.querySelectorAll('.section').forEach(s =>
     s.classList.toggle('active', s.id === 'section-' + section));
+  document.querySelectorAll('[data-mobile-section]').forEach(b => {
+    const activo = b.dataset.mobileSection === section;
+    b.classList.toggle('active', activo);
+    if (activo) b.setAttribute('aria-current', 'page');
+    else b.removeAttribute('aria-current');
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (window.innerWidth <= 880) toggleSidebar(false);
   if (pushHash && ('#' + section) !== location.hash) location.hash = section;
@@ -208,9 +217,15 @@ function toggleSidebar(force) {
   const open = force === undefined ? !sb.classList.contains('open') : force;
   sb.classList.toggle('open', open);
   ov.classList.toggle('active', open);
+  document.body.classList.toggle('nav-open', open);
+  document.getElementById('tbBurger').setAttribute('aria-expanded', String(open));
+  document.querySelector('[data-mobile-menu]')?.classList.toggle('active', open);
 }
 document.getElementById('tbBurger').addEventListener('click', () => toggleSidebar());
 document.getElementById('sbOverlay').addEventListener('click', () => toggleSidebar(false));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('sidebar').classList.contains('open')) toggleSidebar(false);
+});
 
 // ── Usuario en el sidebar ──
 function pintarUsuario(user, plan, miembro) {

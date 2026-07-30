@@ -1,9 +1,9 @@
 /* Service Worker · Visión Pecuaria — El Rancho Digital (PWA) */
-const CACHE = 'vision-pecuaria-v3';
-// 'rancho.html' en vez de 'index.html': el portal real pasa a ser El Rancho Digital.
-// './' sirve el puente que redirige al Rancho Digital. Los landings alternos
-// ya no se precachean: la entrada comercial oficial vive en visionpecuariamx.com.
-const ASSETS = ['./', 'rancho.html', 'login.html', 'manifest.json', 'pwa-192.png', 'pwa-512.png'];
+const CACHE = 'vision-pecuaria-v4';
+// La app instalada empieza en login.html. Si ya hay una sesión activa, el propio
+// login lleva al socio a rancho.html; sin conexión, el acceso sigue siendo la
+// pantalla segura de entrada. El landing comercial vive en visionpecuariamx.com.
+const ASSETS = ['./', 'login.html', 'rancho.html', 'manifest.json', 'pwa-install.js', 'pwa-192.png', 'pwa-512.png', 'pwa-maskable-512.png'];
 self.addEventListener('install', (e) => {
   // Sin .catch: si el precaché falla (socio sin red o con señal mala justo cuando se
   // descubre el SW nuevo), el install falla y NO se llega al activate. Así el caché
@@ -26,7 +26,7 @@ self.addEventListener('fetch', (e) => {
   // Nota: rancho.html NO entra aquí — es HTML y sigue por red-primero, abajo.
   if (url.pathname.includes('/rancho-js/') || url.pathname.endsWith('/rancho.css')) return;
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
-    e.respondWith(fetch(req).then((res) => { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); return res; }).catch(() => caches.match(req).then((r) => r || caches.match('rancho.html'))));
+    e.respondWith(fetch(req).then((res) => { const cp = res.clone(); caches.open(CACHE).then((c) => c.put(req, cp)); return res; }).catch(() => caches.match(req).then((r) => r || caches.match('login.html'))));
     return;
   }
   // JS y CSS de mismo origen (los que no salieron por el bypass de arriba):

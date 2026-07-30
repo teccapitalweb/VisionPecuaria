@@ -27,7 +27,7 @@
       '#vp-pwa-ov{position:fixed;inset:0;z-index:99999;display:flex;align-items:flex-end;justify-content:center;'+
       'background:rgba(5,15,9,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transition:opacity .25s;padding:0 14px calc(16px + env(safe-area-inset-bottom))}'+
       '#vp-pwa-ov.on{opacity:1}'+
-      '#vp-pwa-card{width:100%;max-width:420px;background:#0a1f12;border:1px solid rgba(212,160,23,.32);border-radius:22px;padding:20px 20px 18px;'+
+      '#vp-pwa-card{width:100%;max-width:420px;max-height:calc(100dvh - 32px - env(safe-area-inset-top));overflow-y:auto;overscroll-behavior:contain;background:#0a1f12;border:1px solid rgba(212,160,23,.32);border-radius:22px;padding:20px 20px max(18px,env(safe-area-inset-bottom));'+
       'box-shadow:0 -10px 44px rgba(0,0,0,.5);transform:translateY(24px);transition:transform .3s cubic-bezier(.2,.8,.2,1);'+
       'font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f3ea}'+
       '#vp-pwa-ov.on #vp-pwa-card{transform:translateY(0)}'+
@@ -38,7 +38,7 @@
       '.vp-pwa-body{font-size:13px;color:#d8e4d4;line-height:1.55;margin:2px 0 16px}'+
       '.vp-pwa-body b{color:#e8c465}'+
       '.vp-pwa-btns{display:flex;gap:10px}'+
-      '.vp-pwa-btn{flex:1;border:none;border-radius:13px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .12s}'+
+      '.vp-pwa-btn{flex:1;min-height:48px;border:none;border-radius:13px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .12s;touch-action:manipulation}'+
       '.vp-pwa-btn:active{transform:scale(.97)}'+
       '.vp-pwa-later{background:rgba(255,255,255,.08);color:#cbb88a}'+
       '.vp-pwa-go{background:linear-gradient(135deg,#e8c465,#d4a017);color:#0a1f12;box-shadow:0 6px 16px rgba(212,160,23,.3)}'+
@@ -52,7 +52,7 @@
   function show(){
     if(shown||!canShow()||document.getElementById('vp-pwa-ov'))return; shown=true; injectStyles();
     var o=document.createElement('div');o.id='vp-pwa-ov';
-    o.innerHTML='<div id="vp-pwa-card" role="dialog" aria-label="Instalar app">'+
+    o.innerHTML='<div id="vp-pwa-card" role="dialog" aria-modal="true" aria-label="Instalar app">'+
       '<div class="vp-pwa-top"><img class="vp-pwa-ic" src="pwa-192.png" alt="Visión Pecuaria">'+
       '<div><div class="vp-pwa-tt">Instala Visión Pecuaria</div>'+
       '<div class="vp-pwa-sub">Tu rancho digital, directo en tu pantalla</div></div></div>'+
@@ -85,5 +85,12 @@
     else if(isIOS){renderIOS();}
     else{snooze();hide();}
   }
-  window.addEventListener('load',function(){ if(installed())return; setTimeout(function(){if(canShow())show();},1400); });
+  window.addEventListener('load',function(){
+    if(installed())return;
+    setTimeout(function(){
+      var a=document.activeElement;
+      var escribiendo=a&&(/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName));
+      if(canShow()&&!escribiendo)show();
+    },12000);
+  });
 })();

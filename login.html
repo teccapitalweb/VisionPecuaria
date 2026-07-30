@@ -6,6 +6,12 @@
 <title>Entrar · Visión Pecuaria</title>
 <meta name="description" content="Entra a tu rancho digital de Élite Pecuario.">
 <meta name="theme-color" content="#2E4A2A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Visión Pecuaria">
+<link rel="manifest" href="manifest.json?v=20260730-mobile">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐂%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,7 +75,7 @@ button,input{font-family:var(--font-body)}
 .marca-nota{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;border:1px solid rgba(232,196,101,.25);background:rgba(232,196,101,.09);border-radius:12px;color:rgba(245,239,228,.82);font-size:.78rem;font-weight:600}
 .marca-nota b{color:#F6E7C0}
 @media(max-width:959px){
-  .marca{min-height:auto;padding:20px 20px 30px}
+  .marca{min-height:auto;padding:max(18px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) 38px max(20px,env(safe-area-inset-left))}
   .marca-svg{height:52%;opacity:.5}
   .marca-logo{margin-bottom:9px}
   .marca-logo img{height:30px}
@@ -87,7 +93,7 @@ button,input{font-family:var(--font-body)}
 /* ── Lado tarjeta ── */
 .lado-card{display:flex;align-items:center;justify-content:center;padding:32px 20px}
 .card{background:var(--panel);border-radius:var(--r-lg);box-shadow:var(--shadow-card);width:100%;max-width:430px;padding:30px 28px}
-@media(max-width:959px){ .lado-card{padding:20px 16px 34px} .card{padding:24px 20px;margin-top:-30px;position:relative;z-index:2} }
+@media(max-width:959px){ .lado-card{align-items:flex-start;padding:0 max(14px,env(safe-area-inset-right)) max(34px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))} .card{padding:24px 20px;margin-top:-26px;position:relative;z-index:2} }
 .card-h{margin-bottom:20px}
 .card-h h2{font-size:1.45rem;margin-bottom:4px}
 .card-h p{color:var(--tinta-2);font-size:.93rem}
@@ -154,6 +160,57 @@ button,input{font-family:var(--font-body)}
 /* ── Toast de sesión ── */
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(140%);background:var(--verde-hondo);color:var(--crema);padding:13px 22px;border-radius:14px;font-weight:600;font-size:.9rem;z-index:99;transition:transform .3s ease;max-width:92vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Experiencia móvil tipo app */
+@media(max-width:600px){
+  html{background:var(--verde-hondo);scroll-behavior:smooth}
+  body{
+    min-width:0;
+    min-height:100dvh;
+    -webkit-text-size-adjust:100%;
+    overscroll-behavior-y:contain;
+  }
+  .wrap{display:block;min-height:100dvh}
+  .marca{min-height:218px;padding-bottom:46px}
+  .marca-logo{border-radius:13px;padding:6px 10px}
+  .marca-logo img{height:28px}
+  .marca-eyebrow{font-size:.56rem;letter-spacing:.13em}
+  .marca h1{font-size:clamp(1.48rem,7.2vw,1.9rem);line-height:1.08;max-width:18ch}
+  .marca-puntos{margin-top:12px;padding-bottom:2px;scroll-snap-type:x proximity}
+  .marca-puntos li{min-height:34px;scroll-snap-align:start}
+  .lado-card{background:var(--crema)}
+  .card{
+    max-width:440px;
+    padding:22px 18px max(22px,env(safe-area-inset-bottom));
+    border-radius:22px;
+    box-shadow:0 16px 42px -24px rgba(35,52,31,.44);
+  }
+  .top-link{margin-bottom:12px;min-height:34px;display:flex;align-items:center;justify-content:center}
+  .tabs{margin-bottom:17px}
+  .tab{min-height:42px;touch-action:manipulation}
+  .card-h{margin-bottom:16px}
+  .card-h h2{font-size:1.34rem}
+  .campo{margin-bottom:12px}
+  .campo input{
+    min-height:50px;
+    padding:12px 14px;
+    font-size:16px;
+  }
+  .ojo{min-width:42px;min-height:42px;touch-action:manipulation}
+  .btn,.btn-google{min-height:50px;font-size:.95rem;touch-action:manipulation}
+  .link{min-height:40px;padding:8px;touch-action:manipulation}
+  .sep{margin:14px 0}
+  .pie{margin-top:16px;padding-bottom:2px}
+  .toast{bottom:max(16px,env(safe-area-inset-bottom));width:max-content;max-width:calc(100vw - 28px)}
+}
+
+@media(max-width:360px){
+  .marca{min-height:202px;padding-inline:16px}
+  .marca h1{font-size:1.42rem}
+  .marca-puntos li:nth-child(n+3){display:none}
+  .card{padding-inline:15px}
+  .card-h h2{font-size:1.25rem}
+}
 </style>
 </head>
 <body>
@@ -646,6 +703,6 @@ if (window.matchMedia('(min-width: 960px)').matches) {
 </script>
 
 <!-- PWA instalable + popup (igual que el login vivo) -->
-<script src="pwa-install.js" defer></script>
+<script src="pwa-install.js?v=20260730-mobile" defer></script>
 </body>
 </html>
