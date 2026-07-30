@@ -1,5 +1,5 @@
 /* Service Worker · Visión Pecuaria — El Rancho Digital (PWA) */
-const CACHE = 'vision-pecuaria-v4';
+const CACHE = 'vision-pecuaria-v5';
 // La app instalada empieza en login.html. Si ya hay una sesión activa, el propio
 // login lleva al socio a rancho.html; sin conexión, el acceso sigue siendo la
 // pantalla segura de entrada. El landing comercial vive en visionpecuariamx.com.
