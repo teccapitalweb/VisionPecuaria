@@ -37,29 +37,51 @@ img{max-width:100%;display:block}
 button,input{font-family:var(--font-body)}
 :focus-visible{outline:3px solid var(--naranja);outline-offset:2px;border-radius:6px}
 
-/* ═══ LAYOUT DIVIDIDO: marca+paisaje / tarjeta ═══ */
+/* ═══ LAYOUT DIVIDIDO: vitrina del club / tarjeta de acceso ═══ */
 .wrap{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:1fr;}
-@media(min-width:960px){ .wrap{grid-template-columns:1.05fr .95fr} }
+@media(min-width:960px){ .wrap{grid-template-columns:minmax(0,1.25fr) minmax(420px,.75fr)} }
 
-/* ── Lado marca (verde hondo + paisaje amanecer) ── */
-.marca{position:relative;overflow:hidden;background:var(--verde-hondo);color:var(--crema);display:flex;flex-direction:column;justify-content:center;padding:34px 30px;min-height:210px}
+/* ── Lado marca: propuesta de valor antes de entrar ── */
+.marca{position:relative;overflow:hidden;background:var(--verde-hondo);color:var(--crema);display:flex;flex-direction:column;justify-content:center;padding:28px clamp(34px,5vw,72px);min-height:250px}
+.marca::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 15%,rgba(78,139,62,.3),transparent 42%),linear-gradient(115deg,rgba(255,255,255,.035),transparent 55%);pointer-events:none}
 .marca-svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:58%;pointer-events:none}
-.marca-in{position:relative;z-index:1;max-width:440px;margin:0 auto;width:100%}
-.marca-logo{background:var(--panel);border-radius:16px;padding:9px 14px;display:inline-block;margin-bottom:18px}
-.marca-logo img{height:46px;display:block}
+.marca-in{position:relative;z-index:1;max-width:720px;margin:0 auto;width:100%}
+.marca-logo{background:var(--panel);border-radius:16px;padding:8px 13px;display:inline-block;margin-bottom:14px;box-shadow:0 12px 28px -18px rgba(0,0,0,.65)}
+.marca-logo img{height:40px;display:block}
 .marca-logo-fallback{display:none;font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--verde-hondo);white-space:nowrap}
-.marca h1{font-size:clamp(1.5rem,3.4vw,2.3rem);font-weight:800;margin-bottom:10px}
-.marca h1 em{font-style:normal;color:var(--miel)}
-.marca p{color:rgba(245,239,228,.72);font-size:1rem;max-width:38ch}
-.marca-puntos{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:9px}
-.marca-puntos li{display:flex;align-items:center;gap:10px;font-size:.92rem;color:rgba(245,239,228,.85)}
-.marca-puntos .p-ico{width:26px;height:26px;border-radius:8px;background:rgba(245,239,228,.12);display:grid;place-items:center;font-size:.85rem;flex-shrink:0}
+.marca-eyebrow{display:block;color:#E8C465;font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+.marca h1{font-size:clamp(2.05rem,3.8vw,3.2rem);font-weight:800;margin-bottom:10px;max-width:17ch}
+.marca h1 em{font-style:normal;color:#E8C465}
+.marca-sub{color:rgba(245,239,228,.76);font-size:1rem;max-width:55ch}
+.curso-showcase{margin-top:17px}
+.curso-showcase-label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px;color:rgba(245,239,228,.62);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.curso-showcase-label span:last-child{color:#E8C465;letter-spacing:0;text-transform:none}
+.curso-strip{display:grid;grid-auto-flow:column;grid-auto-columns:92px;gap:9px;overflow-x:auto;padding:2px 2px 6px;scroll-snap-type:x proximity;scrollbar-width:none}
+.curso-strip::-webkit-scrollbar{display:none}
+.curso-mini{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;scroll-snap-align:start;background:rgba(245,239,228,.08);border:1px solid rgba(245,239,228,.14);box-shadow:0 12px 26px -18px rgba(0,0,0,.8)}
+.curso-mini img{width:100%;height:100%;object-fit:cover}
+.marca-benefit-title{font-family:var(--font-display);font-size:1.05rem;font-weight:800;margin-top:13px}
+.marca-puntos{list-style:none;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.marca-puntos li{display:flex;align-items:flex-start;gap:9px;font-size:.82rem;line-height:1.35;color:rgba(245,239,228,.78)}
+.marca-puntos strong{color:var(--crema);font-weight:700}
+.marca-puntos .p-ico{width:22px;height:22px;border-radius:50%;background:#8EC5E7;color:#17334A;display:grid;place-items:center;font-size:.72rem;font-weight:900;flex-shrink:0;margin-top:1px}
+.marca-puntos li:last-child{grid-column:1/-1}
+.marca-nota{display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;border:1px solid rgba(232,196,101,.25);background:rgba(232,196,101,.09);border-radius:12px;color:rgba(245,239,228,.82);font-size:.78rem;font-weight:600}
+.marca-nota b{color:#F6E7C0}
 @media(max-width:959px){
-  .marca{min-height:auto;padding:22px 20px 26px}
+  .marca{min-height:auto;padding:20px 20px 30px}
   .marca-svg{height:52%;opacity:.5}
-  .marca-logo{margin-bottom:12px}
+  .marca-logo{margin-bottom:9px}
   .marca-logo img{height:30px}
-  .marca p,.marca-puntos{display:none}
+  .marca-eyebrow{font-size:.58rem;margin-bottom:5px}
+  .marca h1{font-size:clamp(1.45rem,7vw,2rem);margin-bottom:0;max-width:19ch}
+  .marca-sub,.curso-showcase,.marca-benefit-title,.marca-nota{display:none}
+  .marca-puntos{display:flex;gap:7px;margin-top:11px;overflow-x:auto;scrollbar-width:none}
+  .marca-puntos::-webkit-scrollbar{display:none}
+  .marca-puntos li{flex:0 0 auto;background:rgba(245,239,228,.1);border:1px solid rgba(245,239,228,.1);border-radius:99px;padding:6px 10px;font-size:.72rem;color:var(--crema);align-items:center}
+  .marca-puntos li:nth-child(n+4){display:none}
+  .marca-puntos .p-ico{width:17px;height:17px;font-size:.6rem;margin:0}
+  .marca-puntos .p-detail{display:none}
 }
 
 /* ── Lado tarjeta ── */
@@ -161,13 +183,31 @@ button,input{font-family:var(--font-body)}
 
     <div class="marca-in">
       <span class="marca-logo"><img src="club-assets/logo-vp.png" alt="Visión Pecuaria" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><strong class="marca-logo-fallback">Visión Pecuaria</strong></span>
-      <h1>Entra a tu <em>rancho digital</em></h1>
-      <p>El club de los ganaderos que deciden con datos, no con corazonadas.</p>
+      <span class="marca-eyebrow">Formación · herramientas · comunidad</span>
+      <h1>Haz crecer tu rancho con <em>conocimiento que sí aplicas.</em></h1>
+      <p class="marca-sub">Cursos especializados, acompañamiento y herramientas digitales reunidas en un solo club para el sector pecuario.</p>
+
+      <div class="curso-showcase" aria-label="Muestra de cursos disponibles">
+        <div class="curso-showcase-label"><span>Algunos cursos del club</span><span>Aprende a tu ritmo</span></div>
+        <div class="curso-strip">
+          <figure class="curso-mini"><img src="cursos/curso-01.jpg" alt="Portada de curso especializado de Visión Pecuaria"></figure>
+          <figure class="curso-mini"><img src="cursos/curso-03.jpg" alt="Portada de curso especializado de Visión Pecuaria"></figure>
+          <figure class="curso-mini"><img src="cursos/curso-05.jpg" alt="Portada de curso especializado de Visión Pecuaria"></figure>
+          <figure class="curso-mini"><img src="cursos/curso-07.jpg" alt="Portada de curso especializado de Visión Pecuaria"></figure>
+          <figure class="curso-mini"><img src="cursos/curso-09.jpg" alt="Portada de curso especializado de Visión Pecuaria"></figure>
+          <figure class="curso-mini"><img src="cursos/curso-11.jpg" alt="Portada de curso especializado de Visión Pecuaria"></figure>
+        </div>
+      </div>
+
+      <h2 class="marca-benefit-title">Al unirte a Élite Pecuario tendrás:</h2>
       <ul class="marca-puntos">
-        <li><span class="p-ico" aria-hidden="true">🩺</span> Diagnóstico veterinario por IA</li>
-        <li><span class="p-ico" aria-hidden="true">🎓</span> Cursos con certificado verificable</li>
-        <li><span class="p-ico" aria-hidden="true">🏛️</span> Apoyos de gobierno al día</li>
+        <li><span class="p-ico" aria-hidden="true">✓</span><span><strong>Biblioteca completa</strong><span class="p-detail"> de cursos pecuarios especializados.</span></span></li>
+        <li><span class="p-ico" aria-hidden="true">✓</span><span><strong>Clases y webinars</strong><span class="p-detail"> con especialistas del sector.</span></span></li>
+        <li><span class="p-ico" aria-hidden="true">✓</span><span><strong>Material y certificados</strong><span class="p-detail"> con folio y QR verificable.</span></span></li>
+        <li><span class="p-ico" aria-hidden="true">✓</span><span><strong>Herramientas digitales</strong><span class="p-detail"> para hato, mercado y rentabilidad.</span></span></li>
+        <li><span class="p-ico" aria-hidden="true">✓</span><span><strong>Comunidad y acompañamiento</strong><span class="p-detail"> para avanzar con respaldo.</span></span></li>
       </ul>
+      <p class="marca-nota"><span aria-hidden="true">🌱</span><span><b>Empieza gratis.</b> Conoce el portal y elige tu plan desde adentro.</span></p>
     </div>
   </section>
 
