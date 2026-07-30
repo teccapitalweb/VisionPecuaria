@@ -8,7 +8,7 @@ import { iniciarHato, montarHato } from './hato.js';
 import { iniciarPrediccion, montarPrediccion, pintarAnimalesPrediccion } from './prediccion.js';
 import { iniciarCertificados, montarCertificados } from './certificados.js';
 import { iniciarCalculadora, montarCalculadora } from './calculadora.js';
-import { iniciarBiblioteca, montarBiblioteca } from './biblioteca.js';
+import { iniciarBiblioteca, montarBiblioteca } from './biblioteca.js?v=20260730-free1';
 import { iniciarWebinars } from './webinars.js';
 import { iniciarProgreso, refrescarProgreso } from './progreso.js';
 import { iniciarMaterial } from './material.js';
@@ -56,7 +56,7 @@ const VITRINA = {
   bitacora:    { icon:'📓', desc:'Puedes ver el historial de tu hato. Para borrar eventos necesitas ser Élite Pecuario.' },
   prediccion:  { icon:'📊', desc:'Ves la calculadora. Para correr el análisis de venta óptima, hazte Élite Pecuario.' },
   calculadora: { icon:'🧮', desc:'Ves la calculadora. Para correr el análisis de rentabilidad, hazte Élite Pecuario.' },
-  cursos:      { icon:'🎓', desc:'Mira la primera clase gratis. Para acceder a los cursos completos, hazte Élite Pecuario.' },
+  cursos:      { icon:'🎓', desc:'La Clase 1 del curso de muestra es gratis. Las demás clases y los cursos completos son Élite.' },
   progreso:    { icon:'🏆', desc:'Tu avance en los cursos. Para tomarlos completos, hazte Élite Pecuario.' },
   certificados:{ icon:'🎖️', desc:'Aquí aparecen tus certificados con folio y QR. Para ganarlos, hazte Élite Pecuario.' },
   material:    { icon:'📚', desc:'Ves los títulos. Para descargar el material completo, hazte Élite Pecuario.' },

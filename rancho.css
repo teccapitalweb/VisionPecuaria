@@ -529,8 +529,12 @@ button{font-family:var(--font-body)}
 .bib-clase{display:flex;align-items:center;gap:11px;background:var(--crema);border:1.5px solid transparent;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font-family:var(--font-body);width:100%}
 .bib-clase:hover{border-color:var(--crema-2)}
 .bib-clase.active{background:var(--salvia-bg);border-color:var(--verde)}
+.bib-clase--lock{opacity:.72;background:var(--crema);border-color:rgba(166,122,31,.12)}
+.bib-clase--lock:hover{opacity:1;border-color:rgba(166,122,31,.38)}
+.bib-clase--lock.active{background:var(--crema);border-color:rgba(166,122,31,.12)}
 .bib-cl-num{width:26px;height:26px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font-size:.78rem;font-weight:700;flex-shrink:0;color:var(--verde-hondo)}
 .bib-cl-tit{font-size:.88rem;font-weight:600}
+.bib-cl-plan{margin-left:auto;flex-shrink:0;background:var(--miel-bg);color:var(--miel-fg);border-radius:99px;padding:3px 8px;font-size:.65rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
 
 /* ═══ MATERIAL ═══ */
 .mat-lista{display:flex;flex-direction:column;gap:12px}

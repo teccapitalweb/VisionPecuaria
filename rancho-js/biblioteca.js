@@ -54,10 +54,10 @@ function bloqueadoPorFree() {
   return true;
 }
 
-// ── Drip: el curso ordenDrip=1 es libre; los demás se abren N días
-//    después de fechaUltimaActivacion. Versión de solo lectura: el
-//    viejo además INFIERE y PERSISTE la fecha en Firestore; eso es una
-//    escritura y aquí no se hace.
+// ── Drip: el curso ordenDrip=1 es la muestra gratuita; un usuario FREE
+//    puede abrirlo, pero solo reproducir la primera clase. Los demás cursos
+//    y las clases 2+ de la muestra requieren Élite. Para miembros Élite,
+//    los cursos siguientes se abren N días después de la activación.
 function fechaActivacion() {
   const cand = [miembro?.fechaUltimaActivacion, miembro?.fechaInicio,
                 miembro?.fechaActivacion, miembro?.fechaPago, miembro?.fechaRegistro];
@@ -90,6 +90,11 @@ function estadoCurso(curso) {
     : { desbloqueado: false, esLibre: false, diasRestantes: restan, fechaDesbloqueo: abre };
 }
 
+function claseBloqueadaParaFree(curso, idx) {
+  if (!curso || plan === 'vip') return false;
+  return estadoCurso(curso).esLibre && idx > 0;
+}
+
 // ═══════════════════════════════════════════════════════════
 // LISTA DE CURSOS
 // ═══════════════════════════════════════════════════════════
@@ -111,7 +116,9 @@ function pintar() {
   cont.innerHTML = cursos.map(c => {
     const st = estadoCurso(c);
     const clases = Array.isArray(c.clases) ? c.clases : [];
-    const vistas = (prog[c.id] || []).length;
+    const progresoCurso = Array.isArray(prog[c.id]) ? prog[c.id] : [];
+    const indicesVistos = progresoCurso.filter(i => !claseBloqueadaParaFree(c, i));
+    const vistas = indicesVistos.length;
     const pct = clases.length ? Math.round((vistas / clases.length) * 100) : 0;
 
     let candado = '';
@@ -120,7 +127,7 @@ function pintar() {
         ? '<span class="bib-lock">🔒 Élite</span>'
         : `<span class="bib-lock">🔒 En ${st.diasRestantes} ${st.diasRestantes === 1 ? 'día' : 'días'}</span>`;
     } else if (st.esLibre) {
-      candado = '<span class="bib-libre">Gratis</span>';
+      candado = '<span class="bib-libre">Clase 1 gratis</span>';
     }
 
     return `
@@ -182,14 +189,31 @@ function pintarClases() {
   const clases = Array.isArray(cursoAbierto.clases) ? cursoAbierto.clases : [];
   const vistas = leerProgreso()[cursoAbierto.id] || [];
 
-  cont.innerHTML = clases.map((cl, i) => `
-    <button type="button" class="bib-clase${i === claseActual ? ' active' : ''}" data-idx="${i}">
-      <span class="bib-cl-num">${vistas.includes(i) ? '✓' : i + 1}</span>
-      <span class="bib-cl-tit">${esc(cl.titulo || 'Clase ' + (i + 1))}</span>
-    </button>`).join('');
+  cont.innerHTML = clases.map((cl, i) => {
+    const bloqueada = claseBloqueadaParaFree(cursoAbierto, i);
+    const numero = bloqueada ? '🔒' : (vistas.includes(i) ? '✓' : i + 1);
+    return `
+      <button type="button"
+        class="bib-clase${i === claseActual ? ' active' : ''}${bloqueada ? ' bib-clase--lock' : ''}"
+        data-idx="${i}"
+        ${bloqueada ? `aria-label="${esc(cl.titulo || 'Clase ' + (i + 1))}. Contenido Élite"` : ''}>
+        <span class="bib-cl-num">${numero}</span>
+        <span class="bib-cl-tit">${esc(cl.titulo || 'Clase ' + (i + 1))}</span>
+        ${bloqueada ? '<span class="bib-cl-plan">Élite</span>' : ''}
+      </button>`;
+  }).join('');
 
   cont.querySelectorAll('[data-idx]').forEach(b =>
-    b.addEventListener('click', () => { claseActual = Number(b.dataset.idx); pintarClases(); montarReproductor(claseActual); }));
+    b.addEventListener('click', () => {
+      const idx = Number(b.dataset.idx);
+      if (claseBloqueadaParaFree(cursoAbierto, idx)) {
+        bloqueadoPorFree();
+        return;
+      }
+      claseActual = idx;
+      pintarClases();
+      montarReproductor(claseActual);
+    }));
 }
 
 // Bunny se vuelve la fuente principal clase por clase. Mientras termina la
@@ -198,6 +222,12 @@ function pintarClases() {
 function montarReproductor(idx) {
   const player = document.getElementById('bibPlayer');
   if (!player || !cursoAbierto) return;
+  if (claseBloqueadaParaFree(cursoAbierto, idx)) {
+    player.innerHTML = '';
+    document.getElementById('bibMarcar').style.display = 'none';
+    bloqueadoPorFree();
+    return;
+  }
   const clases = Array.isArray(cursoAbierto.clases) ? cursoAbierto.clases : [];
   const clase = clases[idx];
   if (!clase) { player.innerHTML = ''; return; }
@@ -248,6 +278,10 @@ function montarReproductor(idx) {
 
 function marcarVista() {
   if (!cursoAbierto) return;
+  if (claseBloqueadaParaFree(cursoAbierto, claseActual)) {
+    bloqueadoPorFree();
+    return;
+  }
   const p = leerProgreso();
   const arr = p[cursoAbierto.id] || [];
   if (!arr.includes(claseActual)) { arr.push(claseActual); p[cursoAbierto.id] = arr; guardarProgreso(p); }
