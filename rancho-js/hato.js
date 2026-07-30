@@ -66,8 +66,8 @@ function toast(msg) {
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove('show'), 3500);
 }
-// El gate Élite es del cliente, igual que en el portal actual
-// (las reglas solo piden autenticado()). Ver BL01.
+// El cliente muestra el gate Élite y las reglas de Firestore lo vuelven
+// a comprobar antes de guardar cualquier cambio en el hato.
 function bloqueadoPorFree(razon) {
   if (plan === 'vip') return false;
   if (typeof window.abrirModalVIP === 'function') window.abrirModalVIP(razon);

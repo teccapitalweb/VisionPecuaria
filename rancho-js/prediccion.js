@@ -87,7 +87,7 @@ function num(v) {
 const mxn = n => '$' + Math.round(n).toLocaleString('es-MX');
 
 // Gate Élite del cliente, igual que el portal actual (bloquearAccionVIP).
-// Las reglas solo piden autenticado(); esto no es seguridad, es producto. Ver BL01.
+// El cálculo ocurre en el navegador y no escribe datos en Firestore.
 function bloqueadoPorFree() {
   if (plan === 'vip') return false;
   if (typeof window.abrirModalVIP === 'function') {

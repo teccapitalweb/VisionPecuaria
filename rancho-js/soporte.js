@@ -13,14 +13,14 @@
 // ═══════════════════════════════════════════════════════════
 import { cerrarSesion } from './firebase.js';
 
-const WHATSAPP = '5212361100649'; // mismo número que ya usa rancho-js/app.js
+const WHATSAPP = '522361049715'; // número oficial de ventas de Visión Pecuaria
 const EMAIL = 'visionpecuaria12@gmail.com';
 
 const CONTACTOS = [
   {
     clase: 'wa', emoji: '💬', titulo: 'WhatsApp directo',
     sub: 'Para dudas rápidas y soporte personalizado',
-    meta: '+52 1 236 110 0649',
+    meta: '+52 1 236 104 9715',
     href: `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, necesito ayuda con Visión Pecuaria')}`
   },
   {
@@ -53,7 +53,7 @@ const FAQ = [
   },
   {
     q: '¿Cómo cambio mi método de pago o cancelo la suscripción?',
-    a: 'Escríbenos por WhatsApp al <strong>+52 1 236 110 0649</strong> con tu correo registrado y te atendemos directo. La cancelación aplica al final del periodo ya pagado — no se corta el acceso a la mitad.'
+    a: 'Escríbenos por WhatsApp al <strong>+52 1 236 104 9715</strong> con tu correo registrado y te atendemos directo. La cancelación aplica al final del periodo ya pagado — no se corta el acceso a la mitad.'
   },
   {
     q: '¿Mis animales registrados son privados?',

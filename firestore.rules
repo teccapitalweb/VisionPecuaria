@@ -77,14 +77,17 @@ service cloud.firestore {
     }
     match /certificados/{certId} {
       allow get, list: if true;
-      allow create: if autenticado() && request.resource.data.uid == request.auth.uid;
+      allow create: if esVip() && request.resource.data.uid == request.auth.uid;
       allow update, delete: if esAdmin();
     }
     match /animales/{animalId} {
       // Cualquier autenticado puede LEER (para trazabilidad QR pública)
       allow read: if autenticado();
-      allow create: if autenticado() && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if autenticado() && resource.data.userId == request.auth.uid;
+      // Registrar, editar o eliminar animales es una función Élite.
+      // La regla replica el bloqueo de la interfaz para que no pueda
+      // saltarse llamando directamente a Firestore desde DevTools.
+      allow create: if esVip() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if esVip() && resource.data.userId == request.auth.uid;
     }
     match /mercado/{productoId} {
       allow read, list: if autenticado();
@@ -106,10 +109,10 @@ service cloud.firestore {
       allow create: if esVip()
         && request.resource.data.ranchoUid == request.auth.uid;
       allow update: if esAdmin()
-        || (autenticado() && resource.data.ranchoUid == request.auth.uid)
+        || (esVip() && resource.data.ranchoUid == request.auth.uid)
         || (autenticado() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['vistas','reportes']));
       allow delete: if esAdmin()
-        || (autenticado() && resource.data.ranchoUid == request.auth.uid);
+        || (esVip() && resource.data.ranchoUid == request.auth.uid);
     }
     // ═════════════════════════════════════════════════════════
     // 🆕 VENTA DE CURSOS — Catálogo público + entitlement de acceso

@@ -175,7 +175,7 @@ button,input{font-family:var(--font-body)}
   <section class="lado-card">
     <div class="card">
 
-      <a class="top-link" href="club.html">← Conoce el club</a>
+      <a class="top-link" href="https://visionpecuariamx.com/">← Volver a Visión Pecuaria</a>
 
       <!-- ── Pestañas: login / registro ── -->
       <div class="tabs" id="tabs" role="tablist" aria-label="Entrar o crear cuenta">
@@ -345,30 +345,12 @@ googleProvider.setCustomParameters({ prompt: 'select_account' });
 // Persistencia LOCAL para que la sesión sobreviva refrescos del browser
 await setPersistence(auth, browserLocalPersistence);
 
-// ═══════════════════════════════════════════════════════════
-// 🔶 ÚNICO CAMBIO DE COMPORTAMIENTO vs login.html — REVISAR
-//
-// El viejo mandaba SIEMPRE a index.html. Quien venía de club.html
-// a pagar dejaba su `intencion_pago` en sessionStorage y acababa
-// en el portal: la intención quedaba huérfana (index.html no la lee).
-//
-// Aquí, si hay una intención válida, devolvemos al usuario a
-// club.html — que en su onAuthStateChanged (club.html:789-797) la
-// detecta, la borra y retoma el checkout solo.
-//
-// OJO: NO borramos la clave aquí. Borrarla rompería el arreglo,
-// porque club.html es quien la consume.
-// Solo aceptamos 'mensual'/'anual' (los valores que valida
-// club.html:800); cualquier otra cosa va al portal como siempre.
-// ═══════════════════════════════════════════════════════════
-const PLANES_VALIDOS = ['mensual', 'anual'];
-
 function destinoTrasLogin() {
-  let plan = null;
-  try { plan = sessionStorage.getItem('intencion_pago'); } catch (e) {}
-  // El portal es ahora rancho.html (El Rancho Digital). Se manda directo,
-  // sin rebotar por index.html, que quedó solo como puente de redirección.
-  return PLANES_VALIDOS.includes(plan) ? 'club.html' : 'rancho.html';
+  // La suscripción se ofrece únicamente dentro de El Rancho Digital.
+  // Limpiamos cualquier intención guardada por el landing antiguo para
+  // impedir que una sesión nueva vuelva a club.html antes de entrar.
+  try { sessionStorage.removeItem('intencion_pago'); } catch (e) {}
+  return 'rancho.html';
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -397,9 +379,8 @@ onAuthStateChanged(auth, (user) => {
 
   const destino = destinoTrasLogin();
   toast.classList.add('show');
-  toast.querySelector('span').textContent = destino === 'club.html'
-    ? 'Listo — te llevamos al pago 🐂'
-    : `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
+  toast.querySelector('span').textContent =
+    `Bienvenido, ${user.displayName || user.email.split('@')[0]} 🐂`;
   setTimeout(() => { window.location.href = destino; }, 600);
 });
 

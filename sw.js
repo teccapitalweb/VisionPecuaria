@@ -1,8 +1,9 @@
 /* Service Worker · Visión Pecuaria — El Rancho Digital (PWA) */
-const CACHE = 'vision-pecuaria-v2';
+const CACHE = 'vision-pecuaria-v3';
 // 'rancho.html' en vez de 'index.html': el portal real pasa a ser El Rancho Digital.
-// './' sigue precacheando lo que sirva la raíz, sea el portal viejo o el stub.
-const ASSETS = ['./', 'rancho.html', 'login.html', 'vip.html', 'manifest.json', 'pwa-192.png', 'pwa-512.png'];
+// './' sirve el puente que redirige al Rancho Digital. Los landings alternos
+// ya no se precachean: la entrada comercial oficial vive en visionpecuariamx.com.
+const ASSETS = ['./', 'rancho.html', 'login.html', 'manifest.json', 'pwa-192.png', 'pwa-512.png'];
 self.addEventListener('install', (e) => {
   // Sin .catch: si el precaché falla (socio sin red o con señal mala justo cuando se
   // descubre el SW nuevo), el install falla y NO se llega al activate. Así el caché

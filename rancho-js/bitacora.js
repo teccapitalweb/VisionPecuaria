@@ -47,8 +47,8 @@ function toast(msg) {
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove('show'), 3500);
 }
-// El gate Élite es del cliente, igual que en el resto del portal
-// (las reglas solo piden autenticado()). Ver BL01.
+// El gate Élite se muestra en el cliente. Los eventos viven dentro del
+// documento del animal, cuya escritura también exige Élite en Firestore.
 function bloqueadoPorFree() {
   if (plan === 'vip') return false;
   if (typeof window.abrirModalVIP === 'function') {

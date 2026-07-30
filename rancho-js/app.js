@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // EL RANCHO DIGITAL · shell: auth, sidebar, router, modal VIP
 // ═══════════════════════════════════════════════════════════
-import { auth, initAuth, cerrarSesion } from './firebase.js';
+import { auth, initAuth, cerrarSesion, detectarPlan } from './firebase.js';
 import { pintarSaludo, pintarStats } from './casco.js';
 import { iniciarApoyos } from './apoyos.js';
 import { iniciarHato, montarHato } from './hato.js';
@@ -27,23 +27,25 @@ const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
 // ── Las 17 herramientas reales ──
 // vip:true → sección exclusiva: en modo Explorador (free) se inyecta
 // el banner vitrina (igual que el portal actual). href → página aparte.
+// El orden también define la jerarquía del menú y del buscador: la formación
+// es el producto principal; el resto acompaña la experiencia del productor.
 const TOOLS = [
-  { id:'casco',        emoji:'🏠', nombre:'Casco',                grupo:'Tu rancho',    color:'salvia', desc:'Tu punto de partida: el resumen del día.' },
-  { id:'hato',         emoji:'🐄', nombre:'Mi Hato',              grupo:'Tu rancho',    color:'miel',   desc:'Registro individual y por lotes.' },
-  { id:'diagnostico',  emoji:'🩺', nombre:'Diagnóstico IA',       grupo:'Tu rancho',    color:'coral',  desc:'Orientación veterinaria en segundos.', vip:true },
-  { id:'calculadora',  emoji:'🧮', nombre:'Calculadora',          grupo:'Tu rancho',    color:'cielo',  desc:'Cuánto te deja cada engorda.' },
-  { id:'bitacora',     emoji:'📓', nombre:'Bitácora',             grupo:'Tu rancho',    color:'teal',   desc:'Vacunas, pesos y eventos con fecha.' },
-  { id:'mercado',      emoji:'💰', nombre:'Mercado',              grupo:'Tu rancho',    color:'lila',   desc:'Precios estimados de referencia, actualizados cada 12 h.' },
-  { id:'prediccion',   emoji:'📊', nombre:'Predicción',           grupo:'Tu rancho',    color:'miel',   desc:'Anticípate a los precios.' },
-  { id:'apoyos',       emoji:'🏛️', nombre:'Apoyos Gob',           grupo:'Tu rancho',    color:'salvia', desc:'FIRA, SINIIGA, Bienestar y más.' },
-  { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Aprendizaje',  color:'cielo',  desc:'Los 26 cursos completos, a tu ritmo.', vip:true },
-  { id:'material',     emoji:'📚', nombre:'Material de apoyo',    grupo:'Aprendizaje',  color:'coral',  desc:'Guías y manuales descargables.', vip:true },
-  { id:'webinars',     emoji:'📡', nombre:'Webinars exclusivos',  grupo:'Aprendizaje',  color:'lila',   desc:'Sesiones en vivo con expertos.', vip:true },
+  { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Cursos y formación', color:'cielo', desc:'Los 26 cursos completos, a tu ritmo.', vip:true, principal:true },
+  { id:'material',     emoji:'📚', nombre:'Material de apoyo',    grupo:'Cursos y formación', color:'coral', desc:'Guías y manuales descargables.', vip:true, principal:true },
+  { id:'webinars',     emoji:'📡', nombre:'Webinars exclusivos',  grupo:'Cursos y formación', color:'lila',  desc:'Sesiones en vivo con expertos.', vip:true, principal:true },
   // Sin "rankings": no existen. Ver progreso.js — es un contador local.
-  { id:'progreso',     emoji:'🏆', nombre:'Mi progreso',          grupo:'Tu carrera',   color:'teal',   desc:'Tu avance y logros en los cursos.' },
-  { id:'certificados', emoji:'🎖️', nombre:'Certificados',         grupo:'Tu carrera',   color:'miel',   desc:'Folio oficial y QR verificable.' },
-  { id:'comunidad',    emoji:'🌐', nombre:'Comunidad',            grupo:'Tu carrera',   color:'salvia', desc:'Compra, vende y conecta con otros ranchos.' },
-  { id:'soporte',      emoji:'📞', nombre:'Soporte técnico',      grupo:'Tu carrera',   color:'cielo',  desc:'Te acompañamos cuando lo necesites.' },
+  { id:'progreso',     emoji:'🏆', nombre:'Mi progreso',          grupo:'Cursos y formación', color:'teal', desc:'Tu avance y logros en los cursos.', principal:true },
+  { id:'certificados', emoji:'🎖️', nombre:'Certificados',         grupo:'Cursos y formación', color:'miel', desc:'Folio oficial y QR verificable.', principal:true },
+  { id:'casco',        emoji:'🏠', nombre:'Casco',                grupo:'Herramientas del rancho', color:'salvia', desc:'Tu punto de partida: el resumen del día.' },
+  { id:'hato',         emoji:'🐄', nombre:'Mi Hato',              grupo:'Herramientas del rancho', color:'miel',   desc:'Registro individual y por lotes.' },
+  { id:'diagnostico',  emoji:'🩺', nombre:'Diagnóstico IA',       grupo:'Herramientas del rancho', color:'coral',  desc:'Orientación veterinaria en segundos.', vip:true },
+  { id:'calculadora',  emoji:'🧮', nombre:'Calculadora',          grupo:'Herramientas del rancho', color:'cielo',  desc:'Cuánto te deja cada engorda.' },
+  { id:'bitacora',     emoji:'📓', nombre:'Bitácora',             grupo:'Herramientas del rancho', color:'teal',   desc:'Vacunas, pesos y eventos con fecha.' },
+  { id:'mercado',      emoji:'💰', nombre:'Mercado',              grupo:'Herramientas del rancho', color:'lila',   desc:'Precios estimados de referencia, actualizados cada 12 h.' },
+  { id:'prediccion',   emoji:'📊', nombre:'Predicción',           grupo:'Herramientas del rancho', color:'miel',   desc:'Anticípate a los precios.' },
+  { id:'apoyos',       emoji:'🏛️', nombre:'Apoyos Gob',           grupo:'Herramientas del rancho', color:'salvia', desc:'FIRA, SINIIGA, Bienestar y más.' },
+  { id:'comunidad',    emoji:'🌐', nombre:'Comunidad',            grupo:'Comunidad y ayuda', color:'salvia', desc:'Compra, vende y conecta con otros ranchos.' },
+  { id:'soporte',      emoji:'📞', nombre:'Soporte técnico',      grupo:'Comunidad y ayuda', color:'cielo',  desc:'Te acompañamos cuando lo necesites.' },
   { id:'trazabilidad', emoji:'🔗', nombre:'Trazabilidad',         grupo:'Más',          color:'coral',  desc:'Certificados QR por animal.', href:'trazabilidad.html' },
   { id:'verificador',  emoji:'✅', nombre:'Verificador',          grupo:'Más',          color:'teal',   desc:'Valida cualquier certificado.', href:'verificar.html' },
 ];
@@ -68,6 +70,7 @@ const STRIPE_PK = 'pk_live_51TMAcSA7If2CqXs9NuKsM1cVT9n5agProkMR8HFiT6QTXzS0g9Pt
 
 let currentUser = null;
 let userPlan = 'free';
+let retornoPagoProcesado = false;
 
 // ── Toast ──
 function toast(msg) {
@@ -78,16 +81,52 @@ function toast(msg) {
   t._h = setTimeout(() => t.classList.remove('show'), 3500);
 }
 
+function limpiarRetornoPago() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete('pago_exitoso');
+  url.searchParams.delete('session_id');
+  const query = url.searchParams.toString();
+  history.replaceState(null, '', url.pathname + (query ? `?${query}` : '') + url.hash);
+}
+
+async function procesarRetornoPago(user, planInicial) {
+  if (retornoPagoProcesado || new URLSearchParams(location.search).get('pago_exitoso') !== '1') return;
+  retornoPagoProcesado = true;
+
+  if (planInicial === 'vip') {
+    limpiarRetornoPago();
+    toast('✅ Pago confirmado. Tu Rancho ya está desbloqueado.');
+    return;
+  }
+
+  toast('⏳ Pago recibido. Estamos activando tu cuenta Élite...');
+  for (let intento = 0; intento < 12; intento += 1) {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    const estado = await detectarPlan(user);
+    if (estado.plan === 'vip') {
+      limpiarRetornoPago();
+      toast('✅ Cuenta Élite activada. Cargando tus herramientas...');
+      setTimeout(() => window.location.reload(), 900);
+      return;
+    }
+  }
+
+  limpiarRetornoPago();
+  toast('Tu pago está en proceso. Si no se activa en un minuto, escríbenos por WhatsApp.');
+}
+
 // ── Render del sidebar y las secciones ──
 function renderShell() {
   const nav = document.getElementById('sbNav');
   const grupos = [...new Set(TOOLS.map(t => t.grupo))];
   nav.innerHTML = grupos.map(g =>
-    `<div class="sb-label">${g}</div>` +
-    TOOLS.filter(t => t.grupo === g).map(t => t.href
-      ? `<a class="sb-item" href="${t.href}"><span class="ico">${t.emoji}</span>${t.nombre}<span class="ext">↗</span></a>`
-      : `<button class="sb-item" data-section="${t.id}"><span class="ico">${t.emoji}</span>${t.nombre}</button>`
-    ).join('')
+    `<div class="sb-group${g === 'Cursos y formación' ? ' sb-group--principal' : ''}">
+      <div class="sb-label">${g}</div>
+      ${TOOLS.filter(t => t.grupo === g).map(t => t.href
+        ? `<a class="sb-item" href="${t.href}"><span class="ico">${t.emoji}</span>${t.nombre}<span class="ext">↗</span></a>`
+        : `<button class="sb-item" data-section="${t.id}"><span class="ico">${t.emoji}</span>${t.nombre}</button>`
+      ).join('')}
+    </div>`
   ).join('');
 
   // Secciones "en construcción" (las que aún no se migran)
@@ -99,22 +138,29 @@ function renderShell() {
         <span class="w-tag">🚧 EN CONSTRUCCIÓN</span>
         <h2>${t.nombre}</h2>
         <p>${t.desc}</p>
-        <p>Esta herramienta se está migrando al nuevo Rancho Digital.
-           Mientras tanto, úsala en <a href="index.html">el portal actual</a>.</p>
+        <p>Esta herramienta se está preparando para El Rancho Digital.
+           Vuelve al <a href="#casco">Casco</a> para usar las funciones disponibles.</p>
       </div>
     </section>`).join(''));
 
-  // Tarjetas de acceso en el Casco
-  const grid = document.getElementById('cascoTools');
-  grid.innerHTML = TOOLS.filter(t => t.id !== 'casco').map(t => t.href
-    ? `<a class="tool-card tc--${t.color}" href="${t.href}" style="text-decoration:none;display:block">
-         <span class="t-emoji">${t.emoji}</span><h4>${t.nombre} ↗</h4><p>${t.desc}</p></a>`
-    : `<button class="tool-card tc--${t.color}" data-goto="${t.id}">
-         <span class="t-emoji">${t.emoji}</span><h4>${t.nombre}</h4><p>${t.desc}</p></button>`
-  ).join('');
+  // El Casco repite la jerarquía del menú: formación primero, complementos después.
+  const cardMarkup = t => {
+    const clases = `tool-card tc--${t.color}${t.principal ? ' tool-card--principal' : ''}${t.id === 'cursos' ? ' tool-card--cursos' : ''}`;
+    const badge = t.id === 'cursos' ? '<span class="t-badge">Empieza aquí</span>' : '';
+    return t.href
+      ? `<a class="${clases}" href="${t.href}" style="text-decoration:none;display:block">
+           ${badge}<span class="t-emoji">${t.emoji}</span><h4>${t.nombre} ↗</h4><p>${t.desc}</p></a>`
+      : `<button class="${clases}" data-goto="${t.id}">
+           ${badge}<span class="t-emoji">${t.emoji}</span><h4>${t.nombre}</h4><p>${t.desc}</p></button>`;
+  };
+  const learningGrid = document.getElementById('cascoLearning');
+  const toolsGrid = document.getElementById('cascoTools');
+  learningGrid.innerHTML = TOOLS.filter(t => t.principal).map(cardMarkup).join('');
+  toolsGrid.innerHTML = TOOLS.filter(t => t.id !== 'casco' && !t.principal).map(cardMarkup).join('');
 
   nav.querySelectorAll('[data-section]').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.section)));
-  grid.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.goto)));
+  document.querySelectorAll('#section-casco [data-goto]').forEach(b =>
+    b.addEventListener('click', () => navigateTo(b.dataset.goto)));
 }
 
 // ── Navegación show/hide + hash deep-links ──
@@ -186,8 +232,9 @@ function pintarUsuario(user, plan, miembro) {
 }
 
 // ── Modal VIP + checkout (mismo funnel del portal: webhook Railway + Stripe) ──
+const MENSAJE_VIP_BASE = 'Desbloquea las 17 herramientas, los 26 cursos y la comunidad.';
 window.abrirModalVIP = function(razon) {
-  if (razon) document.getElementById('mvSub').textContent = razon;
+  document.getElementById('mvSub').textContent = razon || MENSAJE_VIP_BASE;
   document.getElementById('modalVip').classList.add('active');
 };
 document.getElementById('mvClose').addEventListener('click', () =>
@@ -205,7 +252,10 @@ async function suscribirElite(plan) {
     if (!user) throw new Error('Inicia sesión primero');
     const res = await fetch(WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await user.getIdToken()}`
+        },
       body: JSON.stringify({ plan, email: user.email, uid: user.uid, nombre: user.displayName || '' })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status + ' del servidor de pagos');
@@ -226,7 +276,7 @@ async function suscribirElite(plan) {
     throw new Error('Respuesta inesperada del servidor');
   } catch (e) {
     console.error('Error suscribiendo:', e);
-    const numero = '5212361100649';
+    const numero = '522361049715';
     const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + (auth.currentUser?.email || '') + ' Plan: ' + plan);
     toast('Error: ' + e.message + ' — abriendo WhatsApp...');
     setTimeout(() => window.open('https://wa.me/' + numero + '?text=' + msg, '_blank'), 1500);
@@ -269,7 +319,7 @@ async function montarStripeEmbedded(clientSecret) {
 const searchInput = document.getElementById('tbSearch');
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim().toLowerCase();
-  document.querySelectorAll('#cascoTools .tool-card').forEach(card => {
+  document.querySelectorAll('#section-casco .tool-card').forEach(card => {
     card.style.display = !q || card.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 });
@@ -281,7 +331,7 @@ searchInput.addEventListener('keydown', (e) => {
     if (hit.href) { window.location.href = hit.href; return; }
     navigateTo(hit.id);
     searchInput.value = '';
-    document.querySelectorAll('#cascoTools .tool-card').forEach(c => c.style.display = '');
+    document.querySelectorAll('#section-casco .tool-card').forEach(c => c.style.display = '');
   }
 });
 
@@ -317,8 +367,8 @@ initAuth({
     // Mercado: mismo caso que Apoyos — las reglas solo piden autenticado()
     // y no hay gate de plan. El Explorador ve los mismos precios que el Élite.
     iniciarMercado(user);
-    // Hato: el gate Élite es del cliente (las reglas solo piden
-    // autenticado()), igual que en el portal actual. Ver BL01.
+    // Hato: la interfaz muestra el gate Élite y Firestore lo vuelve a
+    // comprobar al registrar, editar o borrar animales.
     iniciarHato(user, plan);
     iniciarBitacora(plan);
     // Comunidad: la regla de `avisos` exige esVip() solo para crear —
@@ -335,5 +385,6 @@ initAuth({
     iniciarDiagnostico(plan);
     navigateTo(location.hash.slice(1) || 'casco', false);
     setTimeout(() => document.getElementById('boot').classList.add('hide'), 400);
+    procesarRetornoPago(user, plan);
   }
 });

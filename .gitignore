@@ -1,0 +1,12 @@
+# Inventarios y utilidades internas de migración (contienen IDs de video)
+migracion-bunny/
+output/
+tmp/
+
+# Auditoría pendiente del proyecto secundario; no forma parte del despliegue
+firestore-mx/
+
+# Respaldos y archivos generados localmente
+*.backup-*.html
+firebase-debug.log
+*.log

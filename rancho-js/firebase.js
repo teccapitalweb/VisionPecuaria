@@ -70,7 +70,7 @@ async function procesarHashAutologin(setBootStatus) {
 }
 
 // ── Detección Élite (idéntica al portal): doc miembros/{uid} ──
-async function detectarPlan(user) {
+export async function detectarPlan(user) {
   try {
     const snapM = await getDoc(doc(db, 'miembros', user.uid));
     if (snapM.exists()) {

@@ -192,15 +192,28 @@ function pintarClases() {
     b.addEventListener('click', () => { claseActual = Number(b.dataset.idx); pintarClases(); montarReproductor(claseActual); }));
 }
 
-// ⚠️ AQUÍ VIVE LA FUGA: `clase.url` es un enlace PÚBLICO de Google Drive.
-// Cuando se arregle (Storage con reglas, proxy con token, hosting firmado…),
-// este es el punto a cambiar.
+// Bunny se vuelve la fuente principal clase por clase. Mientras termina la
+// migración, `clase.url` conserva Google Drive como respaldo reversible.
+// `bunnyActivo:false` permite volver a Drive sin borrar el mapeo de Bunny.
 function montarReproductor(idx) {
   const player = document.getElementById('bibPlayer');
   if (!player || !cursoAbierto) return;
   const clases = Array.isArray(cursoAbierto.clases) ? cursoAbierto.clases : [];
   const clase = clases[idx];
   if (!clase) { player.innerHTML = ''; return; }
+
+  const bunnyLibraryId = String(clase.bunnyLibraryId || '').trim();
+  const bunnyVideoId = String(clase.bunnyVideoId || '').trim();
+  const bunnyValido = /^\d+$/.test(bunnyLibraryId)
+    && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(bunnyVideoId);
+  if (clase.bunnyActivo !== false && bunnyValido) {
+    const bunnyUrl = `https://iframe.mediadelivery.net/embed/${bunnyLibraryId}/${bunnyVideoId}`;
+    player.innerHTML = `<iframe src="${bunnyUrl}"
+      allowfullscreen allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+      title="${esc(clase.titulo || 'Clase')}"></iframe>`;
+    document.getElementById('bibMarcar').style.display = '';
+    return;
+  }
 
   const url = clase.url || clase.videoUrl || '';
   if (!url) {
