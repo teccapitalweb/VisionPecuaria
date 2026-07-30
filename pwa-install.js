@@ -216,6 +216,10 @@
       return;
     }
     setTimeout(function autoPrompt(attempt) {
+      if (document.documentElement.classList.contains('vp-auth-pending') && attempt < 5) {
+        setTimeout(function () { autoPrompt(attempt + 1); }, 1200);
+        return;
+      }
       var active = document.activeElement;
       var typing = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
       if (typing && attempt < 3) {

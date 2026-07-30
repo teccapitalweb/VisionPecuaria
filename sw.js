@@ -1,9 +1,9 @@
 /* Service Worker · Visión Pecuaria — El Rancho Digital (PWA) */
-const CACHE = 'vision-pecuaria-v5';
+const CACHE = 'vision-pecuaria-v6';
 // La app instalada empieza en login.html. Si ya hay una sesión activa, el propio
 // login lleva al socio a rancho.html; sin conexión, el acceso sigue siendo la
 // pantalla segura de entrada. El landing comercial vive en visionpecuariamx.com.
-const ASSETS = ['./', 'login.html', 'rancho.html', 'manifest.json', 'pwa-install.js', 'pwa-192.png', 'pwa-512.png', 'pwa-maskable-512.png'];
+const ASSETS = ['./', 'login.html', 'rancho.html', 'manifest.json', 'pwa-install.js', 'pwa-192.png', 'pwa-512.png', 'pwa-maskable-512.png', 'club-assets/logo-vp.png'];
 self.addEventListener('install', (e) => {
   // Sin .catch: si el precaché falla (socio sin red o con señal mala justo cuando se
   // descubre el SW nuevo), el install falla y NO se llega al activate. Así el caché
