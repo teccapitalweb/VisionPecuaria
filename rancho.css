@@ -33,8 +33,8 @@ button{font-family:var(--font-body)}
 /* ═══ BOOT SCREEN ═══ */
 .boot{position:fixed;inset:0;z-index:1000;background:var(--crema);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .4s ease,visibility .4s}
 .boot.hide{opacity:0;visibility:hidden}
-.boot-logo{background:var(--panel);border-radius:20px;padding:14px 22px;box-shadow:var(--shadow-card)}
-.boot-logo img{height:44px}
+.boot-logo{width:148px;background:transparent;border-radius:0;padding:0;box-shadow:none}
+.boot-logo img{width:100%;height:auto;border-radius:28%}
 .boot-status{color:var(--tinta-2);font-size:.95rem}
 .boot-bar{width:180px;height:6px;border-radius:99px;background:var(--crema-2);overflow:hidden}
 .boot-bar::after{content:"";display:block;width:40%;height:100%;border-radius:99px;background:var(--verde);animation:bootslide 1.1s ease-in-out infinite alternate}
