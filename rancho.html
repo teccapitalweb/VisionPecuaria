@@ -632,6 +632,23 @@
 
         <div class="sop-contactos" id="sopContactos" aria-live="polite"></div>
 
+        <div class="sop-seccion sop-membresia" id="sopGestionMembresia" hidden>
+          <div class="sop-seccion-head">
+            <span aria-hidden="true">💳</span>
+            <div>
+              <h2>Gestiona tu membresía</h2>
+              <p>Controla la renovación desde tu propia cuenta.</p>
+            </div>
+          </div>
+          <div class="sop-membresia-card">
+            <div>
+              <strong>Renovación de Élite Pecuario</strong>
+              <p id="sopMembresiaEstado" aria-live="polite">Consultando tu membresía…</p>
+            </div>
+            <button class="sop-btn-cancelar" id="sopCancelarRenovacion" type="button">Cancelar renovación automática</button>
+          </div>
+        </div>
+
         <div class="sop-seccion">
           <div class="sop-seccion-head">
             <span aria-hidden="true">📘</span>
@@ -655,6 +672,7 @@
         </div>
 
         <div class="sop-salir">
+          <p class="sop-legal"><a href="https://www.visionpecuariamx.com/privacidad.html" target="_blank" rel="noopener">Privacidad</a> · <a href="https://www.visionpecuariamx.com/terminos.html" target="_blank" rel="noopener">Términos</a> · <a href="https://www.visionpecuariamx.com/cancelaciones.html" target="_blank" rel="noopener">Cancelaciones y garantía</a></p>
           <button class="sop-btn-salir" id="sopBtnSalir" type="button">🚪 Cerrar sesión</button>
         </div>
       </section>
@@ -687,7 +705,7 @@
   <div class="mv-box">
     <button class="mv-close" id="mvClose" aria-label="Cerrar">✕</button>
     <h3 id="mvTitle">👑 Hazte Élite Pecuario</h3>
-    <p class="mv-sub" id="mvSub">Desbloquea las 17 herramientas, los 26 cursos y la comunidad.</p>
+    <p class="mv-sub" id="mvSub">Desbloquea la biblioteca completa, las herramientas del rancho y la comunidad.</p>
     <button class="mv-plan mv-plan--anual" data-plan="anual">
       <span><strong>Patrón del Año · Anual</strong><small>Equivale a $160/mes · ahorras $480</small></span>
       <span class="mv-precio">$1,920/año</span>
@@ -707,7 +725,7 @@
     <button class="h-close" id="bibCerrar" aria-label="Cerrar">✕</button>
     <h3 id="bibTitulo">Curso</h3>
     <p class="bib-inst" id="bibInstructor"></p>
-    <!-- ⚠️ El iframe carga un enlace PÚBLICO de Drive — ver biblioteca.js -->
+    <!-- El reproductor recibe el contenido después de validar el acceso en el backend. -->
     <div class="bib-player" id="bibPlayer"></div>
     <button class="btn-verde" id="bibMarcar" type="button" style="display:none">✓ Marcar clase como vista</button>
     <p class="bib-desc" id="bibDesc"></p>

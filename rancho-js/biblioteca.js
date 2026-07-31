@@ -1,26 +1,14 @@
 // ═══════════════════════════════════════════════════════════
 // BIBLIOTECA DE CURSOS · colección `cursos` (12 docs, 52 clases)
 //
-// ⚠️⚠️ FUGA CONOCIDA — LEER ANTES DE TOCAR ESTE ARCHIVO ⚠️⚠️
-//
-// Los videos NO viven en Firebase Storage ni detrás de ninguna regla.
-// Cada clase guarda en Firestore una URL de Google Drive, y las 52
-// están compartidas como "cualquiera con el enlace": se comprobó
-// pidiéndolas sin sesión y sin cookies — las 52 devolvieron HTTP 200.
-//
-// O sea: las reglas protegen la LISTA de cursos, no el CONTENIDO.
-// Quien copie un enlace ve el curso sin pagar, sin cuenta y sin dejar
-// rastro; y quien ya lo tenga lo conserva aunque después se cierren
-// los permisos en Drive.
-//
-// Esto se migró tal cual por decisión de producto: el arreglo va
-// aparte. CUANDO SE ARREGLE, el punto a tocar es `montarReproductor()`
-// aquí abajo y el campo `clase.url` en Firestore — no las reglas de
-// Firestore, que sobre esto no pueden hacer nada.
+// Firestore ya no expone los datos completos a cuentas FREE. El catálogo
+// público llega sanitizado desde el backend y solo incluye la primera clase
+// del curso muestra; el contenido completo requiere token + membresía vigente.
+// Bunny aún debe usar Token Authentication para impedir que un miembro que ya
+// obtuvo una URL válida la comparta fuera del portal.
 // ═══════════════════════════════════════════════════════════
-import { db, collection, onSnapshot, query } from './firebase.js';
+import { auth } from './firebase.js';
 
-let unsub = null;
 let plan = 'free';
 let miembro = null;
 let cursos = [];
@@ -296,17 +284,24 @@ export function iniciarBiblioteca(planUsuario, miembroDoc) {
   miembro = miembroDoc || null;
   const cont = document.getElementById('bibGrid');
   if (!cont) return;
-  if (unsub) { try { unsub(); } catch (e) {} unsub = null; }
-
-  unsub = onSnapshot(query(collection(db, 'cursos')), (snap) => {
-    cursos = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-      .sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
-    pintar();
-  }, (err) => {
-    console.warn('[Biblioteca] Error leyendo cursos:', err.code || err);
-    cursos = [];
-    pintar();
-  });
+  cursos = [];
+  pintar();
+  (async () => {
+    try {
+      const endpoint = plan === 'vip' ? 'cursos-membresia' : 'catalogo-cursos';
+      const headers = {};
+      if (plan === 'vip') headers.Authorization = `Bearer ${await auth.currentUser.getIdToken()}`;
+      const respuesta = await fetch(`https://visionpecuaria-webhook-production.up.railway.app/${endpoint}`, { headers });
+      const datos = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) throw new Error(datos.error || `HTTP ${respuesta.status}`);
+      cursos = Array.isArray(datos.cursos) ? datos.cursos : [];
+      pintar();
+    } catch (err) {
+      console.warn('[Biblioteca] Error leyendo cursos:', err.message || err);
+      cursos = [];
+      pintar();
+    }
+  })();
 }
 
 export function montarBiblioteca() {

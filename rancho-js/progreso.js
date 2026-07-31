@@ -19,7 +19,6 @@ import { db, collection, onSnapshot, query, where } from './firebase.js';
 
 const LS_PROGRESO = 'vp_progreso_cursos';
 
-let unsubCursos = null;
 let unsubCerts = null;
 let plan = 'free';
 let usuario = null;
@@ -119,15 +118,17 @@ export function iniciarProgreso(user, planUsuario) {
   usuario = user || null;
   plan = planUsuario || 'free';
   if (!document.getElementById('progContenido')) return;
-  if (unsubCursos) { try { unsubCursos(); } catch (e) {} unsubCursos = null; }
   if (unsubCerts) { try { unsubCerts(); } catch (e) {} unsubCerts = null; }
   if (!usuario) return;
 
-  unsubCursos = onSnapshot(query(collection(db, 'cursos')), (snap) => {
-    cursos = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-      .sort((a, b) => (a.ordenDrip || 999) - (b.ordenDrip || 999));
-    pintar();
-  }, (err) => { console.warn('[Progreso] cursos:', err.code || err); pintar(); });
+  fetch('https://visionpecuaria-webhook-production.up.railway.app/catalogo-cursos')
+    .then(async respuesta => {
+      const datos = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) throw new Error(datos.error || `HTTP ${respuesta.status}`);
+      cursos = Array.isArray(datos.cursos) ? datos.cursos : [];
+      pintar();
+    })
+    .catch(err => { console.warn('[Progreso] cursos:', err.message || err); pintar(); });
 
   unsubCerts = onSnapshot(query(collection(db, 'certificados'), where('uid', '==', usuario.uid)), (snap) => {
     certificados = snap.size;

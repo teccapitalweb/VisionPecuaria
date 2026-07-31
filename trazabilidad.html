@@ -376,15 +376,9 @@ async function cargarCertificado() {
 
     const animal = { id: snap.id, ...snap.data() };
 
-    // Cargar info del rancho (owner)
-    let rancho = {};
-    try {
-      const refMiembro = doc(db, 'miembros', ownerUid);
-      const snapMiembro = await getDoc(refMiembro);
-      if (snapMiembro.exists()) rancho = snapMiembro.data();
-    } catch(e) {
-      console.warn('No se pudo cargar info del rancho:', e);
-    }
+    // No se consulta `miembros/{uid}`: ese documento incluye datos privados
+    // de cuenta y facturación. La ficha de trazabilidad se limita al animal.
+    const rancho = {};
 
     const especieData = detectarEspecie(animal);
     const trazaId = generarTrazaId(animal);
@@ -436,11 +430,11 @@ async function cargarCertificado() {
           </div>
           <div class="dato">
             <div class="dato-label">Rancho</div>
-            <div class="dato-valor">${escapeHTML(rancho.nombreRancho || 'Sin nombre')}</div>
+            <div class="dato-valor">Información protegida</div>
           </div>
           <div class="dato">
             <div class="dato-label">Ubicación</div>
-            <div class="dato-valor">${escapeHTML(rancho.ubicacionRancho || '—')}</div>
+            <div class="dato-valor">Información protegida</div>
           </div>
           <div class="dato">
             <div class="dato-label">Estado sanitario</div>

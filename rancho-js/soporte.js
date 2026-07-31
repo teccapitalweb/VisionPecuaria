@@ -49,15 +49,15 @@ const GUIAS = [
 const FAQ = [
   {
     q: '¿Qué incluye la suscripción Élite Pecuario?',
-    a: 'Acceso completo a la Biblioteca de cursos, Diagnóstico veterinario, Calculadora de rentabilidad, Mi Hato sin límite, Bitácora de eventos, Comunidad de ranchos, Webinars exclusivos y grupo VIP de WhatsApp con otros productores.'
+    a: 'Acceso completo a la biblioteca disponible, Diagnóstico veterinario orientativo, Calculadora de rentabilidad, Mi Hato, Bitácora de eventos, Comunidad, materiales, webinars y certificados de los cursos que cumplan sus requisitos.'
   },
   {
     q: '¿Cómo cambio mi método de pago o cancelo la suscripción?',
-    a: 'Escríbenos por WhatsApp al <strong>+52 1 236 104 9715</strong> con tu correo registrado y te atendemos directo. La cancelación aplica al final del periodo ya pagado — no se corta el acceso a la mitad.'
+    a: 'En esta misma sección usa <strong>Cancelar renovación automática</strong>. La cancelación se programa para el final del periodo ya pagado y no corta tu acceso de inmediato. Si necesitas ayuda, escríbenos por WhatsApp.'
   },
   {
     q: '¿Mis animales registrados son privados?',
-    a: 'Solo tú los ves en tu Hato. Nadie más —ni otros miembros Élite ni el equipo de Visión Pecuaria— puede verlos, a menos que tú mismo publiques un aviso en Comunidad.'
+    a: 'El listado de tu Hato solo puede consultarlo tu cuenta. Una ficha individual puede mostrarse a un usuario registrado cuando compartes deliberadamente su enlace o QR de trazabilidad. No publiques ese enlace si no deseas compartirla.'
   },
   {
     q: '¿Quién puede publicar en Comunidad?',
@@ -136,4 +136,6 @@ export function iniciarSoporte() {
 
 export function montarSoporte() {
   document.getElementById('sopBtnSalir')?.addEventListener('click', cerrarSesion);
+  document.getElementById('sopCancelarRenovacion')?.addEventListener('click', () =>
+    window.cancelarRenovacionElite?.());
 }

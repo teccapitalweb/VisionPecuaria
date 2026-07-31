@@ -30,7 +30,7 @@ const SECCIONES_LISTAS = new Set(['casco', 'apoyos', 'hato', 'prediccion',
 // El orden también define la jerarquía del menú y del buscador: la formación
 // es el producto principal; el resto acompaña la experiencia del productor.
 const TOOLS = [
-  { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Cursos y formación', color:'cielo', desc:'Los 26 cursos completos, a tu ritmo.', vip:true, principal:true },
+  { id:'cursos',       emoji:'🎓', nombre:'Biblioteca de cursos', grupo:'Cursos y formación', color:'cielo', desc:'La biblioteca completa, a tu ritmo.', vip:true, principal:true },
   { id:'material',     emoji:'📚', nombre:'Material de apoyo',    grupo:'Cursos y formación', color:'coral', desc:'Guías y manuales descargables.', vip:true, principal:true },
   { id:'webinars',     emoji:'📡', nombre:'Webinars exclusivos',  grupo:'Cursos y formación', color:'lila',  desc:'Sesiones en vivo con expertos.', vip:true, principal:true },
   // Sin "rankings": no existen. Ver progreso.js — es un contador local.
@@ -65,7 +65,8 @@ const VITRINA = {
   comunidad:   { icon:'🌐', desc:'Puedes ver todos los avisos. Para publicar el tuyo, hazte Élite Pecuario.' },
 };
 
-const WEBHOOK = 'https://visionpecuaria-webhook-production.up.railway.app/crear-checkout';
+const API_BASE = 'https://visionpecuaria-webhook-production.up.railway.app';
+const WEBHOOK = `${API_BASE}/crear-checkout`;
 const STRIPE_PK = 'pk_live_51TMAcSA7If2CqXs9NuKsM1cVT9n5agProkMR8HFiT6QTXzS0g9PtiokZ4cpT1Qo3rk9bbsrZHx9sOUbE9UEOjgGs00n1OM3Y9b';
 
 let currentUser = null;
@@ -247,7 +248,7 @@ function pintarUsuario(user, plan, miembro) {
 }
 
 // ── Modal VIP + checkout (mismo funnel del portal: webhook Railway + Stripe) ──
-const MENSAJE_VIP_BASE = 'Desbloquea las 17 herramientas, los 26 cursos y la comunidad.';
+const MENSAJE_VIP_BASE = 'Desbloquea la biblioteca completa, las herramientas del rancho y la comunidad.';
 window.abrirModalVIP = function(razon) {
   document.getElementById('mvSub').textContent = razon || MENSAJE_VIP_BASE;
   limpiarErrorPago();
@@ -332,8 +333,8 @@ async function suscribirElite(plan) {
         },
       body: JSON.stringify({ plan, email: user.email, uid: user.uid, nombre: user.displayName || '' })
     });
-    if (!res.ok) throw new Error('HTTP ' + res.status + ' del servidor de pagos');
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status + ' del servidor de pagos'));
     if (data.error) throw new Error(data.error);
     if (data.url) { window.location.href = data.url; return; }
     if (data.clientSecret) {
@@ -350,6 +351,74 @@ async function suscribirElite(plan) {
     bloquearPlanesPago(false);
   }
 }
+
+async function cancelarRenovacionElite() {
+  const boton = document.getElementById('sopCancelarRenovacion');
+  const estado = document.getElementById('sopMembresiaEstado');
+  const user = auth.currentUser;
+  if (!user) {
+    if (estado) estado.textContent = 'Tu sesión venció. Vuelve a iniciar sesión para gestionar la membresía.';
+    return;
+  }
+  if (!window.confirm('¿Quieres detener la renovación automática? Conservarás el acceso hasta terminar el periodo que ya pagaste.')) return;
+
+  if (boton) {
+    boton.disabled = true;
+    boton.setAttribute('aria-busy', 'true');
+    boton.textContent = 'Procesando…';
+  }
+  if (estado) estado.textContent = 'Conectando de forma segura con Stripe…';
+
+  try {
+    const respuesta = await fetch(`${API_BASE}/cancelar-membresia`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${await user.getIdToken()}`
+      },
+      body: JSON.stringify({})
+    });
+    const datos = await respuesta.json().catch(() => ({}));
+    if (!respuesta.ok) throw new Error(datos.error || `Error ${respuesta.status}`);
+
+    const hasta = datos.accesoHasta
+      ? new Intl.DateTimeFormat('es-MX', { dateStyle: 'long' }).format(new Date(datos.accesoHasta))
+      : 'el final de tu periodo actual';
+    if (estado) estado.textContent = `Renovación detenida. Tu acceso Élite continúa hasta ${hasta}.`;
+    if (boton) {
+      boton.textContent = 'Renovación cancelada';
+      boton.disabled = true;
+    }
+    toast('Renovación automática cancelada correctamente.');
+  } catch (error) {
+    console.error('Error cancelando renovación:', error);
+    if (estado) estado.textContent = `No pudimos cancelar: ${error.message}. Escríbenos por WhatsApp si necesitas ayuda.`;
+    if (boton) {
+      boton.disabled = false;
+      boton.textContent = 'Cancelar renovación automática';
+    }
+  } finally {
+    boton?.removeAttribute('aria-busy');
+  }
+}
+
+function pintarGestionMembresia(plan, miembro) {
+  const bloque = document.getElementById('sopGestionMembresia');
+  const boton = document.getElementById('sopCancelarRenovacion');
+  const estado = document.getElementById('sopMembresiaEstado');
+  if (!bloque || !boton || !estado) return;
+
+  bloque.hidden = plan !== 'vip';
+  if (plan !== 'vip') return;
+  const cancelada = Boolean(miembro?.cancelado || miembro?.cancelarAlFinal);
+  boton.disabled = cancelada;
+  boton.textContent = cancelada ? 'Renovación cancelada' : 'Cancelar renovación automática';
+  estado.textContent = cancelada
+    ? 'Tu renovación ya está detenida. Mantendrás el acceso hasta la fecha de fin registrada en tu cuenta.'
+    : 'Tu plan se renueva automáticamente. Puedes detener la próxima renovación sin perder el periodo ya pagado.';
+}
+
+window.cancelarRenovacionElite = cancelarRenovacionElite;
 
 async function montarStripeEmbedded(clientSecret) {
   if (window.__stripeCheckoutInstance) {
@@ -427,6 +496,7 @@ initAuth({
     currentUser = user;
     userPlan = plan;
     pintarUsuario(user, plan, miembro);
+    pintarGestionMembresia(plan, miembro);
     pintarSaludo(user);
     pintarStats(user);
     // Apoyos: las reglas piden autenticado(), así que se cablea ya con sesión.

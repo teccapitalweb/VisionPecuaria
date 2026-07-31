@@ -29,7 +29,9 @@ service cloud.firestore {
       allow write: if false;
     }
     match /cursos/{id} {
-      allow read, list: if autenticado();
+      // Los datos de reproducción se entregan mediante el backend después de
+      // validar el token y la membresía. Firestore ya no los expone a FREE.
+      allow read, list: if esVip();
       allow write: if esAdmin();
     }
     match /videos/{id} {
@@ -56,9 +58,9 @@ service cloud.firestore {
       allow write: if esAdmin();
     }
     match /miembros/{uid} {
-      // Permitir lectura a cualquier autenticado para trazabilidad QR
-      // (solo expone info pública del rancho: nombre, ubicación, emoji)
-      allow get: if autenticado();
+      // El documento también contiene datos de Stripe y contacto: nunca se
+      // expone completo a otros usuarios. La trazabilidad no debe depender de él.
+      allow get: if esAdmin() || esMiPropioDoc(uid);
       allow list: if esAdmin();
       allow create, delete: if esAdmin();
       allow update: if esAdmin() || (esMiPropioDoc(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cursosDesbloqueados','nombreRancho','emojiRancho','ubicacionRancho','especialidadRancho','hectareasRancho','whatsappRancho']));
@@ -81,8 +83,11 @@ service cloud.firestore {
       allow update, delete: if esAdmin();
     }
     match /animales/{animalId} {
-      // Cualquier autenticado puede LEER (para trazabilidad QR pública)
-      allow read: if autenticado();
+      // Un registro individual puede verificarse mediante su QR/enlace difícil
+      // de adivinar. Los listados completos solo pertenecen al dueño o al admin.
+      allow get: if autenticado();
+      allow list: if esAdmin()
+        || (autenticado() && resource.data.userId == request.auth.uid);
       // Registrar, editar o eliminar animales es una función Élite.
       // La regla replica el bloqueo de la interfaz para que no pueda
       // saltarse llamando directamente a Firestore desde DevTools.

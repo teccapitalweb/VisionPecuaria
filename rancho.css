@@ -368,7 +368,16 @@ button{font-family:var(--font-body)}
 .sop-faq-body{padding:0 18px 16px;font-size:.87rem;color:var(--tinta-2);line-height:1.55}
 .sop-faq-body strong{color:var(--tinta)}
 
+.sop-membresia-card{display:flex;align-items:center;justify-content:space-between;gap:18px;background:var(--panel);border:1.5px solid var(--crema-2);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:18px}
+.sop-membresia-card strong{display:block;color:var(--tinta);font-size:.98rem}
+.sop-membresia-card p{margin-top:5px;color:var(--tinta-2);font-size:.86rem;line-height:1.45}
+.sop-btn-cancelar{flex:0 0 auto;border:1.5px solid #C0392B;background:#fff;color:#A52F24;border-radius:99px;padding:11px 17px;font:700 .84rem var(--font-body);cursor:pointer;transition:background .15s,color .15s,transform .15s}
+.sop-btn-cancelar:hover:not(:disabled){background:#C0392B;color:#fff;transform:translateY(-1px)}
+.sop-btn-cancelar:disabled{cursor:not-allowed;opacity:.68;background:var(--crema)}
+
 .sop-salir{text-align:center;margin-top:8px}
+.sop-legal{margin:0 0 14px;color:var(--tinta-3);font-size:.8rem}
+.sop-legal a{color:var(--verde);text-underline-offset:3px}
 .sop-btn-salir{background:none;border:1.5px solid var(--crema-2);color:var(--tinta-2);font-weight:700;font-size:.88rem;padding:11px 22px;border-radius:99px;cursor:pointer;font-family:var(--font-body)}
 .sop-btn-salir:hover{border-color:#C0392B;color:#C0392B}
 
@@ -1069,6 +1078,8 @@ button{font-family:var(--font-body)}
   .cert-acciones>*{flex:1;justify-content:center}
   .mat-card{padding:14px}
   .sop-seccion-head{align-items:flex-start}
+  .sop-membresia-card{align-items:stretch;flex-direction:column;padding:16px}
+  .sop-btn-cancelar{width:100%;min-height:46px}
   .mv-plan{min-height:64px}
   .mv-payment-error a{display:flex;align-items:center;min-height:44px}
 }
