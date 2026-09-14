@@ -216,6 +216,8 @@
       return;
     }
     setTimeout(function autoPrompt(attempt) {
+      // El recorrido acompaña la primera visita; Instalar sigue disponible en la barra.
+      if (window.MembershipTour) return;
       if (document.documentElement.classList.contains('vp-auth-pending') && attempt < 5) {
         setTimeout(function () { autoPrompt(attempt + 1); }, 1200);
         return;

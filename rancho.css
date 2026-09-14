@@ -733,7 +733,7 @@ button{font-family:var(--font-body)}
 .vitrina button:hover{background:#C08A24}
 
 /* ═══ MODAL VIP ═══ */
-.modal-vip{position:fixed;inset:0;z-index:900;background:rgba(20,32,18,.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-vip{position:fixed;inset:0;z-index:1100;background:rgba(20,32,18,.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
 .modal-vip.active{display:flex}
 .mv-box{background:var(--panel);border-radius:var(--r-lg);max-width:430px;width:100%;padding:30px 28px;position:relative;box-shadow:0 40px 90px -30px rgba(0,0,0,.5)}
 .mv-close{position:absolute;top:14px;right:14px;background:var(--crema-2);border:none;width:34px;height:34px;border-radius:50%;font-size:.95rem;cursor:pointer;color:var(--tinta)}

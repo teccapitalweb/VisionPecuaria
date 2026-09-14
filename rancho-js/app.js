@@ -8,7 +8,7 @@ import { iniciarHato, montarHato } from './hato.js';
 import { iniciarPrediccion, montarPrediccion, pintarAnimalesPrediccion } from './prediccion.js';
 import { iniciarCertificados, montarCertificados } from './certificados.js';
 import { iniciarCalculadora, montarCalculadora } from './calculadora.js';
-import { iniciarBiblioteca, montarBiblioteca } from './biblioteca.js?v=20260730-free1';
+import { iniciarBiblioteca, montarBiblioteca, abrirCursoInicial } from './biblioteca.js?v=20260914-course';
 import { iniciarWebinars } from './webinars.js';
 import { iniciarProgreso, refrescarProgreso } from './progreso.js';
 import { iniciarMaterial } from './material.js';
@@ -56,7 +56,7 @@ const VITRINA = {
   bitacora:    { icon:'📓', desc:'Puedes ver el historial de tu hato. Para borrar eventos necesitas ser Élite Pecuario.' },
   prediccion:  { icon:'📊', desc:'Ves la calculadora. Para correr el análisis de venta óptima, hazte Élite Pecuario.' },
   calculadora: { icon:'🧮', desc:'Ves la calculadora. Para correr el análisis de rentabilidad, hazte Élite Pecuario.' },
-  cursos:      { icon:'🎓', desc:'La Clase 1 del curso de muestra es gratis. Las demás clases y los cursos completos son Élite.' },
+  cursos:      { icon:'🎓', desc:'¡Disfruta tu curso gratis! Todas las clases del curso inicial, excepto la última. La clase final y los demás cursos requieren Élite.' },
   progreso:    { icon:'🏆', desc:'Tu avance en los cursos. Para tomarlos completos, hazte Élite Pecuario.' },
   certificados:{ icon:'🎖️', desc:'Aquí aparecen tus certificados con folio y QR. Para ganarlos, hazte Élite Pecuario.' },
   material:    { icon:'📚', desc:'Ves los títulos. Para descargar el material completo, hazte Élite Pecuario.' },
@@ -516,7 +516,7 @@ initAuth({
     iniciarPrediccion(plan);
     iniciarCalculadora(plan);
     iniciarCertificados(user, plan);
-    iniciarBiblioteca(plan, miembro);
+    const bibliotecaLista = iniciarBiblioteca(plan, miembro);
     iniciarWebinars(plan);
     iniciarProgreso(user, plan);
     iniciarMaterial(plan);
@@ -524,5 +524,21 @@ initAuth({
     navigateTo(location.hash.slice(1) || 'casco', false);
     setTimeout(() => document.getElementById('boot').classList.add('hide'), 400);
     procesarRetornoPago(user, plan);
+    Promise.resolve(bibliotecaLista).then(() => {
+      if (!window.MembershipTour || currentUser?.uid !== user.uid) return;
+      window.MembershipTour.mount({
+        brand: 'Visión Pecuaria', userId: user.uid,
+        autoStart: !new URLSearchParams(location.search).has('pago_exitoso'),
+        onStartCourse: () => { navigateTo('cursos'); abrirCursoInicial(); },
+        steps: [
+          { title: '¡Bienvenido a tu rancho digital!', body: 'Cursos, herramientas y comunidad para seguir creciendo. Te acompañamos a descubrir lo que puedes hacer aquí.', onEnter: () => navigateTo('casco') },
+          { title: 'Disfruta tu curso gratis', body: 'El primer curso incluye sin costo todas las clases previas a la última. La clase final y los demás cursos requieren una membresía Élite.', target: '#bibGrid', onEnter: () => navigateTo('cursos') },
+          { title: 'Celebra cada paso', body: 'Marca las clases que termines y revisa tu avance. Los certificados conservan sus requisitos de finalización y membresía.', target: '#section-progreso', onEnter: () => navigateTo('progreso') },
+          { title: 'Conocimiento para tu día a día', body: 'Explora el material de apoyo, los webinars y las herramientas para tu hato. Cada sección te indica qué beneficios incluye Élite.', target: '#cascoTools', onEnter: () => navigateTo('casco') },
+          { title: 'Comunidad y acompañamiento', body: 'Encuentra a otros productores y consulta Soporte técnico cuando necesites ayuda para usar tu plataforma.', target: '#section-soporte', onEnter: () => navigateTo('soporte') },
+          { title: 'Tú eliges cuándo continuar', body: 'En Suscripciones puedes consultar los planes y pagar cuando decidas desbloquear la última clase y el resto de los cursos. Siempre puedes repetir este recorrido.', target: '#sbCtaBtn', onEnter: () => navigateTo('casco') }
+        ]
+      });
+    });
   }
 });
