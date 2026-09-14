@@ -2,7 +2,7 @@
 // BIBLIOTECA DE CURSOS · colección `cursos` (12 docs, 52 clases)
 //
 // Firestore ya no expone los datos completos a cuentas FREE. El catálogo
-// público llega sanitizado desde el backend y solo incluye la primera clase
+// público llega sanitizado desde el backend y incluye las clases previas a la última
 // del curso muestra; el contenido completo requiere token + membresía vigente.
 // Bunny aún debe usar Token Authentication para impedir que un miembro que ya
 // obtuvo una URL válida la comparta fuera del portal.
@@ -31,20 +31,24 @@ function esc(v) {
 function toast(msg) {
   const t = document.getElementById('toast');
   if (!t) return;
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg; t.style.pointerEvents = 'none'; t.classList.add('show');
   clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3500);
 }
 function bloqueadoPorFree() {
   if (plan === 'vip') return false;
+  if (cursoAbierto) {
+    document.getElementById('bibPlayer').innerHTML = '';
+    document.getElementById('bibMarcar').style.display = 'none';
+  }
   if (typeof window.abrirModalVIP === 'function') {
-    window.abrirModalVIP('Los cursos completos son exclusivos de Élite Pecuario.');
+    window.abrirModalVIP('La última clase del curso inicial y los demás cursos requieren una suscripción Élite. Consulta aquí los planes para continuar.');
   }
   return true;
 }
 
 // ── Drip: el curso ordenDrip=1 es la muestra gratuita; un usuario FREE
-//    puede abrirlo, pero solo reproducir la primera clase. Los demás cursos
-//    y las clases 2+ de la muestra requieren Élite. Para miembros Élite,
+//    puede reproducir todas sus clases salvo la última. Los demás cursos
+//    y la última clase del curso inicial requieren Élite. Para miembros Élite,
 //    los cursos siguientes se abren N días después de la activación.
 function fechaActivacion() {
   const cand = [miembro?.fechaUltimaActivacion, miembro?.fechaInicio,
@@ -63,9 +67,9 @@ function fechaActivacion() {
 }
 
 function estadoCurso(curso) {
-  const orden = curso.ordenDrip || 999;
+  const orden = Number(curso.ordenDrip) || 999;
   const dias = curso.diasDrip || 8;
-  if (orden === 1) return { desbloqueado: true, esLibre: true, diasRestantes: 0 };
+  if (window.VisionCoursePolicy.isInitialCourse(curso, cursos)) return { desbloqueado: true, esLibre: true, diasRestantes: 0 };
   if (plan !== 'vip') return { desbloqueado: false, esLibre: false, diasRestantes: 0, requierePago: true };
 
   const desde = fechaActivacion();
@@ -79,8 +83,8 @@ function estadoCurso(curso) {
 }
 
 function claseBloqueadaParaFree(curso, idx) {
-  if (!curso || plan === 'vip') return false;
-  return estadoCurso(curso).esLibre && idx > 0;
+  if (plan === 'vip') return false;
+  return !window.VisionCoursePolicy.isFreeLesson(curso, idx, cursos);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -115,7 +119,7 @@ function pintar() {
         ? '<span class="bib-lock">🔒 Élite</span>'
         : `<span class="bib-lock">🔒 En ${st.diasRestantes} ${st.diasRestantes === 1 ? 'día' : 'días'}</span>`;
     } else if (st.esLibre) {
-      candado = '<span class="bib-libre">Clase 1 gratis</span>';
+      candado = clases.length > 1 ? '<span class="bib-libre">Tu curso gratis*</span>' : '<span class="bib-libre">Curso inicial</span>';
     }
 
     return `
@@ -128,6 +132,7 @@ function pintar() {
           <span class="bib-cat">${esc(c.categoria || 'General')}</span>
           <h3>${esc(c.titulo || 'Curso')}</h3>
           <p>${esc(c.instructor || 'Visión Pecuaria')} · ${clases.length} ${clases.length === 1 ? 'clase' : 'clases'}</p>
+          ${st.esLibre ? '<small class="bib-prog-txt">La última clase requiere suscripción.</small>' : ''}
           ${vistas ? `<div class="bib-prog"><span style="width:${pct}%"></span></div>
                       <small class="bib-prog-txt">${vistas}/${clases.length} vistas</small>` : ''}
         </div>
@@ -160,7 +165,7 @@ function abrirCurso(id) {
   document.getElementById('bibTitulo').textContent = c.titulo || 'Curso';
   document.getElementById('bibInstructor').textContent =
     `${c.instructor || 'Visión Pecuaria'} · ${c.categoria || 'General'}`;
-  document.getElementById('bibDesc').textContent = c.descripcion || '';
+  document.getElementById('bibDesc').textContent = (c.descripcion || '') + (st.esLibre && plan !== 'vip' ? (c.clases.length > 1 ? ' Disfruta tu curso gratis: todas las clases previas a la última están incluidas. La clase final requiere suscripción.' : ' Este curso no tiene clases previas a la última. Su clase final requiere suscripción.') : '');
   document.getElementById('modalCurso').classList.add('active');
   pintarClases();
   montarReproductor(0);
@@ -275,7 +280,7 @@ function marcarVista() {
   if (!arr.includes(claseActual)) { arr.push(claseActual); p[cursoAbierto.id] = arr; guardarProgreso(p); }
   pintarClases();
   pintar();
-  toast('Clase marcada como vista ✓');
+  toast(plan !== 'vip' && estadoCurso(cursoAbierto).esLibre ? '¡Felicidades por tu avance! Sigue disfrutando tu curso gratis.' : '¡Felicidades! Una clase más completada ✓');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -286,7 +291,7 @@ export function iniciarBiblioteca(planUsuario, miembroDoc) {
   if (!cont) return;
   cursos = [];
   pintar();
-  (async () => {
+  return (async () => {
     try {
       const endpoint = plan === 'vip' ? 'cursos-membresia' : 'catalogo-cursos';
       const headers = {};
@@ -294,7 +299,7 @@ export function iniciarBiblioteca(planUsuario, miembroDoc) {
       const respuesta = await fetch(`https://visionpecuaria-webhook-production.up.railway.app/${endpoint}`, { headers });
       const datos = await respuesta.json().catch(() => ({}));
       if (!respuesta.ok) throw new Error(datos.error || `HTTP ${respuesta.status}`);
-      cursos = Array.isArray(datos.cursos) ? datos.cursos : [];
+      cursos = window.VisionCoursePolicy.orderedCourses(datos.cursos);
       pintar();
     } catch (err) {
       console.warn('[Biblioteca] Error leyendo cursos:', err.message || err);
@@ -310,4 +315,8 @@ export function montarBiblioteca() {
   document.getElementById('modalCurso')?.addEventListener('click', (e) => {
     if (e.target === e.currentTarget) cerrarCurso();
   });
+}
+
+export function abrirCursoInicial() {
+  if (cursos[0]) abrirCurso(cursos[0].id);
 }
