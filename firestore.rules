@@ -1,0 +1,185 @@
+rules_version = '2';
+// ═══════════════════════════════════════════════════════════════════════════
+// PROYECTO: visionpecuaria-vip  (acceso VIP del club + ramal de cursos)
+// BL01 — Blindaje de reglas. Diseñadas para NO romper accesos legítimos.
+// Los backends (webhook Railway) usan Firebase Admin SDK y SE SALTAN estas
+// reglas; por eso todo lo que hace el backend puede quedar bloqueado al cliente.
+// ═══════════════════════════════════════════════════════════════════════════
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+
+    // Admin = existir en admins/{uid}. NO hay custom claims en este proyecto,
+    // así que replicamos el mismo check que hace el panel (panel.html:1361).
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Campos de DINERO/ACCESO/IDENTIDAD que el cliente NUNCA debe poder escribir
+    // en su propio doc. El cliente sí escribe campos legítimos (rancho,
+    // preferencias, fechaUltimaActivacion, cursosDesbloqueados) — esos se permiten.
+    // Incluye estado de suscripción, banderas de acceso, IDs de Stripe (cambiar
+    // stripeCustomerId/SubscriptionId podría secuestrar o falsear una suscripción)
+    // y las claves de identidad usadas para búsquedas en el backend (uid, email).
+    function noTocaCamposSensibles() {
+      return !request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(['estado','plan','vip','esVIP','activo','vence','fechaFin',
+                 'fechaVencimiento','cancelado','canceladoEn','rol','nivel',
+                 'regaloAdmin','diasRegalo','motivoRegalo','fechaRegalo',
+                 'stripeCustomerId','stripeSubscriptionId','customerId',
+                 'subscriptionId','ultimoPago','fechaRegistro','uid','email',
+                 // Identidad de registro (distintos de nombreRancho/whatsappRancho,
+                 // que SÍ son editables por el dueño):
+                 'nombre','whatsapp','photoURL','origen']);
+    }
+
+    // ── admins: cada quien lee SU propio doc (el panel lo necesita para el gate,
+    //    sin .catch()). Escritura nunca desde cliente (se crea en consola).
+    match /admins/{uid} {
+      allow read:  if isOwner(uid) || isAdmin();
+      allow write: if false;
+    }
+
+    // ── miembros: doc del suscriptor VIP — CORAZÓN del acceso.
+    //    READ: solo dueño o admin (ver NOTA-TRAZA abajo).
+    //    CREATE/DELETE: solo admin (el cliente nunca crea miembros; el webhook
+    //      lo hace vía Admin SDK).
+    //    UPDATE: admin libre; el dueño solo si NO toca campos sensibles.
+    match /miembros/{uid} {
+      allow read:   if isOwner(uid) || isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin() || (isOwner(uid) && noTocaCamposSensibles());
+      allow delete: if isAdmin();
+    }
+
+    // ── usuarios_free: doc del usuario gratuito. El cliente crea el SUYO al
+    //    registrarse, pero forzamos plan:'free' (no puede auto-nombrarse VIP).
+    match /usuarios_free/{uid} {
+      allow read:   if isOwner(uid) || isAdmin();
+      allow create: if isAdmin() ||
+                    (isOwner(uid) && request.resource.data.plan == 'free');
+      allow update: if isAdmin() || (isOwner(uid) && noTocaCamposSensibles());
+      allow delete: if isAdmin();
+    }
+
+    // ── animales: hato del rancho (la "bitácora" son eventos dentro del doc).
+    //    Dueño = campo userId.
+    //    READ: cualquier usuario logueado — REQUERIDO por la trazabilidad por QR
+    //      (trazabilidad.html lee un animal de otro rancho por su id de QR).
+    //    WRITE: solo el dueño (o admin). Crear exige userId == uid propio.
+    match /animales/{id} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn() &&
+                    request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin() ||
+                    (isSignedIn() && resource.data.userId == request.auth.uid);
+    }
+
+    // ── avisos: muro de comunidad. Todos los logueados leen; cada quien crea/
+    //    borra los suyos (ranchoUid). Cualquiera puede incrementar 'vistas'.
+    match /avisos/{id} {
+      allow read:   if isSignedIn();
+      allow create: if isSignedIn() &&
+                    request.resource.data.ranchoUid == request.auth.uid;
+      allow update: if isAdmin() ||
+                    (isSignedIn() && resource.data.ranchoUid == request.auth.uid) ||
+                    (isSignedIn() && request.resource.data.diff(resource.data)
+                       .affectedKeys().hasOnly(['vistas']));
+      allow delete: if isAdmin() ||
+                    (isSignedIn() && resource.data.ranchoUid == request.auth.uid);
+    }
+
+    // ── certificados: verificación PÚBLICA por folio (verificar.html es anónima).
+    //    El cliente emite el SUYO al completar un curso (uid == propio).
+    //    Editar/borrar: solo admin.  (Ver NOTA-CERT abajo.)
+    match /certificados/{id} {
+      allow read:   if true;
+      allow create: if isSignedIn() &&
+                    request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ── cursos: contenido del club VIP. Lo leen los logueados; escribe admin.
+    match /cursos/{id} {
+      allow read:  if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // ── cursosVenta: catálogo público de cursos en venta (landing lo lee sin
+    //    login). Escritura SOLO admin (los setup-crear-curso*.html no gatean
+    //    en cliente: esta regla es la única barrera real).
+    match /cursosVenta/{slug} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ── instructores: catálogo público. Escritura solo admin.
+    match /instructores/{id} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ── comprasCurso: contiene PII (nombre, email, whatsapp, montos).
+    //    El cliente NO la lee directo (usa el backend /verificar-session-curso).
+    //    Solo admin lee/escribe; el webhook escribe vía Admin SDK.
+    match /comprasCurso/{id} {
+      allow read:  if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── accesosCurso/{uid}/cursos/{slug}: cada quien lee lo suyo.
+    //    Escritura solo admin/backend (Admin SDK).
+    match /accesosCurso/{uid} {
+      allow read:  if isOwner(uid) || isAdmin();
+      allow write: if isAdmin();
+      match /cursos/{slug} {
+        allow read:  if isOwner(uid) || isAdmin();
+        allow write: if isAdmin();
+      }
+    }
+
+    // ── certificadosPendientes: solo backend (Admin SDK) / admin. Nada de cliente.
+    match /certificadosPendientes/{id} {
+      allow read:  if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── pagos / pagos_pendientes: dinero. Solo admin/backend.
+    match /pagos/{id}            { allow read: if isAdmin(); allow write: if isAdmin(); }
+    match /pagos_pendientes/{id} { allow read: if isAdmin(); allow write: if isAdmin(); }
+
+    // ── contenido informativo del club: lectura para logueados, escritura admin.
+    match /pdfs/{id}     { allow read: if isSignedIn(); allow write: if isAdmin(); }
+    match /sesiones/{id} { allow read: if isSignedIn(); allow write: if isAdmin(); }
+    match /mercado/{id}  { allow read: if isSignedIn(); allow write: if isAdmin(); }
+    match /noticias/{id} { allow read: if isSignedIn(); allow write: if isAdmin(); }
+    match /apoyos/{id}   { allow read: if isSignedIn(); allow write: if isAdmin(); }
+
+    // ── config del club (doc config/club): lectura logueada, escritura admin.
+    match /config/{id}   { allow read: if isSignedIn(); allow write: if isAdmin(); }
+
+    // ── Cierre por defecto: cualquier colección no listada arriba queda negada.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// ── NOTA-TRAZA ──────────────────────────────────────────────────────────────
+// trazabilidad.html lee miembros/{ownerUid} de OTRO usuario (por QR) para
+// mostrar el nombre del rancho. Con la regla de arriba (read solo dueño/admin)
+// esa lectura falla, PERO el código la envuelve en try/catch y solo la usa si
+// existe → la página sigue mostrando el animal; solo queda en blanco el bloque
+// "info del rancho". Degradación suave, no rotura. Si prefieres conservar ese
+// dato, cambia la línea de miembros a:  allow read: if isSignedIn();
+// (expone estado/plan/email/whatsapp del miembro a cualquier usuario logueado).
+//
+// ── NOTA-CERT ───────────────────────────────────────────────────────────────
+// 'certificados' tiene lectura pública (necesaria para verificar.html anónima)
+// y el cliente emite el suyo al completar curso. Un usuario podría, en teoría,
+// forjar un certificado a su propio nombre. Es un tema de integridad, no de
+// dinero/acceso VIP, y hoy ya funciona así; lo dejo anotado para endurecer
+// después (mover la emisión al backend) sin romper la auto-emisión actual.
