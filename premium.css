@@ -1,0 +1,165 @@
+/* ========================================================
+   MINIMALIST PREMIUM REDESIGN - VISION PECUARIA
+   Ultra-clean, professional, and sophisticated aesthetics
+   ======================================================== */
+
+/* 1. OVERRIDE DESIGN TOKENS (Minimalista & Elegante) */
+:root {
+  --bg-base: #0a0a0a;         /* Fondo oscuro sólido y limpio */
+  --bg-surface: #121212;      /* Superficies principales (tarjetas, sidebar) */
+  --bg-surface-hover: #1a1a1a;
+  
+  --border-subtle: #262626;   /* Bordes muy finos y elegantes */
+  --border-hover: #404040;
+  
+  --accent-gold: #c99300;     /* Dorado elegante y contenido */
+  --accent-gold-light: #e8c465;
+  
+  --text-main: #f3f4f6;       /* Texto ultra legible */
+  --text-muted: #9ca3af;
+  
+  --shadow-minimal: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. GLOBAL AESTHETICS & BODY */
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-base) !important;
+  color: var(--text-main) !important;
+  line-height: 1.6;
+}
+
+/* Eliminamos los brillos y auroras pesadas para que sea 100% minimalista */
+body::before, body::after {
+  display: none !important;
+}
+
+/* 3. SIDEBAR - Minimalista */
+#sidebar {
+  background: var(--bg-surface) !important;
+  border-right: 1px solid var(--border-subtle) !important;
+  box-shadow: none !important;
+}
+
+/* Sidebar Links */
+.sb-nav-item {
+  transition: all 0.2s ease !important;
+  border-radius: 8px !important;
+  margin: 6px 16px !important;
+  padding: 10px 14px !important;
+  width: calc(100% - 32px) !important;
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+}
+
+.sb-nav-item:hover {
+  background: var(--bg-surface-hover) !important;
+  color: var(--text-main) !important;
+  transform: none !important; /* Sin saltos, más elegante */
+}
+
+.sb-nav-item.active {
+  background: transparent !important;
+  color: var(--accent-gold-light) !important;
+  border-left: 2px solid var(--accent-gold) !important;
+  border-radius: 0 8px 8px 0 !important;
+  margin-left: 0 !important;
+  padding-left: 30px !important;
+  box-shadow: none !important;
+}
+
+/* 4. SECCIÓN DE CURSOS - Clean Gallery */
+#section-curso .section-head {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 3rem; /* Más espacio en blanco (whitespace) */
+}
+
+#section-curso h1 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  background: none;
+  -webkit-text-fill-color: var(--text-main);
+}
+
+/* Course Cards - Minimalist Flat Design */
+.curso-card {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+  box-shadow: var(--shadow-minimal) !important;
+}
+
+.curso-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-hover) !important;
+  border-color: var(--border-hover) !important;
+}
+
+/* Reducimos el zoom excesivo de las imágenes, lo hacemos muy sutil */
+.curso-card img {
+  transition: transform 0.4s ease !important;
+  filter: grayscale(20%); /* Da un tono más serio */
+}
+
+.curso-card:hover img {
+  transform: scale(1.03) !important;
+  filter: grayscale(0%);
+}
+
+.curso-info {
+  padding: 1.5rem !important; /* Más espacio interior */
+}
+
+.curso-info h3 {
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  color: var(--text-main) !important;
+}
+
+/* Botones Premium - Flat & Minimal */
+.btn-premium {
+  background: var(--text-main) !important; /* Botón principal blanco/claro sobre fondo oscuro (alto contraste) */
+  color: var(--bg-base) !important;
+  font-weight: 600 !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px !important; /* Bordes menos redondeados para mayor seriedad */
+  padding: 10px 20px !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
+  text-transform: none !important;
+  letter-spacing: 0px !important;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-premium:hover {
+  background: transparent !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-hover) !important;
+  transform: none !important;
+}
+
+/* 5. CINE MODE (Video Player) */
+.cine-main {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-minimal) !important;
+}
+
+.cine-player {
+  border-radius: 12px 12px 0 0 !important;
+  background: #000 !important; /* Negro puro para video */
+}
+
+.cine-sidebar {
+  border-left: 1px solid var(--border-subtle) !important;
+  background: var(--bg-base) !important;
+}

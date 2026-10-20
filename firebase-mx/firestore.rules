@@ -1,0 +1,54 @@
+rules_version = '2';
+// ═══════════════════════════════════════════════════════════════════════════
+// PROYECTO: visionpecuaria-mx  (certificados)
+// BL01 — PROPUESTA EN BORRADOR. Ver BLOQUEADOR abajo antes de desplegar.
+//
+// Superficies de cliente encontradas en este proyecto:
+//   - ver-certificado.html  → LEE certificados/{folio}  (ANÓNIMA, pública)
+//   - admin-new.html        → LEE/ESCRIBE miembros, cursos, videos, pdfs
+//                             ⚠️ SIN LOGIN (importa auth pero no la usa de gate)
+//
+// Este proyecto NO tiene modelo de admin (no hay colección admins/ referenciada
+// ni custom claims). admin-new.html parece un panel LEGACY anterior al repo
+// VisionPecuaria-ADMIN (que usa el proyecto -vip). Necesito tu decisión:
+//   (A) admin-new.html está OBSOLETO  → aplicar estas reglas tal cual (todo
+//       admin-only). El panel viejo dejará de escribir; no pasa nada.
+//   (B) admin-new.html SIGUE en uso  → NO desplegar esto todavía: primero hay
+//       que ponerle Firebase Auth + poblar admins/{uid} en -mx, o migrar su
+//       función al panel nuevo. Bloquear sin eso rompería tu operación.
+// Mientras no me confirmes, estas reglas quedan como propuesta, sin desplegar.
+// ═══════════════════════════════════════════════════════════════════════════
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // ── certificados: verificación pública por folio (ver-certificado.html anónima).
+    //    Escritura solo admin.
+    match /certificados/{folio} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ── miembros (lista legacy en -mx): dinero/acceso. Solo admin.
+    //    ⚠️ Si eliges la opción (B), admin-new.html rompe aquí hasta añadirle auth.
+    match /miembros/{id} {
+      allow read:  if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // ── cursos / videos / pdfs legacy: escritura solo admin. Lectura logueada.
+    match /cursos/{id} { allow read: if isSignedIn(); allow write: if isAdmin(); }
+    match /videos/{id} { allow read: if isSignedIn(); allow write: if isAdmin(); }
+    match /pdfs/{id}   { allow read: if isSignedIn(); allow write: if isAdmin(); }
+
+    // ── Cierre por defecto.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
